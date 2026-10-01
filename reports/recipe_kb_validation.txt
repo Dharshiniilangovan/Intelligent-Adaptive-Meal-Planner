@@ -1,0 +1,77 @@
+=== RECIPE KB VALIDATION REPORT ===
+
+Shape: (8438, 19)
+Total recipes: 8438
+Duplicate recipe IDs: 0
+Missing recipe IDs: 0
+Missing recipe names: 0
+
+=== MISSING VALUES ===
+recipe_id                 0
+recipe_name               0
+servings                  0
+diet_labels               0
+health_labels             0
+cautions                  0
+cuisine_type              0
+meal_type                 0
+dish_type                 0
+calories_per_serving      0
+weight_g_per_serving      0
+protein_g_per_serving     0
+carbs_g_per_serving       0
+fat_g_per_serving         0
+fiber_g_per_serving       0
+sugar_g_per_serving       0
+sodium_mg_per_serving     0
+calcium_mg_per_serving    0
+iron_mg_per_serving       0
+
+=== NUTRITION STATISTICS ===
+       calories_per_serving  weight_g_per_serving  protein_g_per_serving  carbs_g_per_serving  fat_g_per_serving  fiber_g_per_serving  sugar_g_per_serving  sodium_mg_per_serving  calcium_mg_per_serving  iron_mg_per_serving
+count           8438.000000           8438.000000            8438.000000          8438.000000        8438.000000          8438.000000          8438.000000            8438.000000             8438.000000          8438.000000
+mean             338.451652            231.159464              12.613911            36.602940          16.397828             4.041622             9.388672             433.946832              110.197791             2.239271
+std              309.096447            182.150470              15.235595            40.548142          21.363791             4.608496            21.561912             956.526387              157.419225             2.728428
+min                1.281656              0.449981               0.000000             0.000000           0.000000             0.000000             0.000000               0.000000                0.000000             0.000000
+25%              159.054540             95.154794               3.452859            12.070631           3.816514             0.827796             0.000000              81.223168               24.147609             0.607832
+50%              251.853463            178.655979               7.376451            26.320703           9.999958             2.739672             1.969330             231.704592               62.090908             1.499080
+75%              403.562052            319.450000              15.767099            46.699122          20.394733             5.837344             9.221870             558.825089              133.281506             2.924409
+max             2482.892084            999.692850             197.476275           470.824741         227.121034            63.640000           465.464247           65486.066452             3420.022667            41.554713
+
+=== NEGATIVE VALUES ===
+calories_per_serving: 0
+weight_g_per_serving: 0
+protein_g_per_serving: 0
+carbs_g_per_serving: 0
+fat_g_per_serving: 0
+fiber_g_per_serving: 0
+sugar_g_per_serving: 0
+sodium_mg_per_serving: 0
+calcium_mg_per_serving: 0
+iron_mg_per_serving: 0
+
+=== TOP 10 CALORIES PER SERVING ===
+recipe_id                                            recipe_name  servings  calories_per_serving
+   R27749                     Spicy Barbecue Dip and Pizza Rolls       8.0           2482.892084
+   R39283                               Viennese Christmas Goose       8.0           2482.119665
+   R16399                               Flourless Chocolate Cake       1.0           2479.352844
+   R24629                        Provencal Cheese And Herb Bread       1.0           2472.160238
+   R07837       White Chocolate & Peanut Butter Pie (GF) recipes       4.0           2467.424789
+   R29615                       Leftover-Brisket Breakfast Tacos       4.0           2465.077188
+   R23544                              BBQ Pork Chislic Sandwich       4.0           2428.064694
+   R23518                                      Blood Orange Cake       1.0           2382.457000
+   R05685                                 Halloween Cemetery Dip       8.0           2381.115435
+   R20386 Paleo Maple Pecan Granola with Bacon Sprinkles recipes       1.0           2379.733638
+
+=== 10 RANDOM RECIPES ===
+recipe_id                                                              recipe_name  servings                 diet_labels                                                                                                                              health_labels                      cautions              cuisine_type        meal_type                        dish_type  calories_per_serving  weight_g_per_serving  protein_g_per_serving  carbs_g_per_serving  fat_g_per_serving  fiber_g_per_serving  sugar_g_per_serving  sodium_mg_per_serving  calcium_mg_per_serving  iron_mg_per_serving
+   R27897                                               Halloween Gummy Worm Punch      14.0              ["Low-Sodium"]         ["Vegan","Vegetarian","Dairy-Free","Gluten-Free","Egg-Free","Peanut-Free","Tree-Nut-Free","Soy-Free","Fish-Free","Shellfish-Free"]                  ["Sulfites"]              ["american"]        ["snack"] ["desserts","special occasions"]            201.447366            260.984656               0.678086            44.226875           3.707143             1.070530             0.000000              40.436039               19.237689             0.670260
+   R01604                    Creamy Piquillo Pepper and Chickpea Soup with Chicken       4.0                          []                              ["Dairy-Free","Gluten-Free","Egg-Free","Peanut-Free","Tree-Nut-Free","Soy-Free","Fish-Free","Shellfish-Free"]                  ["Sulfites"]      ["south east asian"] ["lunch/dinner"]                         ["soup"]            311.578155            292.927269              14.589765            21.664210          19.250155             4.050694             0.000000             679.819414               43.927522             2.597795
+   R00856                                           Kimchi Grilled Cheese Sandwich       4.0                ["Low-Carb"]                                                       ["Vegetarian","Peanut-Free","Tree-Nut-Free","Soy-Free","Fish-Free","Shellfish-Free"]                  ["Sulfites"]     ["korean","american"] ["lunch/dinner"]                   ["sandwiches"]            158.991250             47.593750               5.480000             7.975112          11.719162             0.870625             1.031925             243.950937                0.000000             0.000000
+   R02869                                                        Wheat Honey bread      20.0              ["Low-Sodium"]                               ["Vegetarian","Dairy-Free","Egg-Free","Peanut-Free","Tree-Nut-Free","Soy-Free","Fish-Free","Shellfish-Free"]                  ["Sulfites"]              ["american"] ["lunch/dinner"]                        ["bread"]             94.237000             77.782353               2.118100            17.625050           1.660060             0.633450             2.650975              60.911294                5.134471             0.715420
+   R31406                                                    Beetroot & Tahini Dip       4.0 ["High-Fiber","Low-Sodium"] ["Vegan","Vegetarian","Paleo","Dairy-Free","Gluten-Free","Egg-Free","Peanut-Free","Tree-Nut-Free","Soy-Free","Fish-Free","Shellfish-Free"]                  ["Sulfites"]         ["mediterranean"] ["lunch/dinner"]        ["condiments and sauces"]            223.253111            355.449861               5.251918            23.897238          14.976749             8.706994             0.000000              40.178439              129.334385             4.860569
+   R38562                                             Grandma Nancy's Crepe Recipe      10.0    ["Low-Fat","Low-Sodium"]                                          ["Vegetarian","Dairy-Free","Peanut-Free","Tree-Nut-Free","Soy-Free","Fish-Free","Shellfish-Free"]                            []                ["french"]    ["breakfast"]                      ["pancake"]             51.649000             40.496844               1.829300             9.568460           0.531430             0.337500             0.049660              22.054436                5.001890             0.655375
+   R05769                                                              Fruit Pizza       8.0                ["Balanced"]                                            ["Vegetarian","Egg-Free","Peanut-Free","Tree-Nut-Free","Soy-Free","Fish-Free","Shellfish-Free"]                  ["Sulfites"]               ["italian"]        ["snack"]                     ["desserts"]            239.127908            100.243067               8.246110            35.155894           7.156706             1.214822             7.505160             406.847989              130.448504             2.048283
+   R25538                                                               Feta Pesto      12.0   ["Low-Carb","Low-Sodium"]                                              ["Vegetarian","Gluten-Free","Egg-Free","Peanut-Free","Soy-Free","Fish-Free","Shellfish-Free"]                  ["Sulfites"] ["greek","mediterranean"] ["lunch/dinner"]        ["condiments and sauces"]            125.842926             33.358333               2.393661             2.075038          12.451592             0.817152             0.000000              79.238552               62.095467             0.544012
+   R05318                                                          Summer Gazpacho       6.0              ["High-Fiber"]                                           ["Gluten-Free","Egg-Free","Peanut-Free","Tree-Nut-Free","Soy-Free","Fish-Free","Shellfish-Free"] ["Gluten","Wheat","Sulfites"]               ["british"] ["lunch/dinner"]                         ["soup"]            345.815236            575.675628               8.871296            22.208333          25.414561             6.244280             0.000000            1331.868906              129.193216             3.144839
+   R32918 Chorizo and egg breakfast cup - egg muffin recipe | Cardiff Food Blogger       4.0   ["Low-Carb","Low-Sodium"]                                                      ["Gluten-Free","Peanut-Free","Tree-Nut-Free","Soy-Free","Fish-Free","Shellfish-Free"]                  ["Sulfites"]         ["mediterranean"]    ["breakfast"]                  ["main course"]            125.660481             91.657815              12.770520             1.133290           7.418249             0.000000             0.000000               0.000000               57.751127             1.775055
