@@ -5,7 +5,7 @@ import os
 import ast
 
 raw_recipes_path = os.path.join(os.path.dirname(__file__), '../data/raw/recipes_diverse_subset.csv')
-list_of_cols_removed = ['source','url','image_url','ingredient_lines','ingredients','daily_values','digest']
+list_of_cols_removed = ['source','image_url','ingredient_lines','ingredients','daily_values','digest']
 final_kb_path = os.path.join(os.path.dirname(__file__), '../data/processed/recipes_kb.csv')
 validation_report_path = os.path.join(os.path.dirname(__file__),"../reports/recipe_kb_validation.txt")
 
