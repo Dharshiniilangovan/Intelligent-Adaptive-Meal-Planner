@@ -2,27 +2,39 @@ import pandas as pd
 import json
 import ast
 import re
-
+from pathlib import Path
 
 # ============================================================
 # FILE PATHS
 # ============================================================
 
-RECIPES_FILE = (
-    r"C:\Users\saaral\Desktop\gc\intelligent reasoning"
-    r"\project\data\main data\recipes_diverse_subset.csv"
-)
+# Current file:
+# Intelligent-Adaptive-Meal-Planner/scripts/recipe_ingredient_map.py
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+
+# Project root:
+# Intelligent-Adaptive-Meal-Planner/
+PROJECT_ROOT = SCRIPT_DIR.parent
+
+# Input recipe dataset
+RECIPES_FILE = PROJECT_ROOT / "data" / "raw" / "recipes.csv"
+
+# Ingredient aliases
 ALIASES_FILE = (
-    r"C:\Users\saaral\Desktop\gc\intelligent reasoning"
-    r"\project\data\main data\INGREDIENT_ALIASES_MAPPED.csv"
+    PROJECT_ROOT
+    / "data"
+    / "processed"
+    / "INGREDIENT_ALIASES_MAPPED.csv"
 )
 
+# Generated mapping output
 OUTPUT_FILE = (
-    r"C:\Users\saaral\Desktop\gc\intelligent reasoning"
-    r"\project\data\main data\recipe_ingredient_mapping.csv"
+    PROJECT_ROOT
+    / "data"
+    / "processed"
+    / "recipe_ingredient_mapping.csv"
 )
-
 
 # ============================================================
 # 1. LOAD DATA
