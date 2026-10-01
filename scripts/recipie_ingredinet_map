@@ -1,0 +1,1191 @@
+import pandas as pd
+import json
+import ast
+import re
+from pathlib import Path
+
+# ============================================================
+# FILE PATHS
+# ============================================================
+
+# Current file:
+# Intelligent-Adaptive-Meal-Planner/scripts/recipe_ingredient_map.py
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+
+# Project root:
+# Intelligent-Adaptive-Meal-Planner/
+PROJECT_ROOT = SCRIPT_DIR.parent
+
+# Input recipe dataset
+RECIPES_FILE = PROJECT_ROOT / "data" / "raw" / "recipes.csv"
+
+# Ingredient aliases
+ALIASES_FILE = (
+    PROJECT_ROOT
+    / "data"
+    / "processed"
+    / "INGREDIENT_ALIASES_MAPPED.csv"
+)
+
+# Generated mapping output
+OUTPUT_FILE = (
+    PROJECT_ROOT
+    / "data"
+    / "processed"
+    / "recipe_ingredient_mapping.csv"
+)
+
+# ============================================================
+# 1. LOAD DATA
+# ============================================================
+
+recipes_df = pd.read_csv(RECIPES_FILE)
+aliases_df = pd.read_csv(ALIASES_FILE)
+
+print(f"Recipes loaded: {len(recipes_df)}")
+print(f"Alias rows loaded: {len(aliases_df)}")
+
+print("\nRecipe columns:")
+print(recipes_df.columns.tolist())
+
+print("\nAlias columns:")
+print(aliases_df.columns.tolist())
+
+
+# ============================================================
+# 2. CHECK REQUIRED COLUMNS
+# ============================================================
+
+required_recipe_columns = [
+    "recipie_id",
+    "ingredients"
+]
+
+required_alias_columns = [
+    "ingredient_id",
+    "ingredient_name",
+    "alias_name"
+]
+
+for column in required_recipe_columns:
+    if column not in recipes_df.columns:
+        raise ValueError(
+            f"Missing column '{column}' in recipe dataset."
+        )
+
+for column in required_alias_columns:
+    if column not in aliases_df.columns:
+        raise ValueError(
+            f"Missing column '{column}' in alias dataset."
+        )
+
+
+# ============================================================
+# 3. NORMALIZE INGREDIENT NAMES
+# ============================================================
+
+def normalize(text):
+    """
+    Normalize ingredient names for matching.
+
+    Example:
+        Red-Bell Pepper -> red bell pepper
+    """
+
+    if text is None:
+        return ""
+
+    try:
+        if pd.isna(text):
+            return ""
+    except (TypeError, ValueError):
+        pass
+
+    text = str(text).lower().strip()
+
+    # Replace underscore and hyphen with spaces
+    text = re.sub(r"[_-]", " ", text)
+
+    # Remove punctuation
+    text = re.sub(r"[^\w\s]", "", text)
+
+    # Remove extra spaces
+    text = re.sub(r"\s+", " ", text)
+
+    return text.strip()
+
+
+# ============================================================
+# 4. BUILD ALIAS LOOKUP
+# ============================================================
+
+# Mapping:
+#
+# recipe ingredients.food
+#          ↓
+# alias_name
+#          ↓
+# ingredient_id + ingredient_name
+
+alias_lookup = {}
+
+for _, row in aliases_df.iterrows():
+
+    alias_name = row["alias_name"]
+
+    normalized_alias = normalize(alias_name)
+
+    if not normalized_alias:
+        continue
+
+    alias_lookup[normalized_alias] = {
+        "ingredient_id": row["ingredient_id"],
+        "ingredient_name": row["ingredient_name"]
+    }
+
+
+print(
+    f"\nUnique aliases available for matching: "
+    f"{len(alias_lookup)}"
+)
+
+
+# ============================================================
+# 5. PARSE INGREDIENTS COLUMN
+# ============================================================
+
+def parse_ingredients(value):
+    """
+    Convert ingredients column into Python list.
+
+    Expected:
+
+    [
+        {
+            "food": "salt",
+            "quantity": 0,
+            "measure": "<unit>",
+            "text": "salt to taste"
+        }
+    ]
+    """
+
+    if value is None:
+        return []
+
+    if isinstance(value, list):
+        return value
+
+    try:
+        if pd.isna(value):
+            return []
+    except (TypeError, ValueError):
+        pass
+
+    # Try JSON
+    try:
+
+        parsed = json.loads(value)
+
+        if isinstance(parsed, list):
+            return parsed
+
+    except (json.JSONDecodeError, TypeError):
+        pass
+
+    # Try Python literal
+    try:
+
+        parsed = ast.literal_eval(value)
+
+        if isinstance(parsed, list):
+            return parsed
+
+    except (ValueError, SyntaxError, TypeError):
+        pass
+
+    return []
+
+
+# ============================================================
+# 6. PARSE FRACTIONS
+# ============================================================
+
+def parse_fraction(value):
+    """
+    Convert fractions to numeric values.
+
+    Examples:
+
+    1       -> 1
+    1.5     -> 1.5
+    1/2     -> 0.5
+    1 1/2   -> 1.5
+    """
+
+    if value is None:
+        return "NA"
+
+    value = str(value).strip()
+
+    try:
+
+        # Mixed fraction: 1 1/2
+        if " " in value:
+
+            parts = value.split()
+
+            if (
+                len(parts) == 2
+                and "/" in parts[1]
+            ):
+
+                whole = float(parts[0])
+
+                numerator, denominator = (
+                    parts[1].split("/")
+                )
+
+                result = (
+                    whole
+                    + float(numerator)
+                    / float(denominator)
+                )
+
+                if result.is_integer():
+                    return int(result)
+
+                return result
+
+        # Simple fraction: 1/2
+        if "/" in value:
+
+            numerator, denominator = value.split("/")
+
+            result = (
+                float(numerator)
+                / float(denominator)
+            )
+
+            if result.is_integer():
+                return int(result)
+
+            return result
+
+        # Normal number
+        result = float(value)
+
+        if result.is_integer():
+            return int(result)
+
+        return result
+
+    except (
+        ValueError,
+        TypeError,
+        ZeroDivisionError
+    ):
+
+        return "NA"
+
+
+# ============================================================
+# 7. CHECK IF QUANTITY IS ZERO OR MISSING
+# ============================================================
+
+def quantity_is_zero_or_missing(quantity):
+    """
+    True for:
+
+    None
+    NaN
+    ""
+    null
+    none
+    NA
+    0
+    0.0
+    """
+
+    if quantity is None:
+        return True
+
+    try:
+        if pd.isna(quantity):
+            return True
+    except (TypeError, ValueError):
+        pass
+
+    quantity_string = str(quantity).strip().lower()
+
+    if quantity_string in [
+        "",
+        "null",
+        "none",
+        "nan",
+        "na"
+    ]:
+        return True
+
+    try:
+
+        if float(quantity) == 0:
+            return True
+
+    except (ValueError, TypeError):
+        pass
+
+    return False
+
+
+# ============================================================
+# 8. EXTRACT SALT / PEPPER QUANTITY FROM TEXT
+# ============================================================
+
+def extract_salt_pepper_quantity(text):
+    """
+    Used ONLY when salt/pepper has quantity 0 or missing.
+
+    Examples:
+
+    "1 teaspoon salt"
+        -> 1, teaspoon
+
+    "1/2 tsp pepper"
+        -> 0.5, teaspoon
+
+    "a pinch of salt"
+        -> 1, pinch
+
+    "salt to taste"
+        -> NA, to taste
+
+    "pepper as needed"
+        -> NA, to taste
+
+    "salt"
+        -> NA, to taste
+
+    If nothing useful can be extracted:
+        -> NA, to taste
+    """
+
+    # --------------------------------------------------------
+    # No text
+    # --------------------------------------------------------
+
+    if text is None:
+        return "NA", "to taste"
+
+    try:
+
+        if pd.isna(text):
+            return "NA", "to taste"
+
+    except (TypeError, ValueError):
+        pass
+
+    text = str(text).lower().strip()
+
+    if text == "":
+        return "NA", "to taste"
+
+
+    # ========================================================
+    # NORMALIZE UNICODE FRACTIONS
+    # ========================================================
+
+    fraction_map = {
+        "½": "1/2",
+        "¼": "1/4",
+        "¾": "3/4",
+        "⅓": "1/3",
+        "⅔": "2/3",
+        "⅛": "1/8",
+        "⅜": "3/8",
+        "⅝": "5/8",
+        "⅞": "7/8"
+    }
+
+    for symbol, replacement in fraction_map.items():
+
+        text = text.replace(
+            symbol,
+            replacement
+        )
+
+
+    # ========================================================
+    # EXPLICIT "TO TASTE"
+    # ========================================================
+
+    if "to taste" in text:
+
+        return "NA", "to taste"
+
+
+    # ========================================================
+    # "AS NEEDED"
+    # ========================================================
+
+    if "as needed" in text:
+
+        return "NA", "to taste"
+
+
+    # ========================================================
+    # "AS REQUIRED"
+    # ========================================================
+
+    if "as required" in text:
+
+        return "NA", "to taste"
+
+
+    # ========================================================
+    # "ACCORDING TO TASTE"
+    # ========================================================
+
+    if "according to taste" in text:
+
+        return "NA", "to taste"
+
+
+    # ========================================================
+    # A PINCH
+    # ========================================================
+
+    if re.search(
+        r"\b(?:a|one)\s+pinch\b",
+        text
+    ):
+
+        return 1, "pinch"
+
+
+    # ========================================================
+    # A DASH
+    # ========================================================
+
+    if re.search(
+        r"\b(?:a|one)\s+dash\b",
+        text
+    ):
+
+        return 1, "dash"
+
+
+    # ========================================================
+    # UNIT PATTERNS
+    # ========================================================
+
+    unit_patterns = {
+
+        r"teaspoons?|tsp\.?":
+            "teaspoon",
+
+        r"tablespoons?|tbsp\.?":
+            "tablespoon",
+
+        r"grams?|g\b":
+            "gram",
+
+        r"kilograms?|kg\b":
+            "kilogram",
+
+        r"milligrams?|mg\b":
+            "milligram",
+
+        r"ounces?|oz\.?":
+            "ounce",
+
+        r"pounds?|lbs?\.?":
+            "pound",
+
+        r"cups?":
+            "cup",
+
+        r"milliliters?|millilitres?|ml\b":
+            "milliliter",
+
+        r"liters?|litres?|l\b":
+            "liter",
+
+        r"pinches?|pinch":
+            "pinch",
+
+        r"dashes?|dash":
+            "dash"
+    }
+
+
+    # ========================================================
+    # NUMBER PATTERN
+    # ========================================================
+
+    # Supports:
+    #
+    # 1
+    # 1.5
+    # 1/2
+    # 1 1/2
+
+    number_pattern = (
+        r"(\d+\s+\d+/\d+"
+        r"|\d+/\d+"
+        r"|\d+(?:\.\d+)?)"
+    )
+
+
+    # ========================================================
+    # FIND NUMBER + UNIT
+    # ========================================================
+
+    for (
+        unit_pattern,
+        normalized_unit
+    ) in unit_patterns.items():
+
+        pattern = (
+            number_pattern
+            + r"\s*"
+            + r"("
+            + unit_pattern
+            + r")"
+        )
+
+        match = re.search(
+            pattern,
+            text
+        )
+
+        if match:
+
+            quantity_text = (
+                match.group(1)
+            )
+
+            quantity = (
+                parse_fraction(
+                    quantity_text
+                )
+            )
+
+            return (
+                quantity,
+                normalized_unit
+            )
+
+
+    # ========================================================
+    # PINCH WITHOUT QUANTITY
+    # ========================================================
+
+    if re.search(
+        r"\bpinch(?:es)?\b",
+        text
+    ):
+
+        return 1, "pinch"
+
+
+    # ========================================================
+    # DASH WITHOUT QUANTITY
+    # ========================================================
+
+    if re.search(
+        r"\bdash(?:es)?\b",
+        text
+    ):
+
+        return 1, "dash"
+
+
+    # ========================================================
+    # NOTHING FOUND
+    #
+    # For salt/pepper:
+    #
+    # quantity = NA
+    # unit     = to taste
+    # ========================================================
+
+    return "NA", "to taste"
+
+
+# ============================================================
+# 9. CLEAN NORMAL QUANTITY
+# ============================================================
+
+def clean_quantity(quantity):
+    """
+    Clean normal recipe quantity.
+    """
+
+    if quantity is None:
+        return "NA"
+
+    try:
+
+        if pd.isna(quantity):
+            return "NA"
+
+    except (TypeError, ValueError):
+        pass
+
+    value = str(quantity).strip()
+
+    if value.lower() in [
+        "",
+        "null",
+        "none",
+        "nan",
+        "na"
+    ]:
+
+        return "NA"
+
+    return quantity
+
+
+# ============================================================
+# 10. CLEAN NORMAL UNIT
+# ============================================================
+
+def clean_unit(measure):
+    """
+    Clean recipe measure.
+
+    Rules:
+
+    <unit> -> count
+
+    missing -> NA
+    """
+
+    if measure is None:
+        return "NA"
+
+    try:
+
+        if pd.isna(measure):
+            return "NA"
+
+    except (TypeError, ValueError):
+        pass
+
+    unit = str(measure).strip()
+
+    unit_lower = unit.lower()
+
+    # <unit> means count
+    if unit_lower == "<unit>":
+
+        return "count"
+
+    # Missing
+    if unit_lower in [
+        "",
+        "null",
+        "none",
+        "nan",
+        "na"
+    ]:
+
+        return "NA"
+
+    return unit
+
+
+# ============================================================
+# 11. CREATE RECIPE -> INGREDIENT MAPPING
+# ============================================================
+
+output_rows = []
+
+matched_count = 0
+unmatched_count = 0
+
+salt_pepper_text_processed = 0
+salt_pepper_quantity_recovered = 0
+salt_pepper_to_taste = 0
+
+
+for _, recipe_row in recipes_df.iterrows():
+
+    # ========================================================
+    # GET RECIPE ID
+    # ========================================================
+
+    recipe_id = (
+        recipe_row["recipie_id"]
+    )
+
+
+    # ========================================================
+    # PARSE INGREDIENTS COLUMN
+    # ========================================================
+
+    ingredients = (
+        parse_ingredients(
+            recipe_row["ingredients"]
+        )
+    )
+
+
+    # ========================================================
+    # PROCESS EACH INGREDIENT
+    # ========================================================
+
+    for ingredient in ingredients:
+
+        if not isinstance(
+            ingredient,
+            dict
+        ):
+
+            continue
+
+
+        # ====================================================
+        # GET INGREDIENT VALUES
+        # ====================================================
+
+        food = (
+            ingredient.get("food")
+        )
+
+        quantity = (
+            ingredient.get("quantity")
+        )
+
+        measure = (
+            ingredient.get("measure")
+        )
+
+        ingredient_text = (
+            ingredient.get("text")
+        )
+
+
+        # ====================================================
+        # NORMALIZE FOOD
+        # ====================================================
+
+        normalized_food = (
+            normalize(food)
+        )
+
+
+        # ====================================================
+        # CHECK SALT / PEPPER
+        # ====================================================
+
+        is_salt_or_pepper = (
+
+            "salt"
+            in normalized_food
+
+            or
+
+            "pepper"
+            in normalized_food
+        )
+
+
+        # ====================================================
+        # SALT / PEPPER SPECIAL HANDLING
+        # ====================================================
+
+        if (
+            is_salt_or_pepper
+            and
+            quantity_is_zero_or_missing(
+                quantity
+            )
+        ):
+
+            salt_pepper_text_processed += 1
+
+
+            # ----------------------------------------------
+            # Inspect ingredient text
+            # ----------------------------------------------
+
+            (
+                extracted_quantity,
+                extracted_unit
+
+            ) = extract_salt_pepper_quantity(
+                ingredient_text
+            )
+
+
+            # ----------------------------------------------
+            # Use extracted values
+            # ----------------------------------------------
+
+            quantity = (
+                extracted_quantity
+            )
+
+            measure = (
+                extracted_unit
+            )
+
+
+            # ----------------------------------------------
+            # Count recovered quantity
+            # ----------------------------------------------
+
+            if extracted_quantity != "NA":
+
+                salt_pepper_quantity_recovered += 1
+
+
+            # ----------------------------------------------
+            # Count "to taste"
+            # ----------------------------------------------
+
+            if extracted_unit == "to taste":
+
+                salt_pepper_to_taste += 1
+
+
+        # ====================================================
+        # CLEAN QUANTITY
+        # ====================================================
+
+        quantity = clean_quantity(
+            quantity
+        )
+
+
+        # ====================================================
+        # CLEAN UNIT
+        # ====================================================
+
+        unit = clean_unit(
+            measure
+        )
+
+
+        # ====================================================
+        # EXTRA SAFETY RULE FOR SALT / PEPPER
+        # ====================================================
+
+        # If salt/pepper quantity somehow remains zero,
+        # change it to:
+        #
+        # quantity = NA
+        # unit = to taste
+
+        if is_salt_or_pepper:
+
+            try:
+
+                if float(quantity) == 0:
+
+                    quantity = "NA"
+                    unit = "to taste"
+
+            except (
+                ValueError,
+                TypeError
+            ):
+
+                pass
+
+
+        # ====================================================
+        # MATCH FOOD AGAINST ALIAS_NAME
+        # ====================================================
+
+        match = (
+            alias_lookup.get(
+                normalized_food
+            )
+        )
+
+
+        # ====================================================
+        # MATCH FOUND
+        # ====================================================
+
+        if match is not None:
+
+            ingredient_id = (
+                match[
+                    "ingredient_id"
+                ]
+            )
+
+            ingredient_name = (
+                match[
+                    "ingredient_name"
+                ]
+            )
+
+            matched_count += 1
+
+
+        # ====================================================
+        # MATCH NOT FOUND
+        # ====================================================
+
+        else:
+
+            ingredient_id = "NA"
+
+            if (
+                food is None
+                or
+                str(food).strip() == ""
+            ):
+
+                ingredient_name = "NA"
+
+            else:
+
+                ingredient_name = (
+                    str(food).strip()
+                )
+
+            unmatched_count += 1
+
+
+        # ====================================================
+        # ADD FINAL ROW
+        # ====================================================
+
+        output_rows.append(
+            {
+                "recipe_id":
+                    recipe_id,
+
+                "ingredient_id":
+                    ingredient_id,
+
+                "ingredient_name":
+                    ingredient_name,
+
+                "quantity":
+                    quantity,
+
+                "unit":
+                    unit
+            }
+        )
+
+
+# ============================================================
+# 12. CREATE FINAL DATAFRAME
+# ============================================================
+
+output_df = pd.DataFrame(
+    output_rows,
+    columns=[
+        "recipe_id",
+        "ingredient_id",
+        "ingredient_name",
+        "quantity",
+        "unit"
+    ]
+)
+
+
+# ============================================================
+# 13. SAVE CSV
+# ============================================================
+
+output_df.to_csv(
+    OUTPUT_FILE,
+    index=False,
+    na_rep="NA"
+)
+
+
+# ============================================================
+# 14. SUMMARY
+# ============================================================
+
+total = (
+    matched_count
+    +
+    unmatched_count
+)
+
+print("\n==========================================")
+print("RECIPE -> INGREDIENT MAPPING COMPLETED")
+print("==========================================")
+
+print(
+    f"Total ingredient rows          : "
+    f"{total}"
+)
+
+print(
+    f"Matched ingredients            : "
+    f"{matched_count}"
+)
+
+print(
+    f"Unmatched ingredients          : "
+    f"{unmatched_count}"
+)
+
+if total > 0:
+
+    match_rate = (
+        matched_count
+        / total
+    ) * 100
+
+    print(
+        f"Match rate                     : "
+        f"{match_rate:.2f}%"
+    )
+
+
+# ============================================================
+# 15. SALT / PEPPER SUMMARY
+# ============================================================
+
+print("\n==========================================")
+print("SALT / PEPPER TEXT PROCESSING")
+print("==========================================")
+
+print(
+    f"Salt/pepper text checked       : "
+    f"{salt_pepper_text_processed}"
+)
+
+print(
+    f"Actual quantities recovered    : "
+    f"{salt_pepper_quantity_recovered}"
+)
+
+print(
+    f"Marked as 'to taste'           : "
+    f"{salt_pepper_to_taste}"
+)
+
+
+# ============================================================
+# 16. SAMPLE FINAL OUTPUT
+# ============================================================
+
+print("\n==========================================")
+print("SAMPLE OUTPUT")
+print("==========================================")
+
+print(
+    output_df.head(30).to_string(
+        index=False
+    )
+)
+
+
+# ============================================================
+# 17. SHOW SALT / PEPPER OUTPUT
+# ============================================================
+
+salt_pepper_results = output_df[
+    output_df[
+        "ingredient_name"
+    ]
+    .astype(str)
+    .str.lower()
+    .str.contains(
+        r"salt|pepper",
+        regex=True,
+        na=False
+    )
+]
+
+print("\n==========================================")
+print("SALT / PEPPER RESULTS")
+print("==========================================")
+
+if not salt_pepper_results.empty:
+
+    print(
+        salt_pepper_results[
+            [
+                "recipe_id",
+                "ingredient_id",
+                "ingredient_name",
+                "quantity",
+                "unit"
+            ]
+        ]
+        .head(100)
+        .to_string(
+            index=False
+        )
+    )
+
+else:
+
+    print(
+        "No salt or pepper ingredients found."
+    )
+
+
+# ============================================================
+# 18. SHOW UNMATCHED INGREDIENTS
+# ============================================================
+
+unmatched_df = output_df[
+    output_df[
+        "ingredient_id"
+    ] == "NA"
+]
+
+print("\n==========================================")
+print("UNMATCHED INGREDIENTS")
+print("==========================================")
+
+if not unmatched_df.empty:
+
+    unique_unmatched = (
+        unmatched_df[
+            "ingredient_name"
+        ]
+        .dropna()
+        .drop_duplicates()
+        .sort_values()
+    )
+
+    print(
+        f"Unique unmatched ingredients: "
+        f"{len(unique_unmatched)}"
+    )
+
+    print(
+        "\nFirst 50 unmatched ingredients:"
+    )
+
+    for name in unique_unmatched.head(50):
+
+        print(
+            f"- {name}"
+        )
+
+else:
+
+    print(
+        "All ingredients were successfully matched."
+    )
+
+
+# ============================================================
+# 19. FINAL OUTPUT LOCATION
+# ============================================================
+
+print("\n==========================================")
+print("OUTPUT FILE")
+print("==========================================")
+
+print(OUTPUT_FILE)
