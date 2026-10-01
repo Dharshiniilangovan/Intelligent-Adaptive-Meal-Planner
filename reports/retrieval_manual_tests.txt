@@ -7,12 +7,15 @@ Manual retrieval checks — 8,436 recipes in KB
    R16777  Amish Apple Dumplings                               cuisine=american  meal=lunch,dinner  852 kcal  6 g protein
    R18471  Vegetarian Cassoulet                                cuisine=french  meal=lunch,dinner  226 kcal  5 g protein
    R34060  Wild Rice in Vermouth                               cuisine=american  meal=lunch,dinner  333 kcal  10 g protein
-   Verdict: ______  (fill in after checking the names above)
+   Verdict: OK with note - all results are vegetarian and tagged dinner, so the filter is correct.
+            Data issue: "The Madras" is a cocktail and "Amish Apple Dumplings" is a dessert,
+            but the source tags both as lunch/dinner.
 
 ## Vegetarian dinner <= 30 min (strict)  {'diet': 'vegetarian', 'meal': 'dinner', 'max_time': 30}
    -> 0 recipes
    ! No cooking time data in the KB yet; filter_by_max_time cannot verify time.
-   Verdict: ______  (fill in after checking the names above)
+   Verdict: Expected 0 - the KB has no cooking-time data, so strict time filtering excludes
+            every recipe and warns instead of guessing. Works once cooking_time_min is populated.
 
 ## Vegan breakfast  {'diet': 'vegan', 'meal': 'breakfast'}
    -> 332 recipes
@@ -21,7 +24,9 @@ Manual retrieval checks — 8,436 recipes in KB
    R08746  Wake Up Coffee Porter Granola                       cuisine=american  meal=breakfast  846 kcal  28 g protein
    R11462  Quick and Easy Jam                                  cuisine=american  meal=breakfast  341 kcal  1 g protein
    R32947  Melon Pan Toast                                     cuisine=british  meal=breakfast  178 kcal  4 g protein
-   Verdict: ______  (fill in after checking the names above)
+   Verdict: OK with note - smoothie, chia pudding, granola and toast are vegan breakfast foods.
+            Data issue: "Quick and Easy Jam" is a spread, not a meal, and 341 kcal per serving
+            suggests the whole jar is counted as one serving.
 
 ## Asian dinner under 500 kcal  {'cuisine': 'asian', 'meal': 'dinner', 'max_calories': 500}
    -> 976 recipes
@@ -30,7 +35,10 @@ Manual retrieval checks — 8,436 recipes in KB
    R33858  Bacon and Egg Rice                                  cuisine=chinese  meal=lunch,dinner  495 kcal  16 g protein
    R20156  Chhole Peyaz Pulao                                  cuisine=indian  meal=lunch,dinner  333 kcal  13 g protein
    R27845  Braised Swiss Chard and Cannellini Beans            cuisine=south east asian  meal=lunch,dinner  284 kcal  12 g protein
-   Verdict: ______  (fill in after checking the names above)
+   Verdict: OK with note - the asian group correctly matches south east asian, japanese, chinese
+            and indian; all results are dinners under 500 kcal.
+            Data issue: "Braised Swiss Chard and Cannellini Beans" is Mediterranean-style but tagged
+            south east asian in the source.
 
 ## Italian, non-veg, >= 25 g protein  {'cuisine': 'italian', 'diet': 'non vegetarian', 'min_protein': 25}
    -> 78 recipes
@@ -39,7 +47,9 @@ Manual retrieval checks — 8,436 recipes in KB
    R38506  Italian Gnocchi Soup                                cuisine=italian  meal=lunch,dinner  791 kcal  37 g protein
    R28818  Oven Roasted Chicken Tenders Saltimbocca            cuisine=italian  meal=lunch,dinner  1899 kcal  90 g protein
    R10262  Chicken Stuffed with Sundried Tomatoes, Olives, an  cuisine=italian  meal=lunch,dinner  560 kcal  70 g protein
-   Verdict: ______  (fill in after checking the names above)
+   Verdict: OK - all Italian, all contain meat, all >= 25 g protein.
+            Note: Saltimbocca at 1899 kcal per serving is very high; combine with max_calories
+            when recommending meals.
 
 ## Low-carb dinner  {'diet': 'low carb', 'meal': 'dinner'}
    -> 1,441 recipes
@@ -48,7 +58,7 @@ Manual retrieval checks — 8,436 recipes in KB
    R23241  Mexican Meatloaf with Lime and Chipotle Tabasco Sa  cuisine=mexican  meal=lunch,dinner  508 kcal  30 g protein
    R24546  Perfect Grilled Ribeye Steak                        cuisine=american  meal=lunch,dinner  1195 kcal  82 g protein
    R37962  Parmesan Fish                                       cuisine=italian  meal=lunch,dinner  176 kcal  23 g protein
-   Verdict: ______  (fill in after checking the names above)
+   Verdict: OK - cauliflower, beef, meatloaf, steak and fish are typical low-carb dinners.
 
 ## Snack under 200 kcal  {'meal': 'snack', 'max_calories': 200}
    -> 657 recipes
@@ -57,7 +67,7 @@ Manual retrieval checks — 8,436 recipes in KB
    R22736  Plantain Chips-lightened                            cuisine=south american  meal=snack  175 kcal  2 g protein
    R36133  Lemon Honey Pistachio Biscotti                      cuisine=italian  meal=snack  55 kcal  1 g protein
    R33137  Stuffed Celery Sticks                               cuisine=american  meal=snack  180 kcal  5 g protein
-   Verdict: ______  (fill in after checking the names above)
+   Verdict: OK - all snacks, all under 200 kcal.
 
 ## Indian, no gluten or wheat  {'cuisine': 'indian', 'exclude': ['gluten', 'wheat']}
    -> 358 recipes
@@ -66,7 +76,10 @@ Manual retrieval checks — 8,436 recipes in KB
    R21444  Asian Spiral Cucumber Carrot Chickpea Salad         cuisine=indian,asian  meal=lunch,dinner  173 kcal  6 g protein
    R26659  Roasted Curry Chickpeas                             cuisine=indian  meal=lunch,dinner  825 kcal  33 g protein
    R02280  Rava Pakora (Indian Hushpuppies)                    cuisine=american,indian  meal=lunch,dinner  57 kcal  2 g protein
-   Verdict: ______  (fill in after checking the names above)
+   Verdict: OK with note - all Indian and none carry a gluten/wheat caution, so the filter is correct.
+            Data issue: "Rava Pakora" is made with rava (semolina = wheat) but the source has no
+            wheat caution. Cautions are unreliable for allergens; use the "gluten free" health
+            label instead (see the gluten-free vegan lunch query).
 
 ## High-protein Mexican  {'diet': 'high protein', 'cuisine': 'mexican'}
    -> 28 recipes
@@ -75,7 +88,7 @@ Manual retrieval checks — 8,436 recipes in KB
    R24011  Simple Crockpot Taco Soup                           cuisine=mexican  meal=lunch,dinner  266 kcal  36 g protein
    R06604  Chipotle-Marinated Pork Tenderloin with Black Bean  cuisine=mexican  meal=lunch,dinner  162 kcal  24 g protein
    R17211  Caramelized Garlic Chicken                          cuisine=mexican  meal=lunch,dinner  176 kcal  23 g protein
-   Verdict: ______  (fill in after checking the names above)
+   Verdict: OK - all Mexican, all meat or bean based with high protein.
 
 ## Gluten-free vegan lunch  {'diet': ['vegan', 'gluten free'], 'meal': 'lunch'}
    -> 1,173 recipes
@@ -84,4 +97,15 @@ Manual retrieval checks — 8,436 recipes in KB
    R17373  The Food Truck Spice                                cuisine=american  meal=lunch,dinner  13 kcal  1 g protein
    R26079  Southwestern Chickpea Salad                         cuisine=american  meal=lunch,dinner  391 kcal  12 g protein
    R28172  Creamy Vegan Broccoli Soup with Curried Chickpeas   cuisine=american  meal=lunch,dinner  757 kcal  27 g protein
-   Verdict: ______  (fill in after checking the names above)
+   Verdict: OK with note - all results are vegan and gluten free (filter correct); chickpea salad
+            and broccoli soup are good lunches.
+            Data issue: "The Madras" and "Azteca" are cocktails and "The Food Truck Spice" is a spice
+            mix, yet the source tags them lunch/dinner. Using the "gluten free" health label correctly
+            excluded a barley salad that a gluten-caution filter let through.
+
+
+## Summary
+   Queries run: 10
+   Code problems found: 0 - every result matched its filters.
+   Data issues found in the source (not fixed, documented):
+     1. Non-meals tagged lunch/dinner: cocktails (The Madras, Azteca),
