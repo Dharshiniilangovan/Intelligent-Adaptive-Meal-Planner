@@ -1,0 +1,87 @@
+Manual retrieval checks — 8,436 recipes in KB
+
+## Vegetarian dinner  {'diet': 'vegetarian', 'meal': 'dinner'}
+   -> 3,460 recipes
+   R03943  Saucy Cauliflower, low fat                          cuisine=british  meal=lunch,dinner  216 kcal  5 g protein
+   R16472  The Madras                                          cuisine=world  meal=lunch,dinner  159 kcal  0 g protein
+   R16777  Amish Apple Dumplings                               cuisine=american  meal=lunch,dinner  852 kcal  6 g protein
+   R18471  Vegetarian Cassoulet                                cuisine=french  meal=lunch,dinner  226 kcal  5 g protein
+   R34060  Wild Rice in Vermouth                               cuisine=american  meal=lunch,dinner  333 kcal  10 g protein
+   Verdict: ______  (fill in after checking the names above)
+
+## Vegetarian dinner <= 30 min (strict)  {'diet': 'vegetarian', 'meal': 'dinner', 'max_time': 30}
+   -> 0 recipes
+   ! No cooking time data in the KB yet; filter_by_max_time cannot verify time.
+   Verdict: ______  (fill in after checking the names above)
+
+## Vegan breakfast  {'diet': 'vegan', 'meal': 'breakfast'}
+   -> 332 recipes
+   R22189  Healthy Strawberry Shortcake Smoothie               cuisine=american  meal=breakfast  426 kcal  11 g protein
+   R13340  Meal Prep Golden Chia Pudding                       cuisine=british  meal=breakfast,lunch,dinner  328 kcal  11 g protein
+   R08746  Wake Up Coffee Porter Granola                       cuisine=american  meal=breakfast  846 kcal  28 g protein
+   R11462  Quick and Easy Jam                                  cuisine=american  meal=breakfast  341 kcal  1 g protein
+   R32947  Melon Pan Toast                                     cuisine=british  meal=breakfast  178 kcal  4 g protein
+   Verdict: ______  (fill in after checking the names above)
+
+## Asian dinner under 500 kcal  {'cuisine': 'asian', 'meal': 'dinner', 'max_calories': 500}
+   -> 976 recipes
+   R27540  Thai Butternut Squash Soup                          cuisine=south east asian  meal=lunch,dinner  268 kcal  6 g protein
+   R02363  Layered Tuna Sashimi Salad                          cuisine=japanese  meal=lunch,dinner  370 kcal  38 g protein
+   R33858  Bacon and Egg Rice                                  cuisine=chinese  meal=lunch,dinner  495 kcal  16 g protein
+   R20156  Chhole Peyaz Pulao                                  cuisine=indian  meal=lunch,dinner  333 kcal  13 g protein
+   R27845  Braised Swiss Chard and Cannellini Beans            cuisine=south east asian  meal=lunch,dinner  284 kcal  12 g protein
+   Verdict: ______  (fill in after checking the names above)
+
+## Italian, non-veg, >= 25 g protein  {'cuisine': 'italian', 'diet': 'non vegetarian', 'min_protein': 25}
+   -> 78 recipes
+   R06497  Gnocchi with Prosciutto, Spring Peas, and Chantere  cuisine=italian  meal=lunch,dinner  1038 kcal  46 g protein
+   R33708  Saucy Meatball Hoagies                              cuisine=italian  meal=lunch,dinner  644 kcal  34 g protein
+   R38506  Italian Gnocchi Soup                                cuisine=italian  meal=lunch,dinner  791 kcal  37 g protein
+   R28818  Oven Roasted Chicken Tenders Saltimbocca            cuisine=italian  meal=lunch,dinner  1899 kcal  90 g protein
+   R10262  Chicken Stuffed with Sundried Tomatoes, Olives, an  cuisine=italian  meal=lunch,dinner  560 kcal  70 g protein
+   Verdict: ______  (fill in after checking the names above)
+
+## Low-carb dinner  {'diet': 'low carb', 'meal': 'dinner'}
+   -> 1,441 recipes
+   R03943  Saucy Cauliflower, low fat                          cuisine=british  meal=lunch,dinner  216 kcal  5 g protein
+   R02533  Beef and peppers                                    cuisine=american  meal=lunch,dinner  176 kcal  11 g protein
+   R23241  Mexican Meatloaf with Lime and Chipotle Tabasco Sa  cuisine=mexican  meal=lunch,dinner  508 kcal  30 g protein
+   R24546  Perfect Grilled Ribeye Steak                        cuisine=american  meal=lunch,dinner  1195 kcal  82 g protein
+   R37962  Parmesan Fish                                       cuisine=italian  meal=lunch,dinner  176 kcal  23 g protein
+   Verdict: ______  (fill in after checking the names above)
+
+## Snack under 200 kcal  {'meal': 'snack', 'max_calories': 200}
+   -> 657 recipes
+   R11476  Coconut - Pineapple Biscotti                        cuisine=italian  meal=snack  158 kcal  3 g protein
+   R12728  Brown Sugar-Caramel Latte                           cuisine=american  meal=snack  160 kcal  2 g protein
+   R22736  Plantain Chips-lightened                            cuisine=south american  meal=snack  175 kcal  2 g protein
+   R36133  Lemon Honey Pistachio Biscotti                      cuisine=italian  meal=snack  55 kcal  1 g protein
+   R33137  Stuffed Celery Sticks                               cuisine=american  meal=snack  180 kcal  5 g protein
+   Verdict: ______  (fill in after checking the names above)
+
+## Indian, no gluten or wheat  {'cuisine': 'indian', 'exclude': ['gluten', 'wheat']}
+   -> 358 recipes
+   R20156  Chhole Peyaz Pulao                                  cuisine=indian  meal=lunch,dinner  333 kcal  13 g protein
+   R13203  Capsicum Stir Fry Indian                            cuisine=indian  meal=lunch,dinner  137 kcal  3 g protein
+   R21444  Asian Spiral Cucumber Carrot Chickpea Salad         cuisine=indian,asian  meal=lunch,dinner  173 kcal  6 g protein
+   R26659  Roasted Curry Chickpeas                             cuisine=indian  meal=lunch,dinner  825 kcal  33 g protein
+   R02280  Rava Pakora (Indian Hushpuppies)                    cuisine=american,indian  meal=lunch,dinner  57 kcal  2 g protein
+   Verdict: ______  (fill in after checking the names above)
+
+## High-protein Mexican  {'diet': 'high protein', 'cuisine': 'mexican'}
+   -> 28 recipes
+   R05554  Marinated Grilled Chicken With Watermelon Salsa     cuisine=mexican  meal=lunch,dinner  421 kcal  63 g protein
+   R23051  Avocado Chicken Salad                               cuisine=mexican  meal=lunch,dinner  241 kcal  33 g protein
+   R24011  Simple Crockpot Taco Soup                           cuisine=mexican  meal=lunch,dinner  266 kcal  36 g protein
+   R06604  Chipotle-Marinated Pork Tenderloin with Black Bean  cuisine=mexican  meal=lunch,dinner  162 kcal  24 g protein
+   R17211  Caramelized Garlic Chicken                          cuisine=mexican  meal=lunch,dinner  176 kcal  23 g protein
+   Verdict: ______  (fill in after checking the names above)
+
+## Gluten-free vegan lunch  {'diet': ['vegan', 'gluten free'], 'meal': 'lunch'}
+   -> 1,173 recipes
+   R16472  The Madras                                          cuisine=world  meal=lunch,dinner  159 kcal  0 g protein
+   R10128  Azteca                                              cuisine=world  meal=lunch,dinner  709 kcal  4 g protein
+   R17373  The Food Truck Spice                                cuisine=american  meal=lunch,dinner  13 kcal  1 g protein
+   R26079  Southwestern Chickpea Salad                         cuisine=american  meal=lunch,dinner  391 kcal  12 g protein
+   R28172  Creamy Vegan Broccoli Soup with Curried Chickpeas   cuisine=american  meal=lunch,dinner  757 kcal  27 g protein
+   Verdict: ______  (fill in after checking the names above)
