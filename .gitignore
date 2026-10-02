@@ -17,6 +17,7 @@ env/
 # Data artifacts
 !data/processed/.gitkeep
 data/raw/
+data/processed/*.csv
 
 # Notebooks
 .ipynb_checkpoints/
