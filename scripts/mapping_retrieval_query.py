@@ -1,6 +1,7 @@
-import pandas as pd
-from pathlib import Path
 import re
+from pathlib import Path
+
+import pandas as pd
 
 
 # ============================================================
@@ -16,32 +17,7 @@ MAPPING_FILE = (
     / "recipe_ingredient_mapping.csv"
 )
 
-
-# ============================================================
-# GENERIC QUERY FUNCTION
-# ============================================================
-
-def query_by_id(df, column_name, query_id):
-    """
-    Generic function to query a dataframe using an ID.
-    """
-
-    if column_name not in df.columns:
-        raise ValueError(
-            f"Column '{column_name}' not found in the dataset."
-        )
-
-    query_id = str(query_id).strip().upper()
-
-    result = df[
-        df[column_name]
-        .astype(str)
-        .str.strip()
-        .str.upper()
-        == query_id
-    ]
-
-    return result
+RECIPE_ID_PATTERN = re.compile(r"^R\d{5}$")
 
 
 # ============================================================
@@ -58,11 +34,8 @@ def validate_recipe_id(recipe_id):
     Examples:
         R03943 -> Valid
         R00001 -> Valid
-
-        3943   -> Invalid
         ABC    -> Invalid
         R39    -> Invalid
-        R123456 -> Invalid
     """
 
     if recipe_id is None:
@@ -73,161 +46,91 @@ def validate_recipe_id(recipe_id):
     if not recipe_id:
         return False
 
-    pattern = r"^R\d{5}$"
-
-    return bool(re.fullmatch(pattern, recipe_id))
+    return bool(RECIPE_ID_PATTERN.fullmatch(recipe_id))
 
 
 # ============================================================
-# RECIPE QUERY
+# GENERIC QUERY FUNCTION
+# ============================================================
+
+def query_by_id(df, column_name, query_id):
+    """
+    Query a DataFrame using a specified ID column.
+    """
+
+    if column_name not in df.columns:
+        raise ValueError(
+            f"Column '{column_name}' not found in the dataset."
+        )
+
+    query_id = str(query_id).strip().upper()
+
+    return df[
+        df[column_name]
+        .astype(str)
+        .str.strip()
+        .str.upper()
+        == query_id
+    ].copy()
+
+
+# ============================================================
+# GET RECIPE INGREDIENTS
 # ============================================================
 
 def get_recipe_ingredients(recipe_id):
     """
     Retrieve all ingredients belonging to a recipe ID.
 
+    Parameters:
+        recipe_id (str):
+            Recipe ID in the format R followed by 5 digits.
+
     Returns:
-        DataFrame if recipe exists.
-        Empty DataFrame if recipe does not exist.
+        pandas.DataFrame:
+            Rows belonging to the requested recipe.
+            Returns an empty DataFrame if the recipe does not exist.
+
+    Raises:
+        ValueError:
+            If the recipe ID format is invalid.
+
+        FileNotFoundError:
+            If the mapping file does not exist.
     """
 
-    # --------------------------------------------------------
-    # Check mapping file exists
-    # --------------------------------------------------------
+    # Normalize recipe ID
+    recipe_id = str(recipe_id).strip().upper()
 
-    if not MAPPING_FILE.exists():
-        raise FileNotFoundError(
-            f"Mapping file not found:\n{MAPPING_FILE}"
+    # Validate recipe ID
+    if not validate_recipe_id(recipe_id):
+        raise ValueError(
+            f"Invalid Recipe ID: {recipe_id}. "
+            "Expected format: R followed by 5 digits "
+            "(example: R03943)."
         )
 
-    # --------------------------------------------------------
-    # Load mapping
-    # --------------------------------------------------------
+    # Check mapping file
+    if not MAPPING_FILE.exists():
+        raise FileNotFoundError(
+            f"Mapping file not found: {MAPPING_FILE}"
+        )
 
+    # Load mapping
     df = pd.read_csv(MAPPING_FILE)
 
     # Clean column names
     df.columns = df.columns.str.strip()
 
-    # --------------------------------------------------------
-    # Check recipe_id column
-    # --------------------------------------------------------
-
+    # Check required column
     if "recipe_id" not in df.columns:
         raise ValueError(
-            "The mapping file does not contain "
-            "a 'recipe_id' column."
+            "Mapping file must contain a 'recipe_id' column."
         )
 
-    # --------------------------------------------------------
     # Query recipe
-    # --------------------------------------------------------
-
-    result = query_by_id(
+    return query_by_id(
         df=df,
         column_name="recipe_id",
         query_id=recipe_id
     )
-
-    return result
-
-
-# ============================================================
-# MAIN
-# ============================================================
-
-if __name__ == "__main__":
-
-    try:
-
-        recipe_id = input(
-            "Enter Recipe ID (example: R03943): "
-        ).strip().upper()
-
-        # ----------------------------------------------------
-        # EMPTY INPUT
-        # ----------------------------------------------------
-
-        if not recipe_id:
-
-            print("\nInvalid input.")
-            print("Recipe ID cannot be empty.")
-
-        # ----------------------------------------------------
-        # INVALID FORMAT
-        # ----------------------------------------------------
-
-        elif not validate_recipe_id(recipe_id):
-
-            print(f"\nInvalid Recipe ID: {recipe_id}")
-            print(
-                "Expected format: R followed by 5 digits "
-                "(example: R03943)"
-            )
-
-        # ----------------------------------------------------
-        # VALID FORMAT -> SEARCH
-        # ----------------------------------------------------
-
-        else:
-
-            result = get_recipe_ingredients(recipe_id)
-
-            # ------------------------------------------------
-            # RECIPE DOES NOT EXIST
-            # ------------------------------------------------
-
-            if result.empty:
-
-                print(
-                    f"\nRecipe ID '{recipe_id}' "
-                    "was not found."
-                )
-
-            # ------------------------------------------------
-            # RECIPE EXISTS
-            # ------------------------------------------------
-
-            else:
-
-                print(
-                    f"\nIngredients for Recipe ID: "
-                    f"{recipe_id}\n"
-                )
-
-                print(
-                    result.to_csv(
-                        index=False
-                    )
-                )
-
-    # ========================================================
-    # ERROR HANDLING
-    # ========================================================
-
-    except FileNotFoundError as error:
-
-        print("\nFile Error:")
-        print(error)
-
-    except pd.errors.EmptyDataError:
-
-        print(
-            "\nError: The mapping CSV file is empty."
-        )
-
-    except pd.errors.ParserError:
-
-        print(
-            "\nError: Unable to read the mapping CSV file."
-        )
-
-    except ValueError as error:
-
-        print("\nData Error:")
-        print(error)
-
-    except Exception as error:
-
-        print("\nUnexpected Error:")
-        print(error)
