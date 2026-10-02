@@ -19,6 +19,12 @@ def test_valid_recipe_1():
 
     result = get_recipe_ingredients(recipe_id)
 
+    # Print output
+    print("\n" + "=" * 60)
+    print(f"VALID TEST 1 - Recipe ID: {recipe_id}")
+    print("=" * 60)
+    print(result.to_string(index=False))
+
     assert not result.empty
 
     assert all(
@@ -42,6 +48,12 @@ def test_valid_recipe_2():
 
     result = get_recipe_ingredients(recipe_id)
 
+    # Print output
+    print("\n" + "=" * 60)
+    print(f"VALID TEST 2 - Recipe ID: {recipe_id}")
+    print("=" * 60)
+    print(result.to_string(index=False))
+
     assert not result.empty
 
     assert all(
@@ -62,7 +74,16 @@ def test_invalid_recipe_format():
 
     recipe_id = "ABC123"
 
-    assert validate_recipe_id(recipe_id) is False
+    result = validate_recipe_id(recipe_id)
+
+    # Print output
+    print("\n" + "=" * 60)
+    print("INVALID TEST 1 - Wrong Recipe ID Format")
+    print("=" * 60)
+    print(f"Recipe ID: {recipe_id}")
+    print(f"Valid format: {result}")
+
+    assert result is False
 
 
 # ============================================================
@@ -100,6 +121,17 @@ def test_recipe_not_found():
 
     # Call the actual mapping retrieval function
     result = get_recipe_ingredients(recipe_id)
+
+    # Print output
+    print("\n" + "=" * 60)
+    print("INVALID TEST 2 - Recipe Does Not Exist")
+    print("=" * 60)
+    print(f"Recipe ID searched: {recipe_id}")
+
+    if result.empty:
+        print("Result: No recipe found.")
+    else:
+        print(result.to_string(index=False))
 
     # No recipe should be returned
     assert result.empty
