@@ -12,6 +12,8 @@ def test_ingredient_not_in_pantry():
 
     required = {
         "rice": {
+            "ingredient_id": "ING001",
+            "alias_name": "['rice', 'white rice']",
             "quantity": 500,
             "unit": "gram"
         }
@@ -21,6 +23,8 @@ def test_ingredient_not_in_pantry():
 
     assert result == {
         "rice": {
+            "ingredient_id": "ING001",
+            "alias_name": "['rice', 'white rice']",
             "quantity": 500,
             "unit": "gram"
         }
@@ -41,6 +45,8 @@ def test_pantry_has_insufficient_quantity():
 
     required = {
         "rice": {
+            "ingredient_id": "ING001",
+            "alias_name": "['rice', 'white rice']",
             "quantity": 500,
             "unit": "gram"
         }
@@ -50,6 +56,8 @@ def test_pantry_has_insufficient_quantity():
 
     assert result == {
         "rice": {
+            "ingredient_id": "ING001",
+            "alias_name": "['rice', 'white rice']",
             "quantity": 300,
             "unit": "gram"
         }
@@ -70,6 +78,8 @@ def test_pantry_has_exact_quantity():
 
     required = {
         "rice": {
+            "ingredient_id": "ING001",
+            "alias_name": "['rice', 'white rice']",
             "quantity": 500,
             "unit": "gram"
         }
@@ -94,6 +104,8 @@ def test_pantry_has_more_than_required():
 
     required = {
         "rice": {
+            "ingredient_id": "ING001",
+            "alias_name": "['rice', 'white rice']",
             "quantity": 500,
             "unit": "gram"
         }
@@ -118,6 +130,8 @@ def test_unit_mismatch():
 
     required = {
         "butter": {
+            "ingredient_id": "ING002",
+            "alias_name": "['butter', 'unsalted butter']",
             "quantity": 2,
             "unit": "tablespoon"
         }
@@ -127,6 +141,8 @@ def test_unit_mismatch():
 
     assert result == {
         "butter": {
+            "ingredient_id": "ING002",
+            "alias_name": "['butter', 'unsalted butter']",
             "quantity": 2,
             "unit": "tablespoon",
             "status": "unit_mismatch"
@@ -143,6 +159,8 @@ def test_unknown_quantity():
 
     required = {
         "salt": {
+            "ingredient_id": "ING003",
+            "alias_name": "['salt', 'table salt']",
             "quantity": float("nan"),
             "unit": "to taste"
         }
@@ -152,6 +170,8 @@ def test_unknown_quantity():
 
     assert result == {
         "salt": {
+            "ingredient_id": "ING003",
+            "alias_name": "['salt', 'table salt']",
             "quantity": None,
             "unit": "to taste",
             "status": "quantity_unknown"
@@ -177,14 +197,20 @@ def test_multiple_ingredients():
 
     required = {
         "rice": {
+            "ingredient_id": "ING001",
+            "alias_name": "['rice', 'white rice']",
             "quantity": 500,
             "unit": "gram"
         },
         "carrot": {
+            "ingredient_id": "ING004",
+            "alias_name": "['carrot', 'carrots']",
             "quantity": 100,
             "unit": "gram"
         },
         "tofu": {
+            "ingredient_id": "ING005",
+            "alias_name": "['tofu', 'firm tofu']",
             "quantity": 300,
             "unit": "gram"
         }
@@ -194,10 +220,14 @@ def test_multiple_ingredients():
 
     assert result == {
         "rice": {
+            "ingredient_id": "ING001",
+            "alias_name": "['rice', 'white rice']",
             "quantity": 300,
             "unit": "gram"
         },
         "tofu": {
+            "ingredient_id": "ING005",
+            "alias_name": "['tofu', 'firm tofu']",
             "quantity": 300,
             "unit": "gram"
         }

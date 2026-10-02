@@ -23,12 +23,7 @@ def normalize_name(name):
 
 
 def normalize_unit(unit):
-    """
-    Normalize unit formatting only.
-
-    Actual unit conversion such as kg -> g
-    will be handled by the normalization layer.
-    """
+    """Normalize unit formatting only."""
     return str(unit).strip().lower()
 
 
@@ -78,8 +73,10 @@ def examine_pantry(pantry_data):
 
 def fetch_recipe_ingredients(recipe_id):
     """
-    Retrieve recipe ingredients and convert them
-    into a dictionary indexed by ingredient name.
+    Retrieve recipe ingredients from the mapping KB.
+
+    Keeps ingredient ID and aliases so they can later
+    be used by the grocery/product search layer.
     """
 
     df = scripts.mapping_retrieval_query.get_recipe_ingredients(
@@ -91,7 +88,9 @@ def fetch_recipe_ingredients(recipe_id):
 
     return {
         normalize_name(row["ingredient_name"]): {
-            "quantity": row["quantity"],
+            "ingredient_id": row["ingredient_id"],
+            "alias_name": row["alias_name"],
+            "quantity": row["quantity_per_serving"],
             "unit": normalize_unit(row["unit"])
         }
         for _, row in df.iterrows()
@@ -102,11 +101,14 @@ def filter_ingredient_list(pantry_data, ingredient_names):
     """
     Compare recipe requirements with pantry contents.
 
-    Returns only ingredients that need to be purchased.
+    Returns only ingredients that still need
+    to be purchased.
     """
 
     if not isinstance(pantry_data, dict):
-        raise ValueError("Pantry data should be a dictionary.")
+        raise ValueError(
+            "Pantry data should be a dictionary."
+        )
 
     if not isinstance(ingredient_names, dict):
         raise ValueError(
@@ -129,20 +131,23 @@ def filter_ingredient_list(pantry_data, ingredient_names):
 
     for ingredient in ingredients_not_in_pantry:
 
-        required = ingredient_names[ingredient]["quantity"]
-        required_unit = ingredient_names[ingredient]["unit"]
+        ingredient_data = ingredient_names[ingredient]
+
+        required = ingredient_data["quantity"]
+        required_unit = ingredient_data["unit"]
+
+        grocery_item = {
+            "ingredient_id": ingredient_data["ingredient_id"],
+            "alias_name": ingredient_data["alias_name"],
+            "quantity": required,
+            "unit": required_unit
+        }
 
         if is_unknown_quantity(required):
-            grocery_list[ingredient] = {
-                "quantity": None,
-                "unit": required_unit,
-                "status": "quantity_unknown"
-            }
-        else:
-            grocery_list[ingredient] = {
-                "quantity": required,
-                "unit": required_unit
-            }
+            grocery_item["quantity"] = None
+            grocery_item["status"] = "quantity_unknown"
+
+        grocery_list[ingredient] = grocery_item
 
     # -----------------------------------------
     # Ingredients already present in pantry
@@ -150,48 +155,55 @@ def filter_ingredient_list(pantry_data, ingredient_names):
 
     for ingredient in ingredients_in_pantry:
 
-        required = ingredient_names[ingredient]["quantity"]
-        required_unit = ingredient_names[ingredient]["unit"]
+        ingredient_data = ingredient_names[ingredient]
+
+        required = ingredient_data["quantity"]
+        required_unit = ingredient_data["unit"]
 
         available = pantry_data[ingredient]["quantity"]
         pantry_unit = pantry_data[ingredient]["unit"]
 
+        grocery_item = {
+            "ingredient_id": ingredient_data["ingredient_id"],
+            "alias_name": ingredient_data["alias_name"],
+            "quantity": required,
+            "unit": required_unit
+        }
+
         # Unknown recipe quantity
         if is_unknown_quantity(required):
-            grocery_list[ingredient] = {
-                "quantity": None,
-                "unit": required_unit,
-                "status": "quantity_unknown"
-            }
+            grocery_item["quantity"] = None
+            grocery_item["status"] = "quantity_unknown"
+
+            grocery_list[ingredient] = grocery_item
             continue
 
-        # Units must be converted before pantry subtraction
+        # Unit mismatch
+        # Member 3's normalization should eventually
+        # resolve compatible unit conversions.
         if required_unit != pantry_unit:
-            grocery_list[ingredient] = {
-                "quantity": required,
-                "unit": required_unit,
-                "status": "unit_mismatch"
-            }
+            grocery_item["status"] = "unit_mismatch"
+
+            grocery_list[ingredient] = grocery_item
             continue
 
+        # Calculate how much is still required
         missing_quantity = max(
             float(required) - float(available),
             0
         )
 
-        # Only add if something needs to be purchased
+        # Only add ingredients that need purchasing
         if missing_quantity > 0:
-            grocery_list[ingredient] = {
-                "quantity": missing_quantity,
-                "unit": required_unit
-            }
+            grocery_item["quantity"] = missing_quantity
+            grocery_list[ingredient] = grocery_item
 
     return grocery_list
 
 
 if __name__ == "__main__":
 
-    recipe_id = "R02533"
+    recipe_id = "R03943"
 
     ingredients = fetch_recipe_ingredients(recipe_id)
     pantry = examine_pantry(load_pantry())
