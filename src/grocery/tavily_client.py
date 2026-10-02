@@ -24,7 +24,7 @@ load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 # Singapore supermarket websites -> store name shown to users
 SG_GROCERY_DOMAINS = {
     "fairprice.com.sg": "FairPrice",
-    "coldstorage.com.sg": "Cold Storage",
+    # "coldstorage.com.sg": "Cold Storage",
     # "shengsiong.com.sg": "Sheng Siong",
     # "giant.sg": "Giant",
     # "redmart.lazada.sg": "RedMart",

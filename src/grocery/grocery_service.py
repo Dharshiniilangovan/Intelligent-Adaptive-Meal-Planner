@@ -23,9 +23,7 @@ from src.grocery.tavily_client import SearchError, TavilyGroceryClient
 from src.grocery.food_filter import check_match, search_queries, words
 from src.grocery.units import parse_package, pretty, to_base
 
-GROCERY_STORES = ("fairprice", "ntuc", "cold storage", "coldstorage", "redmart", "sheng siong",
-                  "shengsiong", "giant", "prime supermarket", "donki", "amazon fresh", "hao mart",
-                  "little farms", "ryan's grocery", "scoop wholefoods")
+GROCERY_STORES = ("fairprice", "ntuc")
 # Only accept products from known Singapore grocery retailers (Tavily searches only these sites,
 # but this double-checks every result).
 GROCERY_STORES_ONLY = True

@@ -1,0 +1,34 @@
+{
+    "items": [
+        {
+            "name": "milk",
+            "quantity": 1,
+            "unit": "liter"
+        },
+        {
+            "name": "eggs",
+            "quantity": 12,
+            "unit": "pieces"
+        },
+        {
+            "name": "flour",
+            "quantity": 2,
+            "unit": "kilograms"
+        },
+        {
+            "name": "sugar",
+            "quantity": 1,
+            "unit": "kilogram"
+        },
+        {
+            "name": "butter",
+            "quantity": 0.5,
+            "unit": "kilogram"
+        },
+        {
+            "name": "Bell Pepper",
+            "quantity": 1,
+            "unit": "count"
+        }
+    ]
+}
