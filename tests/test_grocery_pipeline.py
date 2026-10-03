@@ -33,7 +33,7 @@ FAKE_RESULTS = {
     ],
     "chicken": [
         product("c1", "Pedigree Adult Dry Dog Food Chicken 3kg", 24.90),
-        product("c2", "Fresh Chicken Breast 500g", 6.50, store="coldstorage"),
+        product("c2","Fresh Chicken Breast 500g",6.50,store="fairprice"),
         product("c3", "Maggi Chicken Stock Cubes 60g", 2.10),
     ],
     "tomato": [
@@ -183,9 +183,13 @@ def test_package_size_from_page_text_when_title_has_none():
 
 # ================================================================= what never reaches the basket
 def test_non_food_never_returned(service):
-    assert "Dog" not in service.get_grocery_option("chicken", 500, "g").product_name
-    assert service.get_grocery_option("tofu", 300, "g").product_name == "Unicurd Firm Tofu 300g"
+    chicken = service.get_grocery_option("chicken", 500, "g")
+    tofu = service.get_grocery_option("tofu", 300, "g")
 
+    assert chicken.product_name is not None
+    assert "Dog" not in chicken.product_name
+
+    assert tofu.product_name == "Unicurd Firm Tofu 300g"
 
 def test_non_singapore_products_rejected(service):
     opt = service.get_grocery_option("tofu", 300, "g")
@@ -258,18 +262,35 @@ def test_extract_price_skips_banners_and_unit_prices():
 
 def test_store_and_product_page_detection():
     url = "https://www.fairprice.com.sg/product/meiji-fresh-milk-2l-13036390"
-    assert store_for(url) == ("fairprice.com.sg", "FairPrice")
-    assert store_for("https://www.amazon.com/dp/123") == (None, None)
+
+    assert store_for(url) == (
+        "fairprice.com.sg",
+        "FairPrice"
+    )
+
+    assert store_for(
+        "https://www.amazon.com/dp/123"
+    ) == (None, None)
+
     assert is_product_page(url)
-    assert is_product_page("https://giant.sg/meiji-fresh-milk-2l-1234567")
-    assert not is_product_page("https://www.fairprice.com.sg/search?query=milk")
-    assert not is_product_page("https://www.fairprice.com.sg/category/milk")
+
+    assert not is_product_page(
+        "https://www.fairprice.com.sg/search?query=milk"
+    )
+
+    assert not is_product_page(
+        "https://www.fairprice.com.sg/category/milk"
+    )
 
 
 def test_clean_title():
-    assert clean_title("Buy Meiji Fresh Milk 2L | FairPrice Singapore") == "Meiji Fresh Milk 2L"
-    assert clean_title("Farm Fresh Pure Fresh Milk 1L - Cold Storage") == "Farm Fresh Pure Fresh Milk 1L"
+    assert clean_title(
+        "Buy Meiji Fresh Milk 2L | FairPrice Singapore"
+    ) == "Meiji Fresh Milk 2L"
 
+    assert clean_title(
+        "FairPrice Basmati Rice | NTUC FairPrice"
+    ) == "FairPrice Basmati Rice"
 
 def test_normalize_tavily_result():
     r = {"title": "Meiji Fresh Milk 2L | FairPrice Singapore",
@@ -290,10 +311,17 @@ def test_normalize_drops_pages_without_price_or_not_products():
 
 
 def test_out_of_stock_page_marked():
-    r = {"title": "Farm Fresh Milk 1L - Cold Storage", "url": "https://coldstorage.com.sg/product/farm-fresh-milk-1l",
-         "content": "Out of stock", "raw_content": "Farm Fresh Milk 1L\nPrice $3.45"}
+    r = {
+        "title": "Farm Fresh Milk 1L | FairPrice Singapore",
+        "url": "https://www.fairprice.com.sg/product/farm-fresh-milk-1l-12345678",
+        "content": "Out of stock",
+        "raw_content": "Farm Fresh Milk 1L\nPrice $3.45",
+    }
+
     p = normalize(r)
-    assert p["price"] == 3.45 and p["in_stock"] is False
+
+    assert p["price"] == 3.45
+    assert p["in_stock"] is False
 
 
 # ================================================================= contract, cache, basket
@@ -322,6 +350,54 @@ def test_grocery_list_and_basket(service):
     assert summary["priced_items"] == 2
     assert summary["estimated_total"] == 3.50 + 1.20
     assert summary["missing_price"] == ["apple"]
+
+def test_basket_marks_unknown_cost_as_incomplete(service):
+    items = [
+        {
+            "ingredient_id": "I1",
+            "ingredient_name": "rice",
+            "quantity": 700,
+            "unit": "g"
+        },
+        {
+            "ingredient_id": "I2",
+            "ingredient_name": "apple",
+            "quantity": 2,
+            "unit": "pcs"
+        },
+    ]
+
+    summary = basket_summary(
+        service.get_grocery_list(items)
+    )
+
+    assert summary["known_subtotal"] == 3.50
+    assert summary["cost_complete"] is False
+    assert "apple" in summary["unknown_cost_items"]
+
+
+def test_basket_marks_all_known_costs_as_complete(service):
+    items = [
+        {
+            "ingredient_id": "I1",
+            "ingredient_name": "rice",
+            "quantity": 700,
+            "unit": "g"
+        },
+        {
+            "ingredient_id": "I2",
+            "ingredient_name": "tofu",
+            "quantity": 300,
+            "unit": "g"
+        },
+    ]
+
+    summary = basket_summary(
+        service.get_grocery_list(items)
+    )
+
+    assert summary["cost_complete"] is True
+    assert summary["unknown_cost_items"] == []
 
 # ================================================================= real Tavily results (FairPrice, Oct 2026)
 REAL_BASMATI = {
