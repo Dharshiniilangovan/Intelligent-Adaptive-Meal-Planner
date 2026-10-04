@@ -220,16 +220,57 @@ def test_unknown_ingredient_gives_na(service):
     assert opt.product_name is None and opt.price_per_package is None
 
 
-def test_no_package_size_keeps_price_but_no_packages(service):
-    opt = service.get_grocery_option("garlic", 50, "g")
-    assert opt.match_status == "matched_no_quantity"
-    assert opt.price_per_package == 1.50 and opt.packages_needed is None and opt.total_cost is None
+def test_no_package_size_uses_minimum_package(service):
+    opt = service.get_grocery_option(
+        "garlic",
+        50,
+        "g",
+    )
+
+    assert (
+        opt.match_status
+        == "matched_minimum_package"
+    )
+
+    assert opt.price_per_package == 1.50
+
+    assert opt.packages_needed == 1
+
+    assert opt.total_cost == 1.50
+
+    assert (
+        "minimum purchase"
+        in opt.note
+    )
 
 
-def test_unit_mismatch(service):
-    opt = service.get_grocery_option("tofu", 2, "pcs")
-    assert opt.match_status == "matched_no_quantity" and opt.total_cost is None
-    assert "unit mismatch" in opt.note
+def test_unit_mismatch_uses_minimum_package(service):
+    opt = service.get_grocery_option(
+        "tofu",
+        2,
+        "pcs",
+    )
+
+    assert (
+        opt.match_status
+        == "matched_minimum_package"
+    )
+
+    assert opt.packages_needed == 1
+
+    assert opt.total_cost == (
+        opt.price_per_package
+    )
+
+    assert (
+        "unit mismatch"
+        in opt.note
+    )
+
+    assert (
+        "minimum purchase"
+        in opt.note
+    )
 
 
 def test_search_error_gives_error_status():

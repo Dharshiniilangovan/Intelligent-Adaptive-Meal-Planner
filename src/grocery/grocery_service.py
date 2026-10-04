@@ -1,19 +1,20 @@
 """src/grocery/grocery_service.py
 
-Turn an ingredient into a buyable FairPrice grocery option.
+Turn grocery ingredients into buyable FairPrice grocery options.
 
-Prices are fetched live through Tavily/FairPrice and cached in memory.
-Products are filtered for:
+The service:
+- searches FairPrice through Tavily
+- filters unrelated or unsafe results
+- calculates package quantities and purchase costs where possible
+- accepts the grocery_list dictionary produced by PantryService
+- returns priced, incomplete, and missing grocery products
+- keeps missing prices as None instead of zero
 
-- Singapore availability
-- SGD currency
-- FairPrice source
-- stock availability
-- realistic grocery prices
-- food/product relevance
-- usable package information
+Other project features should normally use:
 
-If no reliable product is found, product and price remain None (NA).
+    from src.grocery.grocery_service import get_grocery_results
+
+    result = get_grocery_results(grocery_list)
 """
 
 import math
@@ -26,13 +27,24 @@ from datetime import datetime, timezone
 
 import requests
 
-from src.grocery.food_filter import check_match, search_queries, words
-from src.grocery.tavily_client import SearchError, TavilyGroceryClient
-from src.grocery.units import parse_package, pretty, to_base
+from src.grocery.food_filter import (
+    check_match,
+    search_queries,
+    words,
+)
+from src.grocery.tavily_client import (
+    SearchError,
+    TavilyGroceryClient,
+)
+from src.grocery.units import (
+    parse_package,
+    pretty,
+    to_base,
+)
 
 
 # ---------------------------------------------------------------------
-# Grocery source
+# Grocery configuration
 # ---------------------------------------------------------------------
 
 GROCERY_STORE = "fairprice"
@@ -42,7 +54,6 @@ MAX_ITEM_PRICE = 100.0
 PRICE_OUTLIER_FACTOR = 3.0
 
 
-# Listing patterns known to be unreliable or invalid.
 BAD_URL_PATTERNS = [
     (
         re.compile(
@@ -61,7 +72,9 @@ _SOFT_404 = re.compile(
 
 
 def _now() -> str:
-    return datetime.now(timezone.utc).isoformat(
+    return datetime.now(
+        timezone.utc
+    ).isoformat(
         timespec="seconds"
     )
 
@@ -97,13 +110,14 @@ class GroceryOption:
         default_factory=_now
     )
 
-    # matched | matched_no_quantity | no_match | error
+    # matched | matched_minimum_package |
+    # matched_no_quantity | no_match | error
     match_status: str = "no_match"
 
     # exact | approximate
     match_quality: str | None = None
 
-    # Query that produced the selected result
+    # Search query that produced the selected result
     search_query: str | None = None
 
     note: str = ""
@@ -124,7 +138,10 @@ class GroceryService:
         verify_links: bool = False,
         cache_ttl_hours: float = 6.0,
     ):
-        self.client = client or TavilyGroceryClient()
+        self.client = (
+            client
+            or TavilyGroceryClient()
+        )
 
         self.verify_links = verify_links
 
@@ -134,12 +151,12 @@ class GroceryService:
 
         self._search_cache: dict[
             str,
-            tuple[float, list[dict]]
+            tuple[float, list[dict]],
         ] = {}
 
         self._link_cache: dict[
             str,
-            bool
+            bool,
         ] = {}
 
         self._http = requests.Session()
@@ -153,7 +170,7 @@ class GroceryService:
         )
 
     # -----------------------------------------------------------------
-    # Step 1: search with cache
+    # Search with cache
     # -----------------------------------------------------------------
 
     def _search(
@@ -165,11 +182,15 @@ class GroceryService:
             words(ingredient)
         )
 
-        hit = self._search_cache.get(key)
+        hit = self._search_cache.get(
+            key
+        )
 
         if (
             hit
-            and time.time() - hit[0] < self.cache_ttl
+            and
+            time.time() - hit[0]
+            < self.cache_ttl
         ):
             return hit[1]
 
@@ -192,13 +213,6 @@ class GroceryService:
     def _is_fairprice_product(
         product: dict,
     ) -> bool:
-        """
-        Defensive FairPrice validation.
-
-        Tavily is already restricted to fairprice.com.sg, but this
-        prevents manually supplied, cached or unexpected results from
-        another retailer from entering the grocery basket.
-        """
 
         text = (
             f"{product.get('store', '')} "
@@ -206,10 +220,12 @@ class GroceryService:
             f"{product.get('url', '')}"
         ).lower()
 
-        return GROCERY_STORE in text
+        return (
+            GROCERY_STORE in text
+        )
 
     # -----------------------------------------------------------------
-    # Step 2: filter results
+    # Filter products
     # -----------------------------------------------------------------
 
     def _filter(
@@ -224,7 +240,9 @@ class GroceryService:
         for product in products:
 
             # Singapore only
-            if product.get("country_code") not in (
+            if product.get(
+                "country_code"
+            ) not in (
                 None,
                 "SG",
             ):
@@ -233,7 +251,9 @@ class GroceryService:
                 ] += 1
                 continue
 
-            if product.get("region") not in (
+            if product.get(
+                "region"
+            ) not in (
                 None,
                 "sg",
             ):
@@ -243,16 +263,24 @@ class GroceryService:
                 continue
 
             # SGD only
-            if product.get("currency") != "SGD":
-                rejected["not SGD"] += 1
+            if product.get(
+                "currency"
+            ) != "SGD":
+                rejected[
+                    "not SGD"
+                ] += 1
                 continue
 
-            # Out-of-stock products cannot be recommended.
-            if product.get("in_stock") is False:
-                rejected["out of stock"] += 1
+            # Out-of-stock products cannot be recommended
+            if product.get(
+                "in_stock"
+            ) is False:
+                rejected[
+                    "out of stock"
+                ] += 1
                 continue
 
-            # Local products only.
+            # Local availability only
             if product.get(
                 "availability"
             ) not in (
@@ -265,22 +293,30 @@ class GroceryService:
                 ] += 1
                 continue
 
-            price = product.get("price")
+            # Product must have a usable price
+            price = product.get(
+                "price"
+            )
 
-            # Product must have a usable numeric price.
             if price is None:
-                rejected["missing price"] += 1
+                rejected[
+                    "missing price"
+                ] += 1
                 continue
 
             if not isinstance(
                 price,
                 (int, float),
             ):
-                rejected["invalid price"] += 1
+                rejected[
+                    "invalid price"
+                ] += 1
                 continue
 
             if price <= 0:
-                rejected["invalid price"] += 1
+                rejected[
+                    "invalid price"
+                ] += 1
                 continue
 
             if price > MAX_ITEM_PRICE:
@@ -289,7 +325,7 @@ class GroceryService:
                 ] += 1
                 continue
 
-            # FairPrice only.
+            # FairPrice only
             if not self._is_fairprice_product(
                 product
             ):
@@ -298,38 +334,48 @@ class GroceryService:
                 ] += 1
                 continue
 
-            # Reject known bad URLs.
+            # Reject known invalid URLs
             bad_reason = None
 
-            for regex, reason in BAD_URL_PATTERNS:
+            for regex, reason in (
+                BAD_URL_PATTERNS
+            ):
                 if regex.search(
-                    product.get("url") or ""
+                    product.get("url")
+                    or ""
                 ):
                     bad_reason = reason
                     break
 
             if bad_reason:
-                rejected[bad_reason] += 1
+                rejected[
+                    bad_reason
+                ] += 1
                 continue
 
-            # Check that the product is actually the requested food.
+            # Check product relevance
             ok, quality = check_match(
                 ingredient,
-                product.get("title") or "",
+                product.get("title")
+                or "",
             )
 
             if not ok:
-                rejected[quality] += 1
+                rejected[
+                    quality
+                ] += 1
                 continue
 
-            # Try title first, then Tavily page text.
+            # Parse package size from title/page text
             package = (
                 parse_package(
-                    product.get("title") or ""
+                    product.get("title")
+                    or ""
                 )
                 or
                 parse_package(
-                    product.get("size_text") or ""
+                    product.get("size_text")
+                    or ""
                 )
             )
 
@@ -350,7 +396,7 @@ class GroceryService:
         )
 
     # -----------------------------------------------------------------
-    # Remove suspicious price outliers
+    # Price outliers
     # -----------------------------------------------------------------
 
     @staticmethod
@@ -366,11 +412,13 @@ class GroceryService:
 
             for product in valid
 
-            if product.get("package")
-            and product["package"][0] > 0
+            if (
+                product.get("package")
+                and
+                product["package"][0] > 0
+            )
         }
 
-        # Not enough products to determine a reliable median.
         if len(unit_prices) < 3:
             return valid
 
@@ -382,19 +430,26 @@ class GroceryService:
 
         for product in valid:
 
-            product_id = id(product)
+            product_id = id(
+                product
+            )
 
             if (
                 product_id in unit_prices
                 and
                 unit_prices[product_id]
-                > PRICE_OUTLIER_FACTOR * median
+                >
+                PRICE_OUTLIER_FACTOR
+                * median
             ):
                 rejected[
                     "price outlier"
                 ] += 1
+
             else:
-                kept.append(product)
+                kept.append(
+                    product
+                )
 
         return kept
 
@@ -409,8 +464,11 @@ class GroceryService:
 
         score = 0
 
-        if GroceryService._is_fairprice_product(
-            product
+        if (
+            GroceryService
+            ._is_fairprice_product(
+                product
+            )
         ):
             score += 2
 
@@ -419,37 +477,52 @@ class GroceryService:
         ):
             score += 1
 
-        if product.get("package"):
+        if product.get(
+            "package"
+        ):
             score += 1
 
         return score
 
     # -----------------------------------------------------------------
-    # Step 3: rank candidates
+    # Rank candidates
     # -----------------------------------------------------------------
 
     def _rank(
         self,
         valid: list[dict],
-        need: tuple[float, str] | None,
+        need: tuple[
+            float,
+            str,
+        ] | None,
     ) -> list[dict]:
 
         for product in valid:
 
-            product["packages"] = None
-            product["total"] = None
+            product[
+                "packages"
+            ] = None
+
+            product[
+                "total"
+            ] = None
 
             package = product.get(
                 "package"
             )
 
+            # Exact package calculation when units match
             if (
                 need
-                and package
-                and package[1] == need[1]
+                and
+                package
+                and
+                package[1] == need[1]
             ):
 
-                product["packages"] = max(
+                product[
+                    "packages"
+                ] = max(
                     1,
                     math.ceil(
                         need[0]
@@ -458,7 +531,9 @@ class GroceryService:
                     ),
                 )
 
-                product["total"] = round(
+                product[
+                    "total"
+                ] = round(
                     product["packages"]
                     * product["price"],
                     2,
@@ -467,48 +542,68 @@ class GroceryService:
         def exact_first(
             product: dict,
         ) -> int:
+
             return (
                 0
-                if product["match"] == "exact"
+                if product[
+                    "match"
+                ] == "exact"
                 else 1
             )
 
-        # Products where total purchase cost can be calculated.
+        # Products with complete purchase calculation
         priced = sorted(
             (
                 product
-                for product in valid
-                if product["total"] is not None
+                for product
+                in valid
+                if product[
+                    "total"
+                ] is not None
             ),
             key=lambda product: (
-                exact_first(product),
-                product["total"],
-                -self._quality(product),
+                exact_first(
+                    product
+                ),
+                product[
+                    "total"
+                ],
+                -self._quality(
+                    product
+                ),
             ),
         )
 
-        # Products where package math could not be completed.
+        # Products where package calculation is incomplete
         others = sorted(
             (
                 product
-                for product in valid
-                if product["total"] is None
+                for product
+                in valid
+                if product[
+                    "total"
+                ] is None
             ),
             key=lambda product: (
-                exact_first(product),
-                -self._quality(product),
-                product["price"],
+                exact_first(
+                    product
+                ),
+                -self._quality(
+                    product
+                ),
+                product[
+                    "price"
+                ],
             ),
         )
 
-        # Exact matches always remain ahead of approximate matches.
         return sorted(
             priced + others,
             key=exact_first,
         )
 
     # -----------------------------------------------------------------
-    # Step 4: optional link verification
+    # Optional product link verification
     # -----------------------------------------------------------------
 
     def _link_ok(
@@ -522,43 +617,57 @@ class GroceryService:
         if url not in self._link_cache:
 
             try:
-                response = self._http.get(
-                    url,
-                    timeout=10,
-                    allow_redirects=True,
+                response = (
+                    self._http.get(
+                        url,
+                        timeout=10,
+                        allow_redirects=True,
+                    )
                 )
 
                 gone = (
                     response.status_code
-                    in (404, 410)
+                    in (
+                        404,
+                        410,
+                    )
                     or (
-                        response.status_code < 400
+                        response.status_code
+                        < 400
                         and
                         _SOFT_404.search(
-                            response.text[:50_000]
+                            response.text[
+                                :50_000
+                            ]
                         )
                     )
                 )
 
-                self._link_cache[url] = (
-                    not gone
-                )
+                self._link_cache[
+                    url
+                ] = not gone
 
             except requests.RequestException:
-                # FairPrice may block automated requests.
-                # Network failure does not prove the page is invalid.
-                self._link_cache[url] = True
 
-        return self._link_cache[url]
+                self._link_cache[
+                    url
+                ] = True
+
+        return self._link_cache[
+            url
+        ]
 
     # -----------------------------------------------------------------
-    # Try ingredient search fallbacks
+    # Search fallbacks
     # -----------------------------------------------------------------
 
     def _find_candidates(
         self,
         ingredient: str,
-        need: tuple[float, str] | None = None,
+        need: tuple[
+            float,
+            str,
+        ] | None = None,
     ) -> tuple[
         list[dict],
         Counter,
@@ -572,65 +681,94 @@ class GroceryService:
         n_results = 0
         used_query = None
 
-        for query in search_queries(ingredient):
+        for query in search_queries(
+            ingredient
+        ):
 
-            products = self._search(query)
+            products = self._search(
+                query
+            )
 
-            n_results += len(products)
+            n_results += len(
+                products
+            )
 
-            valid, rejected_here = self._filter(
+            (
+                valid,
+                rejected_here,
+            ) = self._filter(
                 ingredient,
                 products,
             )
 
-            rejected.update(rejected_here)
+            rejected.update(
+                rejected_here
+            )
 
             for product in valid:
+
                 all_valid.setdefault(
-                    product["product_id"],
+                    product[
+                        "product_id"
+                    ],
                     product,
                 )
 
-            if valid and used_query is None:
+            if (
+                valid
+                and
+                used_query is None
+            ):
                 used_query = query
 
-            # -----------------------------------------------------
-            # Stop early only when we have a useful exact match.
-            #
-            # If a quantity/unit is known, the product package
-            # should use the same base unit so purchase cost can
-            # actually be calculated.
-            # -----------------------------------------------------
-
+            # No quantity information:
+            # an exact ingredient match is enough.
             if need is None:
 
                 if any(
-                    product["match"] == "exact"
-                    for product in valid
+                    product[
+                        "match"
+                    ] == "exact"
+                    for product
+                    in valid
                 ):
                     break
 
+            # Quantity known:
+            # continue searching for an exact compatible package.
             else:
 
                 compatible_exact = any(
-                    product["match"] == "exact"
-                    and product.get("package") is not None
-                    and product["package"][1] == need[1]
-                    for product in valid
+                    product[
+                        "match"
+                    ] == "exact"
+                    and
+                    product.get(
+                        "package"
+                    ) is not None
+                    and
+                    product[
+                        "package"
+                    ][1] == need[1]
+
+                    for product
+                    in valid
                 )
 
                 if compatible_exact:
                     break
 
         return (
-            list(all_valid.values()),
+            list(
+                all_valid.values()
+            ),
             rejected,
             n_results,
             used_query,
         )
 
     # -----------------------------------------------------------------
-    # Public API
+    # Single grocery option
     # -----------------------------------------------------------------
 
     def get_grocery_option(
@@ -648,12 +786,15 @@ class GroceryService:
             required_unit=unit,
         )
 
+        # Convert required quantity to base unit
         need = None
 
         if (
             required_quantity is not None
-            and unit
+            and
+            unit
         ):
+
             need = to_base(
                 required_quantity,
                 unit,
@@ -661,24 +802,32 @@ class GroceryService:
 
             if need is None:
                 option.note = (
-                    f"unknown unit '{unit}'. "
+                    f"unknown unit "
+                    f"'{unit}'. "
                 )
 
+        # Search and filter products
         try:
-        
-            valid, rejected, n_results, used_query = (
-            self._find_candidates(
+
+            (
+                valid,
+                rejected,
+                n_results,
+                used_query,
+            ) = self._find_candidates(
                 ingredient_name,
                 need,
             )
-        )
 
         except SearchError as exc:
 
-            option.match_status = "error"
+            option.match_status = (
+                "error"
+            )
 
             option.note += (
-                f"search failed: {exc}"
+                f"search failed: "
+                f"{exc}"
             )
 
             return option
@@ -692,26 +841,31 @@ class GroceryService:
             reasons = ", ".join(
                 f"{reason} ({count})"
                 for reason, count
-                in rejected.most_common(3)
+                in rejected.most_common(
+                    3
+                )
             )
 
             if not reasons:
-                reasons = "no search results"
+                reasons = (
+                    "no search results"
+                )
 
             option.note += (
-                f"no reliable match among "
-                f"{n_results} results: "
-                f"{reasons}"
+                f"no reliable match "
+                f"among {n_results} "
+                f"results: {reasons}"
             )
 
-            # Important:
-            # price remains None rather than becoming zero.
+            # Product and price remain None.
             return option
 
-        option.search_query = used_query
+        option.search_query = (
+            used_query
+        )
 
         # -------------------------------------------------------------
-        # Select best product
+        # Select best candidate
         # -------------------------------------------------------------
 
         broken = 0
@@ -725,30 +879,42 @@ class GroceryService:
                 self.verify_links
                 and
                 not self._link_ok(
-                    product.get("url")
+                    product.get(
+                        "url"
+                    )
                 )
             ):
                 broken += 1
                 continue
 
             option.product_name = (
-                product["title"]
+                product[
+                    "title"
+                ]
             )
 
             option.price_per_package = (
-                product["price"]
+                product[
+                    "price"
+                ]
             )
 
             option.currency = (
-                product["currency"]
+                product[
+                    "currency"
+                ]
             )
 
             option.store = (
-                product["store"]
+                product[
+                    "store"
+                ]
             )
 
             option.source_url = (
-                product["url"]
+                product[
+                    "url"
+                ]
             )
 
             option.source_updated_at = (
@@ -758,11 +924,15 @@ class GroceryService:
             )
 
             option.match_quality = (
-                product["match"]
+                product[
+                    "match"
+                ]
             )
 
             if (
-                product["match"]
+                product[
+                    "match"
+                ]
                 == "approximate"
             ):
                 option.note += (
@@ -776,6 +946,7 @@ class GroceryService:
             )
 
             if package:
+
                 (
                     option.package_quantity,
                     option.package_unit,
@@ -784,17 +955,26 @@ class GroceryService:
                 )
 
             # ---------------------------------------------------------
-            # Complete package calculation
+            # Normal complete package calculation
             # ---------------------------------------------------------
 
-            if product["total"] is not None:
+            if (
+                product[
+                    "total"
+                ]
+                is not None
+            ):
 
                 option.packages_needed = (
-                    product["packages"]
+                    product[
+                        "packages"
+                    ]
                 )
 
                 option.total_cost = (
-                    product["total"]
+                    product[
+                        "total"
+                    ]
                 )
 
                 option.match_status = (
@@ -802,54 +982,105 @@ class GroceryService:
                 )
 
             # ---------------------------------------------------------
-            # Product and price found, but purchase quantity unknown
+            # Exact package calculation could not be completed
             # ---------------------------------------------------------
 
             else:
 
-                option.match_status = (
-                    "matched_no_quantity"
-                )
+                try:
+                    has_required_quantity = (
+                        required_quantity
+                        is not None
+                        and
+                        float(
+                            required_quantity
+                        ) > 0
+                    )
 
-                if need is None:
+                except (
+                    TypeError,
+                    ValueError,
+                ):
+                    has_required_quantity = (
+                        False
+                    )
 
-                    if (
-                        required_quantity is None
-                        or not unit
-                    ):
+                # -----------------------------------------------------
+                # Ingredient needs purchasing and product price exists.
+                #
+                # Use one retail package as the minimum purchase.
+                # -----------------------------------------------------
+
+                if (
+                    option.price_per_package
+                    is not None
+                    and
+                    has_required_quantity
+                ):
+
+                    option.packages_needed = 1
+
+                    option.total_cost = round(
+                        float(
+                            option.price_per_package
+                        ),
+                        2,
+                    )
+
+                    option.match_status = (
+                        "matched_minimum_package"
+                    )
+
+                    if not package:
+
                         option.note += (
-                            "no required quantity given; "
-                            "packages not calculated."
+                            "exact package quantity could "
+                            "not be calculated because "
+                            "package size was not available; "
+                            "using one retail package as the "
+                            "minimum purchase."
+                        )
+
+                    elif need is None:
+
+                        option.note += (
+                            "required quantity could not "
+                            "be converted; using one retail "
+                            "package as the minimum purchase."
                         )
 
                     else:
+
                         option.note += (
-                            "required quantity could not "
-                            "be converted; packages not "
-                            "calculated."
+                            f"unit mismatch "
+                            f"(need {need[1]}, "
+                            f"package in "
+                            f"{package[1]}); "
+                            f"using one retail package as "
+                            f"the minimum purchase."
                         )
 
-                elif not package:
-
-                    option.note += (
-                        "package size not found on "
-                        "the product page; packages "
-                        "not calculated."
-                    )
+                # -----------------------------------------------------
+                # No usable required quantity
+                # -----------------------------------------------------
 
                 else:
 
+                    option.match_status = (
+                        "matched_no_quantity"
+                    )
+
                     option.note += (
-                        f"unit mismatch "
-                        f"(need {need[1]}, "
-                        f"package in {package[1]}); "
-                        f"packages not calculated."
+                        "purchase quantity could "
+                        "not be calculated."
                     )
 
             if broken:
+
                 option.note += (
                     f" skipped {broken} "
-                    f"product(s) with broken links."
+                    f"product(s) with "
+                    f"broken links."
                 )
 
             option.note = (
@@ -859,11 +1090,16 @@ class GroceryService:
             return option
 
         option.note += (
-            f"all top matches had broken "
-            f"product links ({broken})."
+            f"all top matches had "
+            f"broken product links "
+            f"({broken})."
         )
 
         return option
+
+    # -----------------------------------------------------------------
+    # Single ingredient convenience method
+    # -----------------------------------------------------------------
 
     def search_grocery_product(
         self,
@@ -874,39 +1110,156 @@ class GroceryService:
             ingredient_name
         )
 
+    # -----------------------------------------------------------------
+    # Dynamic grocery-list input
+    # -----------------------------------------------------------------
+
     def get_grocery_list(
         self,
-        items: list[dict],
+        items: list[dict] | dict,
     ) -> list[GroceryOption]:
+        """
+        Search and price every grocery item.
 
-        return [
-            self.get_grocery_option(
-                item["ingredient_name"],
-                item.get("quantity"),
-                item.get("unit"),
-                item.get("ingredient_id"),
-            )
-            for item in items
-        ]
+        Accepts the dictionary produced directly by PantryService:
+
+            {
+                "rice": {
+                    "ingredient_id": "ING001",
+                    "quantity": 500,
+                    "unit": "g"
+                }
+            }
+
+        Existing list format is also supported.
+        """
+
+        options = []
+
+        # -------------------------------------------------------------
+        # PantryService dictionary format
+        # -------------------------------------------------------------
+
+        if isinstance(
+            items,
+            dict,
+        ):
+
+            for (
+                ingredient_name,
+                item,
+            ) in items.items():
+
+                option = (
+                    self.get_grocery_option(
+                        ingredient_name=(
+                            ingredient_name
+                        ),
+                        required_quantity=(
+                            item.get(
+                                "quantity"
+                            )
+                        ),
+                        unit=(
+                            item.get(
+                                "unit"
+                            )
+                        ),
+                        ingredient_id=(
+                            item.get(
+                                "ingredient_id"
+                            )
+                        ),
+                    )
+                )
+
+                options.append(
+                    option
+                )
+
+            return options
+
+        # -------------------------------------------------------------
+        # Existing list format
+        # -------------------------------------------------------------
+
+        if isinstance(
+            items,
+            list,
+        ):
+
+            for item in items:
+
+                option = (
+                    self.get_grocery_option(
+                        ingredient_name=(
+                            item[
+                                "ingredient_name"
+                            ]
+                        ),
+                        required_quantity=(
+                            item.get(
+                                "quantity"
+                            )
+                        ),
+                        unit=(
+                            item.get(
+                                "unit"
+                            )
+                        ),
+                        ingredient_id=(
+                            item.get(
+                                "ingredient_id"
+                            )
+                        ),
+                    )
+                )
+
+                options.append(
+                    option
+                )
+
+            return options
+
+        raise TypeError(
+            "items must be a PantryService grocery-list "
+            "dictionary or a list of grocery item dictionaries"
+        )
+
+    # -----------------------------------------------------------------
+    # Main interface for other project features
+    # -----------------------------------------------------------------
+
+    def get_grocery_results(
+        self,
+        items: list[dict] | dict,
+    ) -> dict:
+        """
+        Search all required grocery items and return a clean
+        dictionary for other project features.
+        """
+
+        options = self.get_grocery_list(
+            items
+        )
+
+        return grocery_summary(
+            options
+        )
 
 
 # ---------------------------------------------------------------------
-# Basket summary
+# Existing grocery basket summary
 # ---------------------------------------------------------------------
 
 def basket_summary(
     options: list[GroceryOption],
 ) -> dict:
     """
-    Summarise grocery purchase costs.
+    Summarise grocery purchase results.
 
-    estimated_total is retained for backwards compatibility.
-
-    known_subtotal contains only grocery items whose final purchase
-    cost could be calculated.
-
-    cost_complete is False whenever one or more required grocery
-    items have an unknown final cost.
+    Keeps the original compatibility fields used by the
+    budget layer while also supporting the current grocery logic.
     """
 
     priced = [
@@ -925,16 +1278,11 @@ def basket_summary(
         option.ingredient_name
         for option in options
         if (
-            option.price_per_package
-            is not None
-            and
-            option.total_cost
-            is None
+            option.price_per_package is not None
+            and option.total_cost is None
         )
     ]
 
-    # Any item without a final purchase cost makes the complete basket
-    # cost unknown.
     unknown_cost_items = [
         option.ingredient_name
         for option in options
@@ -950,24 +1298,402 @@ def basket_summary(
     )
 
     return {
-        # Existing fields
         "items": len(options),
-        "priced_items": len(priced),
-        "estimated_total": known_subtotal,
-        "missing_price": missing_price,
-        "missing_package_calc": (
-            missing_package_calc
-        ),
 
-        # Budget-reasoning fields
+        "priced_items": len(priced),
+
+        "estimated_total": known_subtotal,
+
+        "missing_price": missing_price,
+
+        "missing_package_calc": missing_package_calc,
+
+        # Compatibility with BudgetService
         "known_subtotal": known_subtotal,
-        "unknown_cost_items": (
-            unknown_cost_items
-        ),
+
+        "unknown_cost_items": unknown_cost_items,
+
         "cost_complete": (
             len(unknown_cost_items) == 0
         ),
     }
+
+# ---------------------------------------------------------------------
+# Main grocery result returned to other project features
+# ---------------------------------------------------------------------
+
+def grocery_summary(
+    options: list[GroceryOption],
+) -> dict:
+    """
+    Build the grocery result returned to other project features.
+
+    priced_products:
+        Product and purchase price are available.
+
+        This includes:
+        - exact package calculations
+        - minimum one-package purchases when units cannot be
+          directly compared
+
+    incomplete_products:
+        Product and price were found, but a usable purchase
+        quantity could still not be determined.
+
+    missing_products:
+        No reliable available FairPrice product/price was found.
+    """
+
+    priced_products = []
+    incomplete_products = []
+    missing_products = []
+
+    for option in options:
+
+        item = {
+            "ingredient_id":
+                option.ingredient_id,
+
+            "ingredient":
+                option.ingredient_name,
+
+            "required_quantity":
+                option.required_quantity,
+
+            "required_unit":
+                option.required_unit,
+
+            "product_name":
+                option.product_name,
+
+            "package_quantity":
+                option.package_quantity,
+
+            "package_unit":
+                option.package_unit,
+
+            "packages_needed":
+                option.packages_needed,
+
+            "price_per_package":
+                option.price_per_package,
+
+            "total_cost":
+                option.total_cost,
+
+            "currency":
+                option.currency,
+
+            "store":
+                option.store,
+
+            "source_url":
+                option.source_url,
+
+            "match_status":
+                option.match_status,
+
+            "match_quality":
+                option.match_quality,
+
+            "search_query":
+                option.search_query,
+
+            "note":
+                option.note,
+        }
+
+        # -------------------------------------------------------------
+        # Missing product / missing price
+        # -------------------------------------------------------------
+
+        if (
+            option.product_name
+            is None
+            or
+            option.price_per_package
+            is None
+        ):
+
+            missing_products.append(
+                item
+            )
+
+        # -------------------------------------------------------------
+        # Product/price found but purchase value still incomplete
+        # -------------------------------------------------------------
+
+        elif (
+            option.total_cost
+            is None
+        ):
+
+            incomplete_products.append(
+                item
+            )
+
+        # -------------------------------------------------------------
+        # Usable purchase price
+        # -------------------------------------------------------------
+
+        else:
+
+            priced_products.append(
+                item
+            )
+
+    return {
+        "items_requested":
+            len(options),
+
+        "products_priced":
+            len(
+                priced_products
+            ),
+
+        "products_incomplete":
+            len(
+                incomplete_products
+            ),
+
+        "products_missing":
+            len(
+                missing_products
+            ),
+
+        "priced_products":
+            priced_products,
+
+        "incomplete_products":
+            incomplete_products,
+
+        "missing_products":
+            missing_products,
+    }
+
+
+# ---------------------------------------------------------------------
+# Terminal display helper
+# ---------------------------------------------------------------------
+
+def print_grocery_results(
+    result: dict,
+) -> None:
+    """
+    Print a concise grocery result for development/testing.
+
+    The complete result dictionary is still returned by
+    get_grocery_results() for use by other project features.
+    """
+
+    print()
+    print("=" * 70)
+    print("FAIRPRICE GROCERY RESULTS")
+    print("=" * 70)
+    print()
+
+    found_count = (
+        result["products_priced"]
+        + result["products_incomplete"]
+    )
+
+    print(
+        f"Found: {found_count} / "
+        f"{result['items_requested']}"
+    )
+
+    print(
+        f"Missing: "
+        f"{result['products_missing']}"
+    )
+
+    # -------------------------------------------------------------
+    # Products found
+    # -------------------------------------------------------------
+
+    all_found = (
+        result["priced_products"]
+        + result["incomplete_products"]
+    )
+
+    if all_found:
+        print()
+        print("PRODUCTS FOUND")
+        print("-" * 70)
+
+        for item in all_found:
+
+            ingredient = item["ingredient"]
+
+            product = (
+                item["product_name"]
+                or "NA"
+            )
+
+            # -----------------------------------------------------
+            # Package size
+            # -----------------------------------------------------
+
+            package_quantity = item[
+                "package_quantity"
+            ]
+
+            package_unit = item[
+                "package_unit"
+            ]
+
+            if (
+                package_quantity is not None
+                and
+                package_unit is not None
+            ):
+                package_text = (
+                    f"{package_quantity:g} "
+                    f"{package_unit}"
+                )
+            else:
+                package_text = "NA"
+
+            # -----------------------------------------------------
+            # Price
+            # -----------------------------------------------------
+
+            price = item[
+                "price_per_package"
+            ]
+
+            if price is not None:
+                price_text = (
+                    f"S${price:.2f}"
+                )
+            else:
+                price_text = "NA"
+
+            # -----------------------------------------------------
+            # Purchase price
+            # -----------------------------------------------------
+
+            total = item[
+                "total_cost"
+            ]
+
+            if total is not None:
+                total_text = (
+                    f"S${total:.2f}"
+                )
+            else:
+                total_text = "NA"
+
+            # -----------------------------------------------------
+            # Minimum-package marker
+            # -----------------------------------------------------
+
+            status = item[
+                "match_status"
+            ]
+
+            minimum_marker = (
+                " *"
+                if status
+                == "matched_minimum_package"
+                else ""
+            )
+
+            # -----------------------------------------------------
+            # Print product
+            # -----------------------------------------------------
+
+            print(
+                f"{ingredient}"
+            )
+
+            print(
+                f"  Product: "
+                f"{product}"
+            )
+
+            print(
+                f"  Package size: "
+                f"{package_text}"
+            )
+
+            print(
+                f"  Price: "
+                f"{price_text}"
+            )
+
+            print(
+                f"  Purchase price: "
+                f"{total_text}"
+                f"{minimum_marker}"
+            )
+
+            print()
+
+    # -------------------------------------------------------------
+    # Minimum-package explanation
+    # -------------------------------------------------------------
+
+    has_minimum_package = any(
+        item["match_status"]
+        == "matched_minimum_package"
+        for item in result[
+            "priced_products"
+        ]
+    )
+
+    if has_minimum_package:
+        print(
+            "* Minimum 1 package used where "
+            "recipe and product units could not "
+            "be directly compared."
+        )
+
+        print()
+
+    # -------------------------------------------------------------
+    # Total purchase price
+    # -------------------------------------------------------------
+
+    total_purchase = round(
+        sum(
+            item["total_cost"]
+            for item in result[
+                "priced_products"
+            ]
+            if item["total_cost"]
+            is not None
+        ),
+        2,
+    )
+
+    print(
+        f"Total grocery purchase: "
+        f"S${total_purchase:.2f}"
+    )
+
+    # -------------------------------------------------------------
+    # Missing products
+    # -------------------------------------------------------------
+
+    print()
+    print("MISSING PRODUCTS")
+    print("-" * 70)
+
+    if not result[
+        "missing_products"
+    ]:
+        print("None")
+
+    else:
+
+        for item in result[
+            "missing_products"
+        ]:
+
+            print(
+                f"- {item['ingredient']}"
+            )
 
 
 # ---------------------------------------------------------------------
@@ -978,6 +1704,9 @@ _default_service: GroceryService | None = None
 
 
 def _service() -> GroceryService:
+    """
+    Return the shared GroceryService instance.
+    """
 
     global _default_service
 
@@ -990,6 +1719,9 @@ def _service() -> GroceryService:
 def search_grocery_product(
     ingredient_name: str,
 ) -> GroceryOption:
+    """
+    Search for one grocery product.
+    """
 
     return _service().search_grocery_product(
         ingredient_name
@@ -1002,6 +1734,9 @@ def get_grocery_option(
     unit: str,
     ingredient_id: str | None = None,
 ) -> GroceryOption:
+    """
+    Get one priced grocery option.
+    """
 
     return _service().get_grocery_option(
         ingredient_name,
@@ -1009,3 +1744,76 @@ def get_grocery_option(
         unit,
         ingredient_id,
     )
+
+
+def get_grocery_results(
+    items: list[dict] | dict,
+) -> dict:
+    """
+    Main interface for other project modules.
+
+    Input:
+        grocery_list produced by PantryService
+
+    Output:
+        {
+            "items_requested": ...,
+            "products_priced": ...,
+            "products_incomplete": ...,
+            "products_missing": ...,
+            "priced_products": [...],
+            "incomplete_products": [...],
+            "missing_products": [...]
+        }
+    """
+
+    return _service().get_grocery_results(
+        items
+    )
+
+
+# ---------------------------------------------------------------------
+# Manual test
+# ---------------------------------------------------------------------
+
+# if __name__ == "__main__":
+
+#     # Sample input only for manually checking GroceryService.
+#     #
+#     # This is NOT used by the real application.
+#     # The real application passes the dynamic grocery_list produced
+#     # by PantryService into get_grocery_results().
+
+#     test_grocery_list = {
+#         "sour cream": {
+#             "ingredient_id": "ING3248",
+#             "quantity": 1.5,
+#             "unit": "tablespoon",
+#         },
+
+#         "cheddar cheese": {
+#             "ingredient_id": "ING0658",
+#             "quantity": 1.5,
+#             "unit": "tablespoon",
+#         },
+
+#         "cilantro": {
+#             "ingredient_id": "ING0870",
+#             "quantity": 1.0,
+#             "unit": "sprig",
+#         },
+
+#         "dijon mustard": {
+#             "ingredient_id": "ING1203",
+#             "quantity": 1.0,
+#             "unit": "pinch",
+#         },
+#     }
+
+#     result = get_grocery_results(
+#         test_grocery_list
+#     )
+
+#     print_grocery_results(
+#         result
+#     )
