@@ -1,6 +1,6 @@
 import pytest
 
-from src.budget.budget_service import (
+from src.reasoning.budget_service import (
     check_budget,
     check_basket_budget,
 )

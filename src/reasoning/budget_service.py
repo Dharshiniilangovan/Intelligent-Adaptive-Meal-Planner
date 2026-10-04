@@ -336,38 +336,38 @@ def print_budget_result(
         result["reason"]
     )
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 
-#     test_grocery_results = {
-#         "priced_products": [
-#             {
-#                 "ingredient": "sour cream",
-#                 "total_cost": 4.59,
-#             },
-#             {
-#                 "ingredient": "cheddar cheese",
-#                 "total_cost": 10.04,
-#             },
-#             {
-#                 "ingredient": "cilantro",
-#                 "total_cost": 1.80,
-#             },
-#             {
-#                 "ingredient": "dijon mustard",
-#                 "total_cost": 5.60,
-#             },
-#         ],
-#         "incomplete_products": [],
-#         "missing_products": [],
-#     }
+    test_grocery_results = {
+        "priced_products": [
+            {
+                "ingredient": "sour cream",
+                "total_cost": 4.59,
+            },
+            {
+                "ingredient": "cheddar cheese",
+                "total_cost": 10.04,
+            },
+            {
+                "ingredient": "cilantro",
+                "total_cost": 1.80,
+            },
+            {
+                "ingredient": "dijon mustard",
+                "total_cost": 5.60,
+            },
+        ],
+        "incomplete_products": [],
+        "missing_products": [],
+    }
 
-#     test_remaining_budget = 50.00
+    test_remaining_budget = 50.00
 
-#     result = check_grocery_budget(
-#         grocery_results=test_grocery_results,
-#         remaining_budget=test_remaining_budget,
-#     )
+    result = check_grocery_budget(
+        grocery_results=test_grocery_results,
+        remaining_budget=test_remaining_budget,
+    )
 
-#     print_budget_result(
-#         result
-#     )
+    print_budget_result(
+        result
+    )

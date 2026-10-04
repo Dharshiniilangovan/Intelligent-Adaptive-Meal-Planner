@@ -59,7 +59,7 @@ from src.grocery.grocery_service import (
     basket_summary,
 )
 
-from src.budget.budget_service import (
+from src.reasoning.budget_service import (
     check_basket_budget,
 )
 
