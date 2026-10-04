@@ -1,19 +1,28 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
+import json
+
+
+# ============================================================
+# CONFIGURATION
+# ============================================================
+
+USERS_DIR = Path("data/users")
 
 
 # ============================================================
 # SUPPORTED UNITS
 # ============================================================
-# These units are expected to already be standardized
-# by the ingredient normalization pipeline.
+# These units should already be standardized by the
+# ingredient normalization pipeline.
 
 SUPPORTED_UNITS = {
     # Weight
+    "mg",
     "g",
     "kg",
-    "mg",
     "oz",
     "lb",
 
@@ -54,15 +63,12 @@ SUPPORTED_UNITS = {
 # ============================================================
 
 def is_missing(value: Any) -> bool:
-    """
-    Check whether a value is missing.
-    """
+    """Check whether a value is missing."""
 
     if value is None:
         return True
 
     if isinstance(value, str):
-
         return value.strip().lower() in {
             "",
             "none",
@@ -74,38 +80,103 @@ def is_missing(value: Any) -> bool:
         }
 
     try:
-        return value != value  # NaN
+        return value != value
     except Exception:
         return False
+
+
+def normalize_name(name: Any) -> str:
+    """Normalize ingredient names for matching."""
+
+    if name is None:
+        return ""
+
+    return " ".join(
+        str(name).strip().lower().split()
+    )
+
+
+# ============================================================
+# USER STATE LOADER
+# ============================================================
+
+def load_user_state(
+    users_dir: str | Path = USERS_DIR
+) -> Dict[str, Any]:
+    """
+    Load the most recently modified user_state_*.json
+    from data/users/.
+    """
+
+    users_path = Path(users_dir)
+
+    if not users_path.exists():
+        raise FileNotFoundError(
+            f"Users directory not found: {users_path}"
+        )
+
+    user_state_files = sorted(
+        users_path.glob("user_state_*.json"),
+        key=lambda path: path.stat().st_mtime,
+        reverse=True,
+    )
+
+    if not user_state_files:
+        raise FileNotFoundError(
+            f"No user_state_*.json files found in {users_path}"
+        )
+
+    latest_file = user_state_files[0]
+
+    try:
+        with latest_file.open(
+            "r",
+            encoding="utf-8"
+        ) as file:
+            user_state = json.load(file)
+
+    except json.JSONDecodeError as error:
+        raise ValueError(
+            f"Invalid User State JSON: {latest_file}\n"
+            f"{error}"
+        ) from error
+
+    if not isinstance(user_state, dict):
+        raise ValueError(
+            "User State JSON must contain an object"
+        )
+
+    print(f"Loaded User State: {latest_file}")
+
+    return user_state
 
 
 # ============================================================
 # COOKING TIME
 # ============================================================
 
-def parse_cooking_time(value: Any) -> Optional[float]:
+def parse_cooking_time(
+    value: Any
+) -> Optional[float]:
     """
-    Convert common cooking-time values into minutes.
+    Convert common cooking-time formats into minutes.
 
     Examples:
         25          -> 25
         "25 min"    -> 25
-        "1 hour"    -> 60
-        "1.5 hours" -> 90
-
-    Returns None if unavailable/unrecognized.
+        "30 mins"   -> 30
+        "2 hours"   -> 120
     """
 
     if is_missing(value):
         return None
 
-    # Already numeric
     if isinstance(value, (int, float)):
         return float(value)
 
     text = str(value).strip().lower()
 
-    # Plain numeric string
+    # Numeric string
     try:
         return float(text)
     except ValueError:
@@ -125,70 +196,98 @@ def parse_cooking_time(value: Any) -> Optional[float]:
         if unit.startswith("min"):
             return number
 
-        if unit.startswith("hour") or unit.startswith("hr"):
+        if (
+            unit.startswith("hour")
+            or unit.startswith("hr")
+        ):
             return number * 60
 
     return None
 
 
+def get_user_cooking_time(
+    user_state: Dict[str, Any]
+) -> Optional[float]:
+    """
+    Read the user's cooking-time preference.
+
+    User State field:
+        cook_time_preference_hrs
+
+    Example:
+        2 -> 120 minutes
+    """
+
+    value = user_state.get(
+        "cook_time_preference_hrs"
+    )
+
+    if is_missing(value):
+        return None
+
+    try:
+        hours = float(value)
+    except (TypeError, ValueError):
+        return None
+
+    if hours < 0:
+        return None
+
+    return hours * 60
+
+
 def check_cooking_time(
     recipe_time: Any,
-    max_cooking_time: Any
+    user_state: Dict[str, Any]
 ) -> Dict[str, Any]:
     """
-    Check whether recipe cooking time satisfies
-    the user's maximum cooking-time constraint.
+    Check recipe cooking time against user's preference.
     """
 
-    recipe_minutes = parse_cooking_time(recipe_time)
+    recipe_minutes = parse_cooking_time(
+        recipe_time
+    )
 
-    # Recipe cooking time is unavailable
+    user_max_minutes = get_user_cooking_time(
+        user_state
+    )
+
+    # Recipe time unavailable
     if recipe_minutes is None:
-
         return {
             "status": "unknown",
             "passed": None,
             "reason": "Cooking time unavailable"
         }
 
-    # User did not specify a cooking-time limit
-    if is_missing(max_cooking_time):
-
-        return {
-            "status": "pass",
-            "passed": True,
-            "reason": "No cooking-time constraint specified"
-        }
-
-    max_minutes = parse_cooking_time(max_cooking_time)
-
-    # User's maximum time cannot be interpreted
-    if max_minutes is None:
-
+    # User preference unavailable
+    if user_max_minutes is None:
         return {
             "status": "unknown",
             "passed": None,
-            "reason": "Maximum cooking time unavailable"
+            "reason": (
+                "Cooking-time preference unavailable"
+            )
         }
 
-    # Hard constraint
-    if recipe_minutes <= max_minutes:
-
+    # Pass
+    if recipe_minutes <= user_max_minutes:
         return {
             "status": "pass",
             "passed": True,
             "reason": (
-                f"Recipe time {recipe_minutes:g} min is within "
-                f"the {max_minutes:g} min limit"
+                f"Recipe time {recipe_minutes:g} min "
+                f"is within user's {user_max_minutes:g} min limit"
             )
         }
 
+    # Fail
     return {
         "status": "fail",
         "passed": False,
         "reason": (
-            f"Recipe time {recipe_minutes:g} min exceeds "
-            f"the {max_minutes:g} min limit"
+            f"Recipe time {recipe_minutes:g} min "
+            f"exceeds user's {user_max_minutes:g} min limit"
         )
     }
 
@@ -201,16 +300,9 @@ def check_ingredient_feasibility(
     ingredients: Iterable[Dict[str, Any]]
 ) -> Dict[str, Any]:
     """
-    Check whether ingredient information is usable.
+    Check whether recipe ingredient information is usable.
 
-    This function DOES NOT perform conversions.
-
-    It only checks:
-        - ingredient ID
-        - ingredient name
-        - quantity
-        - unit
-        - supported unit
+    This does not perform conversions.
     """
 
     ingredients = list(ingredients or [])
@@ -218,7 +310,6 @@ def check_ingredient_feasibility(
     issues: List[Dict[str, Any]] = []
 
     if not ingredients:
-
         return {
             "status": "unknown",
             "passed": None,
@@ -228,77 +319,60 @@ def check_ingredient_feasibility(
 
     for ingredient in ingredients:
 
-        ingredient_id = ingredient.get("ingredient_id")
-        ingredient_name = ingredient.get("ingredient_name")
+        ingredient_id = ingredient.get(
+            "ingredient_id"
+        )
 
-        # ----------------------------------------------------
-        # Quantity
-        # ----------------------------------------------------
+        ingredient_name = ingredient.get(
+            "ingredient_name"
+        )
 
-        # Support both:
-        # quantity
-        # quantity_per_serving
-
-        quantity = ingredient.get("quantity")
+        quantity = ingredient.get(
+            "quantity"
+        )
 
         if quantity is None:
-            quantity = ingredient.get("quantity_per_serving")
+            quantity = ingredient.get(
+                "quantity_per_serving"
+            )
+
+        unit = ingredient.get("unit")
+
+        # Missing ingredient ID
+        if is_missing(ingredient_id):
+            issues.append({
+                "ingredient_name": ingredient_name,
+                "issue": "missing_ingredient_id"
+            })
+
+        # Missing ingredient name
+        if is_missing(ingredient_name):
+            issues.append({
+                "ingredient_id": ingredient_id,
+                "issue": "missing_ingredient_name"
+            })
 
         # Missing quantity
         if is_missing(quantity):
-
             issues.append({
                 "ingredient_id": ingredient_id,
                 "ingredient_name": ingredient_name,
                 "issue": "missing_quantity"
             })
 
-        # ----------------------------------------------------
-        # Ingredient ID
-        # ----------------------------------------------------
-
-        if is_missing(ingredient_id):
-
-            issues.append({
-                "ingredient_name": ingredient_name,
-                "issue": "missing_ingredient_id"
-            })
-
-        # ----------------------------------------------------
-        # Ingredient name
-        # ----------------------------------------------------
-
-        if is_missing(ingredient_name):
-
-            issues.append({
-                "ingredient_id": ingredient_id,
-                "issue": "missing_ingredient_name"
-            })
-
-        # ----------------------------------------------------
-        # Unit
-        # ----------------------------------------------------
-
-        unit = ingredient.get("unit")
-
+        # Missing unit
         if is_missing(unit):
-
             issues.append({
                 "ingredient_id": ingredient_id,
                 "ingredient_name": ingredient_name,
                 "issue": "missing_unit"
             })
-
             continue
 
         unit = str(unit).strip().lower()
 
-        # ----------------------------------------------------
         # Unsupported unit
-        # ----------------------------------------------------
-
         if unit not in SUPPORTED_UNITS:
-
             issues.append({
                 "ingredient_id": ingredient_id,
                 "ingredient_name": ingredient_name,
@@ -306,17 +380,13 @@ def check_ingredient_feasibility(
                 "issue": "unsupported_unit"
             })
 
-    # --------------------------------------------------------
-    # Return result
-    # --------------------------------------------------------
-
     if issues:
-
         return {
             "status": "unknown",
             "passed": None,
             "reason": (
-                "Ingredient information cannot be fully evaluated"
+                "Ingredient information cannot "
+                "be fully evaluated"
             ),
             "issues": issues
         }
@@ -330,100 +400,233 @@ def check_ingredient_feasibility(
 
 
 # ============================================================
-# PANTRY UTILIZATION
+# PANTRY FROM USER STATE
 # ============================================================
 
-def calculate_pantry_utilization(
-    ingredients: Iterable[Dict[str, Any]],
-    pantry: Any
-) -> float:
+def get_pantry_from_user_state(
+    user_state: Dict[str, Any]
+) -> List[Dict[str, Any]]:
     """
-    MVP pantry utilization:
+    Extract user's pantry from:
 
-        available ingredients
-        ---------------------
-        total required ingredients
+        user_state["ingredient_availability"]
 
-    Ingredient ID is preferred.
-
-    Pantry can be:
-
-        [
-            {...},
-            {...}
-        ]
-
-    OR:
+    Example:
 
         {
-            "items": [...]
+            "Tomatoes": "5 counts",
+            "Cheese": "200 grams"
         }
+    """
+
+    availability = user_state.get(
+        "ingredient_availability",
+        {}
+    )
+
+    if not isinstance(availability, dict):
+        return []
+
+    pantry = []
+
+    for ingredient_name, quantity_info in availability.items():
+
+        pantry.append({
+            "ingredient_name": ingredient_name,
+            "quantity": quantity_info
+        })
+
+    return pantry
+
+
+# ============================================================
+# PANTRY QUANTITY PARSER
+# ============================================================
+
+def parse_pantry_quantity(
+    value: Any
+) -> tuple[Optional[float], Optional[str]]:
+    """
+    Parse pantry strings such as:
+
+        "5 counts"
+        "200 grams"
+        "1 kg"
+        "500 ml"
+
+    Returns:
+
+        quantity, unit
+    """
+
+    if is_missing(value):
+        return None, None
+
+    text = str(value).strip().lower()
+
+    parts = text.split()
+
+    if len(parts) < 2:
+        return None, None
+
+    try:
+        quantity = float(parts[0])
+    except ValueError:
+        return None, None
+
+    unit_text = " ".join(parts[1:])
+
+    # Common pantry unit forms
+    unit_aliases = {
+        "mg": "mg",
+        "milligram": "mg",
+        "milligrams": "mg",
+
+        "g": "g",
+        "gram": "g",
+        "grams": "g",
+        "gm": "g",
+
+        "kg": "kg",
+        "kilogram": "kg",
+        "kilograms": "kg",
+
+        "ml": "ml",
+        "milliliter": "ml",
+        "milliliters": "ml",
+
+        "l": "l",
+        "liter": "l",
+        "liters": "l",
+
+        "count": "count",
+        "counts": "count",
+
+        "piece": "piece",
+        "pieces": "piece",
+
+        "packet": "packet",
+        "packets": "packet",
+
+        "package": "package",
+        "packages": "package",
+    }
+
+    unit = unit_aliases.get(unit_text)
+
+    if unit is None:
+        return None, None
+
+    return quantity, unit
+
+
+# ============================================================
+# QUANTITY CONVERSION FOR PANTRY COMPARISON
+# ============================================================
+
+def convert_to_base_quantity(
+    quantity: float,
+    unit: str
+) -> tuple[float, str]:
+    """
+    Convert only directly comparable units.
+
+    Weight:
+        mg -> g
+        kg -> g
+
+    Volume:
+        l -> ml
+
+    Count:
+        piece -> count
+
+    No ingredient-specific assumptions are made.
+    """
+
+    unit = unit.lower()
+
+    # Weight
+    if unit == "mg":
+        return quantity / 1000, "g"
+
+    if unit == "kg":
+        return quantity * 1000, "g"
+
+    if unit in {"g", "oz", "lb"}:
+        return quantity, unit
+
+    # Volume
+    if unit == "l":
+        return quantity * 1000, "ml"
+
+    if unit == "ml":
+        return quantity, "ml"
+
+    # Count
+    if unit == "piece":
+        return quantity, "count"
+
+    if unit == "count":
+        return quantity, "count"
+
+    # Other units remain unchanged
+    return quantity, unit
+
+
+# ============================================================
+# MISSING INGREDIENTS
+# ============================================================
+
+def calculate_ingredient_availability(
+    ingredients: Iterable[Dict[str, Any]],
+    pantry: List[Dict[str, Any]]
+) -> Dict[str, Any]:
+    """
+    Compare recipe-required ingredients with user pantry.
+
+    Returns:
+
+        already_available
+        missing_ingredients
     """
 
     ingredients = list(ingredients or [])
 
-    if not ingredients:
-        return 0.0
-
     # --------------------------------------------------------
-    # Accept different pantry structures
+    # Create pantry lookup
     # --------------------------------------------------------
 
-    if isinstance(pantry, dict):
+    pantry_lookup = {}
 
-        pantry_items = pantry.get("items", [])
+    for item in pantry:
 
-        if not isinstance(pantry_items, list):
-            pantry_items = []
+        name = normalize_name(
+            item.get("ingredient_name")
+        )
 
-    elif isinstance(pantry, list):
+        if not name:
+            continue
 
-        pantry_items = pantry
+        quantity, unit = parse_pantry_quantity(
+            item.get("quantity")
+        )
 
-    else:
-
-        pantry_items = []
-
-    # --------------------------------------------------------
-    # Pantry ingredient IDs
-    # --------------------------------------------------------
-
-    pantry_ids = set()
-
-    for item in pantry_items:
-
-        ingredient_id = item.get("ingredient_id")
-
-        if not is_missing(ingredient_id):
-
-            pantry_ids.add(
-                str(ingredient_id).strip().upper()
-            )
+        pantry_lookup[name] = {
+            "quantity": quantity,
+            "unit": unit
+        }
 
     # --------------------------------------------------------
-    # Pantry ingredient names
+    # Results
     # --------------------------------------------------------
 
-    pantry_names = set()
-
-    for item in pantry_items:
-
-        name = item.get("ingredient_name")
-
-        if is_missing(name):
-            name = item.get("name")
-
-        if not is_missing(name):
-
-            pantry_names.add(
-                str(name).strip().lower()
-            )
+    already_available = []
+    missing_ingredients = []
 
     # --------------------------------------------------------
-    # Count available ingredients
+    # Compare every recipe ingredient
     # --------------------------------------------------------
-
-    available_count = 0
 
     for ingredient in ingredients:
 
@@ -435,28 +638,331 @@ def calculate_pantry_utilization(
             "ingredient_name"
         )
 
-        id_match = False
-        name_match = False
+        recipe_quantity = ingredient.get(
+            "quantity"
+        )
 
-        if not is_missing(ingredient_id):
-
-            id_match = (
-                str(ingredient_id)
-                .strip()
-                .upper()
-                in pantry_ids
+        if recipe_quantity is None:
+            recipe_quantity = ingredient.get(
+                "quantity_per_serving"
             )
 
-        if not is_missing(ingredient_name):
+        recipe_unit = ingredient.get(
+            "unit"
+        )
 
-            name_match = (
-                str(ingredient_name)
-                .strip()
-                .lower()
-                in pantry_names
+        recipe_name_normalized = normalize_name(
+            ingredient_name
+        )
+
+        # ----------------------------------------------------
+        # Ingredient not in pantry
+        # ----------------------------------------------------
+
+        if recipe_name_normalized not in pantry_lookup:
+
+            missing_ingredients.append({
+                "ingredient_id":
+                    ingredient_id,
+
+                "ingredient_name":
+                    ingredient_name,
+
+                "required_quantity":
+                    recipe_quantity,
+
+                "missing_quantity":
+                    recipe_quantity,
+
+                "unit":
+                    recipe_unit,
+
+                "reason":
+                    "Ingredient not available in pantry"
+            })
+
+            continue
+
+        # ----------------------------------------------------
+        # Pantry information
+        # ----------------------------------------------------
+
+        pantry_item = pantry_lookup[
+            recipe_name_normalized
+        ]
+
+        pantry_quantity = pantry_item[
+            "quantity"
+        ]
+
+        pantry_unit = pantry_item[
+            "unit"
+        ]
+
+        # ----------------------------------------------------
+        # Cannot compare pantry quantity
+        # ----------------------------------------------------
+
+        if (
+            pantry_quantity is None
+            or pantry_unit is None
+        ):
+
+            missing_ingredients.append({
+                "ingredient_id":
+                    ingredient_id,
+
+                "ingredient_name":
+                    ingredient_name,
+
+                "required_quantity":
+                    recipe_quantity,
+
+                "missing_quantity":
+                    "required",
+
+                "unit":
+                    recipe_unit,
+
+                "reason":
+                    "Pantry quantity cannot be interpreted"
+            })
+
+            continue
+
+        # ----------------------------------------------------
+        # Missing recipe quantity
+        # ----------------------------------------------------
+
+        if is_missing(recipe_quantity):
+
+            missing_ingredients.append({
+                "ingredient_id":
+                    ingredient_id,
+
+                "ingredient_name":
+                    ingredient_name,
+
+                "required_quantity":
+                    "required",
+
+                "missing_quantity":
+                    "required",
+
+                "unit":
+                    recipe_unit,
+
+                "reason":
+                    "Recipe quantity unavailable"
+            })
+
+            continue
+
+        # ----------------------------------------------------
+        # Normalize recipe quantity
+        # ----------------------------------------------------
+
+        try:
+            recipe_quantity_number = float(
+                recipe_quantity
+            )
+        except (TypeError, ValueError):
+
+            missing_ingredients.append({
+                "ingredient_id":
+                    ingredient_id,
+
+                "ingredient_name":
+                    ingredient_name,
+
+                "required_quantity":
+                    recipe_quantity,
+
+                "missing_quantity":
+                    "required",
+
+                "unit":
+                    recipe_unit,
+
+                "reason":
+                    "Recipe quantity cannot be interpreted"
+            })
+
+            continue
+
+        # ----------------------------------------------------
+        # Normalize units for comparison
+        # ----------------------------------------------------
+
+        recipe_unit_clean = str(
+            recipe_unit
+        ).strip().lower()
+
+        recipe_base_quantity, recipe_base_unit = (
+            convert_to_base_quantity(
+                recipe_quantity_number,
+                recipe_unit_clean
+            )
+        )
+
+        pantry_base_quantity, pantry_base_unit = (
+            convert_to_base_quantity(
+                pantry_quantity,
+                pantry_unit
+            )
+        )
+
+        # ----------------------------------------------------
+        # Units cannot be compared
+        # ----------------------------------------------------
+
+        if recipe_base_unit != pantry_base_unit:
+
+            missing_ingredients.append({
+                "ingredient_id":
+                    ingredient_id,
+
+                "ingredient_name":
+                    ingredient_name,
+
+                "required_quantity":
+                    recipe_quantity,
+
+                "missing_quantity":
+                    recipe_quantity,
+
+                "unit":
+                    recipe_unit,
+
+                "reason":
+                    (
+                        f"Cannot compare recipe unit "
+                        f"{recipe_unit} with pantry unit "
+                        f"{pantry_unit}"
+                    )
+            })
+
+            continue
+
+        # ----------------------------------------------------
+        # Enough quantity available
+        # ----------------------------------------------------
+
+        if pantry_base_quantity >= recipe_base_quantity:
+
+            already_available.append({
+
+                "ingredient_id":
+                    ingredient_id,
+
+                "ingredient_name":
+                    ingredient_name,
+
+                "required_quantity":
+                    recipe_quantity,
+
+                "available_quantity":
+                    pantry_item["quantity"],
+
+                "unit":
+                    recipe_unit,
+
+                "status":
+                    "enough"
+            })
+
+        # ----------------------------------------------------
+        # Partial quantity available
+        # ----------------------------------------------------
+
+        else:
+
+            missing_quantity = (
+                recipe_base_quantity
+                - pantry_base_quantity
             )
 
-        if id_match or name_match:
+            # Round cleanly
+            if missing_quantity.is_integer():
+                missing_quantity = int(
+                    missing_quantity
+                )
+
+            missing_ingredients.append({
+
+                "ingredient_id":
+                    ingredient_id,
+
+                "ingredient_name":
+                    ingredient_name,
+
+                "required_quantity":
+                    recipe_quantity,
+
+                "available_quantity":
+                    pantry_item["quantity"],
+
+                "missing_quantity":
+                    missing_quantity,
+
+                "unit":
+                    recipe_base_unit,
+
+                "reason":
+                    "Insufficient quantity in pantry"
+            })
+
+    return {
+        "already_available":
+            already_available,
+
+        "missing_ingredients":
+            missing_ingredients
+    }
+
+
+# ============================================================
+# PANTRY UTILIZATION
+# ============================================================
+
+def calculate_pantry_utilization(
+    ingredients: Iterable[Dict[str, Any]],
+    pantry: List[Dict[str, Any]]
+) -> float:
+    """
+    MVP pantry utilization:
+
+        ingredients available in pantry
+        -------------------------------
+        total required ingredients
+    """
+
+    ingredients = list(ingredients or [])
+
+    if not ingredients:
+        return 0.0
+
+    pantry_names = {
+        normalize_name(
+            item.get("ingredient_name")
+        )
+        for item in pantry
+        if not is_missing(
+            item.get("ingredient_name")
+        )
+    }
+
+    available_count = 0
+
+    for ingredient in ingredients:
+
+        ingredient_name = normalize_name(
+            ingredient.get(
+                "ingredient_name"
+            )
+        )
+
+        if ingredient_name in pantry_names:
             available_count += 1
 
     return round(
@@ -471,44 +977,41 @@ def calculate_pantry_utilization(
 
 def evaluate_recipe(
     candidate_recipe: Dict[str, Any],
-    user_state: Dict[str, Any],
-    pantry: Any
+    user_state: Dict[str, Any]
 ) -> Dict[str, Any]:
     """
     Plug-and-play Member 3 interface.
 
-    INPUT
-    -----
+    Inputs:
+        candidate_recipe
+        user_state
 
-    candidate_recipe:
-        Candidate recipe JSON from the workflow.
-
-    user_state:
-        User requirements / current user state.
-
-    pantry:
-        Pantry data.
-
-    OUTPUT
-    ------
-
-    Standardized Member 3 result.
+    Outputs:
+        cooking-time result
+        ingredient feasibility
+        pantry utilization
+        already available ingredients
+        missing ingredients
     """
 
-    if not isinstance(candidate_recipe, dict):
-
+    if not isinstance(
+        candidate_recipe,
+        dict
+    ):
         raise TypeError(
             "candidate_recipe must be a dictionary"
         )
 
-    if not isinstance(user_state, dict):
-
+    if not isinstance(
+        user_state,
+        dict
+    ):
         raise TypeError(
             "user_state must be a dictionary"
         )
 
     # --------------------------------------------------------
-    # Get ingredients
+    # Get recipe ingredients
     # --------------------------------------------------------
 
     ingredients = candidate_recipe.get(
@@ -516,79 +1019,81 @@ def evaluate_recipe(
         []
     )
 
-    if not isinstance(ingredients, list):
-
+    if not isinstance(
+        ingredients,
+        list
+    ):
         raise ValueError(
             "candidate_recipe['ingredients'] "
             "must be a list"
         )
 
     # --------------------------------------------------------
-    # Get cooking-time constraint
+    # Get user's pantry
     # --------------------------------------------------------
 
-    max_cooking_time = user_state.get(
-        "max_cooking_time"
+    pantry = get_pantry_from_user_state(
+        user_state
     )
 
-    # Also support future structure:
-    #
-    # "schedule": {
-    #     "max_cooking_time": 30
-    # }
-
-    if max_cooking_time is None:
-
-        schedule = user_state.get(
-            "schedule",
-            {}
-        )
-
-        if isinstance(schedule, dict):
-
-            max_cooking_time = schedule.get(
-                "max_cooking_time"
-            )
-
     # --------------------------------------------------------
-    # 1. Cooking-time check
+    # 1. Cooking-time constraint
     # --------------------------------------------------------
 
     time_result = check_cooking_time(
         candidate_recipe.get(
             "cooking_time_min"
         ),
-        max_cooking_time
+        user_state
     )
 
     # --------------------------------------------------------
     # 2. Ingredient feasibility
     # --------------------------------------------------------
 
-    ingredient_result = check_ingredient_feasibility(
-        ingredients
+    ingredient_result = (
+        check_ingredient_feasibility(
+            ingredients
+        )
     )
 
     # --------------------------------------------------------
     # 3. Pantry utilization
     # --------------------------------------------------------
 
-    pantry_score = calculate_pantry_utilization(
-        ingredients,
-        pantry
+    pantry_score = (
+        calculate_pantry_utilization(
+            ingredients,
+            pantry
+        )
     )
 
     # --------------------------------------------------------
-    # Final result
+    # 4. Already available / missing ingredients
+    # --------------------------------------------------------
+
+    availability_result = (
+        calculate_ingredient_availability(
+            ingredients,
+            pantry
+        )
+    )
+
+    # --------------------------------------------------------
+    # FINAL RESULT
     # --------------------------------------------------------
 
     return {
 
         "recipe_id":
-            candidate_recipe.get("recipe_id"),
+            candidate_recipe.get(
+                "recipe_id"
+            ),
 
         "recipe_name":
-            candidate_recipe.get("recipe_name"),
+            candidate_recipe.get(
+                "recipe_name"
+            ),
 
         "time_constraint":
             time_result,
@@ -597,7 +1102,17 @@ def evaluate_recipe(
             ingredient_result,
 
         "pantry_utilization":
-            pantry_score
+            pantry_score,
+
+        "already_available":
+            availability_result[
+                "already_available"
+            ],
+
+        "missing_ingredients":
+            availability_result[
+                "missing_ingredients"
+            ]
     }
 
 
@@ -608,10 +1123,9 @@ def evaluate_recipe(
 if __name__ == "__main__":
 
     # --------------------------------------------------------
-    # Dummy candidate recipe
+    # Dummy Candidate Recipe
     #
-    # This represents the JSON that will eventually come
-    # from the real workflow.
+    # Later this will come from the real workflow.
     # --------------------------------------------------------
 
     candidate_recipe = {
@@ -620,9 +1134,9 @@ if __name__ == "__main__":
             "R001",
 
         "recipe_name":
-            "Tofu Fried Rice",
+            "Tomato Cheese Rice",
 
-        # Dummy cooking time 
+        # Dummy cooking time for now
         "cooking_time_min":
             25,
 
@@ -633,13 +1147,13 @@ if __name__ == "__main__":
                     "ING001",
 
                 "ingredient_name":
-                    "rice",
+                    "Tomatoes",
 
                 "quantity":
-                    500,
+                    2,
 
                 "unit":
-                    "g"
+                    "count"
             },
 
             {
@@ -647,10 +1161,10 @@ if __name__ == "__main__":
                     "ING002",
 
                 "ingredient_name":
-                    "tofu",
+                    "Cheese",
 
                 "quantity":
-                    300,
+                    100,
 
                 "unit":
                     "g"
@@ -661,10 +1175,10 @@ if __name__ == "__main__":
                     "ING003",
 
                 "ingredient_name":
-                    "carrot",
+                    "Rice",
 
                 "quantity":
-                    100,
+                    300,
 
                 "unit":
                     "g"
@@ -673,49 +1187,12 @@ if __name__ == "__main__":
     }
 
     # --------------------------------------------------------
-    # Dummy user state
+    # Load actual User State JSON
     # --------------------------------------------------------
 
-    user_state = {
-
-        "max_cooking_time":
-            30
-    }
-
-    # --------------------------------------------------------
-    # Dummy pantry
-    # --------------------------------------------------------
-
-    pantry = [
-
-        {
-            "ingredient_id":
-                "ING001",
-
-            "ingredient_name":
-                "rice",
-
-            "quantity":
-                700,
-
-            "unit":
-                "g"
-        },
-
-        {
-            "ingredient_id":
-                "ING003",
-
-            "ingredient_name":
-                "carrot",
-
-            "quantity":
-                100,
-
-            "unit":
-                "g"
-        }
-    ]
+    user_state = load_user_state(
+        USERS_DIR
+    )
 
     # --------------------------------------------------------
     # Run Member 3
@@ -723,12 +1200,12 @@ if __name__ == "__main__":
 
     result = evaluate_recipe(
         candidate_recipe,
-        user_state,
-        pantry
+        user_state
     )
 
-    # Pretty JSON output
-    import json
+    print(
+        "\n Result:"
+    )
 
     print(
         json.dumps(
