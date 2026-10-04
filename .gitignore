@@ -17,7 +17,12 @@ env/
 # Data artifacts
 !data/processed/.gitkeep
 data/raw/
-data/processed/*.csv
+data/dummy
+data/pantry
+data/users
+data/processed
+# Generated user pantry state
+data/sample/pantry_*.json
 
 # Notebooks
 .ipynb_checkpoints/
