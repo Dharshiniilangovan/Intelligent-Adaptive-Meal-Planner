@@ -6,12 +6,13 @@ import json
 PANTRY_PATH = os.getenv("USER_PANTRY", "../../data/sample/pantry_{user_id}.json")
 
 #build user state
-def build_user_state(budget: float, cook_frequency: int, preferred_cuisines: list[str], dietary_restrictions: list[str], allergies: list[str], preferred_meal_types: list[str], preferred_ingredients: list[str], disliked_ingredients: list[str], budget_flexible: bool, ingredient_availability: dict) -> user.user:
+def build_user_state(budget: float, cook_frequency: int,cook_time_preference_hrs: float,preferred_cuisines: list[str], dietary_restrictions: list[str], allergies: list[str], preferred_meal_types: list[str], preferred_ingredients: list[str], disliked_ingredients: list[str], budget_flexible: bool, ingredient_availability: dict) -> user.user:
     user_id = str(uuid.uuid4())
     user_state = user.user(user_id)
     user_state.setVals(
         budget=budget,
         cook_frequency=cook_frequency,
+        cook_time_preference_hrs=cook_time_preference_hrs,
         preferred_cuisines=preferred_cuisines,
         dietary_restrictions=dietary_restrictions,
         allergies=allergies,
@@ -56,6 +57,7 @@ def save_user_state(user_state: user.user) -> None:
             "user_id": user_state.user_id,
             "budget": user_state.budget,
             "cook_frequency": user_state.cook_frequency,
+            "cook_time_preference_hrs": user_state.cook_time_preference_hrs,
             "preferred_cuisines": user_state.preferred_cuisines,
             "dietary_restrictions": user_state.dietary_restrictions,
             "allergies": user_state.allergies,
@@ -70,6 +72,7 @@ def save_user_state(user_state: user.user) -> None:
 user_state = build_user_state(
     budget=120.0,
     cook_frequency=3,
+    cook_time_preference_hrs = 2,
     preferred_cuisines=["Italian", "Asian"],
     dietary_restrictions=["Vegetarian"],
     allergies=["Peanuts"],
