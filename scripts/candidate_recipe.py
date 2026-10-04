@@ -343,7 +343,18 @@ def retrieve_candidates(
         "meal_type",
         "dish_type",
 
+        "calories_per_serving",
+        "protein_g_per_serving",
+        "carbs_g_per_serving",
+        "fat_g_per_serving",
+        "fiber_g_per_serving",
+        "sugar_g_per_serving",
+        "sodium_mg_per_serving",
+        "calcium_mg_per_serving",
+        "iron_mg_per_serving",
 
+        "is_vegetarian",
+        "is_vegan",
     ]
 
     output_columns = [
