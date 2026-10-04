@@ -1,0 +1,25 @@
+{
+    "user_id": "375b3cdf-b6d3-450e-80ac-ca0fe00f788a",
+    "recipe_id": "R03943",
+    "recipe_name": "Saucy Cauliflower, low fat",
+    "hard_constraints_passed": true,
+    "diet": {
+        "constraint": "diet",
+        "passed": true,
+        "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+    },
+    "allergy": {
+        "constraint": "allergy",
+        "passed": true,
+        "status": "safe",
+        "alert": false,
+        "reason": "Recipe satisfies specified allergy requirements"
+    },
+    "preference": {
+        "score_type": "preference",
+        "score": 0.5,
+        "matched_cuisines": [],
+        "matched_disliked_ingredients": [],
+        "reason": "no preferred cuisine matched"
+    }
+}
