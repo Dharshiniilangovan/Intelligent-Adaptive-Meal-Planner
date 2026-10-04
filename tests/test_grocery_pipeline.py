@@ -484,3 +484,48 @@ def test_real_results_end_to_end():
     assert opt.product_name == "FairPrice Jasmine Fragrant Rice"
     assert opt.package_quantity == 5 and opt.package_unit == "kg"
     assert opt.packages_needed == 1 and opt.total_cost == 9.20 and opt.store == "FairPrice"
+
+def test_multiple_packages_calculated(service):
+    opt = service.get_grocery_option(
+        "rice",
+        1300,
+        "g",
+    )
+
+    assert opt.match_status == "matched"
+
+    assert (
+        opt.product_name
+        == "Royal Umbrella Thai Hom Mali Rice 500g"
+    )
+
+    assert opt.package_quantity == 500
+    assert opt.package_unit == "g"
+
+    assert opt.packages_needed == 3
+
+    assert opt.price_per_package == 2.00
+
+    assert opt.total_cost == 6.00
+
+def test_cilantro_rejects_kimchi():
+    ok, reason = check_match(
+        "cilantro",
+        "CJ Bibigo Sliced Cilantro Kimchi 100g",
+    )
+
+    assert ok is False
+    assert "processed product" in reason
+
+
+def test_kimchi_can_match_kimchi_product():
+    ok, quality = check_match(
+        "kimchi",
+        "CJ Bibigo Sliced Cilantro Kimchi 100g",
+    )
+
+    assert ok is True
+    assert quality in (
+        "exact",
+        "approximate",
+    )
