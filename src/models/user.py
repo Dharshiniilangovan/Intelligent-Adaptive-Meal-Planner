@@ -3,6 +3,7 @@ class user:
         self.user_id = user_id
         self.budget = 0.0
         self.cook_frequency = 0
+        self.cook_time_preference_hrs = 0
         self.preferred_cuisines = []
         self.dietary_restrictions = []
         self.allergies = []
@@ -12,9 +13,10 @@ class user:
         self.budget_flexible = False
         self.budget_cap = None
         self.ingredient_availability = {}
-    def setVals(self, budget: float, cook_frequency: int, preferred_cuisines: list[str], dietary_restrictions: list[str], allergies: list[str], preferred_meal_types: list[str], preferred_ingredients: list[str], disliked_ingredients: list[str], budget_flexible: bool, ingredient_availability: dict) -> None:
+    def setVals(self, budget: float, cook_frequency: int,cook_time_preference_hrs: float, preferred_cuisines: list[str], dietary_restrictions: list[str], allergies: list[str], preferred_meal_types: list[str], preferred_ingredients: list[str], disliked_ingredients: list[str], budget_flexible: bool, ingredient_availability: dict) -> None:
         self.budget = budget
         self.cook_frequency = cook_frequency
+        self.cook_time_preference_hrs = cook_time_preference_hrs
         self.preferred_cuisines = preferred_cuisines
         self.dietary_restrictions = dietary_restrictions
         self.allergies = allergies
