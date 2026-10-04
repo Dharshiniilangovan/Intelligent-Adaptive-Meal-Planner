@@ -8,6 +8,7 @@ from scripts.candidate_recipe import (
     filter_by_cuisine,
     filter_by_calorie_range,
     retrieve_candidates,
+    _contains_label,
 )
 
 
@@ -73,17 +74,20 @@ def test_filter_by_diet():
     )
 
     assert isinstance(result, pd.DataFrame)
+    assert not result.empty
 
     assert all(
         result.apply(
             lambda row:
-                "low-carb" in str(
-                    row.get("diet_labels", "")
-                ).lower()
+                _contains_label(
+                    row.get("diet_labels", ""),
+                    "Low-Carb"
+                )
                 or
-                "low-carb" in str(
-                    row.get("health_labels", "")
-                ).lower(),
+                _contains_label(
+                    row.get("health_labels", ""),
+                    "Low-Carb"
+                ),
             axis=1
         )
     )
@@ -111,10 +115,13 @@ def test_filter_by_health_label():
     assert not result.empty
 
     assert all(
-        result["health_labels"]
-        .astype(str)
-        .str.lower()
-        .str.contains("vegetarian")
+        result["health_labels"].apply(
+            lambda value:
+                _contains_label(
+                    value,
+                    "Vegetarian"
+                )
+        )
     )
 
 
@@ -140,10 +147,12 @@ def test_filter_by_meal_type():
     assert not result.empty
 
     assert all(
-        result["meal_type"]
-        .astype(str)
-        .str.lower()
-        .str.contains("lunch/dinner")
+        result["meal_type"].apply(
+            lambda value:
+                _contains_label(value, "lunch")
+                or
+                _contains_label(value, "dinner")
+        )
     )
 
 
@@ -169,10 +178,13 @@ def test_filter_by_cuisine():
     assert not result.empty
 
     assert all(
-        result["cuisine_type"]
-        .astype(str)
-        .str.lower()
-        .str.contains("indian")
+        result["cuisine_type"].apply(
+            lambda value:
+                _contains_label(
+                    value,
+                    "Indian"
+                )
+        )
     )
 
 
@@ -196,6 +208,7 @@ def test_calorie_range():
     )
 
     assert isinstance(result, pd.DataFrame)
+    assert not result.empty
 
     calories = pd.to_numeric(
         result["calories_per_serving"],
@@ -227,17 +240,23 @@ def test_vegetarian_indian():
     if not result.empty:
 
         assert all(
-            result["health_labels"]
-            .astype(str)
-            .str.lower()
-            .str.contains("vegetarian")
+            result["health_labels"].apply(
+                lambda value:
+                    _contains_label(
+                        value,
+                        "Vegetarian"
+                    )
+            )
         )
 
         assert all(
-            result["cuisine_type"]
-            .astype(str)
-            .str.lower()
-            .str.contains("indian")
+            result["cuisine_type"].apply(
+                lambda value:
+                    _contains_label(
+                        value,
+                        "Indian"
+                    )
+            )
         )
 
 
@@ -263,24 +282,32 @@ def test_vegetarian_indian_lunch_dinner():
     if not result.empty:
 
         assert all(
-            result["health_labels"]
-            .astype(str)
-            .str.lower()
-            .str.contains("vegetarian")
+            result["health_labels"].apply(
+                lambda value:
+                    _contains_label(
+                        value,
+                        "Vegetarian"
+                    )
+            )
         )
 
         assert all(
-            result["cuisine_type"]
-            .astype(str)
-            .str.lower()
-            .str.contains("indian")
+            result["cuisine_type"].apply(
+                lambda value:
+                    _contains_label(
+                        value,
+                        "Indian"
+                    )
+            )
         )
 
         assert all(
-            result["meal_type"]
-            .astype(str)
-            .str.lower()
-            .str.contains("lunch/dinner")
+            result["meal_type"].apply(
+                lambda value:
+                    _contains_label(value, "lunch")
+                    or
+                    _contains_label(value, "dinner")
+            )
         )
 
 
@@ -305,13 +332,35 @@ def test_low_carb_vegetarian_max_600():
 
     if not result.empty:
 
+        # Check Low-Carb
         assert all(
-            result["health_labels"]
-            .astype(str)
-            .str.lower()
-            .str.contains("vegetarian")
+            result.apply(
+                lambda row:
+                    _contains_label(
+                        row.get("diet_labels", ""),
+                        "Low-Carb"
+                    )
+                    or
+                    _contains_label(
+                        row.get("health_labels", ""),
+                        "Low-Carb"
+                    ),
+                axis=1
+            )
         )
 
+        # Check Vegetarian
+        assert all(
+            result["health_labels"].apply(
+                lambda value:
+                    _contains_label(
+                        value,
+                        "Vegetarian"
+                    )
+            )
+        )
+
+        # Check maximum calories
         calories = pd.to_numeric(
             result["calories_per_serving"],
             errors="coerce"

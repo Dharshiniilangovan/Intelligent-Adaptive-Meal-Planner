@@ -2,6 +2,7 @@ import ast
 from pathlib import Path
 
 import pandas as pd
+from src.knowledge.repository import normalize
 
 
 # ============================================================
@@ -14,7 +15,7 @@ RECIPE_KB_FILE = (
     BASE_DIR
     / "data"
     / "processed"
-    / "recipes_kb.csv"
+    / "recipe_kb_clean.csv"
 )
 
 
@@ -61,36 +62,30 @@ def _contains_label(value, target):
     """
     Check whether a list-like or string column contains
     the requested label.
-
-    Example:
-        ["Vegetarian", "Gluten-Free"]
     """
 
     if pd.isna(value):
         return False
 
-    target = str(target).strip().lower()
+    target = normalize(target)
 
     if not target:
         return False
 
-    # Handle values stored as string representations of lists
     if isinstance(value, str):
         try:
             parsed_value = ast.literal_eval(value)
 
             if isinstance(parsed_value, list):
                 return any(
-                    str(item).strip().lower() == target
+                    normalize(item) == target
                     for item in parsed_value
                 )
 
         except (ValueError, SyntaxError):
             pass
 
-    # Fallback for normal strings
-    return target in str(value).strip().lower()
-
+    return normalize(value) == target
 
 # ============================================================
 # FILTER BY DIET
@@ -172,9 +167,37 @@ def filter_by_meal_type(df, meal_type):
             "Recipe KB does not contain 'meal_type'."
         )
 
-    mask = df["meal_type"].apply(
-        lambda value: _contains_label(value, meal_type)
-    )
+    # Handles input such as "lunch/dinner"
+    requested_types = [
+        normalize(item)
+        for item in str(meal_type).split("/")
+    ]
+
+    def matches(value):
+
+        if pd.isna(value):
+            return False
+
+        try:
+            parsed_value = ast.literal_eval(value)
+
+            if isinstance(parsed_value, list):
+                recipe_types = [
+                    normalize(item)
+                    for item in parsed_value
+                ]
+
+                return any(
+                    meal in recipe_types
+                    for meal in requested_types
+                )
+
+        except (ValueError, SyntaxError):
+            pass
+
+        return normalize(value) in requested_types
+
+    mask = df["meal_type"].apply(matches)
 
     return df[mask].copy()
 
@@ -189,6 +212,8 @@ def filter_by_cuisine(df, cuisine):
     """
 
     if cuisine is None or not str(cuisine).strip():
+        return df.copy()
+    if df.empty:
         return df.copy()
 
     if "cuisine_type" not in df.columns:
@@ -309,12 +334,16 @@ def retrieve_candidates(
     output_columns = [
         "recipe_id",
         "recipe_name",
+
         "diet_labels",
         "health_labels",
+        "cautions",
+
         "cuisine_type",
         "meal_type",
         "dish_type",
-        "calories_per_serving",
+
+
     ]
 
     output_columns = [
