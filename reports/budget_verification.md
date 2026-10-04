@@ -31,60 +31,60 @@ This report verifies the complete flow from recipe ingredients and pantry conten
 
 | Ingredient | Ingredient ID | Quantity to Buy | Unit | Pantry Status |
 |---|---|---:|---|---|
-| dijon mustard | ING1203 | 1.0 | pinch | needs_purchase |
-| garlic salt | ING1469 | 1.0 | pinch | needs_purchase |
-| cilantro | ING0870 | 1.0 | sprig | needs_purchase |
-| sour cream | ING3248 | 1.5 | tablespoon | needs_purchase |
 | cheddar cheese | ING0658 | 1.5 | tablespoon | needs_purchase |
+| garlic salt | ING1469 | 1.0 | pinch | needs_purchase |
+| dijon mustard | ING1203 | 1.0 | pinch | needs_purchase |
+| sour cream | ING3248 | 1.5 | tablespoon | needs_purchase |
 | cauliflower | ING0614 | 0.5 | head | needs_purchase |
 | mayonnaise | ING2147 | 1.5 | tablespoon | needs_purchase |
+| cilantro | ING0870 | 1.0 | sprig | needs_purchase |
 
 ## 4. Live FairPrice Grocery Results
 
 | Ingredient | Product | Price / Package | Package | Packs | Purchase Cost | Match Status | Match Quality |
 |---|---|---:|---|---:|---:|---|---|
-| dijon mustard | Maille Dijon Mustard | $5.60 | 215.0 g | NA | NA | matched_no_quantity | exact |
+| cheddar cheese | Chesdale Cheddar Cheese Slices | $10.04 | 500.0 g | NA | NA | matched_no_quantity | exact |
 | garlic salt | FairPrice Premium Quality Fine Salt | $0.45 | 500.0 g | NA | NA | matched_no_quantity | approximate |
+| dijon mustard | Maille Dijon Mustard | $5.60 | 215.0 g | NA | NA | matched_no_quantity | exact |
+| sour cream | Bulla Sour Cream | $5.55 | 50.0 ml | 1 | $5.55 | matched | exact |
+| cauliflower | China Green Cauliflower | $1.62 | 280.0 g | NA | NA | matched_no_quantity | exact |
+| mayonnaise | Best Foods Mayonnaise | $3.16 | 220.0 ml | 1 | $3.16 | matched | exact |
 | cilantro | China Coriander (Cilantro) | $1.80 | 50.0 g | NA | NA | matched_no_quantity | exact |
-| sour cream | Emborg Sour Cream | $12.95 | 1.0 kg | NA | NA | matched_no_quantity | exact |
-| cheddar cheese | Mainland Natural Cheddar Cheese Slice | $8.52 | 210.0 g | NA | NA | matched_no_quantity | exact |
-| cauliflower | China Cauliflower | $1.86 | 620.0 g | NA | NA | matched_no_quantity | exact |
-| mayonnaise | Ayam Brand Tuna Mayonnaise | $3.28 | 160.0 g | NA | NA | matched_no_quantity | exact |
 
 ### FairPrice Sources
 
-- **dijon mustard:** [Maille Dijon Mustard](https://www.fairprice.com.sg/product/la-maison-maille-dijon-mustard-original-215ml-13034962)
+- **cheddar cheese:** [Chesdale Cheddar Cheese Slices](https://www.fairprice.com.sg/product/chesdale-cheddar-cheese-slices-original-500g-24-per-pack-12369809)
 - **garlic salt:** [FairPrice Premium Quality Fine Salt](https://www.fairprice.com.sg/product/fairprice-premium-fine-salt-500g-432823)
+- **dijon mustard:** [Maille Dijon Mustard](https://www.fairprice.com.sg/product/la-maison-maille-dijon-mustard-original-215ml-13034962)
+- **sour cream:** [Bulla Sour Cream](https://www.fairprice.com.sg/product/bulla-sour-cream-original-200ml-13042062)
+- **cauliflower:** [China Green Cauliflower](https://www.fairprice.com.sg/product/china-green-cauliflower-530g-11131460)
+- **mayonnaise:** [Best Foods Mayonnaise](https://www.fairprice.com.sg/product/best-foods-real-mayonnaise-220ml-77554)
 - **cilantro:** [China Coriander (Cilantro)](https://www.fairprice.com.sg/product/china-coriander-cilantro-50g-12393737)
-- **sour cream:** [Emborg Sour Cream](https://www.fairprice.com.sg/product/emborg-sour-cream-1-kg-90179874)
-- **cheddar cheese:** [Mainland Natural Cheddar Cheese Slice](https://www.fairprice.com.sg/product/mainland-natural-cheddar-cheese-slice-extra-tasty-210g-13207895)
-- **cauliflower:** [China Cauliflower](https://www.fairprice.com.sg/product/12120704)
-- **mayonnaise:** [Ayam Brand Tuna Mayonnaise](https://www.fairprice.com.sg/product/ayam-brand-deli-tuna-mayonnaise-160g-13057934)
 
 ## 5. Basket Summary
 
 - Grocery items requiring purchase: **7**
-- Items with known final cost: **0**
-- Known subtotal: **$0.00**
+- Items with known final cost: **2**
+- Known subtotal: **$8.71**
 - Complete purchase cost known: **No**
-- Unknown-cost items: **dijon mustard, garlic salt, cilantro, sour cream, cheddar cheese, cauliflower, mayonnaise**
+- Unknown-cost items: **cheddar cheese, garlic salt, dijon mustard, cauliflower, cilantro**
 
 ## 6. Budget Constraint
 
 | Remaining Budget | Known Grocery Cost | Complete Cost Known? | Decision | Budget After Purchase |
 |---:|---:|---|---|---:|
-| $100.00 | $0.00 | No | **UNCERTAIN** | NA |
-| $50.00 | $0.00 | No | **UNCERTAIN** | NA |
-| $20.00 | $0.00 | No | **UNCERTAIN** | NA |
-| $10.00 | $0.00 | No | **UNCERTAIN** | NA |
-| $1.00 | $0.00 | No | **UNCERTAIN** | NA |
+| $100.00 | $8.71 | No | **UNCERTAIN** | NA |
+| $50.00 | $8.71 | No | **UNCERTAIN** | NA |
+| $20.00 | $8.71 | No | **UNCERTAIN** | NA |
+| $10.00 | $8.71 | No | **UNCERTAIN** | NA |
+| $1.00 | $8.71 | No | **HARD FAIL** | NA |
 
 ## 7. Decision Reasoning
 
 ### Budget $100.00
 
 - Decision: **UNCERTAIN**
-- Known purchase cost: **$0.00**
+- Known purchase cost: **$8.71**
 - Complete cost known: **No**
 - Budget after purchase: **NA**
 - Reason: One or more required grocery costs are unknown.
@@ -92,7 +92,7 @@ This report verifies the complete flow from recipe ingredients and pantry conten
 ### Budget $50.00
 
 - Decision: **UNCERTAIN**
-- Known purchase cost: **$0.00**
+- Known purchase cost: **$8.71**
 - Complete cost known: **No**
 - Budget after purchase: **NA**
 - Reason: One or more required grocery costs are unknown.
@@ -100,7 +100,7 @@ This report verifies the complete flow from recipe ingredients and pantry conten
 ### Budget $20.00
 
 - Decision: **UNCERTAIN**
-- Known purchase cost: **$0.00**
+- Known purchase cost: **$8.71**
 - Complete cost known: **No**
 - Budget after purchase: **NA**
 - Reason: One or more required grocery costs are unknown.
@@ -108,18 +108,18 @@ This report verifies the complete flow from recipe ingredients and pantry conten
 ### Budget $10.00
 
 - Decision: **UNCERTAIN**
-- Known purchase cost: **$0.00**
+- Known purchase cost: **$8.71**
 - Complete cost known: **No**
 - Budget after purchase: **NA**
 - Reason: One or more required grocery costs are unknown.
 
 ### Budget $1.00
 
-- Decision: **UNCERTAIN**
-- Known purchase cost: **$0.00**
+- Decision: **HARD FAIL**
+- Known purchase cost: **$8.71**
 - Complete cost known: **No**
 - Budget after purchase: **NA**
-- Reason: One or more required grocery costs are unknown.
+- Reason: Known purchase cost exceeds remaining budget.
 
 ## 8. Verified Pipeline
 
