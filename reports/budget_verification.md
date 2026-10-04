@@ -31,60 +31,60 @@ This report verifies the complete flow from recipe ingredients and pantry conten
 
 | Ingredient | Ingredient ID | Quantity to Buy | Unit | Pantry Status |
 |---|---|---:|---|---|
-| cheddar cheese | ING0658 | 1.5 | tablespoon | needs_purchase |
 | garlic salt | ING1469 | 1.0 | pinch | needs_purchase |
+| cauliflower | ING0614 | 0.5 | head | needs_purchase |
+| cilantro | ING0870 | 1.0 | sprig | needs_purchase |
+| mayonnaise | ING2147 | 1.5 | tablespoon | needs_purchase |
 | dijon mustard | ING1203 | 1.0 | pinch | needs_purchase |
 | sour cream | ING3248 | 1.5 | tablespoon | needs_purchase |
-| cauliflower | ING0614 | 0.5 | head | needs_purchase |
-| mayonnaise | ING2147 | 1.5 | tablespoon | needs_purchase |
-| cilantro | ING0870 | 1.0 | sprig | needs_purchase |
+| cheddar cheese | ING0658 | 1.5 | tablespoon | needs_purchase |
 
 ## 4. Live FairPrice Grocery Results
 
 | Ingredient | Product | Price / Package | Package | Packs | Purchase Cost | Match Status | Match Quality |
 |---|---|---:|---|---:|---:|---|---|
-| cheddar cheese | Chesdale Cheddar Cheese Slices | $10.04 | 500.0 g | NA | NA | matched_no_quantity | exact |
-| garlic salt | FairPrice Premium Quality Fine Salt | $0.45 | 500.0 g | NA | NA | matched_no_quantity | approximate |
-| dijon mustard | Maille Dijon Mustard | $5.60 | 215.0 g | NA | NA | matched_no_quantity | exact |
-| sour cream | Bulla Sour Cream | $5.55 | 50.0 ml | 1 | $5.55 | matched | exact |
-| cauliflower | China Green Cauliflower | $1.62 | 280.0 g | NA | NA | matched_no_quantity | exact |
-| mayonnaise | Best Foods Mayonnaise | $3.16 | 220.0 ml | 1 | $3.16 | matched | exact |
-| cilantro | China Coriander (Cilantro) | $1.80 | 50.0 g | NA | NA | matched_no_quantity | exact |
+| garlic salt | FairPrice Premium Quality Fine Salt | $0.45 | 500.0 g | 1 | $0.45 | matched_minimum_package | approximate |
+| cauliflower | China Green Cauliflower | $1.62 | 280.0 g | 1 | $1.62 | matched_minimum_package | exact |
+| cilantro | China Coriander (Cilantro) | $1.80 | 50.0 g | 1 | $1.80 | matched_minimum_package | exact |
+| mayonnaise | NA | NA | NA | NA | NA | no_match | NA |
+| dijon mustard | NA | NA | NA | NA | NA | no_match | NA |
+| sour cream | Bulla Sour Cream | $4.59 | 200.0 ml | 1 | $4.59 | matched | exact |
+| cheddar cheese | Chesdale Cheddar Cheese Slices | $10.04 | 500.0 g | 1 | $10.04 | matched_minimum_package | exact |
 
 ### FairPrice Sources
 
-- **cheddar cheese:** [Chesdale Cheddar Cheese Slices](https://www.fairprice.com.sg/product/chesdale-cheddar-cheese-slices-original-500g-24-per-pack-12369809)
 - **garlic salt:** [FairPrice Premium Quality Fine Salt](https://www.fairprice.com.sg/product/fairprice-premium-fine-salt-500g-432823)
-- **dijon mustard:** [Maille Dijon Mustard](https://www.fairprice.com.sg/product/la-maison-maille-dijon-mustard-original-215ml-13034962)
-- **sour cream:** [Bulla Sour Cream](https://www.fairprice.com.sg/product/bulla-sour-cream-original-200ml-13042062)
 - **cauliflower:** [China Green Cauliflower](https://www.fairprice.com.sg/product/china-green-cauliflower-530g-11131460)
-- **mayonnaise:** [Best Foods Mayonnaise](https://www.fairprice.com.sg/product/best-foods-real-mayonnaise-220ml-77554)
 - **cilantro:** [China Coriander (Cilantro)](https://www.fairprice.com.sg/product/china-coriander-cilantro-50g-12393737)
+- **mayonnaise:** No reliable FairPrice product page found.
+- **dijon mustard:** No reliable FairPrice product page found.
+- **sour cream:** [Bulla Sour Cream](https://www.fairprice.com.sg/product/182668)
+- **cheddar cheese:** [Chesdale Cheddar Cheese Slices](https://www.fairprice.com.sg/product/chesdale-cheddar-cheese-slices-original-500g-24-per-pack-12369809)
 
 ## 5. Basket Summary
 
 - Grocery items requiring purchase: **7**
-- Items with known final cost: **2**
-- Known subtotal: **$8.71**
+- Items with known final cost: **5**
+- Known subtotal: **$18.50**
 - Complete purchase cost known: **No**
-- Unknown-cost items: **cheddar cheese, garlic salt, dijon mustard, cauliflower, cilantro**
+- Unknown-cost items: **mayonnaise, dijon mustard**
 
 ## 6. Budget Constraint
 
 | Remaining Budget | Known Grocery Cost | Complete Cost Known? | Decision | Budget After Purchase |
 |---:|---:|---|---|---:|
-| $100.00 | $8.71 | No | **UNCERTAIN** | NA |
-| $50.00 | $8.71 | No | **UNCERTAIN** | NA |
-| $20.00 | $8.71 | No | **UNCERTAIN** | NA |
-| $10.00 | $8.71 | No | **UNCERTAIN** | NA |
-| $1.00 | $8.71 | No | **HARD FAIL** | NA |
+| $100.00 | $18.50 | No | **UNCERTAIN** | NA |
+| $50.00 | $18.50 | No | **UNCERTAIN** | NA |
+| $20.00 | $18.50 | No | **UNCERTAIN** | NA |
+| $10.00 | $18.50 | No | **HARD FAIL** | NA |
+| $1.00 | $18.50 | No | **HARD FAIL** | NA |
 
 ## 7. Decision Reasoning
 
 ### Budget $100.00
 
 - Decision: **UNCERTAIN**
-- Known purchase cost: **$8.71**
+- Known purchase cost: **$18.50**
 - Complete cost known: **No**
 - Budget after purchase: **NA**
 - Reason: One or more required grocery costs are unknown.
@@ -92,7 +92,7 @@ This report verifies the complete flow from recipe ingredients and pantry conten
 ### Budget $50.00
 
 - Decision: **UNCERTAIN**
-- Known purchase cost: **$8.71**
+- Known purchase cost: **$18.50**
 - Complete cost known: **No**
 - Budget after purchase: **NA**
 - Reason: One or more required grocery costs are unknown.
@@ -100,23 +100,23 @@ This report verifies the complete flow from recipe ingredients and pantry conten
 ### Budget $20.00
 
 - Decision: **UNCERTAIN**
-- Known purchase cost: **$8.71**
+- Known purchase cost: **$18.50**
 - Complete cost known: **No**
 - Budget after purchase: **NA**
 - Reason: One or more required grocery costs are unknown.
 
 ### Budget $10.00
 
-- Decision: **UNCERTAIN**
-- Known purchase cost: **$8.71**
+- Decision: **HARD FAIL**
+- Known purchase cost: **$18.50**
 - Complete cost known: **No**
 - Budget after purchase: **NA**
-- Reason: One or more required grocery costs are unknown.
+- Reason: Known purchase cost exceeds remaining budget.
 
 ### Budget $1.00
 
 - Decision: **HARD FAIL**
-- Known purchase cost: **$8.71**
+- Known purchase cost: **$18.50**
 - Complete cost known: **No**
 - Budget after purchase: **NA**
 - Reason: Known purchase cost exceeds remaining budget.
