@@ -69,7 +69,8 @@ def save_user_state(user_state: user.user) -> None:
             "ingredient_availability": user_state.ingredient_availability
         }, f, indent=4)
 
-user_state = build_user_state(
+if __name__=="__main__":
+    user_state = build_user_state(
     budget=120.0,
     cook_frequency=3,
     cook_time_preference_hrs = 2,
@@ -84,8 +85,8 @@ user_state = build_user_state(
         "Tomatoes": "5 counts",
         "Cheese": "200 grams"
     }
-)
+    )
 
-print(user_state.user_id)
-print(user_state.budget)
-print(user_state.dietary_restrictions)
+    print(user_state.user_id)
+    print(user_state.budget)
+    print(user_state.dietary_restrictions)
