@@ -1,0 +1,50 @@
+{
+    "agent": "recipe",
+    "status": "success",
+    "data": {
+        "candidate_recipe_ids": [
+            "R39053",
+            "R04194",
+            "R14977",
+            "R17469",
+            "R14050",
+            "R25646",
+            "R28833",
+            "R21332",
+            "R21610",
+            "R22063"
+        ],
+        "candidate_count": 10,
+        "max_candidates": 10,
+        "applied_filters": {
+            "dietary_restrictions": [
+                "Vegetarian"
+            ],
+            "meal_types": [
+                "Dinner"
+            ],
+            "preferred_cuisines": [
+                "Italian",
+                "Asian"
+            ]
+        }
+    },
+    "warnings": [],
+    "errors": [],
+    "user_id": "375b3cdf-b6d3-450e-80ac-ca0fe00f788a",
+    "input": {
+        "dietary_restrictions": [
+            "Vegetarian"
+        ],
+        "preferred_meal_types": [
+            "Dinner"
+        ],
+        "preferred_cuisines": [
+            "Italian",
+            "Asian"
+        ],
+        "meal_context": {
+            "meal_type": "Dinner"
+        }
+    }
+}
