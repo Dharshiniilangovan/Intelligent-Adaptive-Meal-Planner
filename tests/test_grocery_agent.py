@@ -1,5 +1,8 @@
 from src.agents.grocery_agent import GroceryAgent
 from src.grocery.grocery_service import GroceryOption
+from src.agents.contracts import (
+    normalize_agent_result,
+)
 
 
 class FakeGroceryService:
@@ -539,3 +542,70 @@ def test_grocery_agent_rejects_invalid_missing_ingredients():
         in result["errors"][0]
     )
 
+def test_grocery_agent_matches_shared_contract():
+
+    options = [
+        GroceryOption(
+            ingredient_id="ING01",
+            ingredient_name="rice",
+            required_quantity=300,
+            required_unit="g",
+            product_name="FairPrice Jasmine Rice",
+            package_quantity=500,
+            package_unit="g",
+            packages_needed=1,
+            price_per_package=2.00,
+            total_cost=2.00,
+            currency="SGD",
+            store="FairPrice",
+            match_status="matched",
+        )
+    ]
+
+    agent = GroceryAgent(
+        grocery_service=FakeGroceryService(
+            options
+        )
+    )
+
+    result = agent.run(
+        recipe_id="R001",
+        missing_ingredients=[
+            {
+                "ingredient_id": "ING01",
+                "ingredient_name": "rice",
+                "quantity": 300,
+                "unit": "g",
+            }
+        ],
+    )
+
+    # This is exactly what Manager does.
+    normalized = normalize_agent_result(
+        result,
+        "grocery",
+    )
+
+    assert normalized["agent"] == "grocery"
+    assert normalized["status"] == "success"
+
+    assert isinstance(
+        normalized["data"],
+        dict,
+    )
+
+    assert normalized["data"]["recipe_id"] == "R001"
+    assert normalized["data"]["known_cost"] == 2.00
+
+    assert (
+        normalized["data"]["all_items_priced"]
+        is True
+    )
+
+    assert (
+        normalized["data"]["unpriced_items"]
+        == []
+    )
+
+    assert normalized["warnings"] == []
+    assert normalized["errors"] == []
