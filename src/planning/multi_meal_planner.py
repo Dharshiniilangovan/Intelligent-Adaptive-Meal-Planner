@@ -259,140 +259,81 @@ class MultiMealPlanner:
     # ============================================================
 
     def _get_candidates(
-        self,
-        user_state: dict,
-        slot: MealSlot,
-        plan_state: PlanState,
-    ) -> list[str]:
-        """
-        Ask the existing Recipe Agent for candidates.
+    self,
+    user_state: dict,
+    slot: MealSlot,
+    plan_state: PlanState,
+) -> list[str]:
 
-        This method DOES NOT perform recipe retrieval itself.
-        """
-
-        meal_context = {
+        meal_slot = {
             "date": slot.date.isoformat(),
-
             "meal_type": slot.meal_type,
-
-            "max_cooking_time":
-                slot.max_cooking_time,
-
-            # Member 2 can use these to prevent repetition.
-            "used_recipe_ids":
-                list(plan_state.used_recipe_ids),
-
-            "exclude_recipe_ids":
-                list(plan_state.used_recipe_ids),
-
-            "remaining_budget":
-                plan_state.remaining_budget,
+            "max_cooking_time": slot.max_cooking_time,
         }
-
-        # --------------------------------------------------------
-        # Call existing Recipe Agent
-        # --------------------------------------------------------
 
         response = self.manager.recipe_agent.run(
             user_state=user_state,
-            meal_context=meal_context,
+            meal_slot=meal_slot,
+            selected_recipe_ids=list(
+                plan_state.used_recipe_ids
+            ),
+            recent_cuisines=[],
+            max_candidates=self.max_candidates_per_slot,
         )
 
         if not response:
             return []
 
-        # --------------------------------------------------------
-        # Day-4 AgentResult contract
-        # --------------------------------------------------------
-
-        if isinstance(response, dict):
-
-            data = response.get(
-                "data",
-                response,
-            )
-
-            candidates = (
-                data.get("candidate_recipe_ids")
-                or data.get("recipe_ids")
-                or data.get("candidates")
-                or []
-            )
-
-        else:
-
-            candidates = response
-
-        # --------------------------------------------------------
-        # Normalize candidate IDs
-        # --------------------------------------------------------
+        data = response.get("data", {})
+        candidates = data.get(
+            "candidate_recipe_ids",
+            [],
+        )
 
         result = []
 
-        for candidate in candidates:
-
-            # Candidate already just recipe ID
-
-            if isinstance(candidate, str):
-
-                recipe_id = candidate
-
-            # Candidate represented as object/dict
-
-            elif isinstance(candidate, dict):
-
-                recipe_id = (
-                    candidate.get("recipe_id")
-                    or candidate.get("id")
-                )
-
-            else:
-
-                continue
-
-            if not recipe_id:
-                continue
-
-            # ----------------------------------------------------
-            # Prevent exact repetition
-            # ----------------------------------------------------
+        for recipe_id in candidates:
+            recipe_id = str(recipe_id).strip().upper()
 
             if recipe_id in plan_state.used_recipe_ids:
                 continue
 
-            # Prevent duplicate candidate IDs
-
-            if recipe_id in result:
-                continue
-
-            result.append(recipe_id)
+            if recipe_id not in result:
+                result.append(recipe_id)
 
         return result
-
     # ============================================================
     # EVALUATE ONE CANDIDATE
     # ============================================================
 
     def _evaluate_candidate(
-        self,
-        user_state: dict,
-        slot: MealSlot,
-        recipe_id: str,
-        plan_state: PlanState,
-    ) -> dict:
-        """
-        Send one candidate through the EXISTING Day-4 workflow.
+    self,
+    user_state: dict,
+    slot: MealSlot,
+    recipe_id: str,
+    plan_state: PlanState,
+) -> dict:
 
-        Manager should internally use:
+        planning_user_state = dict(user_state)
 
-            Ingredient Agent
-                ->
-            Grocery Agent
-                ->
-            Reasoning Engine
+        # Your actual Manager expects this exact key.
+        planning_user_state[
+            "remaining_budget"
+        ] = plan_state.remaining_budget
 
-        This planner does not duplicate that logic.
-        """
+        meal_context = {
+            "date": slot.date.isoformat(),
+            "meal_type": slot.meal_type,
+            "max_cooking_time":
+                slot.max_cooking_time,
+        }
+
+        return self.manager.evaluate_candidate(
+            recipe_id=recipe_id,
+            user_state=planning_user_state,
+            meal_context=meal_context,
+        )
+        
 
         # --------------------------------------------------------
         # Copy user state

@@ -26,24 +26,33 @@ from src.planning.multi_meal_planner import (
 class FakeRecipeAgent:
 
     def __init__(self):
-
         self.calls = []
 
     def run(
         self,
         user_state,
-        meal_context,
+        meal_slot,
+        selected_recipe_ids=None,
+        recent_cuisines=None,
+        max_candidates=None,
     ):
+        """
+        Fake Recipe Agent matching Member 2's
+        current Day-5 RecipeAgent interface.
+        """
 
+        selected_recipe_ids = selected_recipe_ids or []
+        recent_cuisines = recent_cuisines or []
+
+        # Keep call history for assertions/debugging.
         self.calls.append(
-            meal_context
-        )
-
-        used = set(
-            meal_context.get(
-                "used_recipe_ids",
-                [],
-            )
+            {
+                "user_state": user_state,
+                "meal_slot": meal_slot,
+                "selected_recipe_ids": selected_recipe_ids,
+                "recent_cuisines": recent_cuisines,
+                "max_candidates": max_candidates,
+            }
         )
 
         candidates = [
@@ -56,25 +65,26 @@ class FakeRecipeAgent:
             "R007",
         ]
 
+        # Simulate Member 2's repetition exclusion.
         candidates = [
             recipe_id
             for recipe_id in candidates
-            if recipe_id not in used
+            if recipe_id not in selected_recipe_ids
         ]
+
+        # Simulate Member 2's candidate limit.
+        if max_candidates is not None:
+            candidates = candidates[:max_candidates]
 
         return {
             "agent": "recipe",
             "status": "success",
-
             "data": {
-                "candidate_recipe_ids":
-                    candidates
+                "candidate_recipe_ids": candidates
             },
-
             "warnings": [],
             "errors": [],
         }
-
 
 class FakeManager:
 
