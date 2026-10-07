@@ -20,8 +20,16 @@ from src.grocery.tavily_client import SearchError
 from src.grocery.food_filter import search_queries  # noqa: E402
 from src.grocery.grocery_service import GroceryService  # noqa: E402
 
-TEST_INGREDIENTS = [("rice", 1, "kg"), ("milk", 1, "l"), ("tofu", 300, "g"),
-                    ("tomato", 500, "g"), ("chicken", 500, "g"), ("eggs", 10, "pcs")]
+TEST_INGREDIENTS = [
+    ("firm tofu", 1.0, "count"),
+    ("soy sauce", 2.0, "tablespoon"),
+    ("olive oil", 2.0, "tablespoon"),
+    ("apple cider vinegar", 2.0, "tablespoon"),
+    ("garlic powder", 1.0, "pinch"),
+    ("fine sea salt", 1.0, "pinch"),
+    ("black pepper", 1.0, "pinch"),
+    ("liquid smoke", 0.5, "teaspoon"),
+]
 REPORT_PATH = PROJECT_ROOT / "reports" / "grocery_source_verification.md"
 
 
@@ -99,7 +107,7 @@ def main() -> None:
     header = ("| Ingredient | Search worked (results) | Product matched | Price | Package size "
               "| Store | URL | Source timestamp |\n|---|---|---|---|---|---|---|---|")
     table = "\n".join("| " + " | ".join(r) + " |" for r in summary_rows)
-    report = (f"# Grocery source verification — BuyWhere\n\nRun: {run_time}\n\n"
+    report = (f"# Grocery source verification — Tavliy Search\n\nRun: {run_time}\n\n"
               f"## Summary\n\n{header}\n{table}\n\n## Details\n\n" + "\n".join(details) +
               "\n## Manual check\nOpen the URLs above and confirm each product and price on the store's page.\n")
 

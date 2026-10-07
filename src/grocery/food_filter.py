@@ -1,248 +1,31 @@
 """src/grocery/food_filter.py
 
-Clean recipe ingredient text and determine whether a grocery product
-is a reliable match for the requested ingredient.
+Clean recipe ingredient text, generate safe grocery search queries,
+and determine whether a retail product is a reasonable match.
 
-This module is responsible for:
-
-- removing quantities, units and preparation words
-- rejecting non-food products
-- rejecting processed products when the raw ingredient was requested
-- identifying exact and approximate ingredient matches
-- generating progressively simpler ingredient search queries
-
-Store selection is handled by tavily_client.py and grocery_service.py.
+Design goals:
+- preserve multi-word ingredient identity
+- never reduce "garlic powder" to just "powder"
+- allow useful fallbacks such as "cherry tomatoes" -> "tomatoes"
+- reject obvious derived/non-ingredient products
+- use title + URL + Tavily evidence when available
+- avoid maintaining giant ingredient-specific blacklists
 """
 
+from __future__ import annotations
+
 import re
+from difflib import SequenceMatcher
+from urllib.parse import unquote, urlparse
+
+
+_WORD = re.compile(r"[a-z]+")
 
 
 # ---------------------------------------------------------------------
-# Products that must never be treated as grocery ingredients
-# ---------------------------------------------------------------------
-
-NON_FOOD = [
-    # Pets
-    "pet",
-    "pets",
-    "dog",
-    "dogs",
-    "cat",
-    "cats",
-    "puppy",
-    "kitten",
-    "kibble",
-    "litter",
-    "aquarium",
-    "pedigree",
-    "whiskas",
-    "friskies",
-    "purina",
-    "iams",
-    "cesar",
-    "sheba",
-    "felix",
-    "loveabowl",
-    "canin",
-    "smartheart",
-    "nutrience",
-    "acana",
-    "orijen",
-
-    # Appliances / kitchenware
-    "cooker",
-    "maker",
-    "kettle",
-    "blender",
-    "juicer",
-    "fryer",
-    "oven",
-    "microwave",
-    "toaster",
-    "machine",
-    "appliance",
-    "processor",
-    "dispenser",
-    "container",
-    "lunchbox",
-    "tumbler",
-    "flask",
-    "mug",
-    "tray",
-    "mould",
-    "mold",
-    "cutter",
-    "press",
-    "pan",
-    "pot",
-    "wok",
-    "knife",
-    "spatula",
-    "storage",
-    "scale",
-    "steamer",
-    "grinder",
-
-    # Household / personal care
-    "detergent",
-    "cleaner",
-    "soap",
-    "shampoo",
-    "conditioner",
-    "lotion",
-    "wash",
-    "tissue",
-    "diaper",
-    "wipes",
-    "cosmetic",
-    "skincare",
-    "mask",
-    "perfume",
-    "fragrance",
-    "candle",
-    "bleach",
-    "bath",
-    "soak",
-    "scent",
-    "scented",
-    "bubble",
-    "body",
-    "skin",
-    "moisturiser",
-    "moisturizer",
-
-    # Home / furniture
-    "panel",
-    "wall",
-    "tile",
-    "paint",
-    "fabric",
-    "curtain",
-    "sofa",
-    "furniture",
-    "rug",
-
-    # Health
-    "supplement",
-    "vitamin",
-    "vitamins",
-    "capsule",
-    "capsules",
-    "tablet",
-    "tablets",
-    "collagen",
-
-    # Electronics / fashion / misc
-    "phone",
-    "iphone",
-    "ipad",
-    "macbook",
-    "airpods",
-    "watch",
-    "charger",
-    "cable",
-    "speaker",
-    "headphones",
-    "laptop",
-    "cover",
-    "toy",
-    "toys",
-    "plush",
-    "keychain",
-    "sticker",
-    "costume",
-    "shirt",
-    "book",
-    "fake",
-    "artificial",
-    "replica",
-    "seeds",
-    "plant",
-    "planter",
-]
-
-
-# ---------------------------------------------------------------------
-# Processed products
-# ---------------------------------------------------------------------
-
-PROCESSED = [
-    "kimchi",
-    "sauce",
-    "ketchup",
-    "paste",
-    "puree",
-    "flavour",
-    "flavor",
-    "flavoured",
-    "flavored",
-    "chips",
-    "crisps",
-    "cracker",
-    "crackers",
-    "biscuit",
-    "biscuits",
-    "cookie",
-    "cookies",
-    "cake",
-    "cakes",
-    "candy",
-    "chocolate",
-    "soup",
-    "stock",
-    "cube",
-    "cubes",
-    "seasoning",
-    "powder",
-    "noodle",
-    "noodles",
-    "snack",
-    "snacks",
-    "nugget",
-    "nuggets",
-    "jam",
-    "jelly",
-    "drink",
-    "drinks",
-    "tea",
-    "wafer",
-    "bar",
-    "bars",
-    "ice cream",
-    "yogurt",
-    "yoghurt",
-    "dessert",
-    "pudding",
-    "spread",
-    "dressing",
-    "marinade",
-    "mix",
-    "sausage",
-    "sausages",
-    "ball",
-    "balls",
-    "bun",
-    "buns",
-    "pie",
-    "vinegar",
-    "flour",
-    "wine",
-    "oil",
-    "starch",
-    "bran",
-    "kinder",
-    "surprise",
-    "easter",
-    "creme",
-    "formula",
-    "infant",
-    "toddler",
-    "growing",
-]
-
-
-# ---------------------------------------------------------------------
-# Recipe description/preparation words
+# Recipe/preparation words
+#
+# These are grammar/preparation/measurement words, NOT food names.
 # ---------------------------------------------------------------------
 
 DESCRIPTORS = {
@@ -251,8 +34,10 @@ DESCRIPTORS = {
     "small",
     "medium",
     "big",
+
     "boneless",
     "skinless",
+
     "chopped",
     "diced",
     "minced",
@@ -268,39 +53,45 @@ DESCRIPTORS = {
     "quartered",
     "cubed",
     "julienned",
+
     "finely",
     "thinly",
     "roughly",
     "coarsely",
     "lightly",
     "freshly",
+
     "organic",
     "raw",
     "cooked",
     "uncooked",
     "ripe",
     "lean",
-    "extra",
-    "virgin",
-    "whole",
-    "unsalted",
-    "salted",
+
     "softened",
     "melted",
     "beaten",
     "packed",
     "divided",
     "optional",
-    "taste",
+
     "room",
     "temperature",
+
     "cold",
     "warm",
     "hot",
-    "dried",
+
     "rinsed",
     "drained",
     "washed",
+
+    "about",
+    "plus",
+    "more",
+    "into",
+    "cut",
+
     "of",
     "and",
     "or",
@@ -309,114 +100,229 @@ DESCRIPTORS = {
     "an",
     "the",
     "to",
-    "about",
-    "plus",
-    "more",
-    "into",
-    "cut",
-    "pieces",
+}
+
+
+# Quantity/container words that describe how much of an ingredient is
+# required rather than the identity of the ingredient itself.
+PORTION_WORDS = {
     "piece",
+    "pieces",
 
-    # Portion words
     "clove",
+    "cloves",
+
     "sprig",
+    "sprigs",
+
     "leaf",
-    "leave",
+    "leaves",
+
     "stalk",
+    "stalks",
+
     "bunch",
+    "bunches",
+
     "head",
-    "can",
-    "tin",
+    "heads",
+
     "slice",
+    "slices",
+
     "pinch",
+    "pinches",
+
     "dash",
+    "dashes",
+
     "handful",
+    "handfuls",
+}
 
-    # Recipe measurement units
+
+MEASUREMENT_WORDS = {
     "cup",
+    "cups",
+
     "tbsp",
-    "tsp",
     "tablespoon",
+    "tablespoons",
+
+    "tsp",
     "teaspoon",
+    "teaspoons",
+
+    "mg",
     "g",
+    "gm",
+    "gms",
+    "gram",
+    "grams",
+
     "kg",
+    "kgs",
+    "kilogram",
+    "kilograms",
+
     "ml",
+    "cl",
+
     "l",
+    "ltr",
+    "litre",
+    "litres",
+    "liter",
+    "liters",
+
     "oz",
+    "ounce",
+    "ounces",
+
     "lb",
+    "lbs",
+    "pound",
+    "pounds",
+
+    "pc",
+    "pcs",
+
+    "unit",
+    "units",
 }
 
 
 # ---------------------------------------------------------------------
-# Generic product heads
+# Generic retail-product forms
+#
+# This is intentionally NOT a list of individual foods/brands.
+#
+# These words indicate that the requested ingredient is being used as
+# an ingredient/flavour/material inside a different retail product.
 # ---------------------------------------------------------------------
 
-# These words are not specific enough to identify the requested food
-# by themselves.
-#
-# Example:
-#
-# "duck breast"
-#
-# must NOT match:
-#
-# "Fresh Chicken Breast 500g"
+DERIVED_PRODUCT_FORMS = {
+    # Prepared foods / flavour products
+    "ketchup",
+    "cracker",
+    "crackers",
+    "biscuit",
+    "biscuits",
+    "cookie",
+    "cookies",
+    "chocolate",
+    "candy",
+    "sweet",
+    "sweets",
+    "surprise",
+    "confectionery",
+    "surprise",
+    "kimchi",
+    "nugget",
+    "nuggets",
+    "sausage",
+    "sausages",
+    "cake",
+    "cakes",
+    "dessert",
+    "pudding",
+    "snack",
+    "snacks",
+    "stock",
+    "cube",
+    "cubes",
+    "paste",
+    "spread",
+    "dressing",
+    "marinade",
 
-GENERIC_HEADS = {
-    "breast",
-    "thigh",
-    "fillet",
-    "leg",
-    "wing",
-    "mince",
-    "meat",
-    "steak",
-    "chop",
-    "loin",
-    "belly",
-    "shoulder",
-    "cheese",
-    "milk",
-    "oil",
-    "sauce",
-    "bean",
-    "pepper",
+    # Generic animal/derived retail forms
+    "food",
+    "pouch",
+    "kibble",
+    "litter",
+
+    # Non-grocery objects
+    "cooker",
+    "maker",
+    "machine",
+    "press",
+    "container",
+    "appliance",
+    "phone",
+    "iphone",
+    "tablet",
+    "laptop",
+    "charger",
+    "toy",
+
+    # Household/personal care
+    "detergent",
+    "cleaner",
+    "soap",
+    "shampoo",
+    "conditioner",
+    "lotion",
+    "bath",
+    "soak",
+    "scent",
+    "scented",
+
+    # Nutrition/formula
+    "formula",
+    "supplement",
+    "capsule",
+    "capsules",
+    "vitamin",
+    "vitamins",
+
+    "deodorizer",
+    "deodoriser",
+    "airfreshener",
+    "freshener",
+    "refresher",
+    "spray",
+    }
+
+
+# Context terms that strongly indicate that the title refers to pet food
+# rather than the human grocery ingredient itself.
+PET_CONTEXT = {
+    "dog",
+    "dogs",
+    "cat",
+    "cats",
+    "puppy",
+    "puppies",
+    "kitten",
+    "kittens",
+    "pet",
+    "pets",
 }
 
 
 # ---------------------------------------------------------------------
-# Regex helpers
-# ---------------------------------------------------------------------
-
-_TECH_SPECS = re.compile(
-    r"\b\d+\s?(gb|tb|mah)\b"
-    r"|\b(5g|4g|bluetooth|wi-?fi|usb)\b",
-    re.IGNORECASE,
-)
-
-_WORD = re.compile(r"[a-z]+")
-
-
-# ---------------------------------------------------------------------
-# Small plural normalizer
+# Normalization
 # ---------------------------------------------------------------------
 
 def _stem(word: str) -> str:
     """
-    Perform minimal plural normalization.
+    Small plural normalizer.
 
-    Examples:
-        tomatoes -> tomato
-        eggs     -> egg
-        berries  -> berry
-        leaves   -> leave
+    This is deliberately conservative.
     """
+
+    word = str(word).lower().strip()
 
     if len(word) > 4 and word.endswith("ies"):
         return word[:-3] + "y"
 
     if len(word) > 4 and word.endswith("oes"):
         return word[:-2]
+
+    if len(word) > 4 and word.endswith("ves"):
+        # leaves -> leave
+        return word[:-1]
 
     if (
         len(word) > 3
@@ -428,131 +334,306 @@ def _stem(word: str) -> str:
     return word
 
 
-# ---------------------------------------------------------------------
-# Tokenization
-# ---------------------------------------------------------------------
-
 def words(text: str) -> list[str]:
-    """
-    Return normalized lowercase words from text.
-    """
+    """Return normalized lowercase words."""
 
     return [
         _stem(word)
-        for word
-        in _WORD.findall(
-            str(text).lower()
+        for word in _WORD.findall(
+            str(text or "").lower()
         )
     ]
 
 
-def _core_tokens(
-    text: str,
-) -> list[str]:
-    """
-    Remove quantities, units, preparation words and recipe descriptions.
+def _strip_recipe_notes(text: str) -> str:
+    """Remove quantities/preparation notes from recipe ingredient text."""
 
-    Example:
+    text = str(text or "").lower()
 
-        "2 boneless skinless chicken breasts, diced (about 500g)"
-
-    becomes approximately:
-
-        ["chicken", "breasts"]
-    """
-
-    text = str(text).lower()
-
-    # Remove parenthesized recipe notes.
-    #
-    # Example:
-    # "(about 500g)"
+    # Parenthesized notes:
+    # garlic (about 3 cloves)
     text = re.sub(
         r"\([^)]*\)",
         " ",
         text,
     )
 
-    # Preparation instructions after a comma usually do not describe
-    # the grocery product.
-    #
-    # Example:
-    # "chicken breasts, diced"
-    text = text.split(",")[0]
+    # Preparation after comma:
+    # chicken breast, diced
+    text = text.split(",", 1)[0]
 
-    raw = _WORD.findall(text)
+    # Fractions such as 1/2.
+    text = re.sub(
+        r"\b\d+\s*/\s*\d+\b",
+        " ",
+        text,
+    )
 
-    core = [
-        word
-        for word in raw
-        if _stem(word) not in DESCRIPTORS
-    ]
+    # Numbers.
+    text = re.sub(
+        r"\b\d+(?:\.\d+)?\b",
+        " ",
+        text,
+    )
 
-    return core or raw
+    return text
 
 
 def clean_ingredient(
     text: str,
 ) -> list[str]:
     """
-    Return normalized ingredient words.
+    Return the meaningful identity tokens of a recipe ingredient.
 
-    Example:
+    Examples:
+
+        "3 garlic cloves, minced"
+            -> ["garlic"]
 
         "2 boneless skinless chicken breasts, diced"
+            -> ["chicken", "breast"]
 
-    becomes:
+        "1 cup fresh cherry tomatoes"
+            -> ["cherry", "tomato"]
 
-        ["chicken", "breast"]
+        "garlic powder"
+            -> ["garlic", "powder"]
     """
 
-    return [
-        _stem(word)
-        for word
-        in _core_tokens(text)
-    ]
+    text = _strip_recipe_notes(
+        text
+    )
+
+    raw = _WORD.findall(
+        text
+    )
+
+    cleaned = []
+
+    for raw_word in raw:
+
+        word = _stem(
+            raw_word
+        )
+
+        if word in DESCRIPTORS:
+            continue
+
+        if word in PORTION_WORDS:
+            continue
+
+        if word in MEASUREMENT_WORDS:
+            continue
+
+        if word:
+            cleaned.append(
+                word
+            )
+
+    return cleaned
+
+
+def canonical_phrase(
+    text: str,
+) -> str:
+
+    return " ".join(
+        clean_ingredient(
+            text
+        )
+    )
 
 
 # ---------------------------------------------------------------------
-# Pre-computed filtering sets
+# Product evidence
 # ---------------------------------------------------------------------
 
-_NON_FOOD_STEMS = {
-    _stem(word)
-    for word in NON_FOOD
-}
+def _url_tokens(
+    url: str,
+) -> list[str]:
 
-_PROCESSED_SINGLE = {
-    _stem(word)
-    for word in PROCESSED
-    if " " not in word
-}
+    try:
+        path = unquote(
+            urlparse(
+                str(url or "")
+            ).path
+        )
 
-_PROCESSED_PHRASES = [
-    phrase
-    for phrase in PROCESSED
-    if " " in phrase
-]
+    except Exception:
+        path = str(
+            url or ""
+        )
+
+    path = (
+        path
+        .replace("-", " ")
+        .replace("_", " ")
+        .replace("/", " ")
+    )
+
+    return words(
+        path
+    )
+
+
+def _evidence_tokens(
+    title: str,
+    url: str = "",
+    content: str = "",
+    size_text: str = "",
+) -> list[str]:
+
+    evidence = []
+
+    evidence.extend(
+        words(title)
+    )
+
+    evidence.extend(
+        _url_tokens(url)
+    )
+
+    evidence.extend(
+        words(content)
+    )
+
+    evidence.extend(
+        words(size_text)
+    )
+
+    return evidence
 
 
 # ---------------------------------------------------------------------
-# Product matching
+# Product-form validation
 # ---------------------------------------------------------------------
+
+def _derived_product_reason(
+    ingredient_tokens: list[str],
+    title_tokens: list[str],
+    url_tokens: list[str],
+) -> str | None:
+    """
+    Detect when the requested ingredient occurs inside a different
+    retail product.
+
+    IMPORTANT:
+    Negative product-form checks use ONLY the product title and URL.
+    Tavily/page text may contain recommendations and unrelated products.
+    """
+
+    ingredient_set = set(ingredient_tokens)
+
+    identity_tokens = set(
+        title_tokens + url_tokens
+    )
+
+    pet_context = (
+        identity_tokens
+        & PET_CONTEXT
+    )
+
+    if pet_context:
+        return (
+            "non-food/pet product: "
+            + sorted(pet_context)[0]
+        )
+
+    forms = (
+        identity_tokens
+        & DERIVED_PRODUCT_FORMS
+    ) - ingredient_set
+
+    if forms:
+        return (
+            "processed product: "
+            + sorted(forms)[0]
+        )
+
+    return None
+
+# ---------------------------------------------------------------------
+# Match scoring
+# ---------------------------------------------------------------------
+
+def _coverage(
+    ingredient_tokens: list[str],
+    evidence_tokens: list[str],
+) -> float:
+
+    if not ingredient_tokens:
+        return 0.0
+
+    ingredient_set = set(
+        ingredient_tokens
+    )
+
+    evidence_set = set(
+        evidence_tokens
+    )
+
+    return (
+        len(
+            ingredient_set
+            & evidence_set
+        )
+        / len(
+            ingredient_set
+        )
+    )
+
+
+def _phrase_similarity(
+    ingredient: str,
+    title: str,
+) -> float:
+
+    ingredient_phrase = (
+        canonical_phrase(
+            ingredient
+        )
+    )
+
+    title_phrase = " ".join(
+        words(title)
+    )
+
+    if (
+        not ingredient_phrase
+        or not title_phrase
+    ):
+        return 0.0
+
+    return SequenceMatcher(
+        None,
+        ingredient_phrase,
+        title_phrase,
+    ).ratio()
+
 
 def check_match(
     ingredient: str,
     title: str,
+    url: str = "",
+    content: str = "",
+    size_text: str = "",
 ) -> tuple[bool, str]:
     """
-    Determine whether a grocery product title is a valid match.
+    Determine whether a retail product is suitable for the ingredient.
+
+    Matching uses:
+        - requested ingredient identity
+        - product title
+        - FairPrice URL
+        - Tavily content
+        - size/page evidence
 
     Returns:
-
         (True, "exact")
+        (True, "strong")
         (True, "approximate")
 
     or:
-
         (False, reason)
     """
 
@@ -561,221 +642,283 @@ def check_match(
     )
 
     if not core:
-        return False, "ingredient has no usable words"
-
-    core_set = set(core)
-
-    title_words = set(
-        words(title)
-    )
-
-    # -------------------------------------------------------------
-    # Reject non-food products
-    # -------------------------------------------------------------
-
-    bad = (
-        title_words
-        & _NON_FOOD_STEMS
-    ) - core_set
-
-    if bad:
         return (
             False,
-            f"non-food word: "
-            f"{sorted(bad)[0]}",
+            "ingredient has no usable identity",
         )
 
-    # -------------------------------------------------------------
-    # Reject obvious electronics
-    # -------------------------------------------------------------
-
-    if _TECH_SPECS.search(
-        str(title)
-    ):
-        return (
-            False,
-            "electronics spec in title",
-        )
-
-    # -------------------------------------------------------------
-    # Reject processed versions unless explicitly requested
-    # -------------------------------------------------------------
-
-    processed = (
-        title_words
-        & _PROCESSED_SINGLE
-    ) - core_set
-
-    ingredient_text = " ".join(
+    core_set = set(
         core
     )
 
-    processed_phrases = [
-        phrase
-        for phrase
-        in _PROCESSED_PHRASES
+    title_tokens = words(title)
 
-        if (
-            phrase in str(title).lower()
-            and
-            phrase not in ingredient_text
+    url_tokens = _url_tokens(url)
+
+    primary_tokens = (
+        title_tokens
+        + url_tokens
+    )
+
+    supporting_tokens = (
+        words(content)
+        + words(size_text)
+    )
+
+    evidence_tokens = (
+        primary_tokens
+        + supporting_tokens
+    )
+
+    title_set = set(title_tokens)
+    primary_set = set(primary_tokens)
+    evidence_set = set(evidence_tokens)
+
+    # ---------------------------------------------------------
+    # Wrong retail-product form
+    # ---------------------------------------------------------
+
+    bad_form = _derived_product_reason(
+        core,
+        title_tokens,
+        url_tokens,
+    )
+
+    if bad_form:
+        return (
+            False,
+            bad_form,
         )
-    ]
 
-    if processed or processed_phrases:
+    # ---------------------------------------------------------
+    # EXACT
+    # Requested identity explicitly appears in product title.
+    # ---------------------------------------------------------
 
-        reason = (
-            sorted(processed)[0]
-            if processed
-            else processed_phrases[0]
-        )
+    if core_set <= title_set:
+        return True, "exact"
+
+
+    # ---------------------------------------------------------
+    # STRONG
+    # Requested identity appears across title + actual
+    # FairPrice product URL.
+    #
+    # Page/snippet content alone cannot establish a strong match.
+    # ---------------------------------------------------------
+
+    if core_set <= primary_set:
+        return True, "strong"
+
+    # ---------------------------------------------------------
+    # Single-word ingredients
+    # ---------------------------------------------------------
+
+    if len(core) == 1:
+
+        token = core[0]
+
+        if token in title_set:
+            return (
+                True,
+                "exact",
+            )
+
+        if token in evidence_set:
+            return (
+                True,
+                "strong",
+            )
 
         return (
             False,
-            f"processed product: {reason}",
+            f"ingredient identity missing: {token}",
         )
 
-    # -------------------------------------------------------------
-    # Exact match
-    # -------------------------------------------------------------
+    # ---------------------------------------------------------
+    # Multi-word approximate match
+    #
+    # This is intentionally stricter than "one word matched".
+    # ---------------------------------------------------------
 
-    if core_set <= title_words:
-        return True, "exact"
+    coverage = _coverage(
+        core,
+        evidence_tokens,
+    )
 
-    # -------------------------------------------------------------
-    # Approximate match
-    # -------------------------------------------------------------
+    similarity = (
+        _phrase_similarity(
+            ingredient,
+            title,
+        )
+    )
 
-    head = core[-1]
+    # Most ingredient identity must remain.
+    if (
+        coverage >= 0.75
+        and similarity >= 0.35
+    ):
+        return (
+            True,
+            "approximate",
+        )
 
-    if head in title_words:
-
-        # Generic words cannot establish a match by themselves.
-        #
-        # Example:
-        #
-        # ingredient = duck breast
-        # product    = chicken breast
-        #
-        # "breast" matches, but "duck" does not.
-        if (
-            head in GENERIC_HEADS
-            and
-            len(core) > 1
-            and
-            core[-2] not in title_words
-        ):
-            return (
-                False,
-                f"'{head}' matched but not "
-                f"'{core[-2]}'",
-            )
-
-        return True, "approximate"
+    missing = [
+        token
+        for token in core
+        if token not in evidence_set
+    ]
 
     return (
         False,
-        f"main ingredient word missing: "
-        f"{head}",
+        "ingredient identity missing: "
+        + ", ".join(
+            missing
+        ),
     )
 
 
 # ---------------------------------------------------------------------
-# Search query generation
+# Safe search-query generation
 # ---------------------------------------------------------------------
 
 def search_queries(
     ingredient: str,
 ) -> list[str]:
     """
-    Generate ingredient searches from specific to more general.
+    Generate specific -> safe fallback queries.
 
-    Store/domain restriction is handled by TavilyGroceryClient,
-    so this function only generates ingredient names.
+    The important rule is:
+
+        Never drop the identity-bearing first word from a multi-word
+        ingredient simply because the last word is generic.
 
     Examples:
 
-        "2 boneless skinless chicken breasts, diced"
+        garlic powder
+            -> ["garlic powder", "garlic"]
 
-        -> [
-            "chicken breasts",
-            "chicken"
-        ]
+        coconut milk
+            -> ["coconut milk", "coconut"]
 
+        black pepper
+            -> ["black pepper"]
 
-        "1 cup fresh cherry tomatoes"
+        cherry tomatoes
+            -> ["cherry tomatoes", "tomatoes"]
 
-        -> [
-            "cherry tomatoes",
-            "tomatoes"
-        ]
+        chicken breasts
+            -> ["chicken breasts", "chicken"]
 
-
-        "tofu"
-
-        -> [
-            "tofu"
-        ]
+    The fallback is only retrieval expansion. check_match() still validates
+    every returned product against the ORIGINAL ingredient.
     """
 
-    tokens = _core_tokens(
+    cleaned = clean_ingredient(
         ingredient
     )
 
-    if not tokens:
+    if not cleaned:
         return []
 
-    base = " ".join(
-        tokens
+    # Preserve a natural cleaned version for Tavily.
+    stripped = _strip_recipe_notes(
+        ingredient
     )
 
-    stemmed = [
-        _stem(token)
-        for token in tokens
+    raw_tokens = [
+        token
+        for token in _WORD.findall(
+            stripped
+        )
+        if (
+            _stem(token)
+            not in DESCRIPTORS
+            and _stem(token)
+            not in PORTION_WORDS
+            and _stem(token)
+            not in MEASUREMENT_WORDS
+        )
     ]
+
+    if raw_tokens:
+        full_query = " ".join(
+            raw_tokens
+        )
+    else:
+        full_query = " ".join(
+            cleaned
+        )
 
     queries = [
-        base
+        full_query
     ]
 
-    if len(tokens) > 1:
+    if len(cleaned) > 1:
 
-        # ---------------------------------------------------------
-        # Generic meat/product head
+        first = cleaned[0]
+        last = cleaned[-1]
+
+        # -----------------------------------------------------
+        # Some last words are ingredient forms.
         #
-        # chicken breasts -> chicken
-        # duck breast     -> duck
-        # pork loin       -> pork
-        # ---------------------------------------------------------
-
-        if stemmed[-1] in GENERIC_HEADS:
-
-            main_food = tokens[-2]
-
-            if main_food:
-                queries.append(
-                    main_food
-                )
-
-        # ---------------------------------------------------------
-        # Descriptive ingredient
+        # Dropping "garlic" from "garlic powder" would be unsafe.
+        # Dropping "coconut" from "coconut milk" would be unsafe.
         #
-        # cherry tomatoes -> tomatoes
-        #
-        # This allows a broader grocery result when the exact
-        # ingredient wording is unavailable.
-        # ---------------------------------------------------------
+        # In these cases fallback to the identity-bearing word.
+        # -----------------------------------------------------
+
+        form_words = {
+            "powder",
+            "milk",
+            "oil",
+            "sauce",
+            "flour",
+            "vinegar",
+            "paste",
+            "cream",
+            "cheese",
+            "stock",
+            "broth",
+            "butter",
+        }
+
+        if last in form_words:
+
+            # garlic powder -> garlic
+            # coconut milk  -> coconut
+            fallback = first
 
         else:
 
-            broader = tokens[-1]
+            # cherry tomato -> tomato
+            # chicken breast -> chicken
+            #
+            # We use morphology/structure only for retrieval;
+            # check_match() still validates the original request.
+            if last in {
+                "breast",
+                "thigh",
+                "fillet",
+                "loin",
+                "wing",
+                "leg",
+            }:
+                fallback = first
+            else:
+                fallback = last
 
-            if broader:
-                queries.append(
-                    broader
-                )
+        if (
+            fallback
+            and fallback
+            != full_query
+        ):
+            queries.append(
+                fallback
+            )
 
-    # Remove duplicates while preserving search order.
     return list(
-        dict.fromkeys(queries)
+        dict.fromkeys(
+            queries
+        )
     )
