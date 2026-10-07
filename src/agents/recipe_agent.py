@@ -1,18 +1,13 @@
-"""
-Member 2 - Recipe Agent
-
-Receives User State and optional meal context from Manager,
-uses the existing candidate_recipe.py retrieval tools,
-and returns candidate recipe IDs.
-
-Final dietary/allergy verification is handled later
-by the Reasoning Engine.
-"""
-
 import json
+from datetime import date
 from pathlib import Path
 
 import pandas as pd
+
+
+# ============================================================
+# REUSE EXISTING CANDIDATE RECIPE FUNCTIONS
+# ============================================================
 
 from scripts.candidate_recipe import (
     load_recipe_kb,
@@ -22,6 +17,11 @@ from scripts.candidate_recipe import (
     retrieve_candidates,
 )
 
+
+# ============================================================
+# SHARED AGENT CONTRACT
+# ============================================================
+
 from src.agents.contracts import (
     AgentResult,
     AgentStatus,
@@ -29,47 +29,57 @@ from src.agents.contracts import (
 
 
 # ============================================================
+# EXISTING REPOSITORY
+# ============================================================
+
+from src.knowledge.repository import (
+    RecipeRepository,
+    normalize,
+)
+
+
+# ============================================================
 # CONFIGURATION
 # ============================================================
 
-DEFAULT_MAX_CANDIDATES = 10
+DEFAULT_MAX_CANDIDATES = 5
+
+RECENT_CUISINE_WINDOW = 3
 
 
 # ============================================================
-# USER STATE HELPERS
+# GENERIC HELPERS
 # ============================================================
 
-def _get_user_field(
-    user_state,
+def _get_field(
+    source,
     key,
-    default=None
+    default=None,
 ):
     """
-    Read a field from either:
-
-    User State object:
-        user_state.dietary_restrictions
-
-    or dictionary:
-        user_state["dietary_restrictions"]
+    Read a field from either a dictionary or object.
     """
 
-    if isinstance(user_state, dict):
-        return user_state.get(
+    if source is None:
+        return default
+
+    if isinstance(source, dict):
+
+        return source.get(
             key,
-            default
+            default,
         )
 
     return getattr(
-        user_state,
+        source,
         key,
-        default
+        default,
     )
 
 
 def _as_list(value):
     """
-    Convert a value into a list.
+    Convert input into a list.
     """
 
     if value is None:
@@ -77,11 +87,23 @@ def _as_list(value):
 
     if isinstance(
         value,
-        (list, tuple, set)
+        (list, tuple, set),
     ):
         return list(value)
 
     return [value]
+
+
+def _clean_list(value):
+    """
+    Remove empty values.
+    """
+
+    return [
+        item
+        for item in _as_list(value)
+        if str(item).strip()
+    ]
 
 
 # ============================================================
@@ -90,28 +112,92 @@ def _as_list(value):
 
 class RecipeAgent:
     """
-    Recipe Agent.
+    MEMBER 2
+    SLOT-AWARE RECIPE CANDIDATE STRATEGY
 
-    Input:
-        user_state
-        optional meal_context
-        optional max_candidates
+    ----------------------------------------------------------
+    INPUT FROM MANAGER
+    ----------------------------------------------------------
 
-    Output:
-        {
-            "agent": "recipe",
-            "status": "success",
-            "data": {
-                "candidate_recipe_ids": [...]
-            },
-            "warnings": [],
-            "errors": []
-        }
+    1. user_state
+
+    2. meal_slot
+
+       Example:
+
+       {
+           "date": "2026-10-07",
+           "meal_type": "dinner",
+           "max_cooking_time": 30
+       }
+
+    3. selected_recipe_ids
+
+       Example:
+
+       [
+           "R001",
+           "R024",
+           "R133"
+       ]
+
+    4. recent_cuisines
+
+       Optional:
+
+       [
+           "asian",
+           "italian",
+           "asian"
+       ]
+
+    ----------------------------------------------------------
+    RESPONSIBILITIES
+    ----------------------------------------------------------
+
+    Existing candidate_recipe.py handles:
+
+        - Recipe KB loading
+        - Diet filtering
+        - Meal-type filtering
+        - Cuisine filtering
+        - Base candidate retrieval
+
+    RecipeAgent adds:
+
+        - Current slot awareness
+        - Manager-selected recipe exclusion
+        - Optional cooking-time constraint
+        - Basic cuisine variety
+        - Duplicate protection
+        - Candidate limit
+
+    ----------------------------------------------------------
+    HARD RULE
+    ----------------------------------------------------------
+
+    Any recipe present in selected_recipe_ids MUST NOT
+    appear in candidate_recipe_ids.
+
+    ----------------------------------------------------------
+    COOKING TIME RULE
+    ----------------------------------------------------------
+
+    If cooking-time information is unavailable:
+
+        SKIP cooking-time filtering.
+
+    Continue using the other filters.
     """
+
+    # ========================================================
+    # INITIALIZE
+    # ========================================================
 
     def __init__(
         self,
-        max_candidates=DEFAULT_MAX_CANDIDATES
+        max_candidates=DEFAULT_MAX_CANDIDATES,
+        repository=None,
     ):
 
         if (
@@ -119,305 +205,417 @@ class RecipeAgent:
             or isinstance(max_candidates, bool)
             or max_candidates <= 0
         ):
+
             raise ValueError(
-                "max_candidates must be "
-                "a positive integer."
+                "max_candidates must be a positive integer."
             )
 
         self.max_candidates = (
             max_candidates
         )
 
+        self.repository = (
+            repository
+            if repository is not None
+            else RecipeRepository.from_csv()
+        )
 
     # ========================================================
-    # EXTRACT REQUIREMENTS
+    # FAILURE RESULT
     # ========================================================
 
-    def _extract_requirements(
-        self,
-        user_state,
-        meal_context=None
+    @staticmethod
+    def _failure_result(
+        error,
     ):
         """
-        Extract recipe requirements from User State.
+        Return shared failure format.
+        """
 
-        User State fields used:
-            dietary_restrictions
-            preferred_cuisines
-            preferred_meal_types
+        return AgentResult(
+            agent="recipe",
 
-        If Manager provides meal_context["meal_type"],
-        it overrides preferred_meal_types.
+            status=AgentStatus.FAILED,
+
+            data={
+                "candidate_recipe_ids": []
+            },
+
+            warnings=[],
+
+            errors=[
+                str(error)
+            ],
+
+        ).to_dict()
+
+    # ========================================================
+    # USER REQUIREMENTS
+    # ========================================================
+
+    def _extract_user_requirements(
+        self,
+        user_state,
+    ):
+        """
+        Extract only recipe-related User State fields.
+
+        Recipe history is NOT read here.
+
+        Manager owns selected_recipe_ids.
         """
 
         if user_state is None:
+
             raise ValueError(
                 "user_state is required."
             )
 
-        if meal_context is None:
-            meal_context = {}
-
-        if not isinstance(
-            meal_context,
-            dict
-        ):
-            raise ValueError(
-                "meal_context must be a dictionary."
-            )
-
-        # ----------------------------------------------------
-        # DIETARY RESTRICTIONS
-        # ----------------------------------------------------
-
-        dietary_restrictions = [
-            value
-            for value in _as_list(
-                _get_user_field(
+        dietary_restrictions = (
+            _clean_list(
+                _get_field(
                     user_state,
                     "dietary_restrictions",
-                    []
+                    [],
                 )
-            )
-            if str(value).strip()
-        ]
-
-        # ----------------------------------------------------
-        # PREFERRED CUISINES
-        # ----------------------------------------------------
-
-        preferred_cuisines = [
-            value
-            for value in _as_list(
-                _get_user_field(
-                    user_state,
-                    "preferred_cuisines",
-                    []
-                )
-            )
-            if str(value).strip()
-        ]
-
-        # ----------------------------------------------------
-        # MEAL TYPE
-        #
-        # Manager's current meal context has priority over
-        # the user's general meal preference.
-        # ----------------------------------------------------
-
-        context_meal_type = (
-            meal_context.get(
-                "meal_type"
             )
         )
 
-        if (
-            context_meal_type is not None
-            and str(context_meal_type).strip()
-        ):
-
-            meal_types = [
-                context_meal_type
-            ]
-
-        else:
-
-            meal_types = [
-                value
-                for value in _as_list(
-                    _get_user_field(
-                        user_state,
-                        "preferred_meal_types",
-                        []
-                    )
+        preferred_cuisines = (
+            _clean_list(
+                _get_field(
+                    user_state,
+                    "preferred_cuisines",
+                    [],
                 )
-                if str(value).strip()
-            ]
+            )
+        )
+
+        preferred_meal_types = (
+            _clean_list(
+                _get_field(
+                    user_state,
+                    "preferred_meal_types",
+                    [],
+                )
+            )
+        )
 
         return {
+
             "dietary_restrictions":
                 dietary_restrictions,
 
-            "meal_types":
-                meal_types,
-
             "preferred_cuisines":
                 preferred_cuisines,
+
+            "preferred_meal_types":
+                preferred_meal_types,
         }
 
-
     # ========================================================
-    # SIMPLE RETRIEVAL
+    # SLOT CONTEXT
     # ========================================================
 
-    def _retrieve_simple(
+    def _extract_slot_context(
         self,
-        requirements
+        requirements,
+        meal_slot,
     ):
         """
-        Use the existing retrieve_candidates() directly
-        when there is at most one diet, one meal type,
-        and one cuisine.
+        Extract current slot supplied by Manager.
+        """
+
+        if meal_slot is None:
+
+            raise ValueError(
+                "meal_slot is required."
+            )
+
+        slot_date = _get_field(
+            meal_slot,
+            "date",
+            None,
+        )
+
+        meal_type = _get_field(
+            meal_slot,
+            "meal_type",
+            None,
+        )
+
+        max_cooking_time = _get_field(
+            meal_slot,
+            "max_cooking_time",
+            None,
+        )
+
+        # ----------------------------------------------------
+        # FALLBACK TO USER STATE
+        # ----------------------------------------------------
+
+        if not meal_type:
+
+            preferred_meal_types = (
+                requirements[
+                    "preferred_meal_types"
+                ]
+            )
+
+            if len(
+                preferred_meal_types
+            ) == 1:
+
+                meal_type = (
+                    preferred_meal_types[0]
+                )
+
+        if not meal_type:
+
+            raise ValueError(
+                "meal_type is required."
+            )
+
+        meal_type = (
+            str(meal_type)
+            .strip()
+            .lower()
+        )
+
+        return {
+
+            "date":
+                slot_date,
+
+            "meal_type":
+                meal_type,
+
+            "max_cooking_time":
+                max_cooking_time,
+        }
+
+    # ========================================================
+    # MANAGER SELECTED RECIPES
+    # ========================================================
+
+    @staticmethod
+    def _normalize_selected_recipe_ids(
+        selected_recipe_ids,
+    ):
+        """
+        Normalize selected recipe IDs supplied by Manager.
+
+        Example:
+
+        [
+            "r001",
+            " R024 ",
+            "R133"
+        ]
+
+        becomes:
+
+        [
+            "R001",
+            "R024",
+            "R133"
+        ]
+        """
+
+        normalized_ids = []
+
+        for recipe_id in _as_list(
+            selected_recipe_ids
+        ):
+
+            if recipe_id is None:
+                continue
+
+            recipe_id = (
+                str(recipe_id)
+                .strip()
+                .upper()
+            )
+
+            if not recipe_id:
+                continue
+
+            if (
+                recipe_id
+                not in normalized_ids
+            ):
+
+                normalized_ids.append(
+                    recipe_id
+                )
+
+        return normalized_ids
+
+    # ========================================================
+    # RECENT CUISINES
+    # ========================================================
+
+    @staticmethod
+    def _normalize_recent_cuisines(
+        recent_cuisines,
+    ):
+        """
+        Normalize optional cuisine history supplied
+        by Manager.
+        """
+
+        normalized_cuisines = []
+
+        for cuisine in _as_list(
+            recent_cuisines
+        ):
+
+            if not str(
+                cuisine
+            ).strip():
+
+                continue
+
+            normalized_cuisine = (
+                normalize(
+                    cuisine
+                )
+            )
+
+            if normalized_cuisine:
+
+                normalized_cuisines.append(
+                    normalized_cuisine
+                )
+
+        return normalized_cuisines[
+            -RECENT_CUISINE_WINDOW:
+        ]
+
+    # ========================================================
+    # BASE CANDIDATE RETRIEVAL
+    # ========================================================
+
+    def _retrieve_candidates(
+        self,
+        requirements,
+        meal_type,
+    ):
+        """
+        REUSE candidate_recipe.py.
+
+        This method does NOT rewrite the existing
+        diet / meal-type / cuisine filters.
         """
 
         diets = requirements[
             "dietary_restrictions"
         ]
 
-        meal_types = requirements[
-            "meal_types"
-        ]
-
         cuisines = requirements[
             "preferred_cuisines"
         ]
 
-        diet = (
-            diets[0]
-            if diets
-            else None
-        )
-
-        meal_type = (
-            meal_types[0]
-            if meal_types
-            else None
-        )
-
-        cuisine = (
-            cuisines[0]
-            if cuisines
-            else None
-        )
-
         # ----------------------------------------------------
-        # REUSE EXISTING CANDIDATE RETRIEVAL
-        # ----------------------------------------------------
-
-        candidates = retrieve_candidates(
-            diet=diet,
-            meal_type=meal_type,
-            cuisine=cuisine
-        )
-
-        # ----------------------------------------------------
-        # CUISINE FALLBACK
+        # SIMPLE CASE
         #
-        # Cuisine is a preference rather than a hard
-        # constraint.
-        #
-        # If no preferred cuisine recipe exists,
-        # retry using diet and meal type only.
+        # Reuse existing retrieve_candidates().
         # ----------------------------------------------------
 
         if (
-            candidates.empty
-            and cuisine is not None
+            len(diets) <= 1
+            and len(cuisines) <= 1
         ):
 
-            candidates = retrieve_candidates(
-                diet=diet,
-                meal_type=meal_type
+            diet = (
+                diets[0]
+                if diets
+                else None
             )
 
-        return candidates
+            cuisine = (
+                cuisines[0]
+                if cuisines
+                else None
+            )
 
+            candidates = (
+                retrieve_candidates(
+                    diet=diet,
+                    meal_type=meal_type,
+                    cuisine=cuisine,
+                )
+            )
 
-    # ========================================================
-    # MULTIPLE REQUIREMENTS
-    # ========================================================
+            # ------------------------------------------------
+            # CUISINE IS SOFT
+            #
+            # Retry without cuisine if preferred cuisine
+            # returns nothing.
+            # ------------------------------------------------
 
-    def _retrieve_multiple(
-        self,
-        requirements
-    ):
-        """
-        Handle list-valued User State requirements while
-        reusing existing candidate_recipe.py functions.
+            if (
+                candidates.empty
+                and cuisine is not None
+            ):
 
-        Dietary restrictions:
-            AND logic
+                candidates = (
+                    retrieve_candidates(
+                        diet=diet,
+                        meal_type=meal_type,
+                    )
+                )
 
-        Meal types:
-            OR logic
-
-        Preferred cuisines:
-            prioritization
-        """
-
-        diets = requirements[
-            "dietary_restrictions"
-        ]
-
-        meal_types = requirements[
-            "meal_types"
-        ]
-
-        cuisines = requirements[
-            "preferred_cuisines"
-        ]
+            return candidates
 
         # ----------------------------------------------------
-        # LOAD USING EXISTING CANDIDATE TOOL
-        # ----------------------------------------------------
-
-        candidates = load_recipe_kb()
-
-        # ----------------------------------------------------
-        # DIETARY RESTRICTIONS
+        # MULTIPLE REQUIREMENTS
         #
-        # Example:
-        # Vegetarian AND Low-Carb
+        # Reuse existing candidate_recipe.py filter functions.
+        # ----------------------------------------------------
+
+        candidates = (
+            load_recipe_kb()
+        )
+
+        # ----------------------------------------------------
+        # DIET
         # ----------------------------------------------------
 
         for diet in diets:
 
-            candidates = filter_by_diet(
-                candidates,
-                diet
+            candidates = (
+                filter_by_diet(
+                    candidates,
+                    diet,
+                )
             )
 
             if candidates.empty:
+
                 return candidates
 
         # ----------------------------------------------------
-        # MEAL TYPES
-        #
-        # candidate_recipe.py already supports:
-        #
-        # Lunch/Dinner
-        #
-        # Therefore:
-        #
-        # ["Lunch", "Dinner"]
-        #
-        # becomes:
-        #
-        # "Lunch/Dinner"
+        # MEAL TYPE
         # ----------------------------------------------------
 
-        if meal_types:
+        if meal_type:
 
-            meal_type_input = "/".join(
-                str(meal_type)
-                for meal_type in meal_types
+            candidates = (
+                filter_by_meal_type(
+                    candidates,
+                    meal_type,
+                )
             )
 
-            candidates = filter_by_meal_type(
-                candidates,
-                meal_type_input
-            )
+            if candidates.empty:
 
-        if candidates.empty:
-            return candidates
+                return candidates
 
         # ----------------------------------------------------
-        # PREFERRED CUISINES
+        # CUISINE
         #
-        # Cuisine is a preference.
-        #
-        # Preferred cuisine recipes are moved to the front.
-        # Other valid recipes remain available.
+        # Cuisine remains a soft preference.
         # ----------------------------------------------------
 
         if cuisines:
@@ -430,11 +628,12 @@ class RecipeAgent:
                 cuisine_candidates = (
                     filter_by_cuisine(
                         candidates,
-                        cuisine
+                        cuisine,
                     )
                 )
 
                 if cuisine_candidates.empty:
+
                     continue
 
                 preferred_frames.append(
@@ -451,7 +650,7 @@ class RecipeAgent:
 
                 preferred = pd.concat(
                     preferred_frames,
-                    ignore_index=True
+                    ignore_index=True,
                 )
 
                 preferred = (
@@ -471,101 +670,600 @@ class RecipeAgent:
                     )
                 ]
 
-                candidates = pd.concat(
-                    [
-                        preferred,
-                        remaining,
-                    ],
-                    ignore_index=True
+                candidates = (
+                    pd.concat(
+                        [
+                            preferred,
+                            remaining,
+                        ],
+                        ignore_index=True,
+                    )
                 )
 
         return candidates
 
-
     # ========================================================
-    # RETRIEVE CANDIDATES
-    # ========================================================
-
-    def _retrieve_candidates(
-        self,
-        requirements
-    ):
-        """
-        Select the appropriate existing retrieval path.
-        """
-
-        diets = requirements[
-            "dietary_restrictions"
-        ]
-
-        meal_types = requirements[
-            "meal_types"
-        ]
-
-        cuisines = requirements[
-            "preferred_cuisines"
-        ]
-
-        simple_input = (
-            len(diets) <= 1
-            and len(meal_types) <= 1
-            and len(cuisines) <= 1
-        )
-
-        if simple_input:
-
-            return self._retrieve_simple(
-                requirements
-            )
-
-        return self._retrieve_multiple(
-            requirements
-        )
-
-
-    # ========================================================
-    # FAILURE RESULT
+    # HARD REPETITION EXCLUSION
     # ========================================================
 
     @staticmethod
-    def _failure_result(
-        error
+    def _exclude_selected_recipes(
+        candidates,
+        selected_recipe_ids,
     ):
         """
-        Return the shared AgentResult failure format.
+        Remove recipes already selected by Manager.
+
+        HARD CONSTRAINT.
+
+        This is query-time exclusion.
+
+        Nothing is deleted from Recipe KB.
         """
 
-        return AgentResult(
-            agent="recipe",
+        if candidates.empty:
 
-            status=AgentStatus.FAILED,
+            return candidates
 
-            data={
-                "candidate_recipe_ids": []
-            },
+        if not selected_recipe_ids:
 
-            warnings=[],
+            return candidates
 
-            errors=[
-                str(error)
-            ],
-        ).to_dict()
+        if (
+            "recipe_id"
+            not in candidates.columns
+        ):
 
+            raise KeyError(
+                "recipe_id column is missing "
+                "from recipe candidates."
+            )
+
+        selected_set = set(
+            selected_recipe_ids
+        )
+
+        candidate_ids = (
+            candidates[
+                "recipe_id"
+            ]
+            .astype(str)
+            .str.strip()
+            .str.upper()
+        )
+
+        return candidates[
+            ~candidate_ids.isin(
+                selected_set
+            )
+        ].copy()
 
     # ========================================================
-    # PUBLIC ENTRY POINT
+    # OPTIONAL COOKING TIME
+    # ========================================================
+
+    def _apply_cooking_time(
+        self,
+        candidates,
+        max_cooking_time,
+    ):
+        """
+        Apply cooking-time filtering ONLY when possible.
+
+        ------------------------------------------------------
+        CASE 1
+        cooking_time_min column is unavailable
+        ------------------------------------------------------
+
+        Skip cooking-time filtering.
+
+        ------------------------------------------------------
+        CASE 2
+        cooking_time_min exists but has no usable values
+        ------------------------------------------------------
+
+        Skip cooking-time filtering.
+
+        ------------------------------------------------------
+        CASE 3
+        cooking-time data exists but Manager supplied
+        no max_cooking_time
+        ------------------------------------------------------
+
+        Skip maximum-time filtering.
+
+        ------------------------------------------------------
+        CASE 4
+        cooking-time data exists AND Manager supplied
+        max_cooking_time
+        ------------------------------------------------------
+
+        Reuse RecipeRepository.filter_by_max_time()
+        instead of rewriting the time-filter logic.
+        """
+
+        warnings = []
+
+        if candidates.empty:
+
+            return (
+                candidates,
+                warnings,
+            )
+
+        # ----------------------------------------------------
+        # COOKING-TIME COLUMN DOES NOT EXIST
+        # ----------------------------------------------------
+
+        if (
+            "cooking_time_min"
+            not in candidates.columns
+        ):
+
+            warnings.append(
+                "Cooking-time data unavailable; "
+                "cooking-time filtering skipped."
+            )
+
+            return (
+                candidates,
+                warnings,
+            )
+
+        # ----------------------------------------------------
+        # CHECK IF COLUMN CONTAINS USABLE VALUES
+        # ----------------------------------------------------
+
+        cooking_times = (
+            pd.to_numeric(
+                candidates[
+                    "cooking_time_min"
+                ],
+                errors="coerce",
+            )
+        )
+
+        if not cooking_times.notna().any():
+
+            warnings.append(
+                "No usable cooking-time values; "
+                "cooking-time filtering skipped."
+            )
+
+            return (
+                candidates,
+                warnings,
+            )
+
+        # ----------------------------------------------------
+        # MANAGER DID NOT SUPPLY TIME CONSTRAINT
+        # ----------------------------------------------------
+
+        if max_cooking_time is None:
+
+            return (
+                candidates,
+                warnings,
+            )
+
+        # ----------------------------------------------------
+        # VALIDATE TIME
+        # ----------------------------------------------------
+
+        try:
+
+            max_cooking_time = float(
+                max_cooking_time
+            )
+
+        except (
+            TypeError,
+            ValueError,
+        ):
+
+            warnings.append(
+                "Invalid max cooking time; "
+                "cooking-time filtering skipped."
+            )
+
+            return (
+                candidates,
+                warnings,
+            )
+
+        if max_cooking_time < 0:
+
+            warnings.append(
+                "Negative max cooking time; "
+                "cooking-time filtering skipped."
+            )
+
+            return (
+                candidates,
+                warnings,
+            )
+
+        # ----------------------------------------------------
+        # REUSE EXISTING REPOSITORY FILTER
+        # ----------------------------------------------------
+
+        valid_time_ids = set(
+            self.repository
+            .filter_by_max_time(
+                max_cooking_time,
+                include_unknown=False,
+            )
+            .ids()
+        )
+
+        valid_time_ids = {
+            str(recipe_id)
+            .strip()
+            .upper()
+
+            for recipe_id
+            in valid_time_ids
+        }
+
+        # ----------------------------------------------------
+        # KEEP ONLY RECIPES VALID FOR TIME LIMIT
+        # ----------------------------------------------------
+
+        normalized_candidate_ids = (
+            candidates[
+                "recipe_id"
+            ]
+            .astype(str)
+            .str.strip()
+            .str.upper()
+        )
+
+        candidates = candidates[
+            normalized_candidate_ids.isin(
+                valid_time_ids
+            )
+        ].copy()
+
+        return (
+            candidates,
+            warnings,
+        )
+
+    # ========================================================
+    # CUISINE IDS
+    # ========================================================
+
+    @staticmethod
+    def _cuisine_recipe_ids(
+        candidates,
+        cuisine,
+    ):
+        """
+        Reuse candidate_recipe.py's cuisine filter.
+        """
+
+        if candidates.empty:
+
+            return set()
+
+        matching = (
+            filter_by_cuisine(
+                candidates,
+                cuisine,
+            )
+        )
+
+        if matching.empty:
+
+            return set()
+
+        return set(
+            matching[
+                "recipe_id"
+            ]
+            .astype(str)
+            .str.strip()
+            .str.upper()
+            .tolist()
+        )
+
+    # ========================================================
+    # BASIC VARIETY
+    # ========================================================
+
+    def _rank_for_variety(
+        self,
+        candidates,
+        preferred_cuisines,
+        recent_cuisines,
+    ):
+        """
+        Member 2 variety logic.
+
+        Exact recipe:
+            HARD exclusion handled earlier.
+
+        Preferred cuisine:
+            +1
+
+        Recently selected cuisine:
+            -1 per occurrence
+
+        Cuisine remains a soft preference.
+        """
+
+        if candidates.empty:
+
+            return candidates
+
+        if (
+            not preferred_cuisines
+            and not recent_cuisines
+        ):
+
+            return candidates
+
+        ranked = (
+            candidates.copy()
+        )
+
+        ranked[
+            "_original_order"
+        ] = range(
+            len(ranked)
+        )
+
+        ranked[
+            "_variety_score"
+        ] = 0
+
+        # ----------------------------------------------------
+        # PREFERRED CUISINE BOOST
+        # ----------------------------------------------------
+
+        for cuisine in preferred_cuisines:
+
+            matching_ids = (
+                self._cuisine_recipe_ids(
+                    candidates,
+                    cuisine,
+                )
+            )
+
+            if not matching_ids:
+
+                continue
+
+            normalized_ids = (
+                ranked[
+                    "recipe_id"
+                ]
+                .astype(str)
+                .str.strip()
+                .str.upper()
+            )
+
+            ranked.loc[
+                normalized_ids.isin(
+                    matching_ids
+                ),
+                "_variety_score",
+            ] += 1
+
+        # ----------------------------------------------------
+        # RECENT CUISINE PENALTY
+        # ----------------------------------------------------
+
+        for cuisine in recent_cuisines:
+
+            matching_ids = (
+                self._cuisine_recipe_ids(
+                    candidates,
+                    cuisine,
+                )
+            )
+
+            if not matching_ids:
+
+                continue
+
+            normalized_ids = (
+                ranked[
+                    "recipe_id"
+                ]
+                .astype(str)
+                .str.strip()
+                .str.upper()
+            )
+
+            ranked.loc[
+                normalized_ids.isin(
+                    matching_ids
+                ),
+                "_variety_score",
+            ] -= 1
+
+        # ----------------------------------------------------
+        # STABLE RANK
+        # ----------------------------------------------------
+
+        ranked = (
+            ranked
+            .sort_values(
+                by=[
+                    "_variety_score",
+                    "_original_order",
+                ],
+
+                ascending=[
+                    False,
+                    True,
+                ],
+
+                kind="stable",
+            )
+        )
+
+        ranked = (
+            ranked
+            .drop(
+                columns=[
+                    "_variety_score",
+                    "_original_order",
+                ]
+            )
+        )
+
+        return ranked
+
+    # ========================================================
+    # REMOVE DUPLICATES
+    # ========================================================
+
+    @staticmethod
+    def _remove_duplicate_recipes(
+        candidates,
+    ):
+        """
+        Remove duplicate recipe IDs.
+        """
+
+        if candidates.empty:
+
+            return candidates
+
+        if (
+            "recipe_id"
+            not in candidates.columns
+        ):
+
+            raise KeyError(
+                "recipe_id column is missing."
+            )
+
+        candidates = (
+            candidates.copy()
+        )
+
+        candidates[
+            "recipe_id"
+        ] = (
+            candidates[
+                "recipe_id"
+            ]
+            .astype(str)
+            .str.strip()
+            .str.upper()
+        )
+
+        return (
+            candidates
+            .drop_duplicates(
+                subset=[
+                    "recipe_id"
+                ],
+                keep="first",
+            )
+        )
+
+    # ========================================================
+    # FINAL HARD REPETITION CHECK
+    # ========================================================
+
+    @staticmethod
+    def _final_repetition_check(
+        candidate_ids,
+        selected_recipe_ids,
+    ):
+        """
+        Final safety check.
+
+        Manager-selected recipes can never escape
+        into the final output.
+        """
+
+        selected_set = set(
+            selected_recipe_ids
+        )
+
+        safe_ids = []
+
+        for recipe_id in candidate_ids:
+
+            recipe_id = (
+                str(recipe_id)
+                .strip()
+                .upper()
+            )
+
+            if not recipe_id:
+
+                continue
+
+            # ------------------------------------------------
+            # ALREADY SELECTED
+            # ------------------------------------------------
+
+            if recipe_id in selected_set:
+
+                continue
+
+            # ------------------------------------------------
+            # DUPLICATE IN CURRENT OUTPUT
+            # ------------------------------------------------
+
+            if recipe_id in safe_ids:
+
+                continue
+
+            safe_ids.append(
+                recipe_id
+            )
+
+        return safe_ids
+
+    # ========================================================
+    # RUN
     # ========================================================
 
     def run(
         self,
         user_state,
-        meal_context=None,
-        max_candidates=None
+        meal_slot,
+        selected_recipe_ids=None,
+        recent_cuisines=None,
+        max_candidates=None,
     ):
         """
-        Execute Recipe Agent.
+        Generate candidates for ONE slot.
 
-        Manager calls this method directly.
+        Manager calls this method once per meal slot.
+
+        Example:
+
+        result = recipe_agent.run(
+
+            user_state=user_state,
+
+            meal_slot={
+                "date": "2026-10-07",
+                "meal_type": "dinner",
+                "max_cooking_time": 30
+            },
+
+            selected_recipe_ids=[
+                "R001",
+                "R024",
+                "R133"
+            ],
+
+            recent_cuisines=[
+                "asian",
+                "italian"
+            ],
+
+            max_candidates=5
+        )
         """
 
         # ----------------------------------------------------
@@ -574,7 +1272,9 @@ class RecipeAgent:
 
         limit = (
             self.max_candidates
+
             if max_candidates is None
+
             else max_candidates
         )
 
@@ -585,20 +1285,41 @@ class RecipeAgent:
         ):
 
             return self._failure_result(
-                "max_candidates must be "
-                "a positive integer"
+                "max_candidates must be a positive integer."
             )
 
         # ----------------------------------------------------
-        # EXTRACT MANAGER / USER STATE INPUT
+        # NORMALIZE MANAGER STATE
+        # ----------------------------------------------------
+
+        selected_recipe_ids = (
+            self._normalize_selected_recipe_ids(
+                selected_recipe_ids
+            )
+        )
+
+        recent_cuisines = (
+            self._normalize_recent_cuisines(
+                recent_cuisines
+            )
+        )
+
+        # ----------------------------------------------------
+        # EXTRACT INPUT
         # ----------------------------------------------------
 
         try:
 
             requirements = (
-                self._extract_requirements(
-                    user_state,
-                    meal_context
+                self._extract_user_requirements(
+                    user_state
+                )
+            )
+
+            slot_context = (
+                self._extract_slot_context(
+                    requirements,
+                    meal_slot,
                 )
             )
 
@@ -612,19 +1333,85 @@ class RecipeAgent:
             )
 
         # ----------------------------------------------------
-        # EXISTING CANDIDATE RETRIEVAL
+        # CANDIDATE PIPELINE
         # ----------------------------------------------------
 
         try:
 
+            # =================================================
+            # 1. EXISTING CANDIDATE RETRIEVAL
+            # =================================================
+
             candidates = (
                 self._retrieve_candidates(
-                    requirements
+                    requirements,
+
+                    slot_context[
+                        "meal_type"
+                    ],
+                )
+            )
+
+            # =================================================
+            # 2. HARD REPETITION EXCLUSION
+            # =================================================
+
+            candidates = (
+                self._exclude_selected_recipes(
+                    candidates,
+
+                    selected_recipe_ids,
+                )
+            )
+
+            # =================================================
+            # 3. OPTIONAL COOKING TIME
+            #
+            # Uses existing repository when applicable.
+            # =================================================
+
+            (
+                candidates,
+                time_warnings,
+            ) = (
+                self._apply_cooking_time(
+                    candidates,
+
+                    slot_context[
+                        "max_cooking_time"
+                    ],
+                )
+            )
+
+            # =================================================
+            # 4. DUPLICATE REMOVAL
+            # =================================================
+
+            candidates = (
+                self._remove_duplicate_recipes(
+                    candidates
+                )
+            )
+
+            # =================================================
+            # 5. BASIC VARIETY
+            # =================================================
+
+            candidates = (
+                self._rank_for_variety(
+                    candidates,
+
+                    requirements[
+                        "preferred_cuisines"
+                    ],
+
+                    recent_cuisines,
                 )
             )
 
         except (
             ValueError,
+            KeyError,
             FileNotFoundError,
         ) as error:
 
@@ -633,17 +1420,7 @@ class RecipeAgent:
             )
 
         # ----------------------------------------------------
-        # LIMIT DOWNSTREAM WORK
-        # ----------------------------------------------------
-
-        candidates = (
-            candidates
-            .head(limit)
-            .copy()
-        )
-
-        # ----------------------------------------------------
-        # EXTRACT RECIPE IDS
+        # GET IDS
         # ----------------------------------------------------
 
         if (
@@ -656,6 +1433,8 @@ class RecipeAgent:
                     "recipe_id"
                 ]
                 .astype(str)
+                .str.strip()
+                .str.upper()
                 .tolist()
             )
 
@@ -664,60 +1443,68 @@ class RecipeAgent:
             candidate_ids = []
 
         # ----------------------------------------------------
-        # REMOVE DUPLICATE IDS WHILE PRESERVING ORDER
+        # FINAL REPETITION PROTECTION
         # ----------------------------------------------------
 
-        candidate_ids = list(
-            dict.fromkeys(
-                candidate_ids
+        candidate_ids = (
+            self._final_repetition_check(
+                candidate_ids,
+
+                selected_recipe_ids,
             )
         )
 
         # ----------------------------------------------------
-        # WARNINGS
+        # LIMIT
         # ----------------------------------------------------
 
-        warnings = []
-
-        if not candidate_ids:
-
-            warnings.append(
-                "No candidate recipes matched "
-                "retrieval criteria"
-            )
+        candidate_ids = (
+            candidate_ids[
+                :limit
+            ]
+        )
 
         # ----------------------------------------------------
-        # SHARED AGENT RESULT
+        # EXACT REQUIRED OUTPUT
         # ----------------------------------------------------
 
-        return AgentResult(
-            agent="recipe",
+        return {
 
-            status=AgentStatus.SUCCESS,
+            "slot": {
 
-            data={
-                "candidate_recipe_ids":
-                    candidate_ids
+                "date":
+                    slot_context[
+                        "date"
+                    ],
+
+                "meal_type":
+                    slot_context[
+                        "meal_type"
+                    ],
             },
 
-            warnings=
-                warnings,
-
-            errors=[],
-        ).to_dict()
+            "candidate_recipe_ids":
+                candidate_ids,
+        }
 
 
 # ============================================================
-# TEMPORARY MAIN - STANDALONE CHECK ONLY
-#
-# Remove this block when Manager integration is complete.
+# LOAD LATEST USER STATE
 # ============================================================
 
-if __name__ == "__main__":
+def load_latest_user_state():
+    """
+    Load the latest User State.
 
-    # --------------------------------------------------------
-    # PROJECT ROOT
-    # --------------------------------------------------------
+    User State provides:
+
+        diet
+        cuisine
+        meal preferences
+        other user restrictions
+
+    Previously selected recipes now come from Manager.
+    """
 
     project_root = (
         Path(__file__)
@@ -725,19 +1512,11 @@ if __name__ == "__main__":
         .parents[2]
     )
 
-    # --------------------------------------------------------
-    # USER STATE DIRECTORY
-    # --------------------------------------------------------
-
     users_dir = (
         project_root
         / "data"
         / "users"
     )
-
-    # --------------------------------------------------------
-    # FIND EXISTING USER STATE FILES
-    # --------------------------------------------------------
 
     user_state_files = list(
         users_dir.glob(
@@ -752,77 +1531,143 @@ if __name__ == "__main__":
             f"{users_dir}"
         )
 
-    # --------------------------------------------------------
-    # USE MOST RECENT USER STATE
-    # --------------------------------------------------------
-
     latest_user_state_file = max(
         user_state_files,
-        key=lambda path:
-            path.stat().st_mtime
-    )
 
-    # --------------------------------------------------------
-    # LOAD USER STATE
-    # --------------------------------------------------------
+        key=lambda path:
+            path.stat().st_mtime,
+    )
 
     with open(
         latest_user_state_file,
         "r",
-        encoding="utf-8"
+        encoding="utf-8",
     ) as file:
 
-        user_state = json.load(
+        return json.load(
             file
         )
 
+
+# ============================================================
+# STANDALONE INPUT
+# ============================================================
+
+def get_standalone_input():
+    """
+    Temporary standalone input.
+
+    During Manager integration, Manager will supply:
+
+        meal_slot
+        selected_recipe_ids
+        recent_cuisines
+
+    This function only allows recipe_agent.py
+    to be run independently.
+    """
+
+    meal_slot = {
+
+        "date":
+            date.today().isoformat(),
+
+        "meal_type":
+            "dinner",
+    }
+
     # --------------------------------------------------------
-    # PRINT INPUT
+    # WHEN TESTING MANUALLY, PUT ALREADY SELECTED RECIPES HERE
     # --------------------------------------------------------
 
-    print("\n" + "=" * 70)
-    print("RECIPE AGENT INPUT")
-    print("=" * 70)
+    selected_recipe_ids = [
+    ]
 
-    print(
-        json.dumps(
-            user_state,
-            indent=4
-        )
+    # --------------------------------------------------------
+    # OPTIONAL VARIETY CONTEXT
+    # --------------------------------------------------------
+
+    recent_cuisines = [
+    ]
+
+    return (
+        meal_slot,
+        selected_recipe_ids,
+        recent_cuisines,
     )
 
-    # --------------------------------------------------------
-    # CREATE RECIPE AGENT
-    # --------------------------------------------------------
 
-    recipe_agent = RecipeAgent(
-        max_candidates=10
-    )
+# ============================================================
+# PRINT
+# ============================================================
 
-    # --------------------------------------------------------
-    # RUN RECIPE AGENT
-    #
-    # No meal_context is supplied for this standalone check.
-    # The agent therefore uses preferred_meal_types from
-    # User State.
-    # --------------------------------------------------------
-
-    result = recipe_agent.run(
-        user_state=user_state,
-        max_candidates=10
-    )
-
-    # --------------------------------------------------------
-    # PRINT OUTPUT
-    # --------------------------------------------------------
-
-    print("\n" + "=" * 70)
-    print("RECIPE AGENT OUTPUT")
-    print("=" * 70)
+def print_recipe_result(
+    result,
+):
+    """
+    Print final Recipe Agent output.
+    """
 
     print(
         json.dumps(
             result,
-            indent=4
+            indent=4,
         )
     )
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+def main():
+    """
+    Main only runs functions.
+
+    No filtering or Recipe Agent business logic lives here.
+    """
+
+    user_state = (
+        load_latest_user_state()
+    )
+
+    recipe_agent = (
+        RecipeAgent(
+            max_candidates=5
+        )
+    )
+
+    (
+        meal_slot,
+        selected_recipe_ids,
+        recent_cuisines,
+    ) = (
+        get_standalone_input()
+    )
+
+    result = (
+        recipe_agent.run(
+
+            user_state=
+                user_state,
+
+            meal_slot=
+                meal_slot,
+
+            selected_recipe_ids=
+                selected_recipe_ids,
+
+            recent_cuisines=
+                recent_cuisines,
+
+            max_candidates=5,
+        )
+    )
+
+    print_recipe_result(
+        result
+    )
+
+
+if __name__ == "__main__":
+    main()
