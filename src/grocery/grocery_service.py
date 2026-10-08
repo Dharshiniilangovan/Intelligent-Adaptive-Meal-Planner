@@ -204,25 +204,26 @@ class GroceryService:
         self,
         query: str,
     ) -> list[dict]:
+        """
+        Search grocery products with an in-memory cache.
 
-        key = " ".join(
-            words(query)
-        )
+        Repeated queries reuse cached results until TTL expires.
+        """
 
-        hit = self._search_cache.get(
-            key
-        )
+        key = " ".join(words(query))
+
+        hit = self._search_cache.get(key)
 
         if (
-            hit
-            and time.time() - hit[0]
-            < self.cache_ttl
+            hit is not None
+            and time.time() - hit[0] < self.cache_ttl
         ):
+            print(f"[GROCERY CACHE HIT] {query}")
             return hit[1]
 
-        products = self.client.search(
-            query
-        )
+        print(f"[LIVE TAVILY SEARCH] {query}")
+
+        products = self.client.search(query)
 
         self._search_cache[key] = (
             time.time(),
