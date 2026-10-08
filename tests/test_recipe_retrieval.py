@@ -1,5 +1,5 @@
 import pytest
-
+import pandas as pd
 from src.knowledge.repository import CUISINE_GROUPS, DEFAULT_KB_PATH, RecipeRepository
 
 
@@ -85,15 +85,65 @@ def test_exclude_cautions(repo):
 
 
 # ------------------------------------------------------------------ time (no data yet)
-def test_max_time_warns_and_excludes_unknown(repo):
-    with pytest.warns(UserWarning):
-        assert len(repo.filter_by_max_time(30)) == 0
+# ------------------------------------------------------------------
+# COOKING TIME TESTS
+# ------------------------------------------------------------------
+
+def test_max_time_excludes_unknown(repo):
+    """
+    Verify that recipes with cooking time <= 30 minutes
+    are returned and missing values are excluded.
+    """
+
+    result = repo.filter_by_max_time(
+        30,
+        include_unknown=False
+    )
+
+    df = result.to_frame()
+
+    assert len(df) > 0
+
+    cooking_times = pd.to_numeric(
+        df["cooking_time_min"],
+        errors="coerce"
+    )
+
+    assert cooking_times.notna().all()
+    assert (cooking_times <= 30).all()
+    assert (cooking_times >= 0).all()
+
+    print(
+        f"\nRecipes with cooking time <= 30 min: {len(df)}"
+    )
 
 
 def test_max_time_include_unknown(repo):
-    with pytest.warns(UserWarning):
-        assert len(repo.filter_by_max_time(30, include_unknown=True)) == len(repo)
+    """
+    Verify that recipes with cooking time <= 30 minutes
+    OR missing cooking time are included.
+    """
 
+    result = repo.filter_by_max_time(
+        30,
+        include_unknown=True
+    )
+
+    df = result.to_frame()
+
+    cooking_times = pd.to_numeric(
+        df["cooking_time_min"],
+        errors="coerce"
+    )
+
+    assert (
+        (cooking_times <= 30) |
+        cooking_times.isna()
+    ).all()
+
+    print(
+        f"\nRecipes including unknown cooking time: {len(df)}"
+    )
 
 # ------------------------------------------------------------------ combinations
 def test_vegetarian_dinner_combo(repo):
