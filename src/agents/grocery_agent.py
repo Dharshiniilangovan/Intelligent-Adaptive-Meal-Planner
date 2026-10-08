@@ -1,19 +1,16 @@
+
 """src/agents/grocery_agent.py
 
 Grocery Agent.
 
 The Grocery Agent receives missing ingredients from the
-Ingredient Agent / Manager and uses the existing GroceryService
-to obtain purchasable FairPrice grocery options.
+Ingredient Agent / Manager and uses GroceryService to obtain
+purchasable FairPrice grocery options.
 
-The agent does not:
-- implement grocery search itself
-- parse prices itself
-- calculate package quantities itself
-- calculate budget feasibility
-- make the final recipe decision
+BudgetService checks whether the combined grocery purchase
+cost fits the remaining budget.
 
-Those responsibilities remain in the existing deterministic services.
+The final recipe decision remains with the Reasoning Engine.
 """
 
 import math
@@ -28,6 +25,8 @@ from src.grocery.grocery_service import (
     grocery_summary,
 )
 
+from src.reasoning.budget_service import check_grocery_budget
+
 
 class GroceryAgent:
     """
@@ -38,49 +37,31 @@ class GroceryAgent:
             Candidate recipe being evaluated.
 
         missing_ingredients:
-            Ingredients that still need to be purchased,
-            normally produced by the Ingredient Agent.
+            Ingredients that need to be purchased.
+
+        remaining_budget:
+            Available grocery budget. Optional.
 
     Output:
-        Shared AgentResult dictionary containing:
-
-        {
-            "agent": "grocery",
-            "status": "success | partial | failed",
-            "data": {
-                "recipe_id": ...,
-                "items": [...],
-                "known_cost": ...,
-                "all_items_priced": ...,
-                "unpriced_items": [...]
-            },
-            "warnings": [...],
-            "errors": [...]
-        }
+        Shared AgentResult containing grocery information,
+        combined purchase cost, and budget feasibility.
     """
 
     def __init__(
         self,
         grocery_service: GroceryService | None = None,
     ):
-        """
-        Use an injected GroceryService when provided.
-
-        This allows:
-        - deterministic unit tests
-        - reuse of GroceryService caching
-        - real GroceryService use in production
-        """
-
         self.grocery_service = (
             grocery_service
-            or GroceryService()
+            if grocery_service is not None
+            else GroceryService()
         )
 
     def run(
         self,
         recipe_id: str,
         missing_ingredients: list[dict] | dict,
+        remaining_budget: float | None = None,
     ) -> dict:
         """
         Find purchasable grocery options for missing ingredients.
@@ -94,8 +75,11 @@ class GroceryAgent:
         - minimum-package fallback
         - caching
 
-        GroceryAgent only orchestrates the service and converts its
-        output into the shared agent contract.
+        BudgetService performs:
+        - total known purchase cost checking
+        - budget feasibility
+        - remaining budget calculation
+        - unknown-cost handling
         """
 
         # ---------------------------------------------------------
@@ -103,15 +87,12 @@ class GroceryAgent:
         # ---------------------------------------------------------
 
         if not recipe_id:
-
             return AgentResult(
                 agent="grocery",
                 status=AgentStatus.FAILED,
                 data={},
                 warnings=[],
-                errors=[
-                    "recipe_id is required"
-                ],
+                errors=["recipe_id is required"],
             ).to_dict()
 
         # ---------------------------------------------------------
@@ -122,7 +103,6 @@ class GroceryAgent:
             missing_ingredients,
             (list, dict),
         ):
-
             return AgentResult(
                 agent="grocery",
                 status=AgentStatus.FAILED,
@@ -131,10 +111,7 @@ class GroceryAgent:
                 },
                 warnings=[],
                 errors=[
-                    (
-                        "missing_ingredients must be "
-                        "a list or dictionary"
-                    )
+                    "missing_ingredients must be a list or dictionary"
                 ],
             ).to_dict()
 
@@ -144,24 +121,53 @@ class GroceryAgent:
 
         if not missing_ingredients:
 
+            budget_result = None
+            budget_status = "not_checked"
+
+            if remaining_budget is not None:
+                try:
+                    budget_result = check_grocery_budget(
+                        grocery_results={
+                            "priced_products": [],
+                            "incomplete_products": [],
+                            "missing_products": [],
+                        },
+                        remaining_budget=remaining_budget,
+                    )
+
+                    budget_status = budget_result["budget_status"]
+
+                except (TypeError, ValueError) as exc:
+                    return AgentResult(
+                        agent="grocery",
+                        status=AgentStatus.FAILED,
+                        data={
+                            "recipe_id": recipe_id,
+                        },
+                        warnings=[],
+                        errors=[
+                            f"Budget validation failed: {exc}"
+                        ],
+                    ).to_dict()
+
             return AgentResult(
                 agent="grocery",
                 status=AgentStatus.SUCCESS,
                 data={
-                    "recipe_id":
-                        recipe_id,
+                    "recipe_id": recipe_id,
+                    "items": [],
+                    "known_cost": 0.0,
+                    "all_items_priced": True,
+                    "unpriced_items": [],
 
-                    "items":
-                        [],
-
-                    "known_cost":
-                        0.0,
-
-                    "all_items_priced":
-                        True,
-
-                    "unpriced_items":
-                        [],
+                    "budget": budget_result,
+                    "budget_status": budget_status,
+                    "remaining_budget": remaining_budget,
+                    "budget_after_purchase": (
+                        budget_result.get("budget_after_purchase")
+                        if budget_result is not None
+                        else None
+                    ),
                 },
                 warnings=[],
                 errors=[],
@@ -172,22 +178,14 @@ class GroceryAgent:
         # ---------------------------------------------------------
 
         try:
-
             options = (
                 self.grocery_service
-                .get_grocery_list(
-                    missing_ingredients
-                )
+                .get_grocery_list(missing_ingredients)
             )
 
-            grocery_results = (
-                grocery_summary(
-                    options
-                )
-            )
+            grocery_results = grocery_summary(options)
 
         except Exception as exc:
-
             return AgentResult(
                 agent="grocery",
                 status=AgentStatus.FAILED,
@@ -196,76 +194,47 @@ class GroceryAgent:
                 },
                 warnings=[],
                 errors=[
-                    (
-                        "Grocery lookup failed: "
-                        f"{exc}"
-                    )
+                    f"Grocery lookup failed: {exc}"
                 ],
             ).to_dict()
 
         # ---------------------------------------------------------
         # Known purchase cost
-        # ---------------------------------------------------------
         #
         # Only products with a usable total_cost contribute.
-        #
-        # Missing/incomplete products are NOT treated as zero-cost
-        # completed purchases.
+        # Missing/incomplete products are NOT treated as free.
         # ---------------------------------------------------------
 
         known_cost = round(
             sum(
-                float(
-                    item["total_cost"]
-                )
-                for item
-                in grocery_results[
-                    "priced_products"
-                ]
-                if item.get(
-                    "total_cost"
-                ) is not None
+                float(item["total_cost"])
+                for item in grocery_results["priced_products"]
+                if item.get("total_cost") is not None
             ),
             2,
         )
 
         # ---------------------------------------------------------
-        # Find items whose complete purchase cost is unknown
+        # Find items whose purchase cost is unknown
         # ---------------------------------------------------------
 
         unpriced_items = []
 
-        for item in grocery_results[
-            "incomplete_products"
-        ]:
-
-            ingredient = item.get(
-                "ingredient"
-            )
+        for item in grocery_results["incomplete_products"]:
+            ingredient = item.get("ingredient")
 
             if ingredient:
-                unpriced_items.append(
-                    ingredient
-                )
+                unpriced_items.append(ingredient)
 
-        for item in grocery_results[
-            "missing_products"
-        ]:
-
-            ingredient = item.get(
-                "ingredient"
-            )
+        for item in grocery_results["missing_products"]:
+            ingredient = item.get("ingredient")
 
             if ingredient:
-                unpriced_items.append(
-                    ingredient
-                )
+                unpriced_items.append(ingredient)
 
         # Remove duplicates while preserving order.
         unpriced_items = list(
-            dict.fromkeys(
-                unpriced_items
-            )
+            dict.fromkeys(unpriced_items)
         )
 
         # ---------------------------------------------------------
@@ -281,27 +250,21 @@ class GroceryAgent:
         # ---------------------------------------------------------
 
         warnings = [
-            (
-                "No complete purchase price "
-                f"found for {ingredient}"
-            )
-            for ingredient
-            in unpriced_items
+            f"No complete purchase price found for {ingredient}"
+            for ingredient in unpriced_items
         ]
 
         # ---------------------------------------------------------
         # Agent status
-        # ---------------------------------------------------------
         #
         # success:
-        #     Every required grocery item has a usable purchase cost.
+        #   Every grocery item has a usable purchase cost.
         #
         # partial:
-        #     Grocery processing succeeded, but one or more costs
-        #     remain unknown.
+        #   Some costs remain unknown.
         #
         # failed:
-        #     Reserved for invalid input/service failures above.
+        #   Invalid input or service failure.
         # ---------------------------------------------------------
 
         if all_items_priced:
@@ -314,16 +277,54 @@ class GroceryAgent:
         # ---------------------------------------------------------
 
         items = (
-            grocery_results[
-                "priced_products"
-            ]
-            + grocery_results[
-                "incomplete_products"
-            ]
-            + grocery_results[
-                "missing_products"
-            ]
+            grocery_results["priced_products"]
+            + grocery_results["incomplete_products"]
+            + grocery_results["missing_products"]
         )
+
+        # ---------------------------------------------------------
+        # BUDGET SERVICE INTEGRATION
+        #
+        # Pass actual GroceryService results.
+        #
+        # BudgetService returns:
+        #   pass
+        #   hard_fail
+        #   uncertain
+        #
+        # If no budget was provided:
+        #   not_checked
+        # ---------------------------------------------------------
+
+        budget_result = None
+        budget_status = "not_checked"
+
+        if remaining_budget is not None:
+
+            try:
+                budget_result = check_grocery_budget(
+                    grocery_results=grocery_results,
+                    remaining_budget=remaining_budget,
+                )
+
+                budget_status = budget_result["budget_status"]
+
+            except (TypeError, ValueError) as exc:
+                return AgentResult(
+                    agent="grocery",
+                    status=AgentStatus.FAILED,
+                    data={
+                        "recipe_id": recipe_id,
+                        "items": items,
+                        "known_cost": known_cost,
+                        "all_items_priced": all_items_priced,
+                        "unpriced_items": unpriced_items,
+                    },
+                    warnings=warnings,
+                    errors=[
+                        f"Budget validation failed: {exc}"
+                    ],
+                ).to_dict()
 
         # ---------------------------------------------------------
         # Shared AgentResult
@@ -331,28 +332,32 @@ class GroceryAgent:
 
         return AgentResult(
             agent="grocery",
-
             status=status,
-
             data={
-                "recipe_id":
-                    recipe_id,
+                "recipe_id": recipe_id,
 
-                "items":
-                    items,
+                "items": items,
 
-                "known_cost":
-                    known_cost,
+                "known_cost": known_cost,
 
-                "all_items_priced":
-                    all_items_priced,
+                "all_items_priced": all_items_priced,
 
-                "unpriced_items":
-                    unpriced_items,
+                "unpriced_items": unpriced_items,
+
+                # BudgetService results
+                "budget": budget_result,
+
+                "budget_status": budget_status,
+
+                "remaining_budget": remaining_budget,
+
+                "budget_after_purchase": (
+                    budget_result.get("budget_after_purchase")
+                    if budget_result is not None
+                    else None
+                ),
             },
-
             warnings=warnings,
-
             errors=[],
         ).to_dict()
 
@@ -370,6 +375,7 @@ def _ingredient_key(item):
     ingredient_id is preferred because names may have
     capitalization/spacing differences.
     """
+
     ingredient_id = item.get("ingredient_id")
 
     if ingredient_id:
@@ -389,6 +395,7 @@ def _ingredient_name(item):
     Get ingredient name regardless of whether the source uses
     'ingredient_name' or 'name'.
     """
+
     return (
         item.get("ingredient_name")
         or item.get("name")
@@ -410,7 +417,6 @@ def aggregate_requirements(recipe_requirements):
     Parameters
     ----------
     recipe_requirements : list
-        Expected format:
 
         [
             {
@@ -435,11 +441,12 @@ def aggregate_requirements(recipe_requirements):
     aggregated = {}
 
     for recipe in recipe_requirements or []:
-        recipe_id = recipe.get("recipe_id")
 
+        recipe_id = recipe.get("recipe_id")
         ingredients = recipe.get("ingredients", [])
 
         for ingredient in ingredients:
+
             key = _ingredient_key(ingredient)
 
             if not key:
@@ -461,26 +468,16 @@ def aggregate_requirements(recipe_requirements):
 
             if key not in aggregated:
                 aggregated[key] = {
-                    "ingredient_id":
-                        ingredient.get("ingredient_id"),
-
-                    "ingredient_name":
-                        name,
-
-                    "quantity":
-                        0.0,
-
-                    "unit":
-                        unit,
-
-                    "recipe_ids":
-                        [],
+                    "ingredient_id": ingredient.get("ingredient_id"),
+                    "ingredient_name": name,
+                    "quantity": 0.0,
+                    "unit": unit,
+                    "recipe_ids": [],
                 }
 
             existing_unit = aggregated[key]["unit"]
 
-            # For Day 5, do not silently combine incompatible units.
-            # Unit normalization/conversion should happen upstream.
+            # Do not silently combine incompatible units.
             if (
                 existing_unit
                 and unit
@@ -495,12 +492,9 @@ def aggregate_requirements(recipe_requirements):
 
             if (
                 recipe_id is not None
-                and recipe_id
-                not in aggregated[key]["recipe_ids"]
+                and recipe_id not in aggregated[key]["recipe_ids"]
             ):
-                aggregated[key]["recipe_ids"].append(
-                    recipe_id
-                )
+                aggregated[key]["recipe_ids"].append(recipe_id)
 
     return list(aggregated.values())
 
@@ -512,14 +506,15 @@ def subtract_inventory(requirements, inventory):
 
     Example:
         Required rice = 700g
-        Pantry rice   = 500g
+        Pantry rice = 500g
 
-        Purchase requirement = 200g
+    Purchase requirement = 200g
     """
 
     inventory_map = {}
 
     for item in inventory or []:
+
         key = _ingredient_key(item)
 
         if not key:
@@ -532,8 +527,6 @@ def subtract_inventory(requirements, inventory):
         except (TypeError, ValueError):
             quantity = 0.0
 
-        # If duplicate inventory rows exist, combine them
-        # when their units match.
         if key not in inventory_map:
             inventory_map[key] = {
                 "quantity": quantity,
@@ -554,6 +547,7 @@ def subtract_inventory(requirements, inventory):
     results = []
 
     for requirement in requirements or []:
+
         key = _ingredient_key(requirement)
 
         required_quantity = float(
@@ -567,6 +561,7 @@ def subtract_inventory(requirements, inventory):
         inventory_available = 0.0
 
         if inventory_item:
+
             inventory_unit = inventory_item.get("unit")
 
             if (
@@ -577,11 +572,7 @@ def subtract_inventory(requirements, inventory):
                 inventory_available = max(
                     0.0,
                     float(
-                        inventory_item.get(
-                            "quantity",
-                            0,
-                        )
-                        or 0
+                        inventory_item.get("quantity", 0) or 0
                     ),
                 )
 
@@ -598,17 +589,10 @@ def subtract_inventory(requirements, inventory):
         result = dict(requirement)
 
         result.update({
-            "required_quantity":
-                required_quantity,
-
-            "inventory_available":
-                inventory_available,
-
-            "inventory_used":
-                inventory_used,
-
-            "purchase_required":
-                purchase_required,
+            "required_quantity": required_quantity,
+            "inventory_available": inventory_available,
+            "inventory_used": inventory_used,
+            "purchase_required": purchase_required,
         })
 
         results.append(result)
@@ -632,6 +616,7 @@ def calculate_packages(
     try:
         required_quantity = float(required_quantity)
         package_quantity = float(package_quantity)
+
     except (TypeError, ValueError):
         return None
 
@@ -652,8 +637,8 @@ def calculate_package_leftover(
     packages,
 ):
     """
-    Calculate how much purchased product remains after satisfying
-    the current requirement.
+    Calculate how much purchased product remains after
+    satisfying the current requirement.
     """
 
     if packages is None:
@@ -663,6 +648,7 @@ def calculate_package_leftover(
         required_quantity = float(required_quantity)
         package_quantity = float(package_quantity)
         packages = int(packages)
+
     except (TypeError, ValueError):
         return None
 
@@ -686,22 +672,18 @@ def find_plan_product(
     Matching order:
     1. ingredient_id
     2. normalized ingredient name
-
-    If your existing Day-4 Grocery Agent already has a better
-    matching function, you can replace calls to this function
-    with that existing matcher later.
     """
 
-    requirement_id = requirement.get(
-        "ingredient_id"
-    )
+    requirement_id = requirement.get("ingredient_id")
 
     # --------------------------------------------------------
     # 1. ID matching
     # --------------------------------------------------------
 
     if requirement_id:
+
         for product in product_catalog or []:
+
             if (
                 str(
                     product.get("ingredient_id", "")
@@ -719,7 +701,9 @@ def find_plan_product(
     ).lower()
 
     if requirement_name:
+
         for product in product_catalog or []:
+
             product_name = (
                 product.get("ingredient_name")
                 or product.get("name")
@@ -740,23 +724,21 @@ def build_plan_grocery_basket(
     """
     Build ONE grocery basket for the entire meal plan.
 
-    This is the main Member-4 Day-5 function.
+    This is the Member-4 Day-5 function.
 
     Steps:
-        1. Aggregate ingredients across recipes.
-        2. Subtract existing inventory.
-        3. Find a grocery product.
-        4. Calculate required package count.
-        5. Calculate purchase cost.
-        6. Calculate package leftovers.
-        7. Track missing/unreliable pricing.
+    1. Aggregate ingredients across recipes.
+    2. Subtract existing inventory.
+    3. Find a grocery product.
+    4. Calculate required package count.
+    5. Calculate purchase cost.
+    6. Calculate package leftovers.
+    7. Track missing/unreliable pricing.
 
-    Important:
-        This function reports grocery/cost facts.
+    This function reports grocery/cost facts.
 
-        It DOES NOT decide whether the complete meal plan
-        is feasible. That belongs to the Plan Validator /
-        Reasoning Engine.
+    It does not decide whether the complete meal plan
+    is feasible.
     """
 
     inventory = inventory or []
@@ -780,7 +762,6 @@ def build_plan_grocery_basket(
     )
 
     basket_items = []
-
     known_cost = 0.0
     unpriced_items = []
 
@@ -791,26 +772,15 @@ def build_plan_grocery_basket(
     for requirement in purchase_requirements:
 
         purchase_required = float(
-            requirement.get(
-                "purchase_required",
-                0,
-            )
-            or 0
+            requirement.get("purchase_required", 0) or 0
         )
 
         # Pantry completely satisfies this ingredient.
-        # Nothing has to be purchased.
         if purchase_required <= 0:
             continue
 
-        ingredient_id = requirement.get(
-            "ingredient_id"
-        )
-
-        ingredient_name = _ingredient_name(
-            requirement
-        )
-
+        ingredient_id = requirement.get("ingredient_id")
+        ingredient_name = _ingredient_name(requirement)
         required_unit = requirement.get("unit")
 
         product = find_plan_product(
@@ -824,58 +794,27 @@ def build_plan_grocery_basket(
 
         if product is None:
 
-            unpriced_items.append(
-                ingredient_name
-            )
+            unpriced_items.append(ingredient_name)
 
             basket_items.append({
-                "ingredient_id":
-                    ingredient_id,
-
-                "name":
-                    ingredient_name,
-
-                "required_quantity":
-                    purchase_required,
-
-                "required_unit":
-                    required_unit,
-
-                "package_quantity":
-                    None,
-
-                "package_unit":
-                    None,
-
-                "packages":
-                    None,
-
-                "purchased_quantity":
-                    None,
-
-                "price_per_package":
-                    None,
-
-                "purchase_cost":
-                    None,
-
-                "leftover_quantity":
-                    None,
-
-                "inventory_used":
-                    requirement.get(
-                        "inventory_used",
-                        0,
-                    ),
-
-                "recipe_ids":
-                    requirement.get(
-                        "recipe_ids",
-                        [],
-                    ),
-
-                "pricing_status":
-                    "unpriced",
+                "ingredient_id": ingredient_id,
+                "name": ingredient_name,
+                "required_quantity": purchase_required,
+                "required_unit": required_unit,
+                "package_quantity": None,
+                "package_unit": None,
+                "packages": None,
+                "purchased_quantity": None,
+                "price_per_package": None,
+                "purchase_cost": None,
+                "leftover_quantity": None,
+                "inventory_used": requirement.get(
+                    "inventory_used", 0
+                ),
+                "recipe_ids": requirement.get(
+                    "recipe_ids", []
+                ),
+                "pricing_status": "unpriced",
             })
 
             continue
@@ -884,30 +823,20 @@ def build_plan_grocery_basket(
         # READ PRODUCT DATA
         # ====================================================
 
-        package_quantity = product.get(
-            "package_quantity"
-        )
+        package_quantity = product.get("package_quantity")
+        package_unit = product.get("package_unit")
 
-        package_unit = product.get(
-            "package_unit"
-        )
-
-        # Support either field name.
         price = product.get("price")
 
         if price is None:
-            price = product.get(
-                "price_per_package"
-            )
+            price = product.get("price_per_package")
 
         # ====================================================
         # PACKAGE DATA MISSING
         # ====================================================
 
         try:
-            package_quantity_float = float(
-                package_quantity
-            )
+            package_quantity_float = float(package_quantity)
         except (TypeError, ValueError):
             package_quantity_float = None
 
@@ -916,58 +845,27 @@ def build_plan_grocery_basket(
             or package_quantity_float <= 0
         ):
 
-            unpriced_items.append(
-                ingredient_name
-            )
+            unpriced_items.append(ingredient_name)
 
             basket_items.append({
-                "ingredient_id":
-                    ingredient_id,
-
-                "name":
-                    ingredient_name,
-
-                "required_quantity":
-                    purchase_required,
-
-                "required_unit":
-                    required_unit,
-
-                "package_quantity":
-                    package_quantity,
-
-                "package_unit":
-                    package_unit,
-
-                "packages":
-                    None,
-
-                "purchased_quantity":
-                    None,
-
-                "price_per_package":
-                    price,
-
-                "purchase_cost":
-                    None,
-
-                "leftover_quantity":
-                    None,
-
-                "inventory_used":
-                    requirement.get(
-                        "inventory_used",
-                        0,
-                    ),
-
-                "recipe_ids":
-                    requirement.get(
-                        "recipe_ids",
-                        [],
-                    ),
-
-                "pricing_status":
-                    "invalid_package",
+                "ingredient_id": ingredient_id,
+                "name": ingredient_name,
+                "required_quantity": purchase_required,
+                "required_unit": required_unit,
+                "package_quantity": package_quantity,
+                "package_unit": package_unit,
+                "packages": None,
+                "purchased_quantity": None,
+                "price_per_package": price,
+                "purchase_cost": None,
+                "leftover_quantity": None,
+                "inventory_used": requirement.get(
+                    "inventory_used", 0
+                ),
+                "recipe_ids": requirement.get(
+                    "recipe_ids", []
+                ),
+                "pricing_status": "invalid_package",
             })
 
             continue
@@ -982,58 +880,27 @@ def build_plan_grocery_basket(
             and package_unit != required_unit
         ):
 
-            unpriced_items.append(
-                ingredient_name
-            )
+            unpriced_items.append(ingredient_name)
 
             basket_items.append({
-                "ingredient_id":
-                    ingredient_id,
-
-                "name":
-                    ingredient_name,
-
-                "required_quantity":
-                    purchase_required,
-
-                "required_unit":
-                    required_unit,
-
-                "package_quantity":
-                    package_quantity_float,
-
-                "package_unit":
-                    package_unit,
-
-                "packages":
-                    None,
-
-                "purchased_quantity":
-                    None,
-
-                "price_per_package":
-                    price,
-
-                "purchase_cost":
-                    None,
-
-                "leftover_quantity":
-                    None,
-
-                "inventory_used":
-                    requirement.get(
-                        "inventory_used",
-                        0,
-                    ),
-
-                "recipe_ids":
-                    requirement.get(
-                        "recipe_ids",
-                        [],
-                    ),
-
-                "pricing_status":
-                    "unit_mismatch",
+                "ingredient_id": ingredient_id,
+                "name": ingredient_name,
+                "required_quantity": purchase_required,
+                "required_unit": required_unit,
+                "package_quantity": package_quantity_float,
+                "package_unit": package_unit,
+                "packages": None,
+                "purchased_quantity": None,
+                "price_per_package": price,
+                "purchase_cost": None,
+                "leftover_quantity": None,
+                "inventory_used": requirement.get(
+                    "inventory_used", 0
+                ),
+                "recipe_ids": requirement.get(
+                    "recipe_ids", []
+                ),
+                "pricing_status": "unit_mismatch",
             })
 
             continue
@@ -1049,58 +916,27 @@ def build_plan_grocery_basket(
 
         if price_float is None:
 
-            unpriced_items.append(
-                ingredient_name
-            )
+            unpriced_items.append(ingredient_name)
 
             basket_items.append({
-                "ingredient_id":
-                    ingredient_id,
-
-                "name":
-                    ingredient_name,
-
-                "required_quantity":
-                    purchase_required,
-
-                "required_unit":
-                    required_unit,
-
-                "package_quantity":
-                    package_quantity_float,
-
-                "package_unit":
-                    package_unit,
-
-                "packages":
-                    None,
-
-                "purchased_quantity":
-                    None,
-
-                "price_per_package":
-                    None,
-
-                "purchase_cost":
-                    None,
-
-                "leftover_quantity":
-                    None,
-
-                "inventory_used":
-                    requirement.get(
-                        "inventory_used",
-                        0,
-                    ),
-
-                "recipe_ids":
-                    requirement.get(
-                        "recipe_ids",
-                        [],
-                    ),
-
-                "pricing_status":
-                    "unpriced",
+                "ingredient_id": ingredient_id,
+                "name": ingredient_name,
+                "required_quantity": purchase_required,
+                "required_unit": required_unit,
+                "package_quantity": package_quantity_float,
+                "package_unit": package_unit,
+                "packages": None,
+                "purchased_quantity": None,
+                "price_per_package": None,
+                "purchase_cost": None,
+                "leftover_quantity": None,
+                "inventory_used": requirement.get(
+                    "inventory_used", 0
+                ),
+                "recipe_ids": requirement.get(
+                    "recipe_ids", []
+                ),
+                "pricing_status": "unpriced",
             })
 
             continue
@@ -1122,64 +958,33 @@ def build_plan_grocery_basket(
             packages * price_float
         )
 
-        leftover_quantity = (
-            calculate_package_leftover(
-                purchase_required,
-                package_quantity_float,
-                packages,
-            )
+        leftover_quantity = calculate_package_leftover(
+            purchase_required,
+            package_quantity_float,
+            packages,
         )
 
         known_cost += purchase_cost
 
         basket_items.append({
-            "ingredient_id":
-                ingredient_id,
-
-            "name":
-                ingredient_name,
-
-            "required_quantity":
-                purchase_required,
-
-            "required_unit":
-                required_unit,
-
-            "package_quantity":
-                package_quantity_float,
-
-            "package_unit":
-                package_unit,
-
-            "packages":
-                packages,
-
-            "purchased_quantity":
-                purchased_quantity,
-
-            "price_per_package":
-                round(price_float, 2),
-
-            "purchase_cost":
-                round(purchase_cost, 2),
-
-            "leftover_quantity":
-                leftover_quantity,
-
-            "inventory_used":
-                requirement.get(
-                    "inventory_used",
-                    0,
-                ),
-
-            "recipe_ids":
-                requirement.get(
-                    "recipe_ids",
-                    [],
-                ),
-
-            "pricing_status":
-                "priced",
+            "ingredient_id": ingredient_id,
+            "name": ingredient_name,
+            "required_quantity": purchase_required,
+            "required_unit": required_unit,
+            "package_quantity": package_quantity_float,
+            "package_unit": package_unit,
+            "packages": packages,
+            "purchased_quantity": purchased_quantity,
+            "price_per_package": round(price_float, 2),
+            "purchase_cost": round(purchase_cost, 2),
+            "leftover_quantity": leftover_quantity,
+            "inventory_used": requirement.get(
+                "inventory_used", 0
+            ),
+            "recipe_ids": requirement.get(
+                "recipe_ids", []
+            ),
+            "pricing_status": "priced",
         })
 
     # Remove duplicate names while preserving order.
@@ -1188,23 +993,12 @@ def build_plan_grocery_basket(
     )
 
     return {
-        "items":
-            basket_items,
-
-        "known_cost":
-            round(known_cost, 2),
-
-        "all_items_priced":
-            len(unpriced_items) == 0,
-
-        "unpriced_items":
-            unpriced_items,
-
-        "aggregated_requirements":
-            aggregated,
-
-        "purchase_requirements":
-            purchase_requirements,
+        "items": basket_items,
+        "known_cost": round(known_cost, 2),
+        "all_items_priced": len(unpriced_items) == 0,
+        "unpriced_items": unpriced_items,
+        "aggregated_requirements": aggregated,
+        "purchase_requirements": purchase_requirements,
     }
 
 
@@ -1215,45 +1009,29 @@ def build_cost_summary(
     """
     Return cost facts for the plan.
 
-    IMPORTANT:
-    This does NOT determine plan feasibility.
+    This does NOT determine final plan feasibility.
     """
 
     known_cost = float(
-        grocery_basket.get(
-            "known_cost",
-            0,
-        )
-        or 0
+        grocery_basket.get("known_cost", 0) or 0
     )
 
-    initial_budget = float(
-        initial_budget
-    )
+    initial_budget = float(initial_budget)
 
     remaining = (
         initial_budget - known_cost
     )
 
     return {
-        "initial_budget":
-            round(initial_budget, 2),
-
-        "known_grocery_cost":
-            round(known_cost, 2),
-
-        "remaining":
-            round(remaining, 2),
-
-        "all_items_priced":
-            grocery_basket.get(
-                "all_items_priced",
-                False,
-            ),
-
-        "unpriced_items":
-            grocery_basket.get(
-                "unpriced_items",
-                [],
-            ),
+        "initial_budget": round(initial_budget, 2),
+        "known_grocery_cost": round(known_cost, 2),
+        "remaining": round(remaining, 2),
+        "all_items_priced": grocery_basket.get(
+            "all_items_priced",
+            False,
+        ),
+        "unpriced_items": grocery_basket.get(
+            "unpriced_items",
+            [],
+        ),
     }
