@@ -67,7 +67,9 @@ class ManagerAgent:
         try:
             raw_recipe_result = self.recipe_agent.run(
                 user_state=user_state,
-                meal_context=meal_context,
+                meal_slot=meal_context,
+                selected_recipe_ids=[],
+                recent_cuisines=[],
                 max_candidates=max_candidates,
             )
             recipe_result = normalize_agent_result(raw_recipe_result, "recipe")
@@ -377,3 +379,44 @@ class ManagerAgent:
             "errors": workflow.errors,
             "execution_trace": workflow.execution_trace,
         }
+    
+    def evaluate_candidate(
+    self,
+    recipe_id: str,
+    user_state: Any,
+    meal_context: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+
+        workflow = WorkflowState(
+            request_id=str(uuid4()),
+            user_state=user_state,
+        )
+
+        self._evaluate_one_candidate(
+            workflow=workflow,
+            recipe_id=recipe_id,
+            user_state=user_state,
+        )
+
+        result = workflow.candidate_results.get(
+            recipe_id
+        )
+
+        if result is None:
+            return {
+                "recipe_id": recipe_id,
+                "status": "failed",
+                "reason": (
+                    "Candidate evaluation produced no result."
+                ),
+                "execution_trace":
+                    workflow.execution_trace,
+            }
+
+        result = dict(result)
+
+        result["execution_trace"] = (
+            workflow.execution_trace
+        )
+
+        return result
