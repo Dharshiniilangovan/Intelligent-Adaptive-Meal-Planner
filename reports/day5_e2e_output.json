@@ -1,6 +1,6 @@
 {
   "plan": {
-    "status": "uncertain",
+    "status": "infeasible",
     "slots": [
       {
         "slot_id": "2026-10-07_lunch",
@@ -1626,10 +1626,9 @@
     ]
   },
   "validation": {
-    "status": "uncertain",
+    "status": "infeasible",
     "issues": [
-      "Only 0/6 meal slots were filled.",
-      "Not all grocery items could be priced."
+      "Only 0/6 meal slots were filled."
     ]
   },
   "grocery_basket": {
