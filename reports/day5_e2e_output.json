@@ -157,12 +157,6 @@
         "recipe_id": "R21444",
         "reason": [
           {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -218,12 +212,6 @@
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R21444",
         "reason": [
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -280,12 +268,6 @@
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R21444",
         "reason": [
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -342,12 +324,6 @@
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R21444",
         "reason": [
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -404,12 +380,6 @@
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R21444",
         "reason": [
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -466,12 +436,6 @@
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R21444",
         "reason": [
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -531,12 +495,6 @@
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R21444",
         "reason": [
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -615,12 +573,6 @@
         "recipe_id": "R21444",
         "reason": [
           {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -697,12 +649,6 @@
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R21444",
         "reason": [
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -781,12 +727,6 @@
         "recipe_id": "R21444",
         "reason": [
           {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -864,12 +804,6 @@
         "recipe_id": "R21444",
         "reason": [
           {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -946,12 +880,6 @@
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R21444",
         "reason": [
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
