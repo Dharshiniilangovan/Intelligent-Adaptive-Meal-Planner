@@ -120,3 +120,31 @@ def test_ingredient_agent_invalid_recipe():
     assert result["agent"] == "ingredient"
     assert result["status"] == "failed"
     assert len(result["errors"]) > 0
+
+
+
+def test_ingredient_agent_normalizes_units():
+    """Verify raw unit aliases are normalized in ingredient output."""
+
+    agent = IngredientAgent()
+
+    result = agent.run(
+        recipe_id="R16472",
+        pantry={}
+    )
+
+    assert result["status"] in {
+        "success",
+        "partial",
+    }
+
+    ingredients = result["data"]["required_ingredients"]
+
+    units = {
+        ingredient["ingredient_name"]: ingredient["unit"]
+        for ingredient in ingredients
+    }
+
+    assert units["vodka"] == "g"
+    assert units["cranberry juice"] == "g"
+    assert units["orange juice"] == "g"

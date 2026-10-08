@@ -209,7 +209,7 @@ def get_required_ingredients(
                 "ingredient_name": ingredient_name,
                 "alias_name": data.get("alias_name"),
                 "quantity": data.get("quantity"),
-                "unit": data.get("unit"),
+                "unit": normalize_unit(data.get("unit")),
             }
         )
 
