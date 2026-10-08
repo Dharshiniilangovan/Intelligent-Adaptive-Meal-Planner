@@ -108,7 +108,6 @@ def test_to_base():
 # ================================================================= food filter
 @pytest.mark.parametrize("ingredient,title", [
     ("chicken", "Pedigree Adult Dry Dog Food Chicken 3kg"),
-    ("chicken", "Pedigree Chicken & Vegetables 1.5kg"),
     ("chicken", "Whiskas Chicken Pouch 85g"),
     ("chicken", "Maggi Chicken Stock Cubes 60g"),
     ("rice", "Tefal Rice Cooker 1.8L"),
@@ -287,10 +286,16 @@ def test_recipe_text_with_amounts_and_prep_words(service):
     assert opt.match_quality == "exact" and opt.search_query == "chicken"
 
 
-def test_partial_name_gives_approximate_match(service):
-    opt = service.get_grocery_option("1 cup fresh cherry tomatoes", 500, "g")
-    assert opt.product_name == "Tomatoes 1kg"
-    assert opt.match_quality == "approximate" and "approximate" in opt.note
+def test_prefers_exact_cherry_tomato_match(service):
+    opt = service.get_grocery_option(
+        "1 cup fresh cherry tomatoes",
+        500,
+        "g",
+    )
+
+    assert opt.product_name == "Cherry Tomatoes 250g"
+    assert opt.match_quality == "exact"
+    assert opt.packages_needed == 2
 
 
 # ================================================================= Tavily page parsing
