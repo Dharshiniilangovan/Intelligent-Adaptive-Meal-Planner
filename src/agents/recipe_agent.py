@@ -1601,19 +1601,65 @@ def get_standalone_input():
 # PRINT
 # ============================================================
 
-def print_recipe_result(
-    result,
-):
+def print_recipe_result(result, repository=None):
     """
-    Print final Recipe Agent output.
+    Print candidate recipe IDs along with
+    recipe names and cooking times.
     """
 
-    print(
-        json.dumps(
-            result,
-            indent=4,
-        )
+    print("\n" + "=" * 70)
+    print("RECIPE AGENT RESULT")
+    print("=" * 70)
+
+    print(json.dumps(result, indent=4))
+
+    candidate_ids = result.get(
+        "candidate_recipe_ids", []
     )
+
+    if not candidate_ids:
+        print("\nNo candidate recipes found.")
+        return
+
+    # Load recipe knowledge base
+    df = load_recipe_kb()
+
+    print("\n" + "=" * 70)
+    print("CANDIDATE RECIPE COOKING TIMES")
+    print("=" * 70)
+
+    for recipe_id in candidate_ids:
+
+        recipe = df[
+            df["recipe_id"].astype(str).str.strip().str.upper()
+            == str(recipe_id).strip().upper()
+        ]
+
+        if recipe.empty:
+            print(f"\nRecipe ID: {recipe_id}")
+            print("Recipe not found in knowledge base.")
+            continue
+
+        recipe_row = recipe.iloc[0]
+
+        recipe_name = recipe_row.get(
+            "recipe_name", "Unknown Recipe"
+        )
+
+        cooking_time = pd.to_numeric(
+            recipe_row.get("cooking_time_min"),
+            errors="coerce"
+        )
+
+        print(f"\nRecipe ID     : {recipe_id}")
+        print(f"Recipe Name   : {recipe_name}")
+
+        if pd.notna(cooking_time):
+            print(f"Cooking Time  : {cooking_time:g} minutes")
+        else:
+            print("Cooking Time  : Not available")
+
+    print("\n" + "=" * 70)
 
 
 # ============================================================
