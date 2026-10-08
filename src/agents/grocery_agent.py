@@ -154,11 +154,15 @@ class GroceryAgent:
                 agent="grocery",
                 status=AgentStatus.SUCCESS,
                 data={
-                    "recipe_id": recipe_id,
+                    "recipe_id": recipe_id, 
                     "items": [],
                     "known_cost": 0.0,
                     "all_items_priced": True,
                     "unpriced_items": [],
+                    "projected_cost": 0.0,
+                    "projected_cost_complete": True,
+                    "projected_items": 0,
+                    "projection_missing": [],
 
                     "budget": budget_result,
                     "budget_status": budget_status,
@@ -180,8 +184,53 @@ class GroceryAgent:
         try:
             options = (
                 self.grocery_service
-                .get_grocery_list(missing_ingredients)
+                .get_grocery_list(
+                    missing_ingredients,
+                    recipe_id=recipe_id,
+                )
             )
+
+            
+            # ---------------------------------------------------------
+            # Prevent empty grocery results from being treated
+            # as successfully priced purchases.
+            # ---------------------------------------------------------
+
+            if not options:
+                return AgentResult(
+                    agent="grocery",
+                    status=AgentStatus.PARTIAL,
+                    data={
+                        "recipe_id": recipe_id,
+                        "items": [],
+                        "known_cost": 0.0,
+                        "all_items_priced": False,
+                        "unpriced_items": [
+                            (
+                                item.get("ingredient_name")
+                                or item.get("ingredient")
+                            )
+                            for item in (
+                                missing_ingredients.values()
+                                if isinstance(missing_ingredients, dict)
+                                else missing_ingredients
+                            )
+                            if isinstance(item, dict)
+                        ] if isinstance(missing_ingredients, list) else list(missing_ingredients.keys()),
+                        "budget": None,
+                        "budget_status": "uncertain"
+                            if remaining_budget is not None
+                            else "not_checked",
+                        "remaining_budget": remaining_budget,
+                        "budget_after_purchase": None,
+                    },
+                    warnings=[
+                        "Grocery lookup returned no products for "
+                        "the requested missing ingredients."
+                    ],
+                    errors=[],
+                ).to_dict()
+
 
             grocery_results = grocery_summary(options)
 
@@ -253,6 +302,33 @@ class GroceryAgent:
             f"No complete purchase price found for {ingredient}"
             for ingredient in unpriced_items
         ]
+
+        
+        # ---------------------------------------------------------
+        # Warn when one retail package is assumed sufficient.
+        #
+        # The purchase price is known, but exact quantity
+        # coverage has not been verified.
+        # ---------------------------------------------------------
+
+        for item in grocery_results["priced_products"]:
+
+            if (
+                item.get("purchase_basis") == "minimum_retail_package"
+                or item.get("match_status") == "matched_minimum_package"
+            ):
+
+                ingredient = item.get(
+                    "ingredient",
+                    "unknown ingredient",
+                )
+
+                warnings.append(
+                    f"{ingredient}: one retail package is "
+                    "assumed sufficient; exact quantity "
+                    "coverage is not verified."
+                )
+
 
         # ---------------------------------------------------------
         # Agent status
@@ -326,6 +402,67 @@ class GroceryAgent:
                     ],
                 ).to_dict()
 
+        
+        # ---------------------------------------------------------
+        # PROVISIONAL BUDGET EVALUATION
+        #
+        # Separate from the existing BudgetService decision.
+        # Never overwrite budget_status or known_cost.
+        # ---------------------------------------------------------
+
+        estimated_budget_status = "not_checked"
+        estimated_budget_after_purchase = None
+        estimated_budget_reason = (
+            "No remaining budget was provided."
+        )
+
+        projected_cost = grocery_results.get("projected_cost")
+        projection_complete = grocery_results.get(
+            "projected_cost_complete",
+            False,
+        )
+
+        if remaining_budget is not None:
+
+            if (
+                not projection_complete
+                or projected_cost is None
+            ):
+                estimated_budget_status = "uncertain"
+                estimated_budget_reason = (
+                    "One or more grocery items have no "
+                    "reliable projected purchase cost."
+                )
+
+            else:
+                projected_remaining = round(
+                    float(remaining_budget)
+                    - float(projected_cost),
+                    2,
+                )
+
+                estimated_budget_after_purchase = (
+                    projected_remaining
+                )
+
+                if projected_remaining >= 0:
+                    estimated_budget_status = "pass"
+                    estimated_budget_reason = (
+                        "Projected grocery purchases fit "
+                        "within the available budget. "
+                        "This is a provisional estimate, "
+                        "not a verified purchase total."
+                    )
+
+                else:
+                    estimated_budget_status = "hard_fail"
+                    estimated_budget_reason = (
+                        "Projected grocery purchases exceed "
+                        "the available budget. "
+                        "This is a provisional estimate."
+                    )
+
+
         # ---------------------------------------------------------
         # Shared AgentResult
         # ---------------------------------------------------------
@@ -340,6 +477,29 @@ class GroceryAgent:
 
                 "known_cost": known_cost,
 
+                
+                # Provisional shopping estimate.
+                # Does not affect the verified budget decision.
+                "projected_cost": grocery_results.get(
+                    "projected_cost"
+                ),
+
+                "projected_cost_complete": grocery_results.get(
+                    "projected_cost_complete",
+                    False,
+                ),
+
+                "projected_items": grocery_results.get(
+                    "projected_items",
+                    0,
+                ),
+
+                "projection_missing": grocery_results.get(
+                    "projection_missing",
+                    [],
+                ),
+
+
                 "all_items_priced": all_items_priced,
 
                 "unpriced_items": unpriced_items,
@@ -348,6 +508,20 @@ class GroceryAgent:
                 "budget": budget_result,
 
                 "budget_status": budget_status,
+
+                
+                "estimated_budget_status": (
+                    estimated_budget_status
+                ),
+
+                "estimated_budget_after_purchase": (
+                    estimated_budget_after_purchase
+                ),
+
+                "estimated_budget_reason": (
+                    estimated_budget_reason
+                ),
+
 
                 "remaining_budget": remaining_budget,
 

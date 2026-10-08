@@ -11,6 +11,11 @@ from __future__ import annotations
 
 import re
 
+_EXTRA_COUNT = re.compile(
+    r"\b(\d+)\s*(?:pcs?|pieces?|pack|packs)\b",
+    re.IGNORECASE,
+)
+
 
 UNIT_TABLE = {
     # ---------------------------------------------------------
@@ -54,6 +59,7 @@ UNIT_TABLE = {
     "litres": ("ml", 1000.0),
     "liter": ("ml", 1000.0),
     "liters": ("ml", 1000.0),
+    "lt": ("ml", 1000.0),
 
     "tsp": ("ml", 5.0),
     "teaspoon": ("ml", 5.0),
@@ -209,14 +215,17 @@ _NUM = r"(\d+(?:\.\d+)?)"
 _WEIGHT_VOL = (
     r"(kg|kgs|kilograms?|"
     r"g|gm|gms|grams?|mg|"
-    r"ml|cl|l|ltr|litres?|liters?|"
+    r"ml|cl|l|ltr|lt|litres?|liters?|"
     r"oz|ounces?|lbs?|pounds?)"
 )
 
+
 _MULTIPACK = re.compile(
-    rf"\b(\d+)\s*[x×]\s*{_NUM}\s*{_WEIGHT_VOL}\b",
+    rf"\b(\d+)\s*[-]?\s*[x×]\s*[-]?\s*"
+    rf"{_NUM}\s*{_WEIGHT_VOL}\b",
     re.IGNORECASE,
 )
+
 
 _SINGLE = re.compile(
     rf"\b{_NUM}\s*{_WEIGHT_VOL}\b",
@@ -230,23 +239,102 @@ _COUNT = re.compile(
     re.IGNORECASE,
 )
 
+_PACKS_OF = re.compile(
+    r"\b(\d+)\s*(?:packs?|packets?|bottles?)\s*"
+    r"(?:of|x|×)\s*"
+    r"(\d+(?:\.\d+)?)\s*"
+    r"(ml|l|lt|g|kg)\b",
+    re.IGNORECASE,
+)
+
+
 
 def parse_package(text: str):
     """
     Extract the total retail package quantity.
 
-    Examples:
-        12 x 1L -> 12000 ml
-        6 x 200ml -> 1200 ml
-        500g -> 500 g
-        12 eggs -> 12 pcs
-        10s -> 10 pcs
+    Supports:
+        12 x 1L              -> 12000 ml
+        6 x 200ml            -> 1200 ml
+        6 packs of 200ml     -> 1200 ml
+        500g                 -> 500 g
+        12 eggs              -> 12 pcs
+        10s                  -> 10 pcs
+
+    FairPrice URLs:
+        oranges-312-g-90078736 -> 312 g
+        butter-250g-13218509   -> 250 g
+
+    Returns:
+        (quantity, base_unit) or None
     """
 
     if not text:
         return None
 
     text = str(text).lower().strip()
+
+    # ---------------------------------------------------------
+    # FairPrice URL handling
+    # ---------------------------------------------------------
+
+    is_url = (
+        text.startswith("http://")
+        or text.startswith("https://")
+    )
+
+    if is_url:
+        from urllib.parse import urlparse, unquote
+
+        path = unquote(urlparse(text).path)
+
+        # Remove trailing numeric FairPrice product ID.
+        path = re.sub(
+            r"-\d{5,}$",
+            "",
+            path,
+        )
+
+        # Convert URL separators into spaces.
+        text = path.replace("-", " ").replace("_", " ")
+
+        # Prefer explicit mass/volume units in URL slugs.
+        url_match = re.search(
+            r"(?<!\d)(\d+(?:\.\d+)?)\s*"
+            r"(kg|g|grams?|ml|l|lt|ltr|litres?|liters?)\b",
+            text,
+            flags=re.IGNORECASE,
+        )
+
+        if url_match:
+            amount = float(url_match.group(1))
+            unit = url_match.group(2).lower()
+
+            info = UNIT_TABLE.get(unit)
+
+            if info:
+                base, factor = info
+                return round(amount * factor, 4), base
+
+        # Do not interpret bare numbers in URLs as counts.
+        return None
+
+    # ---------------------------------------------------------
+    # Packs of a given size
+    # ---------------------------------------------------------
+
+    match = _PACKS_OF.search(text)
+
+    if match:
+        count = float(match.group(1))
+        amount = float(match.group(2))
+        unit = match.group(3).lower()
+
+        info = UNIT_TABLE.get(unit)
+
+        if info:
+            base, factor = info
+            return count * amount * factor, base
 
     # ---------------------------------------------------------
     # Multipack
@@ -273,15 +361,33 @@ def parse_package(text: str):
 
     if match:
         count = float(match.group(1))
-        return count, "pcs"
+
+        # Reject likely year values.
+        if not (2000 <= count <= 2100):
+            return count, "pcs"
 
     # ---------------------------------------------------------
-    # Eggs:
-    # a value such as 55g commonly refers to egg grading rather
-    # than total retail package mass.
+    # Additional count formats
     # ---------------------------------------------------------
 
-    token_set = set(re.findall(r"[a-z]+", text))
+    match = _EXTRA_COUNT.search(text)
+
+    if match:
+        count = float(match.group(1))
+
+        if not (2000 <= count <= 2100):
+            return count, "pcs"
+
+    # ---------------------------------------------------------
+    # Eggs
+    #
+    # A value such as 55g may indicate egg grading
+    # rather than total package weight.
+    # ---------------------------------------------------------
+
+    token_set = set(
+        re.findall(r"[a-z]+", text)
+    )
 
     if "egg" in token_set or "eggs" in token_set:
         return None
@@ -303,7 +409,6 @@ def parse_package(text: str):
             return amount * factor, base
 
     return None
-
 
 def compatible(
     need: tuple[float, str] | None,

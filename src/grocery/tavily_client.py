@@ -23,6 +23,7 @@ import os
 import re
 from pathlib import Path
 from urllib.parse import urlparse
+from decimal import Decimal, InvalidOperation
 
 from dotenv import load_dotenv
 
@@ -65,6 +66,12 @@ _NON_PRODUCT_URL = re.compile(
 
 _OUT_OF_STOCK = re.compile(
     r"out of stock|sold out|currently unavailable|not available",
+    re.IGNORECASE,
+)
+_DELIVERY_UNAVAILABLE = re.compile(
+    r"unavailable\s+for\s+delivery"
+    r"|not\s+available\s+for\s+delivery"
+    r"|delivery\s+unavailable",
     re.IGNORECASE,
 )
 
@@ -173,50 +180,278 @@ def clean_title(title: str) -> str:
     return _TITLE_SUFFIX.sub("", title).strip()
 
 
+
+
 def extract_price(text: str) -> float | None:
     """
-    Extract prices after removing delivery thresholds.
+    Extract a reliable product selling price from Tavily text.
 
-    Current selection rule:
-    - One price: return it.
-    - Multiple distinct prices: return second-smallest.
+    Supports:
+    - Explicit sale/current prices
+    - FairPrice Offer + old price + savings
+    - Product price + unit price
+    - Old price minus savings
+    - Single unambiguous selling price
 
-    Note: This is a heuristic, not guaranteed product pricing.
+    Rejects:
+    - Savings amounts alone
+    - Discounts alone
+    - Delivery thresholds
+    - Bottle deposits
+    - Ambiguous multiple prices
     """
 
     if not text:
         return None
 
-    # Remove delivery/shipping threshold prices.
+    text = str(text)
+
+    money = (
+        r"(?:S\s*\$|SGD\s*|\$)\s*"
+        r"([\d,]+(?:\.\d{1,2})?)"
+    )
+
+    money_token = (
+        r"(?:S\s*\$|SGD\s*|\$)\s*"
+        r"[\d,]+(?:\.\d{1,2})?"
+    )
+
+    def valid_price(raw):
+        try:
+            value = float(str(raw).replace(",", ""))
+        except (TypeError, ValueError):
+            return None
+
+        if 0 < value <= 1000:
+            return round(value, 2)
+
+        return None
+
+    # ---------------------------------------------------------
+    # Remove delivery/shipping thresholds.
+    # ---------------------------------------------------------
+
     text = re.sub(
-        r"\b(?:free\s+)?(?:delivery|shipping)\s+"
-        r"(?:(?:on|for)\s+orders?\s+)?"
-        r"(?:above|over|from)\s*"
-        r"(?:S\$|\$|SGD\s*)?\d+(?:\.\d{1,2})?",
+        r"\b(?:free\s+)?(?:delivery|shipping)"
+        r"\s+(?:(?:on|for)\s+orders?\s+)?"
+        r"(?:above|over|from|of|minimum)\s*"
+        + money_token,
         " ",
         text,
         flags=re.IGNORECASE,
     )
 
-    prices = []
+    # ---------------------------------------------------------
+    # Remove unit prices.
+    #
+    # Examples:
+    # $0.35/100g
+    # S$1.20/kg
+    # $0.50 per 100ml
+    # ---------------------------------------------------------
 
-    for match in _PRICE.finditer(text):
-        value = float(
-            match.group(1).replace(",", "")
+    text = re.sub(
+        money_token
+        + r"\s*(?:/|per\s+)"
+        + r"\s*(?:\d+(?:\.\d+)?\s*)?"
+        + r"(?:kg|g|ml|l|litre|liter|pcs?|each)\b",
+        " ",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    # ---------------------------------------------------------
+    # Explicit current selling prices.
+    # ---------------------------------------------------------
+
+    priority_patterns = [
+        r"\b(?:sale|selling|current|offer|"
+        r"discounted|special)\s+price\s*[:=]?\s*"
+        + money,
+
+        r"\b(?:now|only)\s*[:=]?\s*"
+        + money,
+
+        r"\bprice\s*[:=]\s*" + money,
+    ]
+
+    for pattern in priority_patterns:
+        matches = re.findall(
+            pattern,
+            text,
+            flags=re.IGNORECASE,
         )
 
-        if 0 < value <= 1000:
-            prices.append(value)
+        for raw in matches:
+            price = valid_price(raw)
 
-    if not prices:
-        return None
+            if price is not None:
+                return price
+
+    # ---------------------------------------------------------
+    # FairPrice promotion:
+    #
+    # Offer
+    # $16.50
+    # $18.20
+    # Save $1.70Ends in 12h
+    #
+    # Verify:
+    # 18.20 - 1.70 == 16.50
+    # ---------------------------------------------------------
+
+    offer_pattern = (
+        r"\bOffer\b"
+        r"[\s\S]{0,120}?"
+        + money
+        + r"\s*"
+        + money
+        + r"\s*"
+        + r"\bSave\s*"
+        + money
+    )
+
+    offer_match = re.search(
+        offer_pattern,
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    if offer_match:
+        current = valid_price(offer_match.group(1))
+        original = valid_price(offer_match.group(2))
+        savings = valid_price(offer_match.group(3))
+
+        if (
+            current is not None
+            and original is not None
+            and savings is not None
+            and abs(
+                (original - savings) - current
+            ) <= 0.02
+        ):
+            return current
+
+    # ---------------------------------------------------------
+    # Identify old-price-minus-savings layouts even
+    # without an explicit Offer label.
+    # ---------------------------------------------------------
+
+    savings_match = re.search(
+        r"\b(?:save|saving|savings)\s*"
+        + money,
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    if savings_match:
+        savings = valid_price(
+            savings_match.group(1)
+        )
+
+        before_savings = text[
+            :savings_match.start()
+        ]
+
+        candidates = [
+            valid_price(match.group(1))
+            for match in re.finditer(
+                money,
+                before_savings,
+                flags=re.IGNORECASE,
+            )
+        ]
+
+        candidates = [
+            value
+            for value in candidates
+            if value is not None
+        ]
+
+        if (
+            savings is not None
+            and len(candidates) >= 2
+        ):
+            current = candidates[-2]
+            original = candidates[-1]
+
+            if abs(
+                (original - savings) - current
+            ) <= 0.02:
+                return current
+
+    # ---------------------------------------------------------
+    # Remove savings/discount amounts.
+    # ---------------------------------------------------------
+
+    text = re.sub(
+        r"\b(?:save|saving|savings)\s*"
+        + money_token,
+        " ",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    text = re.sub(
+        money_token
+        + r"\s*(?:off|discount|savings?)\b",
+        " ",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    # ---------------------------------------------------------
+    # Remove bottle deposits.
+    # ---------------------------------------------------------
+
+    text = re.sub(
+        r"\+\s*"
+        + money_token
+        + r"\s*(?:bottle\s+)?deposit\b",
+        " ",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    # ---------------------------------------------------------
+    # Remove explicitly labelled old prices.
+    # ---------------------------------------------------------
+
+    text = re.sub(
+        r"\b(?:was|original\s+price|"
+        r"regular\s+price|usual\s+price|before)"
+        r"\s*[:=]?\s*"
+        + money_token,
+        " ",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    # ---------------------------------------------------------
+    # Collect remaining selling-price candidates.
+    # ---------------------------------------------------------
+
+    prices = []
+
+    for match in re.finditer(
+        money,
+        text,
+        flags=re.IGNORECASE,
+    ):
+        price = valid_price(match.group(1))
+
+        if price is not None:
+            prices.append(price)
 
     prices = sorted(set(prices))
 
-    if len(prices) >= 2:
-        return round(prices[1], 2)
+    if len(prices) == 1:
+        return prices[0]
 
-    return round(prices[0], 2)
+    # Multiple prices without sufficient evidence.
+    return None
+
+
 
 def normalize(result: dict) -> dict | None:
     """
@@ -241,6 +476,54 @@ def normalize(result: dict) -> dict | None:
     title = clean_title(
         result.get("title") or ""
     )
+
+    
+    # ---------------------------------------------------------
+    # Recover product variants omitted from Tavily titles.
+    #
+    # Example:
+    # Tavily title: Santa Cruz Organic Bottle Juice
+    # Page title:   Santa Cruz Organic Bottle Juice - Pure Lemon
+    # ---------------------------------------------------------
+
+    import re
+
+    snippet_text = result.get("content") or ""
+    raw_text = result.get("raw_content") or ""
+
+    combined_text = (
+        snippet_text + "\n" + raw_text
+    )
+
+    if title:
+        escaped_title = re.escape(title)
+
+        variant_pattern = re.compile(
+            escaped_title
+            + r"\s*[-–]\s*"
+            + r"([A-Za-z][A-Za-z0-9 &]{1,45})",
+            re.IGNORECASE,
+        )
+
+        variant_match = variant_pattern.search(
+            combined_text
+        )
+
+        if variant_match:
+            variant = variant_match.group(1).strip()
+
+            # Stop at typical product metadata boundaries.
+            variant = re.split(
+                r"\s*(?:\||\n|Brand:|"
+                r"\d+\s*(?:ml|g|kg|l)\b)",
+                variant,
+                maxsplit=1,
+                flags=re.IGNORECASE,
+            )[0].strip()
+
+            if variant:
+                title = f"{title} - {variant}"
+
 
     snippet = result.get("content") or ""
     raw = result.get("raw_content") or ""
@@ -321,6 +604,12 @@ def normalize(result: dict) -> dict | None:
 
         "availability": "local",
 
+        "delivery_available": (
+            False
+            if _DELIVERY_UNAVAILABLE.search(page_text)
+            else None
+        ),
+
         "in_stock": (
             False
             if _OUT_OF_STOCK.search(page_text)
@@ -335,6 +624,61 @@ def normalize(result: dict) -> dict | None:
         # which the displayed grocery price was last updated.
         "source_updated_at": None,
     }
+
+
+def extract_product_price(text: str) -> float | None:
+    """
+    Extract a clearly labelled product price.
+
+    Avoid guessing prices from unrelated dollar amounts,
+    delivery thresholds, or percentage discounts.
+    """
+    if not text:
+        return None
+
+    text = str(text)
+
+    # Remove delivery and shipping threshold statements.
+    text = re.sub(
+        r"(?:free\s+)?(?:delivery|shipping)"
+        r".{0,60}?"
+        r"(?:above|over|minimum|from)\s*"
+        r"(?:S\$|SGD|\$)\s*[\d,]+(?:\.\d{1,2})?",
+        " ",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    patterns = [
+        # Explicitly labelled price.
+        r"(?:current\s+price|sale\s+price|"
+        r"selling\s+price|product\s+price)"
+        r"\s*[:=]?\s*(?:S\$|SGD|\$)\s*"
+        r"([\d,]+(?:\.\d{1,2})?)",
+
+        # Currency followed by price.
+        r"(?:S\$|SGD|\$)\s*"
+        r"([\d,]+(?:\.\d{1,2})?)",
+    ]
+
+    for pattern in patterns:
+        matches = re.findall(
+            pattern,
+            text,
+            flags=re.IGNORECASE,
+        )
+
+        for raw in matches:
+            try:
+                price = Decimal(raw.replace(",", ""))
+            except InvalidOperation:
+                continue
+
+            if Decimal("0") < price <= Decimal("1000"):
+                return float(price)
+
+    return None
+
 
 
 class TavilyGroceryClient:

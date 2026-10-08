@@ -83,6 +83,7 @@ class DemoGroceryService:
     def get_grocery_list(
         self,
         items,
+        recipe_id=None,
     ):
         options = []
 
