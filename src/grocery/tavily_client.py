@@ -175,49 +175,32 @@ def clean_title(title: str) -> str:
 
 def extract_price(text: str) -> float | None:
     """
-    Extract the current selling price from FairPrice text.
+    Extract prices after removing delivery thresholds.
 
-    Ignores:
-    - savings amounts such as "Save $0.08"
-    - delivery/minimum-spend amounts
-    - vouchers/rewards
-    - unit prices such as "$0.35/100g"
+    Current selection rule:
+    - One price: return it.
+    - Multiple distinct prices: return second-smallest.
 
-    FairPrice normally presents the current selling price
-    before the previous/original price, so the first valid
-    product price is returned.
+    Note: This is a heuristic, not guaranteed product pricing.
     """
 
-    text = str(text or "")
+    if not text:
+        return None
+
+    # Remove delivery/shipping threshold prices.
+    text = re.sub(
+        r"\b(?:free\s+)?(?:delivery|shipping)\s+"
+        r"(?:(?:on|for)\s+orders?\s+)?"
+        r"(?:above|over|from)\s*"
+        r"(?:S\$|\$|SGD\s*)?\d+(?:\.\d{1,2})?",
+        " ",
+        text,
+        flags=re.IGNORECASE,
+    )
 
     prices = []
 
     for match in _PRICE.finditer(text):
-
-        before = text[
-            max(0, match.start() - 60):
-            match.start()
-        ]
-
-        after = text[
-            match.end():
-            match.end() + 40
-        ]
-
-        # Delivery thresholds, minimum spends, etc.
-        if _IGNORE_BEFORE.search(before):
-            continue
-
-        # Savings/discount amounts.
-        # Example: "Save $0.08"
-        if _SAVE_BEFORE.search(before):
-            continue
-
-        # Unit prices.
-        # Example: "$0.35/100g"
-        if after.lstrip().startswith("/"):
-            continue
-
         value = float(
             match.group(1).replace(",", "")
         )
@@ -228,10 +211,12 @@ def extract_price(text: str) -> float | None:
     if not prices:
         return None
 
-    return round(
-        prices[0],
-        2
-    )
+    prices = sorted(set(prices))
+
+    if len(prices) >= 2:
+        return round(prices[1], 2)
+
+    return round(prices[0], 2)
 
 def normalize(result: dict) -> dict | None:
     """
