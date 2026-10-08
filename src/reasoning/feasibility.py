@@ -300,9 +300,17 @@ def check_ingredient_feasibility(
     ingredients: Iterable[Dict[str, Any]]
 ) -> Dict[str, Any]:
     """
-    Check whether recipe ingredient information is usable.
+    Check ingredient identity/reliability using ingredient_id.
 
-    This does not perform conversions.
+    Rule:
+        - ingredient_id is the primary identifier.
+        - ingredient_name should also be available.
+        - Quantity and unit are NOT used to decide whether
+          the ingredient itself is valid.
+        - Quantity/unit may be qualitative, such as:
+              quantity = "required"
+              unit = "to taste"
+        - Pantry availability is handled separately.
     """
 
     ingredients = list(ingredients or [])
@@ -319,82 +327,60 @@ def check_ingredient_feasibility(
 
     for ingredient in ingredients:
 
-        ingredient_id = ingredient.get(
-            "ingredient_id"
-        )
+        ingredient_id = ingredient.get("ingredient_id")
 
-        ingredient_name = ingredient.get(
-            "ingredient_name"
-        )
+        ingredient_name = ingredient.get("ingredient_name")
 
-        quantity = ingredient.get(
-            "quantity"
-        )
+        # --------------------------------------------------------
+        # 1. Ingredient ID is the primary validation
+        # --------------------------------------------------------
 
-        if quantity is None:
-            quantity = ingredient.get(
-                "quantity_per_serving"
-            )
-
-        unit = ingredient.get("unit")
-
-        # Missing ingredient ID
         if is_missing(ingredient_id):
             issues.append({
                 "ingredient_name": ingredient_name,
                 "issue": "missing_ingredient_id"
             })
 
-        # Missing ingredient name
+        # --------------------------------------------------------
+        # 2. Ingredient name should also exist
+        # --------------------------------------------------------
+
         if is_missing(ingredient_name):
             issues.append({
                 "ingredient_id": ingredient_id,
                 "issue": "missing_ingredient_name"
             })
 
-        # Missing quantity
-        if is_missing(quantity):
-            issues.append({
-                "ingredient_id": ingredient_id,
-                "ingredient_name": ingredient_name,
-                "issue": "missing_quantity"
-            })
+        # --------------------------------------------------------
+        # 3. Quantity is NOT used for ingredient-ID validation
+        # --------------------------------------------------------
+        #
+        # Examples that are allowed:
+        #
+        #   quantity = "required"
+        #   unit = "to taste"
+        #
+        # These describe a qualitative quantity.
+        # They do NOT mean the ingredient ID is missing.
+        #
+        # We intentionally do NOT add missing_quantity here.
 
-        # Missing unit
-        if is_missing(unit):
-            issues.append({
-                "ingredient_id": ingredient_id,
-                "ingredient_name": ingredient_name,
-                "issue": "missing_unit"
-            })
-            continue
-
-        unit = str(unit).strip().lower()
-
-        # Unsupported unit
-        if unit not in SUPPORTED_UNITS:
-            issues.append({
-                "ingredient_id": ingredient_id,
-                "ingredient_name": ingredient_name,
-                "unit": unit,
-                "issue": "unsupported_unit"
-            })
+    # ------------------------------------------------------------
+    # Final result
+    # ------------------------------------------------------------
 
     if issues:
         return {
             "status": "unknown",
             "passed": None,
-            "reason": (
-                "Ingredient information cannot "
-                "be fully evaluated"
-            ),
+            "reason": "Ingredient ID/name information is incomplete",
             "issues": issues
         }
 
     return {
         "status": "pass",
         "passed": True,
-        "reason": "Ingredient information is usable",
+        "reason": "All ingredients have valid ingredient IDs and names",
         "issues": []
     }
 
