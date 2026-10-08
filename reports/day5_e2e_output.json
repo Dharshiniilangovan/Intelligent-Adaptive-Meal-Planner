@@ -77,19 +77,86 @@
       "aggregated_requirements": [],
       "status": "empty_plan"
     },
-    "rejected_candidates": [],
+    "rejected_candidates": [
+      {
+        "slot_id": "2026-10-07_lunch",
+        "recipe_id": "R01732",
+        "reason": [
+          {
+            "constraint": "cooking_time",
+            "source": "feasibility",
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          }
+        ]
+      },
+      {
+        "slot_id": "2026-10-07_dinner",
+        "recipe_id": "R01732",
+        "reason": [
+          {
+            "constraint": "cooking_time",
+            "source": "feasibility",
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          }
+        ]
+      },
+      {
+        "slot_id": "2026-10-08_lunch",
+        "recipe_id": "R01732",
+        "reason": [
+          {
+            "constraint": "cooking_time",
+            "source": "feasibility",
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          }
+        ]
+      },
+      {
+        "slot_id": "2026-10-08_dinner",
+        "recipe_id": "R01732",
+        "reason": [
+          {
+            "constraint": "cooking_time",
+            "source": "feasibility",
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          }
+        ]
+      },
+      {
+        "slot_id": "2026-10-09_lunch",
+        "recipe_id": "R01732",
+        "reason": [
+          {
+            "constraint": "cooking_time",
+            "source": "feasibility",
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          }
+        ]
+      },
+      {
+        "slot_id": "2026-10-09_dinner",
+        "recipe_id": "R01732",
+        "reason": [
+          {
+            "constraint": "cooking_time",
+            "source": "feasibility",
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          }
+        ]
+      }
+    ],
     "uncertain_candidates": [
       {
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R21444",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
             "constraint": "ingredient_feasibility",
             "source": "feasibility",
             "status": "unknown",
@@ -110,44 +177,6 @@
         "recipe_id": "R01485",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
-            "remaining_budget": 50.0
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-07_lunch",
-        "recipe_id": "R01732",
-        "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -161,12 +190,6 @@
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R13652",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -182,18 +205,6 @@
         "recipe_id": "R16511",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -207,12 +218,6 @@
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R21444",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "ingredient_feasibility",
             "source": "feasibility",
@@ -234,44 +239,6 @@
         "recipe_id": "R01485",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
-            "remaining_budget": 50.0
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-07_dinner",
-        "recipe_id": "R01732",
-        "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -285,12 +252,6 @@
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R13652",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -306,18 +267,6 @@
         "recipe_id": "R16511",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -331,12 +280,6 @@
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R21444",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "ingredient_feasibility",
             "source": "feasibility",
@@ -358,44 +301,6 @@
         "recipe_id": "R01485",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
-            "remaining_budget": 50.0
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-08_lunch",
-        "recipe_id": "R01732",
-        "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -409,12 +314,6 @@
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R13652",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -430,18 +329,6 @@
         "recipe_id": "R16511",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -455,12 +342,6 @@
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R21444",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "ingredient_feasibility",
             "source": "feasibility",
@@ -482,44 +363,6 @@
         "recipe_id": "R01485",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
-            "remaining_budget": 50.0
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-08_dinner",
-        "recipe_id": "R01732",
-        "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -533,12 +376,6 @@
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R13652",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -554,18 +391,6 @@
         "recipe_id": "R16511",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -579,12 +404,6 @@
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R21444",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "ingredient_feasibility",
             "source": "feasibility",
@@ -606,44 +425,6 @@
         "recipe_id": "R01485",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
-            "remaining_budget": 50.0
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-09_lunch",
-        "recipe_id": "R01732",
-        "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -657,12 +438,6 @@
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R13652",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -678,18 +453,6 @@
         "recipe_id": "R16511",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -703,12 +466,6 @@
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R21444",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "ingredient_feasibility",
             "source": "feasibility",
@@ -730,44 +487,6 @@
         "recipe_id": "R01485",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
-            "remaining_budget": 50.0
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-09_dinner",
-        "recipe_id": "R01732",
-        "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -782,12 +501,6 @@
         "recipe_id": "R13652",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -801,18 +514,6 @@
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R16511",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -831,12 +532,6 @@
         "recipe_id": "R21444",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
             "constraint": "ingredient_feasibility",
             "source": "feasibility",
             "status": "unknown",
@@ -858,18 +553,6 @@
         "recipe_id": "R01485",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -880,29 +563,15 @@
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R01732",
         "reason": [
           {
             "constraint": "cooking_time",
             "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
-            "remaining_budget": 50.0
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
           }
         ]
       },
@@ -911,12 +580,6 @@
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R13652",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -932,18 +595,6 @@
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R16511",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -964,12 +615,6 @@
         "recipe_id": "R21444",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
             "constraint": "ingredient_feasibility",
             "source": "feasibility",
             "status": "unknown",
@@ -991,18 +636,6 @@
         "recipe_id": "R01485",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -1013,29 +646,15 @@
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R01732",
         "reason": [
           {
             "constraint": "cooking_time",
             "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
-            "remaining_budget": 50.0
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
           }
         ]
       },
@@ -1044,12 +663,6 @@
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R13652",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -1065,18 +678,6 @@
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R16511",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -1097,12 +698,6 @@
         "recipe_id": "R21444",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
             "constraint": "ingredient_feasibility",
             "source": "feasibility",
             "status": "unknown",
@@ -1124,18 +719,6 @@
         "recipe_id": "R01485",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -1146,29 +729,15 @@
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R01732",
         "reason": [
           {
             "constraint": "cooking_time",
             "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
-            "remaining_budget": 50.0
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
           }
         ]
       },
@@ -1177,12 +746,6 @@
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R13652",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -1198,18 +761,6 @@
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R16511",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -1230,12 +781,6 @@
         "recipe_id": "R21444",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
             "constraint": "ingredient_feasibility",
             "source": "feasibility",
             "status": "unknown",
@@ -1257,18 +802,6 @@
         "recipe_id": "R01485",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -1279,29 +812,15 @@
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R01732",
         "reason": [
           {
             "constraint": "cooking_time",
             "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
-            "remaining_budget": 50.0
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
           }
         ]
       },
@@ -1310,12 +829,6 @@
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R13652",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -1331,18 +844,6 @@
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R16511",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -1363,12 +864,6 @@
         "recipe_id": "R21444",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
             "constraint": "ingredient_feasibility",
             "source": "feasibility",
             "status": "unknown",
@@ -1390,18 +885,6 @@
         "recipe_id": "R01485",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -1412,29 +895,15 @@
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R01732",
         "reason": [
           {
             "constraint": "cooking_time",
             "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
-            "remaining_budget": 50.0
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
           }
         ]
       },
@@ -1443,12 +912,6 @@
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R13652",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -1464,18 +927,6 @@
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R16511",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -1496,12 +947,6 @@
         "recipe_id": "R21444",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
             "constraint": "ingredient_feasibility",
             "source": "feasibility",
             "status": "unknown",
@@ -1523,18 +968,6 @@
         "recipe_id": "R01485",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
@@ -1545,29 +978,15 @@
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R01732",
         "reason": [
           {
             "constraint": "cooking_time",
             "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
-            "remaining_budget": 50.0
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
           }
         ]
       },
@@ -1576,12 +995,6 @@
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R13652",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",
@@ -1597,18 +1010,6 @@
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R16511",
         "reason": [
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
-          },
           {
             "constraint": "budget",
             "source": "budget_service",

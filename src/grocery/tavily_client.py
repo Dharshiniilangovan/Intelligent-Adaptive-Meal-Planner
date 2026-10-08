@@ -83,19 +83,23 @@ _PRICE = re.compile(
     r"(\d{1,4}(?:,\d{3})*(?:\.\d{1,2})?)"
 )
 
-# Prices immediately following these phrases are usually promotional
-# thresholds, fees or rewards rather than the product price.
-#
-# Example:
-# "Free delivery above $79"
+
 _IGNORE_BEFORE = re.compile(
     r"\b("
-    r"deliver\w*|above|min|minimum|spend|save|voucher|cashback|"
-    r"over|free|shipping|fee|off|worth|up to|earn|reward"
+    r"deliver\w*|above|min|minimum|spend|"
+    r"voucher|cashback|shipping|fee|worth|"
+    r"up to|earn|reward"
     r")\b[^$]{0,25}$",
     re.IGNORECASE,
 )
 
+
+_SAVE_BEFORE = re.compile(
+    r"\b("
+    r"save|saving|savings|discount"
+    r")\b[^$]{0,20}$",
+    re.IGNORECASE,
+)
 
 # ---------------------------------------------------------------------
 # FairPrice title cleanup
@@ -171,46 +175,46 @@ def clean_title(title: str) -> str:
 
 def extract_price(text: str) -> float | None:
     """
-    Extract the first reliable product price from FairPrice text.
+    Extract the current selling price from FairPrice text.
 
-    Promotional thresholds such as:
-        "Free delivery above $79"
+    Ignores:
+    - savings amounts such as "Save $0.08"
+    - delivery/minimum-spend amounts
+    - vouchers/rewards
+    - unit prices such as "$0.35/100g"
 
-    and unit prices such as:
-        "$0.35/100g"
-
-    are ignored.
-
-    FairPrice offer pages commonly show:
-        $16.50
-        $18.20
-        Save $1.70
-
-    where the first price is the current offer price and the second is
-    the previous price. Therefore page order is preserved.
+    FairPrice normally presents the current selling price
+    before the previous/original price, so the first valid
+    product price is returned.
     """
 
     text = str(text or "")
 
-    matches = list(_PRICE.finditer(text))
     prices = []
 
-    for match in matches:
+    for match in _PRICE.finditer(text):
+
         before = text[
-            max(0, match.start() - 50):
+            max(0, match.start() - 60):
             match.start()
         ]
 
         after = text[
             match.end():
-            match.end() + 30
+            match.end() + 40
         ]
 
-        # Ignore delivery thresholds, minimum spends, vouchers, etc.
+        # Delivery thresholds, minimum spends, etc.
         if _IGNORE_BEFORE.search(before):
             continue
 
-        # Ignore unit prices such as "$0.35/100g".
+        # Savings/discount amounts.
+        # Example: "Save $0.08"
+        if _SAVE_BEFORE.search(before):
+            continue
+
+        # Unit prices.
+        # Example: "$0.35/100g"
         if after.lstrip().startswith("/"):
             continue
 
@@ -224,10 +228,10 @@ def extract_price(text: str) -> float | None:
     if not prices:
         return None
 
-    # Preserve FairPrice page order.
-    # The first valid price is normally the current selling price.
-    return round(prices[0], 2)
-
+    return round(
+        prices[0],
+        2
+    )
 
 def normalize(result: dict) -> dict | None:
     """
@@ -279,10 +283,21 @@ def normalize(result: dict) -> dict | None:
 
     # Prefer raw product-page content.
     # Fall back to the Tavily search snippet if necessary.
-    price = extract_price(raw_price_section)
+
+    # Search-result content often preserves the product's displayed
+# selling price even when FairPrice raw_content omits dynamic
+# pricing information.
+    # Tavily search content often contains the displayed price
+# even when FairPrice raw_content does not contain dynamically
+# rendered pricing information.
+    price = extract_price(
+        snippet
+    )
 
     if price is None:
-        price = extract_price(snippet)
+        price = extract_price(
+            raw_price_section
+        )
 
     if price is None:
         return None
@@ -315,6 +330,9 @@ def normalize(result: dict) -> dict | None:
         "url": url,
 
         "size_text": size_text,
+         # NEW
+        "search_content": snippet,
+        "product_text": page_text,
 
         "availability": "local",
 
@@ -342,7 +360,7 @@ class TavilyGroceryClient:
     def __init__(
         self,
         api_key: str | None = None,
-        max_results: int = 10,
+        max_results: int = 15,
         search_depth: str = "basic",
     ):
         self.api_key = (
@@ -381,7 +399,10 @@ class TavilyGroceryClient:
 
         try:
             response = self._tavily().search(
-            query=f"price of {query} in Singapore",
+            query=(f'site:fairprice.com.sg '
+                    f'"{query}" '
+                    f'FairPrice price "$"'
+            ),
             search_depth=self.search_depth,
             max_results=self.max_results,
             include_domains=[GROCERY_DOMAIN],
@@ -407,8 +428,8 @@ class TavilyGroceryClient:
 
         search_terms = [
             query,
-            f"{query} grocery product",
-            f"buy {query}",
+            f'"{query}"',
+            f'"{query}" grocery',
         ]
 
         products = []
@@ -441,8 +462,8 @@ class TavilyGroceryClient:
 
             # We found usable individual FairPrice products.
             # Do not make unnecessary additional Tavily searches.
-            if products:
-                break
+            # if products:
+            #     break
 
         if limit is not None:
             return products[:limit]
