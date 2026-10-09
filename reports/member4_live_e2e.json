@@ -1,0 +1,261 @@
+{
+  "counts": {
+    "RETAIL_KNOWN": 3,
+    "ESTIMATED": 2,
+    "UNKNOWN": 0
+  },
+  "budget": {
+    "budget_status": "pass",
+    "provisional": true,
+    "reason": "Projected grocery cost fits within the budget including the provisional safety margin.",
+    "projected_cost": 10.7,
+    "budget_after_purchase": 39.3,
+    "safety_margin": 0.2
+  },
+  "basket": {
+    "items": [
+      {
+        "ingredient_id": null,
+        "name": "cucumber",
+        "required_quantity": 660.0,
+        "required_unit": "g",
+        "package_quantity": 660.0,
+        "package_unit": "g",
+        "packages": 1,
+        "purchased_quantity": 660.0,
+        "price_per_package": 1.59,
+        "purchase_cost": 1.59,
+        "estimated_purchase_cost": null,
+        "leftover_quantity": 0.0,
+        "inventory_used": 0.0,
+        "recipe_ids": [
+          "LIVE_LUNCH"
+        ],
+        "pricing_status": "priced",
+        "purchase_basis": "calculated_quantity",
+        "quantity_coverage_verified": true,
+        "price_source": "retail"
+      },
+      {
+        "ingredient_id": null,
+        "name": "tofu",
+        "required_quantity": 56.5,
+        "required_unit": "g",
+        "package_quantity": 300.0,
+        "package_unit": "g",
+        "packages": 1,
+        "purchased_quantity": 300.0,
+        "price_per_package": 0.86,
+        "purchase_cost": 0.86,
+        "estimated_purchase_cost": null,
+        "leftover_quantity": 243.5,
+        "inventory_used": 0.0,
+        "recipe_ids": [
+          "LIVE_LUNCH"
+        ],
+        "pricing_status": "priced",
+        "purchase_basis": "calculated_quantity",
+        "quantity_coverage_verified": true,
+        "price_source": "retail"
+      },
+      {
+        "ingredient_id": null,
+        "name": "olive oil",
+        "required_quantity": 60.0,
+        "required_unit": "ml",
+        "package_quantity": 500.0,
+        "package_unit": "ml",
+        "packages": 1,
+        "purchased_quantity": 500.0,
+        "price_per_package": 5.25,
+        "purchase_cost": 5.25,
+        "estimated_purchase_cost": null,
+        "leftover_quantity": 440.0,
+        "inventory_used": 0.0,
+        "recipe_ids": [
+          "LIVE_LUNCH",
+          "LIVE_DINNER"
+        ],
+        "pricing_status": "priced",
+        "purchase_basis": "calculated_quantity",
+        "quantity_coverage_verified": true,
+        "price_source": "retail"
+      },
+      {
+        "ingredient_id": null,
+        "name": "butter lettuce",
+        "required_quantity": 0.5,
+        "required_unit": "head",
+        "package_quantity": 150.0,
+        "package_unit": "g",
+        "packages": 1,
+        "purchased_quantity": 150.0,
+        "price_per_package": 1.5,
+        "purchase_cost": null,
+        "estimated_purchase_cost": 1.5,
+        "leftover_quantity": null,
+        "inventory_used": 0.0,
+        "recipe_ids": [
+          "LIVE_DINNER"
+        ],
+        "pricing_status": "estimated",
+        "purchase_basis": "minimum_retail_package",
+        "quantity_coverage_verified": false,
+        "price_source": "ollama_estimate"
+      },
+      {
+        "ingredient_id": null,
+        "name": "hoisin sauce",
+        "required_quantity": 1.0,
+        "required_unit": "tablespoon",
+        "package_quantity": 380.0,
+        "package_unit": "g",
+        "packages": 1,
+        "purchased_quantity": 380.0,
+        "price_per_package": 1.5,
+        "purchase_cost": null,
+        "estimated_purchase_cost": 1.5,
+        "leftover_quantity": null,
+        "inventory_used": 0.0,
+        "recipe_ids": [
+          "LIVE_DINNER"
+        ],
+        "pricing_status": "estimated",
+        "purchase_basis": "minimum_retail_package",
+        "quantity_coverage_verified": false,
+        "price_source": "ollama_estimate"
+      }
+    ],
+    "known_cost": 7.7,
+    "all_items_priced": false,
+    "unpriced_items": [
+      "butter lettuce",
+      "hoisin sauce"
+    ],
+    "aggregated_requirements": [
+      {
+        "ingredient_id": null,
+        "ingredient_name": "cucumber",
+        "quantity": 660.0,
+        "unit": "g",
+        "recipe_ids": [
+          "LIVE_LUNCH"
+        ]
+      },
+      {
+        "ingredient_id": null,
+        "ingredient_name": "tofu",
+        "quantity": 56.5,
+        "unit": "g",
+        "recipe_ids": [
+          "LIVE_LUNCH"
+        ]
+      },
+      {
+        "ingredient_id": null,
+        "ingredient_name": "olive oil",
+        "quantity": 60.0,
+        "unit": "ml",
+        "recipe_ids": [
+          "LIVE_LUNCH",
+          "LIVE_DINNER"
+        ]
+      },
+      {
+        "ingredient_id": null,
+        "ingredient_name": "butter lettuce",
+        "quantity": 0.5,
+        "unit": "head",
+        "recipe_ids": [
+          "LIVE_DINNER"
+        ]
+      },
+      {
+        "ingredient_id": null,
+        "ingredient_name": "hoisin sauce",
+        "quantity": 1.0,
+        "unit": "tablespoon",
+        "recipe_ids": [
+          "LIVE_DINNER"
+        ]
+      }
+    ],
+    "purchase_requirements": [
+      {
+        "ingredient_id": null,
+        "ingredient_name": "cucumber",
+        "quantity": 660.0,
+        "unit": "g",
+        "recipe_ids": [
+          "LIVE_LUNCH"
+        ],
+        "required_quantity": 660.0,
+        "inventory_available": 0.0,
+        "inventory_used": 0.0,
+        "purchase_required": 660.0
+      },
+      {
+        "ingredient_id": null,
+        "ingredient_name": "tofu",
+        "quantity": 56.5,
+        "unit": "g",
+        "recipe_ids": [
+          "LIVE_LUNCH"
+        ],
+        "required_quantity": 56.5,
+        "inventory_available": 0.0,
+        "inventory_used": 0.0,
+        "purchase_required": 56.5
+      },
+      {
+        "ingredient_id": null,
+        "ingredient_name": "olive oil",
+        "quantity": 60.0,
+        "unit": "ml",
+        "recipe_ids": [
+          "LIVE_LUNCH",
+          "LIVE_DINNER"
+        ],
+        "required_quantity": 60.0,
+        "inventory_available": 0.0,
+        "inventory_used": 0.0,
+        "purchase_required": 60.0
+      },
+      {
+        "ingredient_id": null,
+        "ingredient_name": "butter lettuce",
+        "quantity": 0.5,
+        "unit": "head",
+        "recipe_ids": [
+          "LIVE_DINNER"
+        ],
+        "required_quantity": 0.5,
+        "inventory_available": 0.0,
+        "inventory_used": 0.0,
+        "purchase_required": 0.5
+      },
+      {
+        "ingredient_id": null,
+        "ingredient_name": "hoisin sauce",
+        "quantity": 1.0,
+        "unit": "tablespoon",
+        "recipe_ids": [
+          "LIVE_DINNER"
+        ],
+        "required_quantity": 1.0,
+        "inventory_available": 0.0,
+        "inventory_used": 0.0,
+        "purchase_required": 1.0
+      }
+    ],
+    "projected_cost": 10.7,
+    "projected_cost_complete": true,
+    "projection_missing": [],
+    "warnings": [
+      "butter lettuce: incompatible recipe/package units; assuming one retail package.",
+      "hoisin sauce: incompatible recipe/package units; assuming one retail package."
+    ]
+  },
+  "first_increment": 7.7,
+  "second_increment": 3.0
+}

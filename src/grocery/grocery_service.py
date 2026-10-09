@@ -102,6 +102,10 @@ from src.grocery.units import (
 
 )
 
+from src.grocery.product_category_validator import (
+    is_non_food_product,
+)
+
 
 
 from src.grocery.product_matcher import match_product
@@ -662,6 +666,10 @@ class GroceryService:
                 rejected["missing product title"] += 1
                 continue
 
+
+            if is_non_food_product(title, url):
+                rejected["non-food product"] += 1
+                continue
             # -------------------------------------------------
             # Product matcher
             # -------------------------------------------------
@@ -1685,6 +1693,16 @@ class GroceryService:
 
 
 
+        # Generic recipe pieces are not directly comparable to retail mass.
+        # Use the ingredient-specific estimate, retaining estimated status.
+        if (
+            need is not None
+            and need[1] == "pcs"
+            and estimated_need is not None
+            and estimated_need[1] == "g"
+        ):
+            need = None
+
         if estimated_need is not None:
 
             option.estimated_required_quantity = (
@@ -2608,12 +2626,9 @@ class GroceryService:
                         ),
 
                         required_quantity=(
-
-                            item.get(
-
-                                "quantity"
-
-                            )
+                            item["missing_quantity"]
+                                if item.get("missing_quantity") is not None
+                                else item.get("quantity")
 
                         ),
 
@@ -2740,14 +2755,11 @@ class GroceryService:
                         ),
 
                         required_quantity=(
+                            item["missing_quantity"]
+                                if item.get("missing_quantity") is not None
+                                else item.get("quantity")
 
-                            item.get(
-
-                                "quantity"
-
-                            )
-
-                        ),
+                                                    ),
 
                         unit=(
 
@@ -3478,6 +3490,20 @@ def grocery_summary(
         is None
 
     ]
+        # Separate unverified estimates from genuinely unknown prices.
+    estimated_price_items = [
+        option.ingredient_name
+        for option in options
+        if option.total_cost is None
+        and option.estimated_total_cost is not None
+    ]
+
+    genuinely_unknown_price_items = [
+        option.ingredient_name
+        for option in options
+        if option.total_cost is None
+        and option.estimated_total_cost is None
+    ]
 
 
 
@@ -3550,6 +3576,15 @@ def grocery_summary(
         "unpriced_items":
 
             unpriced_items,
+
+        "estimated_price_items": estimated_price_items,
+
+        "genuinely_unknown_price_items": genuinely_unknown_price_items,
+
+        "all_items_have_price_or_estimate": (
+            bool(options)
+            and not genuinely_unknown_price_items
+        ),
 
 
 
