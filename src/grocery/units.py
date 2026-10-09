@@ -415,6 +415,68 @@ def parse_package(text: str):
             return count * amount * factor, base
 
     # ---------------------------------------------------------
+    # FairPrice URL handling
+    # ---------------------------------------------------------
+
+    is_url = (
+        text.startswith("http://")
+        or text.startswith("https://")
+    )
+
+    if is_url:
+        from urllib.parse import urlparse, unquote
+
+        path = unquote(urlparse(text).path)
+
+        # Remove trailing numeric FairPrice product ID.
+        path = re.sub(
+            r"-\d{5,}$",
+            "",
+            path,
+        )
+
+        # Convert URL separators into spaces.
+        text = path.replace("-", " ").replace("_", " ")
+
+        # Prefer explicit mass/volume units in URL slugs.
+        url_match = re.search(
+            r"(?<!\d)(\d+(?:\.\d+)?)\s*"
+            r"(kg|g|grams?|ml|l|lt|ltr|litres?|liters?)\b",
+            text,
+            flags=re.IGNORECASE,
+        )
+
+        if url_match:
+            amount = float(url_match.group(1))
+            unit = url_match.group(2).lower()
+
+            info = UNIT_TABLE.get(unit)
+
+            if info:
+                base, factor = info
+                return round(amount * factor, 4), base
+
+        # Do not interpret bare numbers in URLs as counts.
+        return None
+
+    # ---------------------------------------------------------
+    # Packs of a given size
+    # ---------------------------------------------------------
+
+    match = _PACKS_OF.search(text)
+
+    if match:
+        count = float(match.group(1))
+        amount = float(match.group(2))
+        unit = match.group(3).lower()
+
+        info = UNIT_TABLE.get(unit)
+
+        if info:
+            base, factor = info
+            return count * amount * factor, base
+
+    # ---------------------------------------------------------
     # Multipack
     # ---------------------------------------------------------
 
