@@ -243,6 +243,8 @@ def test_no_package_size_uses_minimum_package(service):
     )
 
 
+
+
 def test_unit_mismatch_uses_minimum_package(service):
     opt = service.get_grocery_option(
         "tofu",
@@ -250,26 +252,32 @@ def test_unit_mismatch_uses_minimum_package(service):
         "pcs",
     )
 
-    assert (
-        opt.match_status
-        == "matched_minimum_package"
-    )
+    # Step 1: ingredient-specific estimated conversion.
+    assert opt.match_status == "matched_estimated_quantity"
 
-    assert opt.packages_needed == 1
+    # The recipe quantity is estimated, not exact.
+    assert opt.quantity_estimated is True
 
-    assert opt.total_cost == (
-        opt.price_per_package
-    )
+    # 2 tofu pieces are estimated as 600 g.
+    assert opt.estimated_required_quantity == 600.0
+    assert opt.estimated_required_unit == "g"
 
-    assert (
-        "unit mismatch"
-        in opt.note
-    )
+    # A 300 g retail package requires 2 packages.
+    assert opt.package_quantity == 300.0
+    assert opt.package_unit == "g"
+    assert opt.packages_needed == 2
 
-    assert (
-        "minimum purchase"
-        in opt.note
-    )
+    # The cost is estimated because the quantity
+    # conversion is approximate.
+    assert opt.total_cost is None
+    assert opt.estimated_total_cost == 2.40
+
+    # Retail package price is still available.
+    assert opt.price_per_package == 1.20
+
+    assert opt.purchase_basis == "estimated_quantity"
+
+
 
 
 def test_search_error_gives_error_status():
@@ -534,3 +542,61 @@ def test_kimchi_can_match_kimchi_product():
         "exact",
         "approximate",
     )
+
+
+def test_debug_rice_purchase(service):
+    option = service.get_grocery_option(
+        ingredient_name="rice",
+        required_quantity=700,
+        unit="g",
+    )
+
+    print("\nRICE DEBUG")
+    print("Product:", option.product_name)
+    print("Required:", option.required_quantity, option.required_unit)
+    print("Package:", option.package_quantity, option.package_unit)
+    print("Packages:", option.packages_needed)
+    print("Price per package:", option.price_per_package)
+    print("Total:", option.total_cost)
+    print("Basis:", option.purchase_basis)
+    print("Status:", option.match_status)
+    print("Note:", option.note)
+
+
+
+def test_debug_grocery_list_quantities(service):
+    items = [
+        {
+            "ingredient_id": "I1",
+            "ingredient_name": "rice",
+            "quantity": 700,
+            "unit": "g",
+        },
+        {
+            "ingredient_id": "I2",
+            "ingredient_name": "tofu",
+            "quantity": 300,
+            "unit": "g",
+        },
+        {
+            "ingredient_id": "I3",
+            "ingredient_name": "apple",
+            "quantity": 2,
+            "unit": "pcs",
+        },
+    ]
+
+    options = service.get_grocery_list(items)
+
+    for option in options:
+        print(
+            "\nIngredient:", option.ingredient_name,
+            "| Required:", option.required_quantity,
+            option.required_unit,
+            "| Product:", option.product_name,
+            "| Package:", option.package_quantity,
+            option.package_unit,
+            "| Packages:", option.packages_needed,
+            "| Total:", option.total_cost,
+            "| Basis:", option.purchase_basis,
+        )

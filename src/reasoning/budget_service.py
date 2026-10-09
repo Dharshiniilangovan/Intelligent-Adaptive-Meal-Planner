@@ -255,6 +255,106 @@ def check_grocery_budget(
     return result
 
 
+
+def check_provisional_grocery_budget(
+    projected_cost,
+    projected_cost_complete,
+    remaining_budget,
+    safety_margin=0.20,
+):
+    """
+    Evaluate an estimated grocery purchase cost.
+
+    This function is separate from the strict
+    check_grocery_budget() contract.
+
+    Returns a provisional decision only.
+    """
+
+    import math
+
+    if remaining_budget is None:
+        return {
+            "budget_status": "not_checked",
+            "provisional": True,
+            "reason": "No remaining budget provided.",
+            "projected_cost": projected_cost,
+            "budget_after_purchase": None,
+        }
+
+    try:
+        budget = float(remaining_budget)
+    except (TypeError, ValueError):
+        raise ValueError(
+            "remaining_budget must be numeric"
+        )
+
+    if not math.isfinite(budget) or budget < 0:
+        raise ValueError(
+            "remaining_budget must be finite and nonnegative"
+        )
+
+    if (
+        not projected_cost_complete
+        or projected_cost is None
+    ):
+        return {
+            "budget_status": "uncertain",
+            "provisional": True,
+            "reason": "Projected grocery costs are incomplete.",
+            "projected_cost": projected_cost,
+            "budget_after_purchase": None,
+        }
+
+    try:
+        cost = float(projected_cost)
+    except (TypeError, ValueError):
+        raise ValueError(
+            "projected_cost must be numeric"
+        )
+
+    if not math.isfinite(cost) or cost < 0:
+        raise ValueError(
+            "projected_cost must be finite and nonnegative"
+        )
+
+    if not 0 <= safety_margin < 1:
+        raise ValueError(
+            "safety_margin must be between 0 and 1"
+        )
+
+    remaining = round(budget - cost, 2)
+
+    allowed_cost = budget * (1 - safety_margin)
+
+    if cost <= allowed_cost:
+        status = "pass"
+        reason = (
+            "Projected grocery cost fits within the "
+            "budget including the provisional safety margin."
+        )
+    elif cost > budget:
+        status = "hard_fail"
+        reason = (
+            "Projected grocery cost exceeds the budget."
+        )
+    else:
+        status = "uncertain"
+        reason = (
+            "Projected grocery cost fits the nominal budget "
+            "but exceeds the provisional safety-margin limit."
+        )
+
+    return {
+        "budget_status": status,
+        "provisional": True,
+        "reason": reason,
+        "projected_cost": round(cost, 2),
+        "budget_after_purchase": remaining,
+        "safety_margin": safety_margin,
+    }
+
+
 def print_budget_result(
     result: dict,
 ) -> None:

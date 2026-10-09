@@ -156,4 +156,54 @@ def search_queries(ingredient: str) -> list[str]:
         fallback = first if last in forms or last in {'breast', 'thigh', 'fillet', 'loin', 'wing', 'leg'} else last
         if fallback != full_query:
             queries.append(fallback)
+
+    
+    # ---------------------------------------------------------
+    # Ingredient-specific search expansions
+    #
+    # These improve product retrieval without changing
+    # the original ingredient used for validation.
+    # ---------------------------------------------------------
+
+    SEARCH_ALIASES = {
+        "orange": [
+            "fresh oranges",
+            "fresh orange",
+            "orange fruit",
+        ],
+        "lime": [
+            "fresh limes",
+            "fresh lime",
+            "lime fruit",
+        ],
+        "lemon": [
+            "fresh lemons",
+            "fresh lemon",
+            "lemon fruit",
+        ],
+        "butter lettuce": [
+            "butterhead lettuce",
+            "butter lettuce",
+        ],
+        "green onion": [
+            "spring onion",
+            "scallion",
+            "green onion",
+        ],
+        "hoisin sauce": [
+            "hoisin sauce",
+            "hoisin dipping sauce",
+        ],
+    }
+
+    ingredient_key = " ".join(cleaned)
+
+    expansions = SEARCH_ALIASES.get(
+        ingredient_key,
+        [],
+    )
+
+    queries = expansions + queries
+
+
     return list(dict.fromkeys(queries))

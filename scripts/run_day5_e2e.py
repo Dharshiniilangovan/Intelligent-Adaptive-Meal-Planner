@@ -99,7 +99,7 @@ USER_STATE = {
 
     # Your existing user model stores cooking
     # preference in hours.
-    "cook_time_preference_hrs": 0.5,
+    "preferred_cooking_time_hours": 0.5,
 
     # -----------------------------------------
     # Pantry

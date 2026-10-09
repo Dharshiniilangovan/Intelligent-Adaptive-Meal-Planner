@@ -792,7 +792,8 @@ def test_cost_summary_preserves_partial_pricing():
 # ============================================================
 
 
-def test_unit_mismatch_is_not_silently_priced():
+
+def test_compatible_mass_units_are_priced_correctly():
 
     recipes = [
         {
@@ -824,14 +825,59 @@ def test_unit_mismatch_is_not_silently_priced():
         products,
     )
 
+    assert basket["all_items_priced"] is True
+    assert basket["known_cost"] == 3.80
+    assert basket["projected_cost"] == 3.80
+    assert basket["projected_cost_complete"] is True
+
+    assert len(basket["items"]) == 1
+
+    item = basket["items"][0]
+
+    assert item["packages"] == 1
+    assert item["pricing_status"] == "priced"
+    assert item["quantity_coverage_verified"] is True
+
+def test_genuinely_incompatible_units_are_not_verified():
+
+    recipes = [
+        {
+            "recipe_id": "R002",
+            "ingredients": [
+                {
+                    "ingredient_id": "ING002",
+                    "ingredient_name": "lettuce",
+                    "quantity": 0.5,
+                    "unit": "head",
+                }
+            ],
+        }
+    ]
+
+    products = [
+        {
+            "ingredient_id": "ING002",
+            "ingredient_name": "lettuce",
+            "package_quantity": 150,
+            "package_unit": "g",
+            "price": 1.50,
+        }
+    ]
+
+    basket = build_plan_grocery_basket(
+        recipes,
+        [],
+        products,
+    )
+
     assert basket["all_items_priced"] is False
+    assert basket["known_cost"] == 0.0
 
-    assert (
-        basket["items"][0]["pricing_status"]
-        == "unit_mismatch"
-    )
+    assert len(basket["items"]) == 1
 
-    assert (
-        basket["items"][0]["purchase_cost"]
-        is None
-    )
+    item = basket["items"][0]
+
+    assert item["quantity_coverage_verified"] is False
+    assert item.get("pricing_status") != "priced"
+    assert basket["all_items_priced"] is False
+    assert basket["known_cost"] == 0.0

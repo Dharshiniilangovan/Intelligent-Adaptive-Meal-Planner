@@ -202,6 +202,10 @@ def test_grocery_agent_no_missing_ingredients():
 # Test 4: Recipe ID required
 # ============================================================
 
+# ============================================================
+# Test 4: Recipe ID required
+# ============================================================
+
 def test_grocery_agent_requires_recipe_id():
 
     agent = GroceryAgent(
@@ -514,3 +518,68 @@ def test_grocery_agent_matches_shared_contract():
     assert normalized["errors"] == []
 
     assert service.last_recipe_id == "R001"
+
+
+
+def test_provisional_planning_budget_status():
+    from unittest.mock import Mock
+
+    from src.agents.grocery_agent import GroceryAgent
+    from src.grocery.grocery_service import GroceryOption
+
+    service = Mock()
+
+    service.get_grocery_list.return_value = [
+        GroceryOption(
+            ingredient_id="ING001",
+            ingredient_name="butter lettuce",
+            required_quantity=0.5,
+            required_unit="head",
+            product_name="Fresh Butterhead Lettuce",
+            package_quantity=1,
+            package_unit="head",
+            packages_needed=1,
+            price_per_package=1.5,
+            estimated_total_cost=1.5,
+            total_cost=None,
+            purchase_basis="llm_estimated_package",
+            match_status="estimated_no_retail_match",
+        )
+    ]
+
+    agent = GroceryAgent(
+        grocery_service=service
+    )
+
+    result = agent.run(
+        recipe_id="R001",
+        missing_ingredients=[
+            {
+                "ingredient_id": "ING001",
+                "ingredient_name": "butter lettuce",
+                "missing_quantity": 0.5,
+                "unit": "head",
+            }
+        ],
+        remaining_budget=50,
+    )
+
+    data = result["data"]
+
+    assert data["known_cost"] == 0.0
+    assert data["all_items_priced"] is False
+    assert data["projected_cost"] == 1.5
+    assert data["projected_cost_complete"] is True
+
+    assert data["budget_status"] == "uncertain"
+    assert data["estimated_budget_status"] == "pass"
+
+    assert (
+        data["planning_budget_status"]
+        == "provisional_pass"
+    )
+
+    assert (
+        data["planning_budget_source"]
+        == "estimated"
+    )

@@ -132,6 +132,11 @@ UNIT_TABLE = {
 }
 
 
+# Do not treat culinary forms as interchangeable generic pieces.
+for _ambiguous in ("clove", "cloves", "head", "heads", "stalk", "stalks", "sprig", "sprigs", "slice", "slices"):
+    UNIT_TABLE.pop(_ambiguous, None)
+
+
 SMALL_MEASURES = {
     "pinch",
     "pinches",
@@ -273,6 +278,141 @@ def parse_package(text: str):
         return None
 
     text = str(text).lower().strip()
+
+    
+    # ---------------------------------------------------------
+    # FairPrice URL decimal quantities
+    #
+    # Examples:
+    # fresh-cucumber-0-66kg-10422143 -> 0.66 kg
+    # product-1-25kg-12345678 -> 1.25 kg
+    #
+    # The URL slug uses a hyphen instead of a
+    # decimal point.
+    # ---------------------------------------------------------
+
+    url_decimal = re.search(
+        r"(?<![a-z0-9])"
+        r"(\d+)-(\d{1,3})"
+        r"(kg|g|ml|l)"
+        r"(?=-|/|$)",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    if url_decimal:
+        whole = url_decimal.group(1)
+        fraction = url_decimal.group(2)
+        unit = url_decimal.group(3).lower()
+
+        quantity = float(
+            f"{whole}.{fraction}"
+        )
+
+        info = UNIT_TABLE.get(unit)
+
+        if info:
+            base, factor = info
+
+            return (
+                quantity * factor,
+                base,
+            )
+    
+    # ---------------------------------------------------------
+    # FairPrice URL quantities with hyphen before unit.
+    #
+    # Examples:
+    # oranges-312-g-90078736 -> 312 g
+    # rice-5-kg-12345678 -> 5000 g
+    # milk-500-ml-12345678 -> 500 ml
+    # ---------------------------------------------------------
+
+    url_hyphen_unit = re.search(
+        r"(?<![a-z0-9])"
+        r"(\d+(?:\.\d+)?)"
+        r"-(kg|g|ml|l)"
+        r"(?=-|/|$)",
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    if url_hyphen_unit:
+        quantity = float(
+            url_hyphen_unit.group(1)
+        )
+
+        unit = url_hyphen_unit.group(2).lower()
+
+        info = UNIT_TABLE.get(unit)
+
+        if info:
+            base, factor = info
+
+            return quantity * factor, base
+
+
+    # ---------------------------------------------------------
+    # FairPrice URL handling
+    # ---------------------------------------------------------
+
+    is_url = (
+        text.startswith("http://")
+        or text.startswith("https://")
+    )
+
+    if is_url:
+        from urllib.parse import urlparse, unquote
+
+        path = unquote(urlparse(text).path)
+
+        # Remove trailing numeric FairPrice product ID.
+        path = re.sub(
+            r"-\d{5,}$",
+            "",
+            path,
+        )
+
+        # Convert URL separators into spaces.
+        text = path.replace("-", " ").replace("_", " ")
+
+        # Prefer explicit mass/volume units in URL slugs.
+        url_match = re.search(
+            r"(?<!\d)(\d+(?:\.\d+)?)\s*"
+            r"(kg|g|grams?|ml|l|lt|ltr|litres?|liters?)\b",
+            text,
+            flags=re.IGNORECASE,
+        )
+
+        if url_match:
+            amount = float(url_match.group(1))
+            unit = url_match.group(2).lower()
+
+            info = UNIT_TABLE.get(unit)
+
+            if info:
+                base, factor = info
+                return round(amount * factor, 4), base
+
+        # Do not interpret bare numbers in URLs as counts.
+        return None
+
+    # ---------------------------------------------------------
+    # Packs of a given size
+    # ---------------------------------------------------------
+
+    match = _PACKS_OF.search(text)
+
+    if match:
+        count = float(match.group(1))
+        amount = float(match.group(2))
+        unit = match.group(3).lower()
+
+        info = UNIT_TABLE.get(unit)
+
+        if info:
+            base, factor = info
+            return count * amount * factor, base
 
     # ---------------------------------------------------------
     # FairPrice URL handling

@@ -25,7 +25,10 @@ from src.grocery.grocery_service import (
     grocery_summary,
 )
 
-from src.reasoning.budget_service import check_grocery_budget
+from src.reasoning.budget_service import (
+    check_grocery_budget,
+    check_provisional_grocery_budget,
+)
 
 
 class GroceryAgent:
@@ -463,6 +466,77 @@ class GroceryAgent:
                     )
 
 
+        
+        # ---------------------------------------------------------
+        # PROVISIONAL BUDGET SERVICE RESULT
+        #
+        # Separate from the strict BudgetService result.
+        # Does not overwrite known_cost or budget_status.
+        # ---------------------------------------------------------
+
+        try:
+            provisional_budget_result = (
+                check_provisional_grocery_budget(
+                    projected_cost=projected_cost,
+                    projected_cost_complete=projection_complete,
+                    remaining_budget=remaining_budget,
+                    safety_margin=0.20,
+                )
+            )
+
+        except (TypeError, ValueError) as exc:
+            return AgentResult(
+                agent="grocery",
+                status=AgentStatus.FAILED,
+                data={
+                    "recipe_id": recipe_id,
+                    "items": items,
+                    "known_cost": known_cost,
+                    "all_items_priced": all_items_priced,
+                    "unpriced_items": unpriced_items,
+                },
+                warnings=warnings,
+                errors=[
+                    f"Provisional budget validation failed: {exc}"
+                ],
+            ).to_dict()
+
+        
+        # ---------------------------------------------------------
+        # OPTIONAL PLANNING BUDGET INFORMATION
+        #
+        # This does not modify BudgetService results.
+        # It does not turn LLM estimates into verified costs.
+        # ---------------------------------------------------------
+
+        planning_budget_status = budget_status
+
+        planning_budget_source = "verified"
+
+        if budget_status == "not_checked":
+            planning_budget_source = "not_checked"
+
+        elif (
+            budget_status == "uncertain"
+            and projection_complete
+            and projected_cost is not None
+        ):
+            if estimated_budget_status == "pass":
+                planning_budget_status = "provisional_pass"
+                planning_budget_source = "estimated"
+
+            elif estimated_budget_status == "hard_fail":
+                planning_budget_status = "provisional_hard_fail"
+                planning_budget_source = "estimated"
+
+            else:
+                planning_budget_status = "uncertain"
+                planning_budget_source = "incomplete"
+
+        elif budget_status == "uncertain":
+            planning_budget_source = "incomplete"
+
+
         # ---------------------------------------------------------
         # Shared AgentResult
         # ---------------------------------------------------------
@@ -521,6 +595,20 @@ class GroceryAgent:
                 "estimated_budget_reason": (
                     estimated_budget_reason
                 ),
+                 "planning_budget_status": (
+                    planning_budget_status
+                ),
+
+                "planning_budget_source": (
+                    planning_budget_source
+                ),
+
+                
+                "provisional_budget": (
+                    provisional_budget_result
+                ),
+
+
 
 
                 "remaining_budget": remaining_budget,
@@ -890,45 +978,32 @@ def find_plan_product(
     return None
 
 
+
 def build_plan_grocery_basket(
     recipe_requirements,
     inventory=None,
     product_catalog=None,
 ):
     """
-    Build ONE grocery basket for the entire meal plan.
+    Build one grocery basket for the full meal plan.
 
-    This is the Member-4 Day-5 function.
+    Backward-compatible input/output structure.
 
-    Steps:
-    1. Aggregate ingredients across recipes.
-    2. Subtract existing inventory.
-    3. Find a grocery product.
-    4. Calculate required package count.
-    5. Calculate purchase cost.
-    6. Calculate package leftovers.
-    7. Track missing/unreliable pricing.
-
-    This function reports grocery/cost facts.
-
-    It does not decide whether the complete meal plan
-    is feasible.
+    Important:
+    The current MultiMealPlanner passes a reduced
+    product catalog without reliable price-source
+    metadata. Such prices are treated as projections,
+    not automatically verified retail costs.
     """
+
+    import math
 
     inventory = inventory or []
     product_catalog = product_catalog or []
 
-    # ========================================================
-    # STEP 1 - AGGREGATE ALL RECIPES
-    # ========================================================
-
     aggregated = aggregate_requirements(
         recipe_requirements
     )
-
-    # ========================================================
-    # STEP 2 - SUBTRACT PANTRY
-    # ========================================================
 
     purchase_requirements = subtract_inventory(
         aggregated,
@@ -937,243 +1012,632 @@ def build_plan_grocery_basket(
 
     basket_items = []
     known_cost = 0.0
-    unpriced_items = []
+    projected_cost = 0.0
 
-    # ========================================================
-    # STEP 3 - PRICE EACH AGGREGATED REQUIREMENT
-    # ========================================================
+    unpriced_items = []
+    projection_missing = []
+    warnings = []
+
+    unit_aliases = {
+        "tbsp": "tablespoon",
+        "tbs": "tablespoon",
+        "tablespoons": "tablespoon",
+        "tsp": "teaspoon",
+        "teaspoons": "teaspoon",
+        "gram": "g",
+        "grams": "g",
+        "kilogram": "kg",
+        "kilograms": "kg",
+        "milliliter": "ml",
+        "milliliters": "ml",
+        "millilitre": "ml",
+        "millilitres": "ml",
+        "liter": "l",
+        "liters": "l",
+        "litre": "l",
+        "litres": "l",
+        "piece": "pcs",
+        "pieces": "pcs",
+        "count": "pcs",
+        "heads": "head",
+    }
+
+    unit_info = {
+        "tablespoon": ("volume", 15.0),
+        "teaspoon": ("volume", 5.0),
+        "g": ("mass", 1.0),
+        "kg": ("mass", 1000.0),
+        "ml": ("volume", 1.0),
+        "l": ("volume", 1000.0),
+        "pcs": ("count", 1.0),
+        "head": ("head", 1.0),
+        "clove": ("clove", 1.0),
+        "stalk": ("stalk", 1.0),
+        "sprig": ("sprig", 1.0),
+    }
+
+    def normalize_unit(value):
+        text = str(value or "").strip().lower()
+        if text in {"nan", "none", "null"}:
+            return ""
+        return unit_aliases.get(text, text)
+
+    def positive_number(value):
+        if isinstance(value, bool):
+            return None
+
+        try:
+            number = float(value)
+        except (TypeError, ValueError):
+            return None
+
+        if not math.isfinite(number) or number <= 0:
+            return None
+
+        return number
+
+    def convert_requirement(
+        quantity,
+        from_unit,
+        to_unit,
+    ):
+        """
+        Convert required quantity into package units.
+
+        Returns None if no safe conversion exists.
+        """
+
+        from_unit = normalize_unit(from_unit)
+        to_unit = normalize_unit(to_unit)
+
+        if from_unit == to_unit and from_unit:
+            return quantity
+
+        source = unit_info.get(from_unit)
+        target = unit_info.get(to_unit)
+
+        if (
+            source is None
+            or target is None
+            or source[0] != target[0]
+        ):
+            return None
+
+        return (
+            quantity * source[1] / target[1]
+        )
+
+    def implausible_package(quantity, unit, ingredient):
+        """
+        Conservative sanity checks for ordinary
+        household grocery packages.
+
+        These are heuristic checks, not product
+        verification.
+        """
+
+        unit = normalize_unit(unit)
+
+        if unit == "kg" and quantity > 25:
+            return True
+
+        if unit == "g" and quantity > 25000:
+            return True
+
+        if unit == "l" and quantity > 25:
+            return True
+
+        if unit == "ml" and quantity > 25000:
+            return True
+
+        return False
 
     for requirement in purchase_requirements:
 
-        purchase_required = float(
-            requirement.get("purchase_required", 0) or 0
+        required = positive_number(
+            requirement.get("purchase_required")
         )
 
-        # Pantry completely satisfies this ingredient.
-        if purchase_required <= 0:
+        if required is None:
             continue
 
-        ingredient_id = requirement.get("ingredient_id")
-        ingredient_name = _ingredient_name(requirement)
-        required_unit = requirement.get("unit")
+        ingredient_id = requirement.get(
+            "ingredient_id"
+        )
+
+        ingredient_name = _ingredient_name(
+            requirement
+        )
+
+        required_unit = normalize_unit(
+            requirement.get("unit")
+        )
 
         product = find_plan_product(
             requirement,
             product_catalog,
         )
 
-        # ====================================================
-        # NO PRODUCT FOUND
-        # ====================================================
-
-        if product is None:
-
-            unpriced_items.append(ingredient_name)
-
-            basket_items.append({
-                "ingredient_id": ingredient_id,
-                "name": ingredient_name,
-                "required_quantity": purchase_required,
-                "required_unit": required_unit,
-                "package_quantity": None,
-                "package_unit": None,
-                "packages": None,
-                "purchased_quantity": None,
-                "price_per_package": None,
-                "purchase_cost": None,
-                "leftover_quantity": None,
-                "inventory_used": requirement.get(
-                    "inventory_used", 0
-                ),
-                "recipe_ids": requirement.get(
-                    "recipe_ids", []
-                ),
-                "pricing_status": "unpriced",
-            })
-
-            continue
-
-        # ====================================================
-        # READ PRODUCT DATA
-        # ====================================================
-
-        package_quantity = product.get("package_quantity")
-        package_unit = product.get("package_unit")
-
-        price = product.get("price")
-
-        if price is None:
-            price = product.get("price_per_package")
-
-        # ====================================================
-        # PACKAGE DATA MISSING
-        # ====================================================
-
-        try:
-            package_quantity_float = float(package_quantity)
-        except (TypeError, ValueError):
-            package_quantity_float = None
-
-        if (
-            package_quantity_float is None
-            or package_quantity_float <= 0
-        ):
-
-            unpriced_items.append(ingredient_name)
-
-            basket_items.append({
-                "ingredient_id": ingredient_id,
-                "name": ingredient_name,
-                "required_quantity": purchase_required,
-                "required_unit": required_unit,
-                "package_quantity": package_quantity,
-                "package_unit": package_unit,
-                "packages": None,
-                "purchased_quantity": None,
-                "price_per_package": price,
-                "purchase_cost": None,
-                "leftover_quantity": None,
-                "inventory_used": requirement.get(
-                    "inventory_used", 0
-                ),
-                "recipe_ids": requirement.get(
-                    "recipe_ids", []
-                ),
-                "pricing_status": "invalid_package",
-            })
-
-            continue
-
-        # ====================================================
-        # UNIT CHECK
-        # ====================================================
-
-        if (
-            package_unit
-            and required_unit
-            and package_unit != required_unit
-        ):
-
-            unpriced_items.append(ingredient_name)
-
-            basket_items.append({
-                "ingredient_id": ingredient_id,
-                "name": ingredient_name,
-                "required_quantity": purchase_required,
-                "required_unit": required_unit,
-                "package_quantity": package_quantity_float,
-                "package_unit": package_unit,
-                "packages": None,
-                "purchased_quantity": None,
-                "price_per_package": price,
-                "purchase_cost": None,
-                "leftover_quantity": None,
-                "inventory_used": requirement.get(
-                    "inventory_used", 0
-                ),
-                "recipe_ids": requirement.get(
-                    "recipe_ids", []
-                ),
-                "pricing_status": "unit_mismatch",
-            })
-
-            continue
-
-        # ====================================================
-        # PRICE MISSING
-        # ====================================================
-
-        try:
-            price_float = float(price)
-        except (TypeError, ValueError):
-            price_float = None
-
-        if price_float is None:
-
-            unpriced_items.append(ingredient_name)
-
-            basket_items.append({
-                "ingredient_id": ingredient_id,
-                "name": ingredient_name,
-                "required_quantity": purchase_required,
-                "required_unit": required_unit,
-                "package_quantity": package_quantity_float,
-                "package_unit": package_unit,
-                "packages": None,
-                "purchased_quantity": None,
-                "price_per_package": None,
-                "purchase_cost": None,
-                "leftover_quantity": None,
-                "inventory_used": requirement.get(
-                    "inventory_used", 0
-                ),
-                "recipe_ids": requirement.get(
-                    "recipe_ids", []
-                ),
-                "pricing_status": "unpriced",
-            })
-
-            continue
-
-        # ====================================================
-        # PACKAGE CALCULATION
-        # ====================================================
-
-        packages = calculate_packages(
-            purchase_required,
-            package_quantity_float,
-        )
-
-        purchased_quantity = (
-            packages * package_quantity_float
-        )
-
-        purchase_cost = (
-            packages * price_float
-        )
-
-        leftover_quantity = calculate_package_leftover(
-            purchase_required,
-            package_quantity_float,
-            packages,
-        )
-
-        known_cost += purchase_cost
-
-        basket_items.append({
+        base_item = {
             "ingredient_id": ingredient_id,
             "name": ingredient_name,
-            "required_quantity": purchase_required,
+            "required_quantity": required,
             "required_unit": required_unit,
-            "package_quantity": package_quantity_float,
-            "package_unit": package_unit,
-            "packages": packages,
-            "purchased_quantity": purchased_quantity,
-            "price_per_package": round(price_float, 2),
-            "purchase_cost": round(purchase_cost, 2),
-            "leftover_quantity": leftover_quantity,
+            "package_quantity": None,
+            "package_unit": None,
+            "packages": None,
+            "purchased_quantity": None,
+            "price_per_package": None,
+            "purchase_cost": None,
+            "estimated_purchase_cost": None,
+            "leftover_quantity": None,
             "inventory_used": requirement.get(
                 "inventory_used", 0
             ),
             "recipe_ids": requirement.get(
                 "recipe_ids", []
             ),
-            "pricing_status": "priced",
+            "pricing_status": "unpriced",
+            "purchase_basis": None,
+            "quantity_coverage_verified": False,
+            "price_source": "unknown",
+        }
+
+        if product is None:
+            unpriced_items.append(ingredient_name)
+            projection_missing.append(ingredient_name)
+            basket_items.append(base_item)
+            continue
+
+        package_quantity = positive_number(
+            product.get("package_quantity")
+        )
+
+        package_unit = normalize_unit(
+            product.get("package_unit")
+        )
+
+        price = positive_number(
+            product.get("price")
+            if product.get("price") is not None
+            else product.get("price_per_package")
+        )
+
+        base_item["package_quantity"] = (
+            package_quantity
+        )
+
+        base_item["package_unit"] = package_unit
+
+        base_item["price_per_package"] = (
+            round(price, 2)
+            if price is not None
+            else None
+        )
+
+        if price is None:
+            unpriced_items.append(ingredient_name)
+            projection_missing.append(ingredient_name)
+            basket_items.append(base_item)
+            continue
+
+        if package_quantity is None:
+            unpriced_items.append(ingredient_name)
+            projection_missing.append(ingredient_name)
+            base_item["pricing_status"] = "invalid_package"
+            basket_items.append(base_item)
+            continue
+
+        if implausible_package(
+            package_quantity,
+            package_unit,
+            ingredient_name,
+        ):
+            warnings.append(
+                f"{ingredient_name}: implausible package "
+                f"size {package_quantity} {package_unit}"
+            )
+
+            unpriced_items.append(ingredient_name)
+            projection_missing.append(ingredient_name)
+
+            base_item["pricing_status"] = (
+                "implausible_package"
+            )
+
+            basket_items.append(base_item)
+            continue
+
+        
+        # Preserve the existing strict plan-basket
+        # contract for different unit strings.
+        #
+        # A separate provisional calculation can
+        # still be added later without changing
+        # pricing_status.
+
+
+        converted_required = convert_requirement(
+            required,
+            required_unit,
+            package_unit,
+        )
+
+        if converted_required is not None:
+            packages = math.ceil(
+                converted_required / package_quantity
+            )
+
+            packages = max(1, packages)
+
+            purchased_quantity = (
+                packages * package_quantity
+            )
+
+            leftover_quantity = max(
+                0.0,
+                purchased_quantity - converted_required,
+            )
+
+            purchase_basis = "calculated_quantity"
+            quantity_supported = True
+
+        else:
+            # Cannot prove exact quantity coverage.
+            # One package is a provisional assumption.
+            packages = 1
+            purchased_quantity = package_quantity
+            leftover_quantity = None
+
+            purchase_basis = (
+                "minimum_retail_package"
+            )
+
+            quantity_supported = False
+
+            warnings.append(
+                f"{ingredient_name}: incompatible "
+                f"recipe/package units; assuming "
+                f"one retail package."
+            )
+
+        estimated_purchase_cost = round(
+            packages * price,
+            2,
+        )
+
+        projected_cost += estimated_purchase_cost
+
+        # Only count as known when explicit source
+        # evidence is available in the catalog.
+        #
+        # The current planner strips that metadata,
+        # so its reduced catalog normally remains
+        # provisional.
+        retail_total = positive_number(
+            product.get("total_cost")
+        )
+
+        estimated_total = positive_number(
+            product.get("estimated_total_cost")
+        )
+
+        
+        source_basis = product.get("purchase_basis")
+        source_status = product.get("match_status")
+
+        is_llm = (
+            source_basis == "llm_estimated_package"
+            or source_status == "estimated_no_retail_match"
+        )
+
+        has_estimated_quantity = (
+            product.get("quantity_estimated") is True
+            or source_basis == "estimated_quantity"
+            or source_status == "matched_estimated_quantity"
+        )
+
+        has_estimated_source = (
+            estimated_total is not None
+            and retail_total is None
+        )
+
+        has_retail_evidence = (
+            price is not None
+            and not is_llm
+            and not has_estimated_quantity
+            and not has_estimated_source
+        )
+
+
+
+        if has_retail_evidence and quantity_supported:
+            known_cost += estimated_purchase_cost
+
+            base_item["purchase_cost"] = (
+                estimated_purchase_cost
+            )
+
+            base_item["pricing_status"] = "priced"
+            base_item["price_source"] = "retail"
+
+        else:
+            unpriced_items.append(ingredient_name)
+
+            base_item["estimated_purchase_cost"] = (
+                estimated_purchase_cost
+            )
+
+            base_item["pricing_status"] = "estimated"
+
+            
+            base_item["price_source"] = (
+                "ollama_estimate"
+                if is_llm
+                else (
+                    "retail_estimated_quantity"
+                    if has_estimated_quantity
+                    else "unverified"
+                )
+            )
+
+
+        base_item.update({
+            "packages": packages,
+            "purchased_quantity": purchased_quantity,
+            "leftover_quantity": leftover_quantity,
+            "purchase_basis": purchase_basis,
+            "quantity_coverage_verified": (
+                quantity_supported
+            ),
         })
 
-    # Remove duplicate names while preserving order.
+        basket_items.append(base_item)
+
     unpriced_items = list(
         dict.fromkeys(unpriced_items)
+    )
+
+    projection_missing = list(
+        dict.fromkeys(projection_missing)
+    )
+
+    projection_complete = (
+        len(projection_missing) == 0
     )
 
     return {
         "items": basket_items,
         "known_cost": round(known_cost, 2),
-        "all_items_priced": len(unpriced_items) == 0,
+        "all_items_priced": (
+            len(unpriced_items) == 0
+        ),
         "unpriced_items": unpriced_items,
         "aggregated_requirements": aggregated,
         "purchase_requirements": purchase_requirements,
+        "projected_cost": (
+            round(projected_cost, 2)
+            if projection_complete
+            else None
+        ),
+        "projected_cost_complete": (
+            projection_complete
+        ),
+        "projection_missing": projection_missing,
+        "warnings": warnings,
     }
+
+
+
+def calculate_incremental_basket_cost(
+    selected_recipe_requirements,
+    candidate_recipe_requirement,
+    inventory=None,
+    product_catalog=None,
+):
+    """
+    Calculate the additional grocery purchase cost
+    caused by adding one candidate recipe.
+
+    Both baskets use the SAME original inventory
+    and product catalog.
+
+    Verified and estimated costs remain separate.
+    """
+
+    import math
+
+    selected = list(selected_recipe_requirements or [])
+
+    if not isinstance(candidate_recipe_requirement, dict):
+        raise TypeError(
+            "candidate_recipe_requirement must be a dictionary"
+        )
+
+    if not isinstance(
+        candidate_recipe_requirement.get("ingredients", []),
+        list,
+    ):
+        raise ValueError(
+            "Candidate ingredients must be a list"
+        )
+
+    # Use the same initial inventory for both calculations.
+    inventory = inventory if inventory is not None else []
+    product_catalog = (
+        product_catalog if product_catalog is not None else []
+    )
+
+    # Basket before adding the candidate.
+    before = build_plan_grocery_basket(
+        recipe_requirements=selected,
+        inventory=inventory,
+        product_catalog=product_catalog,
+    )
+
+    # Basket after adding the candidate.
+    after = build_plan_grocery_basket(
+        recipe_requirements=(
+            selected + [candidate_recipe_requirement]
+        ),
+        inventory=inventory,
+        product_catalog=product_catalog,
+    )
+
+    def valid_cost(value):
+        try:
+            number = float(value)
+        except (TypeError, ValueError, OverflowError):
+            return None
+
+        if not math.isfinite(number) or number < 0:
+            return None
+
+        return number
+
+    before_known = valid_cost(before.get("known_cost"))
+    after_known = valid_cost(after.get("known_cost"))
+
+    if before_known is None or after_known is None:
+        raise ValueError("Invalid known basket cost")
+
+    # Known retail cost difference.
+    known_increment = round(
+        after_known - before_known, 2
+    )
+
+    # Negative increments indicate inconsistent pricing,
+    # product selection, or source classification.
+    if known_increment < -0.01:
+        raise ValueError(
+            "Known basket cost decreased after adding "
+            "a recipe. Check product catalog consistency."
+        )
+
+    known_increment = max(0.0, known_increment)
+
+    before_complete = (
+        before.get("projected_cost_complete") is True
+    )
+
+    after_complete = (
+        after.get("projected_cost_complete") is True
+    )
+
+    projection_complete = (
+        before_complete and after_complete
+    )
+
+    projected_increment = None
+
+    if projection_complete:
+        before_projected = valid_cost(
+            before.get("projected_cost")
+        )
+
+        after_projected = valid_cost(
+            after.get("projected_cost")
+        )
+
+        if (
+            before_projected is None
+            or after_projected is None
+        ):
+            projection_complete = False
+
+        else:
+            difference = round(
+                after_projected - before_projected, 2
+            )
+
+            if difference < -0.01:
+                raise ValueError(
+                    "Projected basket cost decreased after "
+                    "adding a recipe. Check pricing consistency."
+                )
+
+            projected_increment = max(
+                0.0, difference
+            )
+
+    # Identify products that require additional packages.
+    before_items = {
+        (
+            item.get("ingredient_id")
+            or item.get("name", "").strip().lower()
+        ): item
+        for item in before.get("items", [])
+    }
+
+    additional_items = []
+
+    for item in after.get("items", []):
+        key = (
+            item.get("ingredient_id")
+            or item.get("name", "").strip().lower()
+        )
+
+        previous = before_items.get(key, {})
+
+        old_packages = previous.get("packages")
+        new_packages = item.get("packages")
+
+        additional_packages = None
+
+        if (
+            isinstance(old_packages, int)
+            and isinstance(new_packages, int)
+        ):
+            additional_packages = (
+                new_packages - old_packages
+            )
+
+        elif (
+            not previous
+            and isinstance(new_packages, int)
+        ):
+            additional_packages = new_packages
+
+        additional_items.append({
+            "ingredient_id": item.get("ingredient_id"),
+            "name": item.get("name"),
+            "previous_packages": old_packages,
+            "new_packages": new_packages,
+            "additional_packages": additional_packages,
+            "price_per_package": item.get(
+                "price_per_package"
+            ),
+            "pricing_status": item.get(
+                "pricing_status"
+            ),
+        })
+
+    return {
+        "known_incremental_cost": known_increment,
+        "projected_incremental_cost": projected_increment,
+        "projected_cost_complete": projection_complete,
+
+        "before_known_cost": round(before_known, 2),
+        "after_known_cost": round(after_known, 2),
+
+        "before_projected_cost": (
+            before.get("projected_cost")
+        ),
+        "after_projected_cost": (
+            after.get("projected_cost")
+        ),
+
+        "before_basket": before,
+        "after_basket": after,
+
+        "additional_items": additional_items,
+
+        "projection_missing": list(
+            after.get("projection_missing", [])
+        ),
+    }
+
+
 
 
 def build_cost_summary(
@@ -1181,31 +1645,130 @@ def build_cost_summary(
     initial_budget,
 ):
     """
-    Return cost facts for the plan.
+    Summarize verified and projected grocery spending.
 
-    This does NOT determine final plan feasibility.
+    Known cost:
+        Cost supported by the basket's retail pricing rules.
+
+    Projected cost:
+        Complete basket estimate, including unverified
+        ingredient quantities and Ollama prices.
+
+    A projected balance is not a verified cash balance.
+    This function does not decide plan feasibility.
     """
+    import math
 
-    known_cost = float(
-        grocery_basket.get("known_cost", 0) or 0
+    def valid_money(value, field_name):
+        if isinstance(value, bool):
+            raise ValueError(f"{field_name} must be numeric")
+
+        try:
+            number = float(value)
+        except (TypeError, ValueError, OverflowError):
+            raise ValueError(
+                f"{field_name} must be numeric"
+            ) from None
+
+        if not math.isfinite(number) or number < 0:
+            raise ValueError(
+                f"{field_name} must be finite and nonnegative"
+            )
+
+        return round(number, 2)
+
+    initial_budget = valid_money(
+        initial_budget, "initial_budget"
     )
 
-    initial_budget = float(initial_budget)
+    known_cost = valid_money(
+        grocery_basket.get("known_cost", 0),
+        "known_cost",
+    )
 
-    remaining = (
-        initial_budget - known_cost
+    projection_complete = (
+        grocery_basket.get("projected_cost_complete")
+        is True
+    )
+
+    raw_projected = grocery_basket.get("projected_cost")
+    projected_cost = None
+
+    if projection_complete and raw_projected is not None:
+        projected_cost = valid_money(
+            raw_projected, "projected_cost"
+        )
+
+        if projected_cost + 0.01 < known_cost:
+            raise ValueError(
+                "Projected cost cannot be below known cost"
+            )
+    else:
+        projection_complete = False
+
+    known_remaining = round(
+        initial_budget - known_cost, 2
+    )
+
+    projected_remaining = (
+        round(initial_budget - projected_cost, 2)
+        if projected_cost is not None
+        else None
+    )
+
+    unpriced_items = list(
+        grocery_basket.get("unpriced_items", []) or []
+    )
+
+    projection_missing = list(
+        grocery_basket.get("projection_missing", []) or []
+    )
+
+    estimated_component = (
+        round(projected_cost - known_cost, 2)
+        if projected_cost is not None
+        else None
     )
 
     return {
-        "initial_budget": round(initial_budget, 2),
-        "known_grocery_cost": round(known_cost, 2),
-        "remaining": round(remaining, 2),
+        # Existing fields: preserve compatibility.
+        "initial_budget": initial_budget,
+        "known_grocery_cost": known_cost,
+        "remaining": known_remaining,
         "all_items_priced": grocery_basket.get(
-            "all_items_priced",
-            False,
+            "all_items_priced", False
         ),
-        "unpriced_items": grocery_basket.get(
-            "unpriced_items",
-            [],
+        "unpriced_items": unpriced_items,
+
+        # New reconciliation fields.
+        "projected_grocery_cost": projected_cost,
+        "projected_cost_complete": projection_complete,
+        "estimated_cost_component": estimated_component,
+        "known_remaining_budget": known_remaining,
+        "projected_remaining_budget": projected_remaining,
+        "projection_missing": projection_missing,
+
+        # Explicit affordability reporting.
+        "known_cost_within_budget": (
+            known_cost <= initial_budget
+        ),
+        "projected_cost_within_budget": (
+            projected_cost <= initial_budget
+            if projected_cost is not None
+            else None
+        ),
+        "budget_verification": (
+            "verified"
+            if (
+                grocery_basket.get("all_items_priced") is True
+                and projection_complete
+                and projected_cost is not None
+            )
+            else (
+                "provisional"
+                if projection_complete
+                else "incomplete"
+            )
         ),
     }
+
