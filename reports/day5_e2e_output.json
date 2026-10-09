@@ -87,7 +87,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -100,7 +100,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 32.22,
             "remaining_budget": 50.0
           }
         ]
@@ -113,20 +113,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 7.46,
             "remaining_budget": 50.0
           }
         ]
@@ -139,7 +133,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -152,7 +146,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 15.5,
             "remaining_budget": 50.0
           }
         ]
@@ -165,14 +159,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 19.1,
             "remaining_budget": 50.0
           }
         ]
@@ -185,20 +179,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 13.14,
             "remaining_budget": 50.0
           }
         ]
@@ -211,7 +199,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -224,7 +212,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 32.22,
             "remaining_budget": 50.0
           }
         ]
@@ -237,20 +225,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 7.46,
             "remaining_budget": 50.0
           }
         ]
@@ -263,7 +245,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -276,7 +258,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 15.5,
             "remaining_budget": 50.0
           }
         ]
@@ -289,14 +271,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 19.1,
             "remaining_budget": 50.0
           }
         ]
@@ -309,20 +291,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 13.14,
             "remaining_budget": 50.0
           }
         ]
@@ -335,7 +311,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -348,7 +324,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 32.22,
             "remaining_budget": 50.0
           }
         ]
@@ -361,20 +337,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 7.46,
             "remaining_budget": 50.0
           }
         ]
@@ -387,7 +357,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -400,7 +370,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 15.5,
             "remaining_budget": 50.0
           }
         ]
@@ -413,14 +383,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 19.1,
             "remaining_budget": 50.0
           }
         ]
@@ -433,20 +403,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 13.14,
             "remaining_budget": 50.0
           }
         ]
@@ -459,7 +423,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -472,7 +436,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 32.22,
             "remaining_budget": 50.0
           }
         ]
@@ -485,20 +449,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 7.46,
             "remaining_budget": 50.0
           }
         ]
@@ -511,7 +469,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -524,7 +482,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 15.5,
             "remaining_budget": 50.0
           }
         ]
@@ -537,14 +495,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 19.1,
             "remaining_budget": 50.0
           }
         ]
@@ -557,20 +515,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 13.14,
             "remaining_budget": 50.0
           }
         ]
@@ -583,7 +535,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -596,7 +548,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 32.22,
             "remaining_budget": 50.0
           }
         ]
@@ -609,20 +561,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 7.46,
             "remaining_budget": 50.0
           }
         ]
@@ -635,7 +581,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -648,7 +594,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 15.5,
             "remaining_budget": 50.0
           }
         ]
@@ -661,14 +607,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 19.1,
             "remaining_budget": 50.0
           }
         ]
@@ -681,20 +627,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 13.14,
             "remaining_budget": 50.0
           }
         ]
@@ -707,7 +647,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -720,7 +660,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 32.22,
             "remaining_budget": 50.0
           }
         ]
@@ -733,20 +673,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 7.46,
             "remaining_budget": 50.0
           }
         ]
@@ -759,7 +693,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -772,7 +706,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 15.5,
             "remaining_budget": 50.0
           }
         ]
@@ -785,14 +719,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 19.1,
             "remaining_budget": 50.0
           }
         ]
@@ -805,20 +739,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 13.14,
             "remaining_budget": 50.0
           }
         ]
@@ -834,7 +762,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -847,7 +775,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 32.22,
             "remaining_budget": 50.0
           }
         ]
@@ -861,20 +789,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 7.46,
             "remaining_budget": 50.0
           }
         ]
@@ -888,7 +810,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -901,7 +823,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 15.5,
             "remaining_budget": 50.0
           }
         ]
@@ -915,14 +837,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 19.1,
             "remaining_budget": 50.0
           }
         ]
@@ -936,20 +858,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 13.14,
             "remaining_budget": 50.0
           }
         ]
@@ -967,7 +883,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -980,7 +896,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 32.22,
             "remaining_budget": 50.0
           }
         ]
@@ -994,20 +910,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 7.46,
             "remaining_budget": 50.0
           }
         ]
@@ -1021,7 +931,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -1034,7 +944,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 15.5,
             "remaining_budget": 50.0
           }
         ]
@@ -1048,14 +958,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 19.1,
             "remaining_budget": 50.0
           }
         ]
@@ -1069,20 +979,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 13.14,
             "remaining_budget": 50.0
           }
         ]
@@ -1100,7 +1004,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -1113,7 +1017,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 32.22,
             "remaining_budget": 50.0
           }
         ]
@@ -1127,20 +1031,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 7.46,
             "remaining_budget": 50.0
           }
         ]
@@ -1154,7 +1052,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -1167,7 +1065,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 15.5,
             "remaining_budget": 50.0
           }
         ]
@@ -1181,14 +1079,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 19.1,
             "remaining_budget": 50.0
           }
         ]
@@ -1202,20 +1100,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 13.14,
             "remaining_budget": 50.0
           }
         ]
@@ -1233,7 +1125,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -1246,7 +1138,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 32.22,
             "remaining_budget": 50.0
           }
         ]
@@ -1260,20 +1152,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 7.46,
             "remaining_budget": 50.0
           }
         ]
@@ -1287,7 +1173,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -1300,7 +1186,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 15.5,
             "remaining_budget": 50.0
           }
         ]
@@ -1314,14 +1200,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 19.1,
             "remaining_budget": 50.0
           }
         ]
@@ -1335,20 +1221,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 13.14,
             "remaining_budget": 50.0
           }
         ]
@@ -1366,7 +1246,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -1379,7 +1259,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 32.22,
             "remaining_budget": 50.0
           }
         ]
@@ -1393,20 +1273,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 7.46,
             "remaining_budget": 50.0
           }
         ]
@@ -1420,7 +1294,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -1433,7 +1307,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 15.5,
             "remaining_budget": 50.0
           }
         ]
@@ -1447,14 +1321,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 19.1,
             "remaining_budget": 50.0
           }
         ]
@@ -1468,20 +1342,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 13.14,
             "remaining_budget": 50.0
           }
         ]
@@ -1499,7 +1367,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -1512,7 +1380,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 32.22,
             "remaining_budget": 50.0
           }
         ]
@@ -1526,20 +1394,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 7.46,
             "remaining_budget": 50.0
           }
         ]
@@ -1553,7 +1415,7 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "ingredient_feasibility",
@@ -1566,7 +1428,7 @@
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 15.5,
             "remaining_budget": 50.0
           }
         ]
@@ -1580,14 +1442,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 19.1,
             "remaining_budget": 50.0
           }
         ]
@@ -1601,20 +1463,14 @@
             "constraint": "cooking_time",
             "source": "feasibility",
             "status": "unknown",
-            "reason": "Cooking time unavailable"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "unknown",
-            "reason": "Ingredient information cannot be fully evaluated"
+            "reason": "Cooking-time preference unavailable"
           },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 0.0,
+            "known_purchase_cost": 13.14,
             "remaining_budget": 50.0
           }
         ]
