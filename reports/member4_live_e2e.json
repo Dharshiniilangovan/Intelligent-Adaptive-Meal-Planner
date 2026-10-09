@@ -8,8 +8,8 @@
     "budget_status": "pass",
     "provisional": true,
     "reason": "Projected grocery cost fits within the budget including the provisional safety margin.",
-    "projected_cost": 10.7,
-    "budget_after_purchase": 39.3,
+    "projected_cost": 16.71,
+    "budget_after_purchase": 33.29,
     "safety_margin": 0.2
   },
   "basket": {
@@ -19,14 +19,14 @@
         "name": "cucumber",
         "required_quantity": 660.0,
         "required_unit": "g",
-        "package_quantity": 660.0,
+        "package_quantity": 400.0,
         "package_unit": "g",
-        "packages": 1,
-        "purchased_quantity": 660.0,
-        "price_per_package": 1.59,
-        "purchase_cost": 1.59,
+        "packages": 2,
+        "purchased_quantity": 800.0,
+        "price_per_package": 1.8,
+        "purchase_cost": 3.6,
         "estimated_purchase_cost": null,
-        "leftover_quantity": 0.0,
+        "leftover_quantity": 140.0,
         "inventory_used": 0.0,
         "recipe_ids": [
           "LIVE_LUNCH"
@@ -86,21 +86,21 @@
         "name": "butter lettuce",
         "required_quantity": 0.5,
         "required_unit": "head",
-        "package_quantity": 150.0,
-        "package_unit": "g",
+        "package_quantity": 1.0,
+        "package_unit": "head",
         "packages": 1,
-        "purchased_quantity": 150.0,
-        "price_per_package": 1.5,
+        "purchased_quantity": 1.0,
+        "price_per_package": 3.5,
         "purchase_cost": null,
-        "estimated_purchase_cost": 1.5,
-        "leftover_quantity": null,
+        "estimated_purchase_cost": 3.5,
+        "leftover_quantity": 0.5,
         "inventory_used": 0.0,
         "recipe_ids": [
           "LIVE_DINNER"
         ],
         "pricing_status": "estimated",
-        "purchase_basis": "minimum_retail_package",
-        "quantity_coverage_verified": false,
+        "purchase_basis": "calculated_quantity",
+        "quantity_coverage_verified": true,
         "price_source": "ollama_estimate"
       },
       {
@@ -108,13 +108,13 @@
         "name": "hoisin sauce",
         "required_quantity": 1.0,
         "required_unit": "tablespoon",
-        "package_quantity": 380.0,
+        "package_quantity": 250.0,
         "package_unit": "g",
         "packages": 1,
-        "purchased_quantity": 380.0,
-        "price_per_package": 1.5,
+        "purchased_quantity": 250.0,
+        "price_per_package": 3.5,
         "purchase_cost": null,
-        "estimated_purchase_cost": 1.5,
+        "estimated_purchase_cost": 3.5,
         "leftover_quantity": null,
         "inventory_used": 0.0,
         "recipe_ids": [
@@ -126,7 +126,7 @@
         "price_source": "ollama_estimate"
       }
     ],
-    "known_cost": 7.7,
+    "known_cost": 9.71,
     "all_items_priced": false,
     "unpriced_items": [
       "butter lettuce",
@@ -248,14 +248,13 @@
         "purchase_required": 1.0
       }
     ],
-    "projected_cost": 10.7,
+    "projected_cost": 16.71,
     "projected_cost_complete": true,
     "projection_missing": [],
     "warnings": [
-      "butter lettuce: incompatible recipe/package units; assuming one retail package.",
       "hoisin sauce: incompatible recipe/package units; assuming one retail package."
     ]
   },
-  "first_increment": 7.7,
-  "second_increment": 3.0
+  "first_increment": 9.71,
+  "second_increment": 7.0
 }
