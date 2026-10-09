@@ -23,6 +23,9 @@ import json
 import math
 import os
 import re
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from dataclasses import asdict, dataclass
 
@@ -33,12 +36,17 @@ from src.grocery.ingredient_conversions import estimate_ingredient_mass
 
 OLLAMA_URL = os.getenv(
     "OLLAMA_URL",
-    "http://localhost:11434/api/chat",
+    "https://ollama.com/api/chat",
 )
 
 OLLAMA_MODEL = os.getenv(
     "OLLAMA_GROCERY_MODEL",
-    "mistral:latest",
+    "gemma4:31b",
+)
+
+OLLAMA_API_KEY = os.getenv(
+    "OLLAMA_API_KEY",
+    "",
 )
 
 def _debug_failure(reason, details=None):
@@ -606,10 +614,20 @@ Return only the requested JSON object.
     }
 
     try:
+        if not OLLAMA_API_KEY:
+            _debug_failure(
+                "OLLAMA_API_KEY is missing"
+            )
+            return None
+
         response = requests.post(
-            OLLAMA_URL,
-            json=payload,
-            timeout=timeout,
+        OLLAMA_URL,
+        headers={
+            "Authorization": f"Bearer {OLLAMA_API_KEY}",
+            "Content-Type": "application/json",
+        },
+        json=payload,
+        timeout=timeout,
         )
 
         response.raise_for_status()
