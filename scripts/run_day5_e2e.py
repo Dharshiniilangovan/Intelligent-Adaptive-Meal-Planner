@@ -35,10 +35,6 @@ from src.agents.recipe_agent import RecipeAgent
 from src.agents.ingredient_agent import IngredientAgent
 from src.agents.grocery_agent import GroceryAgent
 
-from src.grocery.ollama_fallback_service import (
-    OllamaFallbackGroceryService,
-)
-
 from src.planning.multi_meal_planner import MultiMealPlanner
 
 
@@ -103,7 +99,7 @@ USER_STATE = {
 
     # Your existing user model stores cooking
     # preference in hours.
-    "cook_time_preference_hrs": 0.5,
+    "preferred_cooking_time_hours": 0.5,
 
     # -----------------------------------------
     # Pantry
@@ -206,8 +202,7 @@ def build_system():
     # 3. GROCERY AGENT
     # ========================================================
 
-    grocery_agent = GroceryAgent(
-        grocery_service=OllamaFallbackGroceryService())
+    grocery_agent = GroceryAgent()
 
     # ========================================================
     # 4. RECIPE LOOKUP
