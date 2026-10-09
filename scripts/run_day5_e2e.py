@@ -24,6 +24,9 @@ from __future__ import annotations
 import json
 from datetime import date
 from pathlib import Path
+from src.grocery.ollama_fallback_service import (
+    OllamaFallbackGroceryService,
+)
 
 
 # ============================================================
@@ -99,7 +102,7 @@ USER_STATE = {
 
     # Your existing user model stores cooking
     # preference in hours.
-    "preferred_cooking_time_hours": 0.5,
+    "cook_time_preference_hrs": 0.5,
 
     # -----------------------------------------
     # Pantry
@@ -202,8 +205,9 @@ def build_system():
     # 3. GROCERY AGENT
     # ========================================================
 
-    grocery_agent = GroceryAgent()
-
+    grocery_agent = GroceryAgent(
+    grocery_service=OllamaFallbackGroceryService()
+    )
     # ========================================================
     # 4. RECIPE LOOKUP
     # ========================================================
@@ -228,6 +232,7 @@ def build_system():
         ingredient_agent=ingredient_agent,
         grocery_agent=grocery_agent,
         recipe_lookup=recipe_lookup,
+        allow_provisional_budget=True,
     )
 
     # ========================================================

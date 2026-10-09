@@ -15,6 +15,10 @@ from src.reasoning.dietary_requirements import evaluate_dietary_requirements
 from src.reasoning.feasibility import evaluate_recipe as evaluate_feasibility
 from src.reasoning.reasoning_engine import evaluate_candidate
 from src.state.workflow_state import WorkflowState
+from src.reasoning.budget_service import (
+    check_budget,
+    check_provisional_grocery_budget,
+)
 
 
 class ManagerAgent:
@@ -35,6 +39,7 @@ class ManagerAgent:
         feasibility_evaluator: Callable[[dict, dict], dict] = evaluate_feasibility,
         budget_evaluator: Callable[..., dict] = check_budget,
         candidate_evaluator: Callable[..., dict] = evaluate_candidate,
+        allow_provisional_budget: bool = False,
     ) -> None:
         self.recipe_agent = recipe_agent
         self.ingredient_agent = ingredient_agent
@@ -44,6 +49,7 @@ class ManagerAgent:
         self.feasibility_evaluator = feasibility_evaluator
         self.budget_evaluator = budget_evaluator
         self.candidate_evaluator = candidate_evaluator
+        self.allow_provisional_budget = allow_provisional_budget
 
     def plan(
         self,
@@ -281,20 +287,51 @@ class ManagerAgent:
             "ingredient": ingredient_data,
             "grocery": grocery_data,
             "reasoning": reasoning,
+            "budget_assessment": budget_result,
             "warnings": (
                 ingredient_result["warnings"] + grocery_result["warnings"]
             ),
         }
 
-    def _evaluate_budget(self, grocery_data: dict[str, Any], user_state: Any) -> dict:
-        known_cost = float(grocery_data.get("known_cost", 0.0) or 0.0)
-        all_items_priced = bool(grocery_data.get("all_items_priced", False))
+    def _evaluate_budget(self, grocery_data: dict, user_state) -> dict:
+        known_cost = float(grocery_data.get("known_cost") or 0)
+        all_items_priced = grocery_data.get("all_items_priced") is True
         remaining_budget = self._remaining_budget(user_state)
-        return self.budget_evaluator(
+
+        strict = self.budget_evaluator(
             purchase_cost=known_cost,
             remaining_budget=remaining_budget,
             has_unknown_cost=not all_items_priced,
         )
+
+        if not self.allow_provisional_budget:
+            return strict
+
+        strict_status = strict.get("budget_status", strict.get("status"))
+
+        if strict_status != "uncertain":
+            return strict
+
+        if grocery_data.get("projected_cost_complete") is not True:
+            return strict
+
+        provisional = check_provisional_grocery_budget(
+            projected_cost=grocery_data.get("projected_cost"),
+            projected_cost_complete=True,
+            remaining_budget=remaining_budget,
+        )
+
+        result = dict(strict)
+        result["strict_budget"] = strict
+        result["provisional_budget"] = provisional
+
+        if provisional.get("budget_status") == "pass":
+            result["budget_status"] = "pass"
+            result["status"] = "pass"
+            result["provisionally_accepted"] = True
+            result["pricing_mode"] = "provisional"
+
+        return result
 
     @staticmethod
     def _remaining_budget(user_state: Any) -> float:

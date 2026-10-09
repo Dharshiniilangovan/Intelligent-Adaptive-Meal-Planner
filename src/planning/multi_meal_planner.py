@@ -858,20 +858,42 @@ class MultiMealPlanner:
                 product_catalog,
         )
     @staticmethod
-    def _extract_cost(
-    decision: dict,
-) -> float:
-        grocery = decision.get(
-            "grocery",
-            {},
-        )
-        known_cost = grocery.get(
-            "known_cost",
-            0.0,
-        )
-        return float(
-            known_cost or 0.0
-        )
+    def _extract_cost(decision: dict) -> float:
+        grocery = decision.get("grocery") or {}
+        budget = decision.get("budget_assessment") or {}
+
+        # 1. Provisional pricing: use projected cost
+        if budget.get("provisionally_accepted"):
+            projected = grocery.get(
+                "projected_cost",
+                decision.get("projected_cost")
+            )
+
+            complete = grocery.get(
+                "projected_cost_complete",
+                decision.get("projected_cost_complete")
+            )
+
+            if complete is True and projected is not None:
+                return float(projected)
+
+            raise ValueError(
+                "Provisional candidate has no complete projected cost"
+            )
+
+        # 2. Verified pricing: support both old and new formats
+        known = grocery.get("known_cost")
+
+        if known is None:
+            known = decision.get("known_cost")
+
+        if known is None:
+            raise ValueError(
+                "Verified candidate has no known cost"
+            )
+
+        return float(known)
+
     @staticmethod
     def _extract_reason(
     decision: dict,
