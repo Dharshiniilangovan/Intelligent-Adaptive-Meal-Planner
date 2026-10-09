@@ -31,6 +31,7 @@ class DemoGroceryService:
     def get_grocery_list(
         self,
         items,
+        recipe_id=None,
     ):
         return [
             GroceryOption(
@@ -114,6 +115,7 @@ def main():
     result = agent.run(
         recipe_id="R001",
         missing_ingredients=missing_ingredients,
+        remaining_budget=50.00,
     )
 
     # ---------------------------------------------------------
