@@ -1,6 +1,9 @@
 from src.planning.plan_state import PlanState
 
 
+from src.planning.plan_state import PlanState
+
+
 def validate_plan(
     plan_state: PlanState,
     all_items_priced: bool = True,
@@ -8,77 +11,36 @@ def validate_plan(
 ) -> dict:
 
     total_slots = len(plan_state.slots)
-
-    selected_slots = len(
-        plan_state.selected_meals
-    )
-
+    selected_slots = len(plan_state.selected_meals)
     issues = []
-
-    # --------------------------------
-    # Check all slots filled
-    # --------------------------------
 
     if selected_slots < total_slots:
         issues.append(
-            f"Only {selected_slots}/{total_slots} "
-            "meal slots were filled."
+            f"Only {selected_slots}/{total_slots} meal slots were filled."
         )
 
-    # --------------------------------
-    # Final aggregated budget
-    # --------------------------------
+    # Known budget violation always makes the plan infeasible.
+    if (
+        final_grocery_cost is not None
+        and final_grocery_cost > plan_state.initial_budget
+    ):
+        issues.append("Final grocery cost exceeds budget.")
+        return {"status": "infeasible", "issues": issues}
 
-    if final_grocery_cost is not None:
-
-        if final_grocery_cost > plan_state.initial_budget:
-
-            issues.append(
-                "Final aggregated grocery cost "
-                "exceeds user budget."
-            )
-
-            return {
-                "status": "infeasible",
-                "issues": issues,
-            }
-
-    # --------------------------------
-    # Pricing uncertainty
-    # --------------------------------
-
-    if not all_items_priced:
-
-        return {
-            "status": "uncertain",
-            "issues": issues + [
-                "Not all grocery items could be priced."
-            ],
-        }
-
-    # --------------------------------
-    # Missing meal slots
-    # --------------------------------
-
+    # No selected meals.
     if selected_slots == 0:
+        return {"status": "infeasible", "issues": issues}
 
-        return {
-            "status": "infeasible",
-            "issues": issues,
-        }
-
+    # Some slots could not be filled.
     if selected_slots < total_slots:
+        if not all_items_priced:
+            issues.append("Some grocery prices are unavailable.")
 
-        return {
-            "status": "partial",
-            "issues": issues,
-        }
+        return {"status": "partial", "issues": issues}
 
-    # --------------------------------
-    # Complete valid plan
-    # --------------------------------
+    # All slots filled, but final cost is not fully verified.
+    if not all_items_priced or final_grocery_cost is None:
+        issues.append("Complete grocery cost could not be verified.")
+        return {"status": "uncertain", "issues": issues}
 
-    return {
-        "status": "feasible",
-        "issues": [],
-    }
+    return {"status": "feasible", "issues": []}
