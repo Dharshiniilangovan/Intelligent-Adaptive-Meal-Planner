@@ -202,6 +202,10 @@ def test_grocery_agent_no_missing_ingredients():
 # Test 4: Recipe ID required
 # ============================================================
 
+# ============================================================
+# Test 4: Recipe ID required
+# ============================================================
+
 def test_grocery_agent_requires_recipe_id():
 
     agent = GroceryAgent(
