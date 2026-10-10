@@ -1,4 +1,3 @@
-
 """src/agents/grocery_agent.py
 
 Grocery Agent.
@@ -34,7 +33,6 @@ from src.grocery.units import to_base
 from src.grocery.ingredient_conversions import (
     estimate_ingredient_mass,
 )
-
 
 class GroceryAgent:
     """
@@ -198,7 +196,6 @@ class GroceryAgent:
                 )
             )
 
-            
             # ---------------------------------------------------------
             # Prevent empty grocery results from being treated
             # as successfully priced purchases.
@@ -238,7 +235,6 @@ class GroceryAgent:
                     ],
                     errors=[],
                 ).to_dict()
-
 
             grocery_results = grocery_summary(options)
 
@@ -311,7 +307,6 @@ class GroceryAgent:
             for ingredient in unpriced_items
         ]
 
-        
         # ---------------------------------------------------------
         # Warn when one retail package is assumed sufficient.
         #
@@ -336,7 +331,6 @@ class GroceryAgent:
                     "assumed sufficient; exact quantity "
                     "coverage is not verified."
                 )
-
 
         # ---------------------------------------------------------
         # Agent status
@@ -410,7 +404,6 @@ class GroceryAgent:
                     ],
                 ).to_dict()
 
-        
         # ---------------------------------------------------------
         # PROVISIONAL BUDGET EVALUATION
         #
@@ -470,8 +463,6 @@ class GroceryAgent:
                         "This is a provisional estimate."
                     )
 
-
-        
         # ---------------------------------------------------------
         # PROVISIONAL BUDGET SERVICE RESULT
         #
@@ -506,7 +497,6 @@ class GroceryAgent:
                 ],
             ).to_dict()
 
-        
         # ---------------------------------------------------------
         # OPTIONAL PLANNING BUDGET INFORMATION
         #
@@ -541,7 +531,6 @@ class GroceryAgent:
         elif budget_status == "uncertain":
             planning_budget_source = "incomplete"
 
-
         # ---------------------------------------------------------
         # Shared AgentResult
         # ---------------------------------------------------------
@@ -556,7 +545,6 @@ class GroceryAgent:
 
                 "known_cost": known_cost,
 
-                
                 # Provisional shopping estimate.
                 # Does not affect the verified budget decision.
                 "projected_cost": grocery_results.get(
@@ -578,7 +566,6 @@ class GroceryAgent:
                     [],
                 ),
 
-
                 "all_items_priced": all_items_priced,
 
                 "unpriced_items": unpriced_items,
@@ -588,7 +575,6 @@ class GroceryAgent:
 
                 "budget_status": budget_status,
 
-                
                 "estimated_budget_status": (
                     estimated_budget_status
                 ),
@@ -608,13 +594,9 @@ class GroceryAgent:
                     planning_budget_source
                 ),
 
-                
                 "provisional_budget": (
                     provisional_budget_result
                 ),
-
-
-
 
                 "remaining_budget": remaining_budget,
 
@@ -628,12 +610,10 @@ class GroceryAgent:
             errors=[],
         ).to_dict()
 
-
 # ============================================================
 # DAY 5 - PLAN-LEVEL GROCERY AGGREGATION
 # Member 4
 # ============================================================
-
 
 def _ingredient_key(item):
     """
@@ -655,7 +635,6 @@ def _ingredient_key(item):
     )
 
     return name.strip().lower()
-
 
 def _ingredient_name(item):
     """
@@ -715,8 +694,6 @@ def normalize_requirement_quantity(name, quantity, unit):
         "original_quantity": quantity,
         "original_unit": unit,
     }
-
-
 
 def aggregate_requirements(recipe_requirements):
     """
@@ -820,8 +797,6 @@ def aggregate_requirements(recipe_requirements):
 
     return list(aggregated.values())
 
-
-
 def subtract_inventory(requirements, inventory):
     """
     Deduct pantry stock from aggregated requirements.
@@ -898,7 +873,6 @@ def subtract_inventory(requirements, inventory):
 
     return results
 
-
 def calculate_packages(
     required_quantity,
     package_quantity,
@@ -929,7 +903,6 @@ def calculate_packages(
         required_quantity / package_quantity
     )
 
-
 def calculate_package_leftover(
     required_quantity,
     package_quantity,
@@ -959,7 +932,6 @@ def calculate_package_leftover(
         0.0,
         purchased_quantity - required_quantity,
     )
-
 
 def find_plan_product(
     requirement,
@@ -1014,7 +986,60 @@ def find_plan_product(
 
     return None
 
+def collect_qualitative_requirements(recipe_requirements):
+    """Preserve non-numeric ingredient instructions separately."""
+    qualitative = []
+    seen = set()
 
+    qualitative_units = {
+        "to taste",
+        "as needed",
+        "as required",
+    }
+
+    for recipe in recipe_requirements or []:
+        recipe_id = recipe.get("recipe_id")
+
+        for ingredient in recipe.get("ingredients", []):
+            raw_quantity = ingredient.get("quantity")
+            raw_unit = str(ingredient.get("unit") or "").strip().lower()
+
+            instruction = None
+
+            if isinstance(raw_quantity, str):
+                candidate = raw_quantity.strip().lower()
+                if candidate in qualitative_units:
+                    instruction = candidate
+
+            if raw_unit in qualitative_units:
+                instruction = raw_unit
+
+            if instruction is None:
+                continue
+
+            name = _ingredient_name(ingredient)
+            key = (
+                ingredient.get("ingredient_id"),
+                name.lower(),
+                instruction,
+                recipe_id,
+            )
+
+            if key in seen:
+                continue
+
+            seen.add(key)
+            qualitative.append({
+                "ingredient_id": ingredient.get("ingredient_id"),
+                "ingredient_name": name,
+                "instruction": instruction,
+                "quantity": raw_quantity,
+                "unit": instruction,
+                "recipe_id": recipe_id,
+                "recipe_ids": [recipe_id] if recipe_id is not None else [],
+            })
+
+    return qualitative
 
 def build_plan_grocery_basket(
     recipe_requirements,
@@ -1038,6 +1063,9 @@ def build_plan_grocery_basket(
     inventory = inventory or []
     product_catalog = product_catalog or []
 
+    qualitative_requirements = collect_qualitative_requirements(
+        recipe_requirements
+    )
     aggregated = aggregate_requirements(
         recipe_requirements
     )
@@ -1155,6 +1183,51 @@ def build_plan_grocery_basket(
         return (
             quantity * source[1] / target[1]
         )
+
+    def estimate_package_conversion(
+        quantity,
+        from_unit,
+        to_unit,
+        ingredient_name,
+    ):
+        """Estimate package units through ingredient-specific mass data.
+
+        This is a provisional fallback only. It must not be treated
+        as exact retail quantity coverage.
+        """
+        from_unit = normalize_unit(from_unit)
+        to_unit = normalize_unit(to_unit)
+
+        # Convert an ingredient-specific recipe measure to mass.
+        required_mass = estimate_ingredient_mass(
+            ingredient_name,
+            quantity,
+            from_unit,
+        )
+        if required_mass is not None:
+            grams, _ = required_mass
+            if to_unit == "g":
+                return grams
+            if to_unit == "kg":
+                return grams / 1000.0
+
+        # Convert mass requirements to an estimated count-like unit
+        # such as head, bunch, piece, clove, sprig, or wedge.
+        if from_unit in {"g", "kg"}:
+            required_grams = (
+                quantity * 1000.0 if from_unit == "kg" else quantity
+            )
+            grams_per_package_unit = estimate_ingredient_mass(
+                ingredient_name,
+                1.0,
+                to_unit,
+            )
+            if grams_per_package_unit is not None:
+                grams, _ = grams_per_package_unit
+                if grams > 0:
+                    return required_grams / grams
+
+        return None
 
     def implausible_package(quantity, unit, ingredient):
         """
@@ -1326,7 +1399,6 @@ def build_plan_grocery_basket(
             basket_items.append(base_item)
             continue
 
-        
         # Preserve the existing strict plan-basket
         # contract for different unit strings.
         #
@@ -1334,12 +1406,23 @@ def build_plan_grocery_basket(
         # still be added later without changing
         # pricing_status.
 
-
         converted_required = convert_requirement(
             required,
             required_unit,
             package_unit,
         )
+        estimated_package_conversion = False
+
+        if converted_required is None:
+            converted_required = estimate_package_conversion(
+                required,
+                required_unit,
+                package_unit,
+                ingredient_name,
+            )
+            estimated_package_conversion = (
+                converted_required is not None
+            )
 
         if converted_required is not None:
             packages = math.ceil(
@@ -1372,9 +1455,17 @@ def build_plan_grocery_basket(
 
             quantity_supported = (
                 conversion_is_exact
+                and not estimated_package_conversion
                 and normalization_resolved
                 and inventory_resolved
             )
+
+            if estimated_package_conversion:
+                warnings.append(
+                    f"{ingredient_name}: estimated ingredient-specific "
+                    "conversion used for package sizing; quantity "
+                    "coverage is provisional."
+                )
 
             is_llm_product = (
                 product.get("purchase_basis") == "llm_estimated_package"
@@ -1428,7 +1519,6 @@ def build_plan_grocery_basket(
             product.get("estimated_total_cost")
         )
 
-        
         source_basis = product.get("purchase_basis")
         source_status = product.get("match_status")
 
@@ -1454,8 +1544,6 @@ def build_plan_grocery_basket(
             and not has_estimated_quantity
             and not has_estimated_source
         )
-
-
 
         conversion_is_exact = (
             requirement.get("conversion_status", "exact") == "exact"
@@ -1495,7 +1583,6 @@ def build_plan_grocery_basket(
 
             base_item["pricing_status"] = "estimated"
 
-            
             base_item["price_source"] = (
                 "ollama_estimate"
                 if is_llm
@@ -1509,12 +1596,20 @@ def build_plan_grocery_basket(
                 )
             )
 
-
         base_item.update({
             "packages": packages,
             "purchased_quantity": purchased_quantity,
             "leftover_quantity": leftover_quantity,
             "purchase_basis": purchase_basis,
+            "package_conversion_status": (
+                "estimated"
+                if estimated_package_conversion
+                else (
+                    "exact"
+                    if converted_required is not None
+                    else "unresolved"
+                )
+            ),
             "quantity_coverage_verified": (
                 quantity_supported
             ),
@@ -1541,6 +1636,7 @@ def build_plan_grocery_basket(
         "all_items_priced": (
             len(unpriced_items) == 0
         ),
+        "qualitative_requirements": qualitative_requirements,
         "unpriced_items": unpriced_items,
         "aggregated_requirements": aggregated,
         "purchase_requirements": purchase_requirements,
@@ -1555,8 +1651,6 @@ def build_plan_grocery_basket(
         "projection_missing": projection_missing,
         "warnings": warnings,
     }
-
-
 
 def calculate_incremental_basket_cost(
     selected_recipe_requirements,
@@ -1765,9 +1859,6 @@ def calculate_incremental_basket_cost(
             after.get("projection_missing", [])
         ),
     }
-
-
-
 
 def build_cost_summary(
     grocery_basket,
