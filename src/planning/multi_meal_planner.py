@@ -241,8 +241,20 @@ class MultiMealPlanner:
 
         feasible_candidates = []
 
-        for recipe_id in candidate_ids[: self.max_candidates_per_slot]:
-            if recipe_id in plan_state.used_recipe_ids:
+        max_repeats = int(
+            user_state.get(
+                "max_recipe_repetitions",
+                len(plan_state.slots),
+            )
+        )
+
+        for recipe_id in candidate_ids:
+
+            recipe_count = sum(
+                meal["recipe_id"] == recipe_id for meal in plan_state.selected_meals
+            )
+
+            if recipe_count >= max_repeats:
                 continue
 
             decision = self._evaluate_candidate(
@@ -451,7 +463,8 @@ class MultiMealPlanner:
             next_beams.sort(
                 key=lambda state: (
                     -len(state.selected_meals),
-                    state.estimated_spent,
+                    round(state.estimated_spent, 2),
+                    len(state.used_recipe_ids),
                 )
             )
 
@@ -461,7 +474,8 @@ class MultiMealPlanner:
             beams,
             key=lambda state: (
                 -len(state.selected_meals),
-                state.estimated_spent,
+                round(state.estimated_spent, 2),
+                len(state.used_recipe_ids),
             ),
         )
 
@@ -474,11 +488,42 @@ class MultiMealPlanner:
         slot: MealSlot,
         plan_state: PlanState,
     ) -> list[str]:
+        """
+        Retrieve new recipes and include previously selected
+        recipes as potential reuse candidates.
+
+        Recipe repetition is limited during candidate evaluation.
+        """
+
         meal_slot = {
             "date": slot.date.isoformat(),
             "meal_type": slot.meal_type,
             "max_cooking_time": slot.max_cooking_time,
         }
+
+        max_repeats = int(
+            user_state.get(
+                "max_recipe_repetitions",
+                len(plan_state.slots),
+            )
+        )
+
+        usage_counts = {}
+
+        for meal in plan_state.selected_meals:
+            recipe_id = meal["recipe_id"]
+            usage_counts[recipe_id] = usage_counts.get(recipe_id, 0) + 1
+
+        # Reuse candidates are already known to the planner.
+        reuse_ids = [
+            recipe_id
+            for recipe_id in usage_counts
+            if usage_counts[recipe_id] < max_repeats
+        ]
+
+        # Ask Recipe Agent for new recipes.
+        # Existing recipe IDs remain excluded from retrieval,
+        # but are reintroduced locally as reuse candidates.
         response = self.manager.recipe_agent.run(
             user_state=user_state,
             meal_slot=meal_slot,
@@ -486,46 +531,48 @@ class MultiMealPlanner:
             recent_cuisines=[],
             max_candidates=self.max_candidates_per_slot,
         )
-        if not response:
-            return []
-        # ========================================================
-        # Member 2's current RecipeAgent returns:
-        #
-        # {
-        #     "slot": {...},
-        #     "candidate_recipe_ids": [...]
-        # }
-        # ========================================================
+
         if isinstance(response, dict):
-            # Current Member-2 format
             candidates = response.get("candidate_recipe_ids")
-            # Backward-compatible fallback for AgentResult format
+
             if candidates is None:
-                data = response.get("data", {})
+                data = response.get("data") or {}
                 candidates = data.get("candidate_recipe_ids", [])
-        else:
+
+        elif isinstance(response, list):
             candidates = response
-        # ========================================================
-        # Normalize IDs
-        # ========================================================
+
+        else:
+            candidates = []
+
         result = []
-        for candidate in candidates or []:
-            if isinstance(candidate, str):
-                recipe_id = candidate.strip().upper()
-            elif isinstance(candidate, dict):
-                recipe_id = candidate.get("recipe_id") or candidate.get("id")
-                if recipe_id:
-                    recipe_id = str(recipe_id).strip().upper()
-            else:
-                continue
-            if not recipe_id:
-                continue
-            # Extra safety:
-            # RecipeAgent already excludes selected recipes.
-            if recipe_id in plan_state.used_recipe_ids:
-                continue
+
+        # Prioritize reuse candidates to encourage
+        # ingredient sharing and batch-friendly plans.
+        for recipe_id in reuse_ids:
             if recipe_id not in result:
                 result.append(recipe_id)
+
+        for candidate in candidates or []:
+
+            if isinstance(candidate, str):
+                recipe_id = candidate.strip().upper()
+
+            elif isinstance(candidate, dict):
+                recipe_id = candidate.get("recipe_id") or candidate.get("id")
+
+                if recipe_id:
+                    recipe_id = str(recipe_id).strip().upper()
+
+            else:
+                continue
+
+            if not recipe_id:
+                continue
+
+            if recipe_id not in result:
+                result.append(recipe_id)
+
         return result
 
     # ============================================================
@@ -891,7 +938,7 @@ class MultiMealPlanner:
 
                 # Preserve original Grocery Agent evidence.
                 # Do not turn estimated prices into verified prices.
-                
+
                 price = item.get("price")
 
                 if price is None:
@@ -900,20 +947,13 @@ class MultiMealPlanner:
                 product_catalog.append(
                     {
                         **item,
-                        "ingredient_id": item.get(
-                            "ingredient_id"
-                        ),
+                        "ingredient_id": item.get("ingredient_id"),
                         "ingredient_name": ingredient_name,
-                        "package_quantity": item.get(
-                            "package_quantity"
-                        ),
-                        "package_unit": item.get(
-                            "package_unit"
-                        ),
+                        "package_quantity": item.get("package_quantity"),
+                        "package_unit": item.get("package_unit"),
                         "price": price,
                     }
                 )
-
 
         # ========================================================
         # INITIAL PANTRY

@@ -50,7 +50,7 @@ MEAL_TYPES = [
     "dinner",
 ]
 
-MAX_CANDIDATES_PER_SLOT = 3
+MAX_CANDIDATES_PER_SLOT = 10
 
 
 # ============================================================
@@ -485,7 +485,6 @@ def print_grocery_basket(
             (item.get("packages_needed") or item.get("packages")),
         )
 
-        
         cost = item.get("effective_purchase_cost")
 
         if cost is None:
@@ -494,12 +493,7 @@ def print_grocery_basket(
         if cost is None:
             cost = item.get("estimated_purchase_cost")
 
-        print(
-            f"  Cost: S${cost:.2f}"
-            if cost is not None
-            else "  Cost: Unavailable"
-        )
-
+        print(f"  Cost: S${cost:.2f}" if cost is not None else "  Cost: Unavailable")
 
 
 def print_execution_trace(
@@ -585,10 +579,15 @@ def run_acceptance_checks(
     # 2. No duplicate selected recipes
     # --------------------------------------------------------
 
+    # Recipe repetition is allowed.
+    # A meal slot must still be assigned at most once.
+
+    selected_slot_ids = [meal["slot"]["slot_id"] for meal in selected]
+
     checks.append(
         (
-            "No duplicate selected recipes",
-            len(used_ids) == len(set(used_ids)),
+            "No duplicate meal-slot assignments",
+            len(selected_slot_ids) == len(set(selected_slot_ids)),
         )
     )
 

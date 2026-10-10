@@ -455,23 +455,44 @@ def test_rejected_candidate_retries():
     assert plan["selected_meals"][0]["recipe_id"] == "R002"
 
 
-def test_selected_recipe_not_repeated():
+def test_repeated_recipe_can_fill_multiple_slots():
+    class SingleRecipeAgent:
+        def run(
+            self,
+            user_state,
+            meal_slot,
+            selected_recipe_ids=None,
+            recent_cuisines=None,
+            max_candidates=None,
+        ):
+            return {
+                "candidate_recipe_ids": (
+                    ["R002"] if "R002" not in (selected_recipe_ids or []) else []
+                )
+            }
 
     manager = FakeManager()
+    manager.recipe_agent = SingleRecipeAgent()
 
-    planner = MultiMealPlanner(manager)
+    planner = MultiMealPlanner(
+        manager=manager,
+        max_candidates_per_slot=5,
+    )
 
     result = planner.plan_meals(
-        user_state={"budget_remaining": 100},
-        start_date=date(
-            2026,
-            10,
-            5,
-        ),
-        days=2,
+        user_state={
+            "budget_remaining": 100,
+            "max_recipe_repetitions": 3,
+        },
+        start_date=date(2026, 10, 5),
+        days=3,
         meal_types=["lunch"],
     )
 
-    selected = [item["recipe_id"] for item in result["plan"]["selected_meals"]]
+    selected = result["plan"]["selected_meals"]
 
-    assert len(selected) == len(set(selected))
+    assert len(selected) == 3
+    assert [meal["recipe_id"] for meal in selected] == ["R002", "R002", "R002"]
+
+    slot_ids = [meal["slot"]["slot_id"] for meal in selected]
+    assert len(slot_ids) == len(set(slot_ids))
