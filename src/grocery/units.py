@@ -9,6 +9,7 @@ invented gram/ml conversions.
 
 from __future__ import annotations
 
+import math
 import re
 
 _EXTRA_COUNT = re.compile(
@@ -76,6 +77,25 @@ UNIT_TABLE = {
     "fluid ounce": ("ml", 29.5735),
     "fluid ounces": ("ml", 29.5735),
 
+    # Additional standard volume units
+    "pint": ("ml", 473.176),
+    "pints": ("ml", 473.176),
+    "pt": ("ml", 473.176),
+    "quart": ("ml", 946.353),
+    "quarts": ("ml", 946.353),
+    "qt": ("ml", 946.353),
+    "gallon": ("ml", 3785.41),
+    "gallons": ("ml", 3785.41),
+    "gal": ("ml", 3785.41),
+    "deciliter": ("ml", 100.0),
+    "deciliters": ("ml", 100.0),
+    "decilitre": ("ml", 100.0),
+    "decilitres": ("ml", 100.0),
+    "dl": ("ml", 100.0),
+    "dessert spoon": ("ml", 10.0),
+    "dessert spoons": ("ml", 10.0),
+
+
     # ---------------------------------------------------------
     # Count
     # ---------------------------------------------------------
@@ -129,6 +149,26 @@ UNIT_TABLE = {
     # FairPrice-style count notation
     "s": ("pcs", 1.0),
     "'s": ("pcs", 1.0),
+
+
+    # Additional standard volume units
+    "pint": ("ml", 473.176),
+    "pints": ("ml", 473.176),
+    "pt": ("ml", 473.176),
+    "quart": ("ml", 946.353),
+    "quarts": ("ml", 946.353),
+    "qt": ("ml", 946.353),
+    "gallon": ("ml", 3785.41),
+    "gallons": ("ml", 3785.41),
+    "gal": ("ml", 3785.41),
+    "deciliter": ("ml", 100.0),
+    "deciliters": ("ml", 100.0),
+    "decilitre": ("ml", 100.0),
+    "decilitres": ("ml", 100.0),
+    "dl": ("ml", 100.0),
+    "dessert spoon": ("ml", 10.0),
+    "dessert spoons": ("ml", 10.0),
+
 }
 
 
@@ -204,12 +244,13 @@ def to_base(
 
     base, factor = info
 
+
     try:
         quantity = float(quantity)
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
         return None
 
-    if quantity < 0:
+    if not math.isfinite(quantity) or quantity < 0:
         return None
 
     return quantity * factor, base

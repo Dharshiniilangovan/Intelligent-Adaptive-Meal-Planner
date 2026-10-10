@@ -18,7 +18,7 @@ class IngredientConversion:
     grams_per_clove: float | None = None
     grams_per_wedge: float | None = None
     grams_per_pinch: float | None = None
-
+    grams_per_bunch: float | None = None
 
 _SOURCE = "provisional culinary estimate; verify for production"
 
@@ -39,8 +39,8 @@ INGREDIENT_CONVERSIONS = {
     "carrot": IngredientConversion(_SOURCE, grams_per_tablespoon=9, grams_per_piece=70),
     "yellow onion": IngredientConversion(_SOURCE, grams_per_tablespoon=10, grams_per_piece=150),
     "onion": IngredientConversion(_SOURCE, grams_per_tablespoon=10, grams_per_piece=150),
-    "green onion": IngredientConversion(_SOURCE, grams_per_tablespoon=6),
-    "spring onion": IngredientConversion(_SOURCE, grams_per_tablespoon=6),
+    "green onion": IngredientConversion(_SOURCE,grams_per_tablespoon=6,grams_per_bunch=100),
+    "spring onion": IngredientConversion(_SOURCE,grams_per_tablespoon=6,grams_per_bunch=100,),
     "zucchini": IngredientConversion(_SOURCE, grams_per_tablespoon=9, grams_per_piece=200),
     "mint": IngredientConversion(_SOURCE, grams_per_tablespoon=1.5, grams_per_sprig=1),
     "salt": IngredientConversion(_SOURCE, grams_per_tablespoon=18, grams_per_pinch=0.35),
@@ -107,6 +107,8 @@ def estimate_ingredient_mass(
         "sprig": (conversion.grams_per_sprig, 1),
         "sprigs": (conversion.grams_per_sprig, 1),
         "count": (conversion.grams_per_piece, 1),
+        "bunch": (conversion.grams_per_bunch, 1),
+        "bunches": (conversion.grams_per_bunch, 1),
     }
     factor, multiplier = mapping.get(measure, (None, 1))
     if factor is None:
