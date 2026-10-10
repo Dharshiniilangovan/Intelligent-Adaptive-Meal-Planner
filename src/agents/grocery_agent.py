@@ -29,6 +29,11 @@ from src.reasoning.budget_service import (
     check_grocery_budget,
     check_provisional_grocery_budget,
 )
+from src.grocery.units import to_base
+
+from src.grocery.ingredient_conversions import (
+    estimate_ingredient_mass,
+)
 
 
 class GroceryAgent:
@@ -664,51 +669,78 @@ def _ingredient_name(item):
         or ""
     ).strip()
 
+def normalize_requirement_quantity(name, quantity, unit):
+    try:
+        quantity = float(quantity)
+    except (TypeError, ValueError, OverflowError):
+        return None
+
+    if not math.isfinite(quantity) or quantity <= 0:
+        return None
+
+    unit = str(unit or "").strip().lower()
+
+    # FIRST: Ingredient-specific conversion
+    estimated = estimate_ingredient_mass(
+        name,
+        quantity,
+        unit,
+    )
+
+    if estimated is not None:
+        return {
+            "quantity": estimated[0],
+            "unit": estimated[1],
+            "conversion_status": "estimated",
+            "original_quantity": quantity,
+            "original_unit": unit,
+        }
+
+    # SECOND: General physical-unit conversion
+    exact = to_base(quantity, unit)
+
+    if exact is not None:
+        return {
+            "quantity": exact[0],
+            "unit": exact[1],
+            "conversion_status": "exact",
+            "original_quantity": quantity,
+            "original_unit": unit,
+        }
+
+    return {
+        "quantity": quantity,
+        "unit": unit,
+        "conversion_status": "unresolved",
+        "original_quantity": quantity,
+        "original_unit": unit,
+    }
+
+
 
 def aggregate_requirements(recipe_requirements):
     """
-    Combine ingredient requirements from ALL selected recipes.
+    Aggregate ingredient requirements across selected recipes.
 
-    Example:
-        Recipe A -> rice 300g
-        Recipe B -> rice 400g
-
-    Result:
-        rice 700g
-
-    Parameters
-    ----------
-    recipe_requirements : list
-
-        [
-            {
-                "recipe_id": "R001",
-                "ingredients": [
-                    {
-                        "ingredient_id": "ING001",
-                        "ingredient_name": "rice",
-                        "quantity": 300,
-                        "unit": "g"
-                    }
-                ]
-            }
-        ]
-
-    Returns
-    -------
-    list
-        Aggregated ingredient requirements.
+    - Uses existing unit normalization.
+    - Combines compatible normalized quantities.
+    - Preserves estimated conversion status.
+    - Keeps incompatible units separate.
+    - Never silently adds incompatible quantities.
     """
 
     aggregated = {}
 
+    status_priority = {
+        "exact": 0,
+        "estimated": 1,
+        "unresolved": 2,
+    }
+
     for recipe in recipe_requirements or []:
-
         recipe_id = recipe.get("recipe_id")
-        ingredients = recipe.get("ingredients", [])
 
-        for ingredient in ingredients:
-
+        for ingredient in recipe.get("ingredients", []):
             key = _ingredient_key(ingredient)
 
             if not key:
@@ -716,145 +748,150 @@ def aggregate_requirements(recipe_requirements):
 
             name = _ingredient_name(ingredient)
 
-            try:
-                quantity = float(
-                    ingredient.get("quantity", 0) or 0
-                )
-            except (TypeError, ValueError):
-                quantity = 0.0
+            normalized = normalize_requirement_quantity(
+                name=name,
+                quantity=ingredient.get("quantity"),
+                unit=ingredient.get("unit"),
+            )
 
-            unit = ingredient.get("unit")
-
-            if quantity <= 0:
+            if normalized is None:
                 continue
 
-            if key not in aggregated:
-                aggregated[key] = {
+            quantity = normalized["quantity"]
+            unit = normalized["unit"]
+            conversion_status = normalized["conversion_status"]
+
+            # Different incompatible units must remain separate.
+            group_key = (key, unit)
+
+            if group_key not in aggregated:
+                aggregated[group_key] = {
                     "ingredient_id": ingredient.get("ingredient_id"),
                     "ingredient_name": name,
                     "quantity": 0.0,
                     "unit": unit,
                     "recipe_ids": [],
+                    "conversion_status": conversion_status,
+                    "normalization_status": "resolved",
+                    "source_requirements": [],
                 }
 
-            existing_unit = aggregated[key]["unit"]
+            record = aggregated[group_key]
 
-            # Do not silently combine incompatible units.
+            record["quantity"] += quantity
+
+            # Preserve the least certain conversion status.
+            current_status = record["conversion_status"]
+
             if (
-                existing_unit
-                and unit
-                and existing_unit != unit
+                status_priority[conversion_status]
+                > status_priority[current_status]
             ):
-                raise ValueError(
-                    f"Incompatible units for {name}: "
-                    f"{existing_unit} vs {unit}"
-                )
+                record["conversion_status"] = conversion_status
 
-            aggregated[key]["quantity"] += quantity
+            record["source_requirements"].append({
+                "recipe_id": recipe_id,
+                "quantity": normalized["original_quantity"],
+                "unit": normalized["original_unit"],
+                "conversion_status": conversion_status,
+            })
 
             if (
                 recipe_id is not None
-                and recipe_id not in aggregated[key]["recipe_ids"]
+                and recipe_id not in record["recipe_ids"]
             ):
-                aggregated[key]["recipe_ids"].append(recipe_id)
+                record["recipe_ids"].append(recipe_id)
+
+    # Identify ingredients with incompatible unit groups.
+    ingredient_groups = {}
+
+    for (ingredient_key, unit), record in aggregated.items():
+        ingredient_groups.setdefault(
+            ingredient_key, []
+        ).append(record)
+
+    for records in ingredient_groups.values():
+        if len(records) > 1:
+            units = [record["unit"] for record in records]
+
+            for record in records:
+                record["normalization_status"] = "unresolved"
+                record["unresolved_units"] = units
 
     return list(aggregated.values())
 
 
+
 def subtract_inventory(requirements, inventory):
     """
-    Subtract existing pantry/inventory quantities from the
-    aggregated plan requirements.
+    Deduct pantry stock from aggregated requirements.
 
-    Example:
-        Required rice = 700g
-        Pantry rice = 500g
-
-    Purchase requirement = 200g
+    Does not mutate the original inventory.
+    Does not consume the same pantry stock twice.
     """
 
-    inventory_map = {}
+    stock_map = {}
 
     for item in inventory or []:
-
         key = _ingredient_key(item)
 
         if not key:
             continue
 
-        try:
-            quantity = float(
-                item.get("quantity", 0) or 0
-            )
-        except (TypeError, ValueError):
-            quantity = 0.0
+        name = _ingredient_name(item)
 
-        if key not in inventory_map:
-            inventory_map[key] = {
-                "quantity": quantity,
-                "unit": item.get("unit"),
-            }
+        normalized = normalize_requirement_quantity(
+            name,
+            item.get("quantity"),
+            item.get("unit"),
+        )
 
-        else:
-            existing_unit = inventory_map[key]["unit"]
-            current_unit = item.get("unit")
+        if normalized is None:
+            continue
 
-            if (
-                existing_unit
-                and current_unit
-                and existing_unit == current_unit
-            ):
-                inventory_map[key]["quantity"] += quantity
+        stock_map.setdefault(key, []).append({
+            "quantity": normalized["quantity"],
+            "unit": normalized["unit"],
+            "conversion_status": normalized["conversion_status"],
+        })
 
     results = []
 
     for requirement in requirements or []:
-
         key = _ingredient_key(requirement)
-
-        required_quantity = float(
-            requirement.get("quantity", 0) or 0
-        )
-
+        required = float(requirement.get("quantity", 0))
         required_unit = requirement.get("unit")
 
-        inventory_item = inventory_map.get(key)
+        remaining = required
+        inventory_used = 0.0
+        inventory_unresolved = False
 
-        inventory_available = 0.0
+        for stock in stock_map.get(key, []):
+            if remaining <= 0:
+                break
 
-        if inventory_item:
+            # Requirements and inventory must share a
+            # comparable normalized unit.
+            if stock["unit"] != required_unit:
+                inventory_unresolved = True
+                continue
 
-            inventory_unit = inventory_item.get("unit")
+            available = max(0.0, stock["quantity"])
+            consumed = min(remaining, available)
 
-            if (
-                inventory_unit == required_unit
-                or not inventory_unit
-                or not required_unit
-            ):
-                inventory_available = max(
-                    0.0,
-                    float(
-                        inventory_item.get("quantity", 0) or 0
-                    ),
-                )
+            remaining -= consumed
+            inventory_used += consumed
 
-        inventory_used = min(
-            required_quantity,
-            inventory_available,
-        )
-
-        purchase_required = max(
-            0.0,
-            required_quantity - inventory_used,
-        )
+            stock["quantity"] -= consumed
 
         result = dict(requirement)
 
         result.update({
-            "required_quantity": required_quantity,
-            "inventory_available": inventory_available,
+            "required_quantity": required,
+            "inventory_available": inventory_used,
             "inventory_used": inventory_used,
-            "purchase_required": purchase_required,
+            "purchase_required": max(0.0, remaining),
+            "inventory_conversion_unresolved": inventory_unresolved,
         })
 
         results.append(result)
@@ -1009,6 +1046,18 @@ def build_plan_grocery_basket(
         aggregated,
         inventory,
     )
+
+    unresolved_requirements = [
+        requirement
+        for requirement in purchase_requirements
+        if (
+            requirement.get("normalization_status")
+            == "unresolved"
+            or requirement.get(
+                "conversion_status"
+            ) == "unresolved"
+        )
+    ]
 
     basket_items = []
     known_cost = 0.0
@@ -1181,7 +1230,36 @@ def build_plan_grocery_basket(
             "purchase_basis": None,
             "quantity_coverage_verified": False,
             "price_source": "unknown",
+            "conversion_status": requirement.get(
+                "conversion_status", "exact"
+            ),
+            "normalization_status": requirement.get(
+                "normalization_status", "resolved"
+            ),
+            "inventory_conversion_unresolved": requirement.get(
+                "inventory_conversion_unresolved", False
+            ),
         }
+
+        if (
+            requirement.get("normalization_status")
+            == "unresolved"
+            or requirement.get("conversion_status")
+            == "unresolved"
+        ):
+            base_item["pricing_status"] = "unresolved_conversion"
+            base_item["price_source"] = "unknown"
+
+            unpriced_items.append(ingredient_name)
+            projection_missing.append(ingredient_name)
+
+            warnings.append(
+                f"{ingredient_name}: unresolved quantity conversion. "
+                "Purchase quantity cannot be verified."
+            )
+
+            basket_items.append(base_item)
+            continue
 
         if product is None:
             unpriced_items.append(ingredient_name)
@@ -1279,8 +1357,36 @@ def build_plan_grocery_basket(
                 purchased_quantity - converted_required,
             )
 
-            purchase_basis = "calculated_quantity"
-            quantity_supported = True
+            conversion_is_exact = (
+                requirement.get("conversion_status", "exact") == "exact"
+            )
+
+            normalization_resolved = (
+                requirement.get("normalization_status", "resolved")
+                == "resolved"
+            )
+
+            inventory_resolved = not requirement.get(
+                "inventory_conversion_unresolved", False
+            )
+
+            quantity_supported = (
+                conversion_is_exact
+                and normalization_resolved
+                and inventory_resolved
+            )
+
+            is_llm_product = (
+                product.get("purchase_basis") == "llm_estimated_package"
+                or product.get("match_status") == "estimated_no_retail_match"
+            )
+
+            if quantity_supported:
+                purchase_basis = "calculated_quantity"
+            elif is_llm_product:
+                purchase_basis = "minimum_retail_package"
+            else:
+                purchase_basis = "estimated_quantity"
 
         else:
             # Cannot prove exact quantity coverage.
@@ -1351,7 +1457,26 @@ def build_plan_grocery_basket(
 
 
 
-        if has_retail_evidence and quantity_supported:
+        conversion_is_exact = (
+            requirement.get("conversion_status", "exact") == "exact"
+        )
+
+        normalization_resolved = (
+            requirement.get("normalization_status", "resolved")
+            == "resolved"
+        )
+
+        inventory_resolved = not requirement.get(
+            "inventory_conversion_unresolved", False
+        )
+
+        if (
+            has_retail_evidence
+            and quantity_supported
+            and conversion_is_exact
+            and normalization_resolved
+            and inventory_resolved
+        ):
             known_cost += estimated_purchase_cost
 
             base_item["purchase_cost"] = (
@@ -1376,7 +1501,10 @@ def build_plan_grocery_basket(
                 if is_llm
                 else (
                     "retail_estimated_quantity"
-                    if has_estimated_quantity
+                    if (
+                        has_estimated_quantity
+                        or not conversion_is_exact
+                    )
                     else "unverified"
                 )
             )
@@ -1409,6 +1537,7 @@ def build_plan_grocery_basket(
     return {
         "items": basket_items,
         "known_cost": round(known_cost, 2),
+        "unresolved_requirements": unresolved_requirements,
         "all_items_priced": (
             len(unpriced_items) == 0
         ),

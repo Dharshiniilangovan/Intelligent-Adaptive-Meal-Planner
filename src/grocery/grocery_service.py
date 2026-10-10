@@ -356,16 +356,31 @@ class GroceryService:
 
 
     def __init__(
-
         self,
-
         client: TavilyGroceryClient | None = None,
-
         verify_links: bool = False,
-
         cache_ttl_hours: float = 6.0,
-
+        persistent_cache_enabled: bool | None = None,
     ):
+        if persistent_cache_enabled is None:
+            persistent_cache_enabled = client is None
+
+        self.persistent_cache_enabled = persistent_cache_enabled
+
+        self.client = client or TavilyGroceryClient()
+        self.verify_links = verify_links
+        self.cache_ttl = cache_ttl_hours * 3600
+
+        self.persistent_cache = (
+            PersistentCache()
+            if self.persistent_cache_enabled
+            else None
+        )
+
+        self._search_cache: dict[
+            str,
+            tuple[float, list[dict]],
+        ] = {}
 
 
 
@@ -447,14 +462,12 @@ class GroceryService:
         query: str,
     ) -> list[dict]:
         """
-        Search grocery products with an in-memory cache.
-
-        Repeated equivalent queries reuse cached results
-        until the cache TTL expires.
+        Search grocery products using:
+        1. In-memory cache
+        2. Persistent SQLite cache (when enabled)
+        3. Live Tavily search
         """
 
-        # Normalize whitespace and capitalization.
-        # Do not remove ingredient identity words.
         key = " ".join(
             str(query or "").lower().split()
         )
@@ -462,25 +475,62 @@ class GroceryService:
         if not key:
             return []
 
+        # 1. Check in-memory cache
         hit = self._search_cache.get(key)
-        if hit is not None and time.time() - hit[0] < self.cache_ttl:
+
+        if (
+            hit is not None
+            and time.time() - hit[0] < self.cache_ttl
+        ):
             print(f"[MEMORY TAVILY CACHE HIT] {query}")
             return hit[1]
 
-        persistent_key = cache_key("tavily_search_v1", {"query": key, "client": type(self.client).__name__})
-        cached = self.persistent_cache.get("tavily_search_v1", persistent_key)
-        if isinstance(cached, list):
-            print(f"[SQLITE TAVILY CACHE HIT] {query}")
-            self._search_cache[key] = (time.time(), cached)
-            return cached
+        # 2. Check persistent SQLite cache
+        persistent_key = cache_key(
+            "tavily_search_v1",
+            {
+                "query": key,
+                "client": type(self.client).__name__,
+            },
+        )
 
+        if self.persistent_cache_enabled and self.persistent_cache is not None:
+            cached = self.persistent_cache.get(
+                "tavily_search_v1",
+                persistent_key,
+            )
+
+            if isinstance(cached, list):
+                print(f"[SQLITE TAVILY CACHE HIT] {query}")
+
+                self._search_cache[key] = (
+                    time.time(),
+                    cached,
+                )
+
+                return cached
+
+        # 3. Perform live search
         print(f"[LIVE TAVILY SEARCH] {query}")
-        products = self.client.search(query)
-        if isinstance(products, list) and products:
-            self._search_cache[key] = (time.time(), products)
-            self.persistent_cache.set("tavily_search_v1", persistent_key, products, self.cache_ttl)
-        return products
 
+        products = self.client.search(query)
+
+        # 4. Save successful results
+        if isinstance(products, list) and products:
+            self._search_cache[key] = (
+                time.time(),
+                products,
+            )
+
+            if self.persistent_cache is not None:
+                self.persistent_cache.set(
+                    "tavily_search_v1",
+                    persistent_key,
+                    products,
+                    self.cache_ttl,
+                )
+
+        return products
 
 
     # -----------------------------------------------------------------

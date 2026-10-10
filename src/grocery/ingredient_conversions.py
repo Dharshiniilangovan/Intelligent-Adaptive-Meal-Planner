@@ -85,6 +85,9 @@ def estimate_ingredient_mass(
         "pieces": (conversion.grams_per_piece, 1),
         "pc": (conversion.grams_per_piece, 1),
         "pcs": (conversion.grams_per_piece, 1),
+        "count": (conversion.grams_per_piece, 1),
+        "unit": (conversion.grams_per_piece, 1),
+        "each": (conversion.grams_per_piece, 1),
         "clove": (conversion.grams_per_clove, 1),
         "cloves": (conversion.grams_per_clove, 1),
         "wedge": (conversion.grams_per_wedge, 1),
@@ -93,6 +96,7 @@ def estimate_ingredient_mass(
         "pinches": (conversion.grams_per_pinch, 1),
         "sprig": (conversion.grams_per_sprig, 1),
         "sprigs": (conversion.grams_per_sprig, 1),
+        "count": (conversion.grams_per_piece, 1),
     }
     factor, multiplier = mapping.get(measure, (None, 1))
     if factor is None:

@@ -192,6 +192,34 @@
             "pantry_used": [],
             "missing_ingredients": [
               {
+                "ingredient_id": "ING2900",
+                "ingredient_name": "red wine vinegar",
+                "quantity": "2.0",
+                "unit": "tablespoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING3399",
+                "ingredient_name": "sugar",
+                "quantity": "1.0",
+                "unit": "teaspoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING0596",
+                "ingredient_name": "carrot",
+                "quantity": "1.0",
+                "unit": "count",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING2333",
+                "ingredient_name": "of chickpea",
+                "quantity": "0.5",
+                "unit": "count",
+                "status": "missing"
+              },
+              {
                 "ingredient_id": "ING2536",
                 "ingredient_name": "pepper",
                 "quantity": "required",
@@ -213,24 +241,17 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING3399",
-                "ingredient_name": "sugar",
-                "quantity": "1.0",
-                "unit": "teaspoon",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING2268",
-                "ingredient_name": "mustard seed",
-                "quantity": "1.0",
-                "unit": "pinch",
-                "status": "missing"
-              },
-              {
                 "ingredient_id": "ING1962",
                 "ingredient_name": "lemon juice",
                 "quantity": "1.0",
                 "unit": "teaspoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING3126",
+                "ingredient_name": "sesame oil",
+                "quantity": "1.0",
+                "unit": "pinch",
                 "status": "missing"
               },
               {
@@ -241,38 +262,17 @@
                 "status": "missing"
               },
               {
+                "ingredient_id": "ING2268",
+                "ingredient_name": "mustard seed",
+                "quantity": "1.0",
+                "unit": "pinch",
+                "status": "missing"
+              },
+              {
                 "ingredient_id": "ING3046",
                 "ingredient_name": "salt",
                 "quantity": "required",
                 "unit": "to taste",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING2333",
-                "ingredient_name": "of chickpea",
-                "quantity": "0.5",
-                "unit": "count",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING2900",
-                "ingredient_name": "red wine vinegar",
-                "quantity": "2.0",
-                "unit": "tablespoon",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING0596",
-                "ingredient_name": "carrot",
-                "quantity": "1.0",
-                "unit": "count",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING3126",
-                "ingredient_name": "sesame oil",
-                "quantity": "1.0",
-                "unit": "pinch",
                 "status": "missing"
               }
             ],
@@ -281,6 +281,62 @@
           "grocery": {
             "recipe_id": "R21444",
             "items": [
+              {
+                "ingredient_id": "ING2900",
+                "ingredient": "red wine vinegar",
+                "required_quantity": "2.0",
+                "required_unit": "tablespoon",
+                "product_name": "De Nigris Red Wine Vinegar - Cabernet",
+                "package_quantity": 250.0,
+                "package_unit": "ml",
+                "packages_needed": 1,
+                "price_per_package": 7.28,
+                "minimum_package_cost": 7.28,
+                "purchase_basis": "exact_quantity",
+                "estimated_total_cost": null,
+                "estimated_required_quantity": 29.88,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": 7.28,
+                "currency": "SGD",
+                "store": "FairPrice",
+                "source_url": "https://www.fairprice.com.sg/product/de-nigris-red-wine-vinegar-cabernet-250ml-13042323",
+                "source_updated_at": null,
+                "date_collected": "2026-10-10T04:16:55+00:00",
+                "match_status": "matched",
+                "match_quality": "exact",
+                "purchase_channel": "in_store_only",
+                "search_query": "red wine vinegar",
+                "note": ""
+              },
+              {
+                "ingredient_id": "ING2333",
+                "ingredient": "of chickpea",
+                "required_quantity": "0.5",
+                "required_unit": "count",
+                "product_name": "Laobanniang Raw Chickpeas",
+                "package_quantity": 500.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 3.36,
+                "minimum_package_cost": 3.36,
+                "purchase_basis": "minimum_retail_package",
+                "estimated_total_cost": null,
+                "estimated_required_quantity": null,
+                "estimated_required_unit": null,
+                "quantity_estimated": false,
+                "total_cost": 3.36,
+                "currency": "SGD",
+                "store": "FairPrice",
+                "source_url": "https://www.fairprice.com.sg/product/laobanniang-raw-chickpeas-500-g-90067240",
+                "source_updated_at": null,
+                "date_collected": "2026-10-10T04:16:57+00:00",
+                "match_status": "matched_minimum_package",
+                "match_quality": "exact",
+                "purchase_channel": "availability_unverified",
+                "search_query": "chickpea",
+                "note": "unit mismatch (need pcs, package in g); using one retail package as the minimum purchase."
+              },
               {
                 "ingredient_id": "ING2536",
                 "ingredient": "pepper",
@@ -302,7 +358,7 @@
                 "store": "FairPrice",
                 "source_url": "https://www.fairprice.com.sg/product/fairprice-ground-black-pepper-100g-11046813",
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T02:57:42+00:00",
+                "date_collected": "2026-10-10T04:16:57+00:00",
                 "match_status": "matched_minimum_package",
                 "match_quality": "exact",
                 "purchase_channel": "availability_unverified",
@@ -330,40 +386,12 @@
                 "store": "FairPrice",
                 "source_url": "https://www.fairprice.com.sg/product/fresh-cucumber-0-66kg-10422143",
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T02:57:43+00:00",
+                "date_collected": "2026-10-10T04:16:57+00:00",
                 "match_status": "matched_minimum_package",
                 "match_quality": "exact",
                 "purchase_channel": "in_store_only",
                 "search_query": "cucumber",
                 "note": "unit mismatch (need pcs, package in g); using one retail package as the minimum purchase."
-              },
-              {
-                "ingredient_id": "ING2268",
-                "ingredient": "mustard seed",
-                "required_quantity": "1.0",
-                "required_unit": "pinch",
-                "product_name": "Max's Seeds - Mustard",
-                "package_quantity": 50.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 0.71,
-                "minimum_package_cost": 0.71,
-                "purchase_basis": "minimum_retail_package",
-                "estimated_total_cost": null,
-                "estimated_required_quantity": null,
-                "estimated_required_unit": null,
-                "quantity_estimated": false,
-                "total_cost": 0.71,
-                "currency": "SGD",
-                "store": "FairPrice",
-                "source_url": "https://www.fairprice.com.sg/product/13157380",
-                "source_updated_at": null,
-                "date_collected": "2026-10-10T02:57:43+00:00",
-                "match_status": "matched_minimum_package",
-                "match_quality": "exact",
-                "purchase_channel": "in_store_only",
-                "search_query": "mustard seed",
-                "note": "required unit 'pinch' cannot be converted to an exact package quantity; minimum retail purchase will be used when a valid product is found. recipe quantity cannot be converted exactly to the retail package unit; using one retail package as the minimum purchase."
               },
               {
                 "ingredient_id": "ING1962",
@@ -386,124 +414,12 @@
                 "store": "FairPrice",
                 "source_url": "https://www.fairprice.com.sg/product/13112025",
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T02:57:43+00:00",
+                "date_collected": "2026-10-10T04:16:57+00:00",
                 "match_status": "matched",
                 "match_quality": "exact",
                 "purchase_channel": "in_store_only",
                 "search_query": "lemon juice",
                 "note": ""
-              },
-              {
-                "ingredient_id": "ING3046",
-                "ingredient": "salt",
-                "required_quantity": "required",
-                "required_unit": "to taste",
-                "product_name": "FairPrice Premium Quality Fine Salt",
-                "package_quantity": 500.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 0.45,
-                "minimum_package_cost": 0.45,
-                "purchase_basis": "minimum_retail_package",
-                "estimated_total_cost": null,
-                "estimated_required_quantity": null,
-                "estimated_required_unit": null,
-                "quantity_estimated": false,
-                "total_cost": 0.45,
-                "currency": "SGD",
-                "store": "FairPrice",
-                "source_url": "https://www.fairprice.com.sg/product/fairprice-premium-fine-salt-500g-432823",
-                "source_updated_at": null,
-                "date_collected": "2026-10-10T02:57:43+00:00",
-                "match_status": "matched_minimum_package",
-                "match_quality": "exact",
-                "purchase_channel": "availability_unverified",
-                "search_query": "salt",
-                "note": "required unit 'to taste' cannot be converted to an exact package quantity; minimum retail purchase will be used when a valid product is found. recipe quantity cannot be converted exactly to the retail package unit; using one retail package as the minimum purchase."
-              },
-              {
-                "ingredient_id": "ING2333",
-                "ingredient": "of chickpea",
-                "required_quantity": "0.5",
-                "required_unit": "count",
-                "product_name": "Laobanniang Raw Chickpeas",
-                "package_quantity": 500.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 3.36,
-                "minimum_package_cost": 3.36,
-                "purchase_basis": "minimum_retail_package",
-                "estimated_total_cost": null,
-                "estimated_required_quantity": null,
-                "estimated_required_unit": null,
-                "quantity_estimated": false,
-                "total_cost": 3.36,
-                "currency": "SGD",
-                "store": "FairPrice",
-                "source_url": "https://www.fairprice.com.sg/product/laobanniang-raw-chickpeas-500-g-90067240",
-                "source_updated_at": null,
-                "date_collected": "2026-10-10T02:57:43+00:00",
-                "match_status": "matched_minimum_package",
-                "match_quality": "exact",
-                "purchase_channel": "availability_unverified",
-                "search_query": "chickpea",
-                "note": "unit mismatch (need pcs, package in g); using one retail package as the minimum purchase."
-              },
-              {
-                "ingredient_id": "ING2900",
-                "ingredient": "red wine vinegar",
-                "required_quantity": "2.0",
-                "required_unit": "tablespoon",
-                "product_name": "De Nigris Red Wine Vinegar - Cabernet",
-                "package_quantity": 250.0,
-                "package_unit": "ml",
-                "packages_needed": 1,
-                "price_per_package": 7.28,
-                "minimum_package_cost": 7.28,
-                "purchase_basis": "exact_quantity",
-                "estimated_total_cost": null,
-                "estimated_required_quantity": 29.88,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": 7.28,
-                "currency": "SGD",
-                "store": "FairPrice",
-                "source_url": "https://www.fairprice.com.sg/product/de-nigris-red-wine-vinegar-cabernet-250ml-13042323",
-                "source_updated_at": null,
-                "date_collected": "2026-10-10T02:57:43+00:00",
-                "match_status": "matched",
-                "match_quality": "exact",
-                "purchase_channel": "in_store_only",
-                "search_query": "red wine vinegar",
-                "note": ""
-              },
-              {
-                "ingredient_id": "ING0596",
-                "ingredient": "carrot",
-                "required_quantity": "1.0",
-                "required_unit": "count",
-                "product_name": "Sumich Fresh Carrots",
-                "package_quantity": 500.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 0.95,
-                "minimum_package_cost": 0.95,
-                "purchase_basis": "minimum_retail_package",
-                "estimated_total_cost": null,
-                "estimated_required_quantity": null,
-                "estimated_required_unit": null,
-                "quantity_estimated": false,
-                "total_cost": 0.95,
-                "currency": "SGD",
-                "store": "FairPrice",
-                "source_url": "https://www.fairprice.com.sg/product/sumich-fresh-carrots-500g-10733611",
-                "source_updated_at": null,
-                "date_collected": "2026-10-10T02:57:43+00:00",
-                "match_status": "matched_minimum_package",
-                "match_quality": "exact",
-                "purchase_channel": "availability_unverified",
-                "search_query": "carrot",
-                "note": "unit mismatch (need pcs, package in g); using one retail package as the minimum purchase."
               },
               {
                 "ingredient_id": "ING3126",
@@ -526,7 +442,7 @@
                 "store": "FairPrice",
                 "source_url": "https://www.fairprice.com.sg/product/lee-kum-kee-pure-sesame-oil-207ml-13160717",
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T02:57:43+00:00",
+                "date_collected": "2026-10-10T04:16:57+00:00",
                 "match_status": "matched_minimum_package",
                 "match_quality": "exact",
                 "purchase_channel": "availability_unverified",
@@ -534,32 +450,60 @@
                 "note": "required unit 'pinch' cannot be converted to an exact package quantity; minimum retail purchase will be used when a valid product is found. recipe quantity cannot be converted exactly to the retail package unit; using one retail package as the minimum purchase."
               },
               {
-                "ingredient_id": "ING3101",
-                "ingredient": "seasoned rice vinegar",
-                "required_quantity": "0.5",
-                "required_unit": "tablespoon",
-                "product_name": "Seasoned Rice Vinegar",
-                "package_quantity": 500.0,
-                "package_unit": "ml",
+                "ingredient_id": "ING2268",
+                "ingredient": "mustard seed",
+                "required_quantity": "1.0",
+                "required_unit": "pinch",
+                "product_name": "Max's Seeds - Mustard",
+                "package_quantity": 50.0,
+                "package_unit": "g",
                 "packages_needed": 1,
-                "price_per_package": 3.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 3.5,
-                "estimated_required_quantity": 7.45,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
+                "price_per_package": 0.71,
+                "minimum_package_cost": 0.71,
+                "purchase_basis": "minimum_retail_package",
+                "estimated_total_cost": null,
+                "estimated_required_quantity": null,
+                "estimated_required_unit": null,
+                "quantity_estimated": false,
+                "total_cost": 0.71,
                 "currency": "SGD",
-                "store": null,
-                "source_url": null,
+                "store": "FairPrice",
+                "source_url": "https://www.fairprice.com.sg/product/13157380",
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T02:57:42+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
+                "date_collected": "2026-10-10T04:16:57+00:00",
+                "match_status": "matched_minimum_package",
+                "match_quality": "exact",
+                "purchase_channel": "in_store_only",
+                "search_query": "mustard seed",
+                "note": "required unit 'pinch' cannot be converted to an exact package quantity; minimum retail purchase will be used when a valid product is found. recipe quantity cannot be converted exactly to the retail package unit; using one retail package as the minimum purchase."
+              },
+              {
+                "ingredient_id": "ING3046",
+                "ingredient": "salt",
+                "required_quantity": "required",
+                "required_unit": "to taste",
+                "product_name": "FairPrice Premium Quality Fine Salt",
+                "package_quantity": 500.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 0.45,
+                "minimum_package_cost": 0.45,
+                "purchase_basis": "minimum_retail_package",
+                "estimated_total_cost": null,
+                "estimated_required_quantity": null,
+                "estimated_required_unit": null,
+                "quantity_estimated": false,
+                "total_cost": 0.45,
+                "currency": "SGD",
+                "store": "FairPrice",
+                "source_url": "https://www.fairprice.com.sg/product/fairprice-premium-fine-salt-500g-432823",
+                "source_updated_at": null,
+                "date_collected": "2026-10-10T04:16:57+00:00",
+                "match_status": "matched_minimum_package",
+                "match_quality": "exact",
                 "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                "search_query": "salt",
+                "note": "required unit 'to taste' cannot be converted to an exact package quantity; minimum retail purchase will be used when a valid product is found. recipe quantity cannot be converted exactly to the retail package unit; using one retail package as the minimum purchase."
               },
               {
                 "ingredient_id": "ING3399",
@@ -582,12 +526,68 @@
                 "store": "FairPrice",
                 "source_url": "https://www.fairprice.com.sg/product/13108806",
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T02:57:43+00:00",
+                "date_collected": "2026-10-10T04:16:57+00:00",
                 "match_status": "matched_estimated_quantity",
                 "match_quality": "exact",
                 "purchase_channel": "availability_unverified",
                 "search_query": "white granulated sugar",
                 "note": "purchase quantity calculated using an approximate ingredient-specific conversion; cost is an estimate, not a verified quantity calculation."
+              },
+              {
+                "ingredient_id": "ING0596",
+                "ingredient": "carrot",
+                "required_quantity": "1.0",
+                "required_unit": "count",
+                "product_name": "Sumich Fresh Carrots",
+                "package_quantity": 500.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 0.95,
+                "minimum_package_cost": 0.95,
+                "purchase_basis": "estimated_quantity",
+                "estimated_total_cost": 0.95,
+                "estimated_required_quantity": 70.0,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": "FairPrice",
+                "source_url": "https://www.fairprice.com.sg/product/sumich-fresh-carrots-500g-10733611",
+                "source_updated_at": null,
+                "date_collected": "2026-10-10T04:16:57+00:00",
+                "match_status": "matched_estimated_quantity",
+                "match_quality": "exact",
+                "purchase_channel": "availability_unverified",
+                "search_query": "carrot",
+                "note": "purchase quantity calculated using an approximate ingredient-specific conversion; cost is an estimate, not a verified quantity calculation."
+              },
+              {
+                "ingredient_id": "ING3101",
+                "ingredient": "seasoned rice vinegar",
+                "required_quantity": "0.5",
+                "required_unit": "tablespoon",
+                "product_name": "Seasoned Rice Vinegar",
+                "package_quantity": 500.0,
+                "package_unit": "ml",
+                "packages_needed": 1,
+                "price_per_package": 3.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 3.5,
+                "estimated_required_quantity": 7.45,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-10T04:16:57+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
               },
               {
                 "ingredient_id": "ING2367",
@@ -610,7 +610,7 @@
                 "store": "FairPrice",
                 "source_url": "https://www.fairprice.com.sg/product/chef-red-onion-large-700g-10736396",
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T02:57:43+00:00",
+                "date_collected": "2026-10-10T04:16:57+00:00",
                 "match_status": "matched_estimated_quantity",
                 "match_quality": "exact",
                 "purchase_channel": "availability_unverified",
@@ -618,15 +618,16 @@
                 "note": "purchase quantity calculated using an approximate ingredient-specific conversion; cost is an estimate, not a verified quantity calculation."
               }
             ],
-            "known_cost": 31.79,
+            "known_cost": 30.84,
             "projected_cost": 39.34,
             "projected_cost_complete": true,
             "projected_items": 12,
             "projection_missing": [],
             "all_items_priced": false,
             "unpriced_items": [
-              "seasoned rice vinegar",
               "sugar",
+              "carrot",
+              "seasoned rice vinegar",
               "onion"
             ],
             "budget": null,
@@ -680,7 +681,7 @@
                 "source": "budget_service",
                 "status": "pass",
                 "reason": "One or more required grocery costs are unknown.",
-                "known_purchase_cost": 31.79,
+                "known_purchase_cost": 30.84,
                 "remaining_budget": 50.0
               }
             ],
@@ -704,13 +705,13 @@
           },
           "budget_assessment": {
             "budget_status": "pass",
-            "known_purchase_cost": 31.79,
+            "known_purchase_cost": 30.84,
             "remaining_budget": 50.0,
             "budget_after_purchase": null,
             "reason": "One or more required grocery costs are unknown.",
             "strict_budget": {
               "budget_status": "uncertain",
-              "known_purchase_cost": 31.79,
+              "known_purchase_cost": 30.84,
               "remaining_budget": 50.0,
               "budget_after_purchase": null,
               "reason": "One or more required grocery costs are unknown."
@@ -728,16 +729,16 @@
             "pricing_mode": "provisional"
           },
           "warnings": [
-            "No complete purchase price found for seasoned rice vinegar",
             "No complete purchase price found for sugar",
+            "No complete purchase price found for carrot",
+            "No complete purchase price found for seasoned rice vinegar",
             "No complete purchase price found for onion",
+            "of chickpea: one retail package is assumed sufficient; exact quantity coverage is not verified.",
             "pepper: one retail package is assumed sufficient; exact quantity coverage is not verified.",
             "cucumber: one retail package is assumed sufficient; exact quantity coverage is not verified.",
+            "sesame oil: one retail package is assumed sufficient; exact quantity coverage is not verified.",
             "mustard seed: one retail package is assumed sufficient; exact quantity coverage is not verified.",
-            "salt: one retail package is assumed sufficient; exact quantity coverage is not verified.",
-            "of chickpea: one retail package is assumed sufficient; exact quantity coverage is not verified.",
-            "carrot: one retail package is assumed sufficient; exact quantity coverage is not verified.",
-            "sesame oil: one retail package is assumed sufficient; exact quantity coverage is not verified."
+            "salt: one retail package is assumed sufficient; exact quantity coverage is not verified."
           ],
           "execution_trace": [
             {
@@ -749,7 +750,7 @@
               "step": "grocery_agent",
               "recipe_id": "R21444",
               "status": "partial",
-              "known_cost": 31.79,
+              "known_cost": 30.84,
               "all_items_priced": false
             },
             {
@@ -791,6 +792,14 @@
           "quantity": 250.0,
           "unit": "ml"
         },
+        "red wine vinegar": {
+          "quantity": 250.0,
+          "unit": "ml"
+        },
+        "of chickpea": {
+          "quantity": 500.0,
+          "unit": "g"
+        },
         "pepper": {
           "quantity": 100.0,
           "unit": "g"
@@ -799,41 +808,33 @@
           "quantity": 660.0,
           "unit": "g"
         },
-        "mustard seed": {
-          "quantity": 50.0,
-          "unit": "g"
-        },
         "lemon juice": {
           "quantity": 473.0,
           "unit": "ml"
-        },
-        "salt": {
-          "quantity": 500.0,
-          "unit": "g"
-        },
-        "of chickpea": {
-          "quantity": 500.0,
-          "unit": "g"
-        },
-        "red wine vinegar": {
-          "quantity": 250.0,
-          "unit": "ml"
-        },
-        "carrot": {
-          "quantity": 500.0,
-          "unit": "g"
         },
         "sesame oil": {
           "quantity": 207.0,
           "unit": "ml"
         },
-        "seasoned rice vinegar": {
+        "mustard seed": {
+          "quantity": 50.0,
+          "unit": "g"
+        },
+        "salt": {
           "quantity": 500.0,
-          "unit": "ml"
+          "unit": "g"
         },
         "sugar": {
           "quantity": 1.0,
           "unit": "kg"
+        },
+        "carrot": {
+          "quantity": 500.0,
+          "unit": "g"
+        },
+        "seasoned rice vinegar": {
+          "quantity": 500.0,
+          "unit": "ml"
         },
         "onion": {
           "quantity": 700.0,
@@ -859,8 +860,8 @@
         {
           "ingredient_id": "ING2367",
           "name": "onion",
-          "required_quantity": 0.5,
-          "required_unit": "pcs",
+          "required_quantity": 75.0,
+          "required_unit": "g",
           "package_quantity": 700.0,
           "package_unit": "g",
           "packages": 1,
@@ -868,21 +869,24 @@
           "price_per_package": 1.7,
           "purchase_cost": null,
           "estimated_purchase_cost": 1.7,
-          "leftover_quantity": null,
+          "leftover_quantity": 625.0,
           "inventory_used": 0.0,
           "recipe_ids": [
             "R21444"
           ],
           "pricing_status": "estimated",
-          "purchase_basis": "minimum_retail_package",
+          "purchase_basis": "estimated_quantity",
           "quantity_coverage_verified": false,
-          "price_source": "unverified"
+          "price_source": "retail_estimated_quantity",
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING3399",
           "name": "sugar",
-          "required_quantity": 1.0,
-          "required_unit": "teaspoon",
+          "required_quantity": 4.1667,
+          "required_unit": "g",
           "package_quantity": 1.0,
           "package_unit": "kg",
           "packages": 1,
@@ -890,43 +894,49 @@
           "price_per_package": 2.35,
           "purchase_cost": null,
           "estimated_purchase_cost": 2.35,
-          "leftover_quantity": null,
+          "leftover_quantity": 0.9958333,
           "inventory_used": 0.0,
           "recipe_ids": [
             "R21444"
           ],
           "pricing_status": "estimated",
-          "purchase_basis": "minimum_retail_package",
+          "purchase_basis": "estimated_quantity",
           "quantity_coverage_verified": false,
-          "price_source": "unverified"
+          "price_source": "retail_estimated_quantity",
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING2268",
           "name": "mustard seed",
           "required_quantity": 1.0,
           "required_unit": "pinch",
-          "package_quantity": 50.0,
-          "package_unit": "g",
-          "packages": 1,
-          "purchased_quantity": 50.0,
-          "price_per_package": 0.71,
+          "package_quantity": null,
+          "package_unit": null,
+          "packages": null,
+          "purchased_quantity": null,
+          "price_per_package": null,
           "purchase_cost": null,
-          "estimated_purchase_cost": 0.71,
+          "estimated_purchase_cost": null,
           "leftover_quantity": null,
           "inventory_used": 0.0,
           "recipe_ids": [
             "R21444"
           ],
-          "pricing_status": "estimated",
-          "purchase_basis": "minimum_retail_package",
+          "pricing_status": "unresolved_conversion",
+          "purchase_basis": null,
           "quantity_coverage_verified": false,
-          "price_source": "unverified"
+          "price_source": "unknown",
+          "conversion_status": "unresolved",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING2900",
           "name": "red wine vinegar",
-          "required_quantity": 2.0,
-          "required_unit": "tablespoon",
+          "required_quantity": 30.0,
+          "required_unit": "ml",
           "package_quantity": 250.0,
           "package_unit": "ml",
           "packages": 1,
@@ -942,7 +952,10 @@
           "pricing_status": "priced",
           "purchase_basis": "calculated_quantity",
           "quantity_coverage_verified": true,
-          "price_source": "retail"
+          "price_source": "retail",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING1129",
@@ -964,13 +977,16 @@
           "pricing_status": "estimated",
           "purchase_basis": "minimum_retail_package",
           "quantity_coverage_verified": false,
-          "price_source": "unverified"
+          "price_source": "unverified",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING0596",
           "name": "carrot",
-          "required_quantity": 1.0,
-          "required_unit": "pcs",
+          "required_quantity": 70.0,
+          "required_unit": "g",
           "package_quantity": 500.0,
           "package_unit": "g",
           "packages": 1,
@@ -978,15 +994,18 @@
           "price_per_package": 0.95,
           "purchase_cost": null,
           "estimated_purchase_cost": 0.95,
-          "leftover_quantity": null,
+          "leftover_quantity": 430.0,
           "inventory_used": 0.0,
           "recipe_ids": [
             "R21444"
           ],
           "pricing_status": "estimated",
-          "purchase_basis": "minimum_retail_package",
+          "purchase_basis": "estimated_quantity",
           "quantity_coverage_verified": false,
-          "price_source": "unverified"
+          "price_source": "retail_estimated_quantity",
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING2333",
@@ -1008,13 +1027,16 @@
           "pricing_status": "estimated",
           "purchase_basis": "minimum_retail_package",
           "quantity_coverage_verified": false,
-          "price_source": "unverified"
+          "price_source": "unverified",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING3101",
           "name": "seasoned rice vinegar",
-          "required_quantity": 0.5,
-          "required_unit": "tablespoon",
+          "required_quantity": 7.5,
+          "required_unit": "ml",
           "package_quantity": 500.0,
           "package_unit": "ml",
           "packages": 1,
@@ -1030,13 +1052,16 @@
           "pricing_status": "priced",
           "purchase_basis": "calculated_quantity",
           "quantity_coverage_verified": true,
-          "price_source": "retail"
+          "price_source": "retail",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING1962",
           "name": "lemon juice",
-          "required_quantity": 1.0,
-          "required_unit": "teaspoon",
+          "required_quantity": 5.0,
+          "required_unit": "ml",
           "package_quantity": 473.0,
           "package_unit": "ml",
           "packages": 1,
@@ -1052,32 +1077,88 @@
           "pricing_status": "priced",
           "purchase_basis": "calculated_quantity",
           "quantity_coverage_verified": true,
-          "price_source": "retail"
+          "price_source": "retail",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING3126",
           "name": "sesame oil",
           "required_quantity": 1.0,
           "required_unit": "pinch",
-          "package_quantity": 207.0,
-          "package_unit": "ml",
-          "packages": 1,
-          "purchased_quantity": 207.0,
-          "price_per_package": 3.0,
+          "package_quantity": null,
+          "package_unit": null,
+          "packages": null,
+          "purchased_quantity": null,
+          "price_per_package": null,
           "purchase_cost": null,
-          "estimated_purchase_cost": 3.0,
+          "estimated_purchase_cost": null,
           "leftover_quantity": null,
           "inventory_used": 0.0,
           "recipe_ids": [
             "R21444"
           ],
-          "pricing_status": "estimated",
-          "purchase_basis": "minimum_retail_package",
+          "pricing_status": "unresolved_conversion",
+          "purchase_basis": null,
           "quantity_coverage_verified": false,
-          "price_source": "unverified"
+          "price_source": "unknown",
+          "conversion_status": "unresolved",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false
         }
       ],
       "known_cost": 21.43,
+      "unresolved_requirements": [
+        {
+          "ingredient_id": "ING2268",
+          "ingredient_name": "mustard seed",
+          "quantity": 1.0,
+          "unit": "pinch",
+          "recipe_ids": [
+            "R21444"
+          ],
+          "conversion_status": "unresolved",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 1.0,
+              "unit": "pinch",
+              "conversion_status": "unresolved"
+            }
+          ],
+          "required_quantity": 1.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 1.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING3126",
+          "ingredient_name": "sesame oil",
+          "quantity": 1.0,
+          "unit": "pinch",
+          "recipe_ids": [
+            "R21444"
+          ],
+          "conversion_status": "unresolved",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 1.0,
+              "unit": "pinch",
+              "conversion_status": "unresolved"
+            }
+          ],
+          "required_quantity": 1.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 1.0,
+          "inventory_conversion_unresolved": false
+        }
+      ],
       "all_items_priced": false,
       "unpriced_items": [
         "onion",
@@ -1092,19 +1173,39 @@
         {
           "ingredient_id": "ING2367",
           "ingredient_name": "onion",
-          "quantity": 0.5,
-          "unit": "count",
+          "quantity": 75.0,
+          "unit": "g",
           "recipe_ids": [
             "R21444"
+          ],
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 0.5,
+              "unit": "count",
+              "conversion_status": "estimated"
+            }
           ]
         },
         {
           "ingredient_id": "ING3399",
           "ingredient_name": "sugar",
-          "quantity": 1.0,
-          "unit": "teaspoon",
+          "quantity": 4.1667,
+          "unit": "g",
           "recipe_ids": [
             "R21444"
+          ],
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 1.0,
+              "unit": "teaspoon",
+              "conversion_status": "estimated"
+            }
           ]
         },
         {
@@ -1114,60 +1215,130 @@
           "unit": "pinch",
           "recipe_ids": [
             "R21444"
+          ],
+          "conversion_status": "unresolved",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 1.0,
+              "unit": "pinch",
+              "conversion_status": "unresolved"
+            }
           ]
         },
         {
           "ingredient_id": "ING2900",
           "ingredient_name": "red wine vinegar",
-          "quantity": 2.0,
-          "unit": "tablespoon",
+          "quantity": 30.0,
+          "unit": "ml",
           "recipe_ids": [
             "R21444"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 2.0,
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
           ]
         },
         {
           "ingredient_id": "ING1129",
           "ingredient_name": "cucumber",
           "quantity": 1.0,
-          "unit": "count",
+          "unit": "pcs",
           "recipe_ids": [
             "R21444"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 1.0,
+              "unit": "count",
+              "conversion_status": "exact"
+            }
           ]
         },
         {
           "ingredient_id": "ING0596",
           "ingredient_name": "carrot",
-          "quantity": 1.0,
-          "unit": "count",
+          "quantity": 70.0,
+          "unit": "g",
           "recipe_ids": [
             "R21444"
+          ],
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 1.0,
+              "unit": "count",
+              "conversion_status": "estimated"
+            }
           ]
         },
         {
           "ingredient_id": "ING2333",
           "ingredient_name": "of chickpea",
           "quantity": 0.5,
-          "unit": "count",
+          "unit": "pcs",
           "recipe_ids": [
             "R21444"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 0.5,
+              "unit": "count",
+              "conversion_status": "exact"
+            }
           ]
         },
         {
           "ingredient_id": "ING3101",
           "ingredient_name": "seasoned rice vinegar",
-          "quantity": 0.5,
-          "unit": "tablespoon",
+          "quantity": 7.5,
+          "unit": "ml",
           "recipe_ids": [
             "R21444"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 0.5,
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
           ]
         },
         {
           "ingredient_id": "ING1962",
           "ingredient_name": "lemon juice",
-          "quantity": 1.0,
-          "unit": "teaspoon",
+          "quantity": 5.0,
+          "unit": "ml",
           "recipe_ids": [
             "R21444"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 1.0,
+              "unit": "teaspoon",
+              "conversion_status": "exact"
+            }
           ]
         },
         {
@@ -1177,6 +1348,16 @@
           "unit": "pinch",
           "recipe_ids": [
             "R21444"
+          ],
+          "conversion_status": "unresolved",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 1.0,
+              "unit": "pinch",
+              "conversion_status": "unresolved"
+            }
           ]
         }
       ],
@@ -1184,28 +1365,50 @@
         {
           "ingredient_id": "ING2367",
           "ingredient_name": "onion",
-          "quantity": 0.5,
-          "unit": "count",
+          "quantity": 75.0,
+          "unit": "g",
           "recipe_ids": [
             "R21444"
           ],
-          "required_quantity": 0.5,
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 0.5,
+              "unit": "count",
+              "conversion_status": "estimated"
+            }
+          ],
+          "required_quantity": 75.0,
           "inventory_available": 0.0,
           "inventory_used": 0.0,
-          "purchase_required": 0.5
+          "purchase_required": 75.0,
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING3399",
           "ingredient_name": "sugar",
-          "quantity": 1.0,
-          "unit": "teaspoon",
+          "quantity": 4.1667,
+          "unit": "g",
           "recipe_ids": [
             "R21444"
           ],
-          "required_quantity": 1.0,
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 1.0,
+              "unit": "teaspoon",
+              "conversion_status": "estimated"
+            }
+          ],
+          "required_quantity": 4.1667,
           "inventory_available": 0.0,
           "inventory_used": 0.0,
-          "purchase_required": 1.0
+          "purchase_required": 4.1667,
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING2268",
@@ -1215,88 +1418,165 @@
           "recipe_ids": [
             "R21444"
           ],
+          "conversion_status": "unresolved",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 1.0,
+              "unit": "pinch",
+              "conversion_status": "unresolved"
+            }
+          ],
           "required_quantity": 1.0,
           "inventory_available": 0.0,
           "inventory_used": 0.0,
-          "purchase_required": 1.0
+          "purchase_required": 1.0,
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING2900",
           "ingredient_name": "red wine vinegar",
-          "quantity": 2.0,
-          "unit": "tablespoon",
+          "quantity": 30.0,
+          "unit": "ml",
           "recipe_ids": [
             "R21444"
           ],
-          "required_quantity": 2.0,
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 2.0,
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 30.0,
           "inventory_available": 0.0,
           "inventory_used": 0.0,
-          "purchase_required": 2.0
+          "purchase_required": 30.0,
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING1129",
           "ingredient_name": "cucumber",
           "quantity": 1.0,
-          "unit": "count",
+          "unit": "pcs",
           "recipe_ids": [
             "R21444"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 1.0,
+              "unit": "count",
+              "conversion_status": "exact"
+            }
           ],
           "required_quantity": 1.0,
           "inventory_available": 0.0,
           "inventory_used": 0.0,
-          "purchase_required": 1.0
+          "purchase_required": 1.0,
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING0596",
           "ingredient_name": "carrot",
-          "quantity": 1.0,
-          "unit": "count",
+          "quantity": 70.0,
+          "unit": "g",
           "recipe_ids": [
             "R21444"
           ],
-          "required_quantity": 1.0,
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 1.0,
+              "unit": "count",
+              "conversion_status": "estimated"
+            }
+          ],
+          "required_quantity": 70.0,
           "inventory_available": 0.0,
           "inventory_used": 0.0,
-          "purchase_required": 1.0
+          "purchase_required": 70.0,
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING2333",
           "ingredient_name": "of chickpea",
           "quantity": 0.5,
-          "unit": "count",
+          "unit": "pcs",
           "recipe_ids": [
             "R21444"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 0.5,
+              "unit": "count",
+              "conversion_status": "exact"
+            }
           ],
           "required_quantity": 0.5,
           "inventory_available": 0.0,
           "inventory_used": 0.0,
-          "purchase_required": 0.5
+          "purchase_required": 0.5,
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING3101",
           "ingredient_name": "seasoned rice vinegar",
-          "quantity": 0.5,
-          "unit": "tablespoon",
+          "quantity": 7.5,
+          "unit": "ml",
           "recipe_ids": [
             "R21444"
           ],
-          "required_quantity": 0.5,
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 0.5,
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 7.5,
           "inventory_available": 0.0,
           "inventory_used": 0.0,
-          "purchase_required": 0.5
+          "purchase_required": 7.5,
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING1962",
           "ingredient_name": "lemon juice",
-          "quantity": 1.0,
-          "unit": "teaspoon",
+          "quantity": 5.0,
+          "unit": "ml",
           "recipe_ids": [
             "R21444"
           ],
-          "required_quantity": 1.0,
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 1.0,
+              "unit": "teaspoon",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 5.0,
           "inventory_available": 0.0,
           "inventory_used": 0.0,
-          "purchase_required": 1.0
+          "purchase_required": 5.0,
+          "inventory_conversion_unresolved": false
         },
         {
           "ingredient_id": "ING3126",
@@ -1306,23 +1586,34 @@
           "recipe_ids": [
             "R21444"
           ],
+          "conversion_status": "unresolved",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R21444",
+              "quantity": 1.0,
+              "unit": "pinch",
+              "conversion_status": "unresolved"
+            }
+          ],
           "required_quantity": 1.0,
           "inventory_available": 0.0,
           "inventory_used": 0.0,
-          "purchase_required": 1.0
+          "purchase_required": 1.0,
+          "inventory_conversion_unresolved": false
         }
       ],
-      "projected_cost": 34.76,
-      "projected_cost_complete": true,
-      "projection_missing": [],
+      "projected_cost": null,
+      "projected_cost_complete": false,
+      "projection_missing": [
+        "mustard seed",
+        "sesame oil"
+      ],
       "warnings": [
-        "onion: incompatible recipe/package units; assuming one retail package.",
-        "sugar: incompatible recipe/package units; assuming one retail package.",
-        "mustard seed: incompatible recipe/package units; assuming one retail package.",
+        "mustard seed: unresolved quantity conversion. Purchase quantity cannot be verified.",
         "cucumber: incompatible recipe/package units; assuming one retail package.",
-        "carrot: incompatible recipe/package units; assuming one retail package.",
         "of chickpea: incompatible recipe/package units; assuming one retail package.",
-        "sesame oil: incompatible recipe/package units; assuming one retail package."
+        "sesame oil: unresolved quantity conversion. Purchase quantity cannot be verified."
       ]
     },
     "rejected_candidates": [
@@ -1355,7 +1646,7 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 12.66,
+            "known_purchase_cost": 11.36,
             "remaining_budget": 10.66
           }
         ]
@@ -1417,7 +1708,7 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 12.66,
+            "known_purchase_cost": 11.36,
             "remaining_budget": 10.66
           }
         ]
@@ -1479,7 +1770,7 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 12.66,
+            "known_purchase_cost": 11.36,
             "remaining_budget": 10.66
           }
         ]
@@ -1541,7 +1832,7 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 12.66,
+            "known_purchase_cost": 11.36,
             "remaining_budget": 10.66
           }
         ]
@@ -1603,7 +1894,7 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 12.66,
+            "known_purchase_cost": 11.36,
             "remaining_budget": 10.66
           }
         ]
@@ -1771,7 +2062,7 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 12.66,
+            "known_purchase_cost": 11.36,
             "remaining_budget": 10.66
           }
         ]
@@ -1856,7 +2147,7 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 12.66,
+            "known_purchase_cost": 11.36,
             "remaining_budget": 10.66
           }
         ]
@@ -1941,7 +2232,7 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 12.66,
+            "known_purchase_cost": 11.36,
             "remaining_budget": 10.66
           }
         ]
@@ -2026,7 +2317,7 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 12.66,
+            "known_purchase_cost": 11.36,
             "remaining_budget": 10.66
           }
         ]
@@ -2111,7 +2402,7 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 12.66,
+            "known_purchase_cost": 11.36,
             "remaining_budget": 10.66
           }
         ]
@@ -2164,8 +2455,8 @@
       {
         "ingredient_id": "ING2367",
         "name": "onion",
-        "required_quantity": 0.5,
-        "required_unit": "pcs",
+        "required_quantity": 75.0,
+        "required_unit": "g",
         "package_quantity": 700.0,
         "package_unit": "g",
         "packages": 1,
@@ -2173,21 +2464,24 @@
         "price_per_package": 1.7,
         "purchase_cost": null,
         "estimated_purchase_cost": 1.7,
-        "leftover_quantity": null,
+        "leftover_quantity": 625.0,
         "inventory_used": 0.0,
         "recipe_ids": [
           "R21444"
         ],
         "pricing_status": "estimated",
-        "purchase_basis": "minimum_retail_package",
+        "purchase_basis": "estimated_quantity",
         "quantity_coverage_verified": false,
-        "price_source": "unverified"
+        "price_source": "retail_estimated_quantity",
+        "conversion_status": "estimated",
+        "normalization_status": "resolved",
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING3399",
         "name": "sugar",
-        "required_quantity": 1.0,
-        "required_unit": "teaspoon",
+        "required_quantity": 4.1667,
+        "required_unit": "g",
         "package_quantity": 1.0,
         "package_unit": "kg",
         "packages": 1,
@@ -2195,43 +2489,49 @@
         "price_per_package": 2.35,
         "purchase_cost": null,
         "estimated_purchase_cost": 2.35,
-        "leftover_quantity": null,
+        "leftover_quantity": 0.9958333,
         "inventory_used": 0.0,
         "recipe_ids": [
           "R21444"
         ],
         "pricing_status": "estimated",
-        "purchase_basis": "minimum_retail_package",
+        "purchase_basis": "estimated_quantity",
         "quantity_coverage_verified": false,
-        "price_source": "unverified"
+        "price_source": "retail_estimated_quantity",
+        "conversion_status": "estimated",
+        "normalization_status": "resolved",
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING2268",
         "name": "mustard seed",
         "required_quantity": 1.0,
         "required_unit": "pinch",
-        "package_quantity": 50.0,
-        "package_unit": "g",
-        "packages": 1,
-        "purchased_quantity": 50.0,
-        "price_per_package": 0.71,
+        "package_quantity": null,
+        "package_unit": null,
+        "packages": null,
+        "purchased_quantity": null,
+        "price_per_package": null,
         "purchase_cost": null,
-        "estimated_purchase_cost": 0.71,
+        "estimated_purchase_cost": null,
         "leftover_quantity": null,
         "inventory_used": 0.0,
         "recipe_ids": [
           "R21444"
         ],
-        "pricing_status": "estimated",
-        "purchase_basis": "minimum_retail_package",
+        "pricing_status": "unresolved_conversion",
+        "purchase_basis": null,
         "quantity_coverage_verified": false,
-        "price_source": "unverified"
+        "price_source": "unknown",
+        "conversion_status": "unresolved",
+        "normalization_status": "resolved",
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING2900",
         "name": "red wine vinegar",
-        "required_quantity": 2.0,
-        "required_unit": "tablespoon",
+        "required_quantity": 30.0,
+        "required_unit": "ml",
         "package_quantity": 250.0,
         "package_unit": "ml",
         "packages": 1,
@@ -2247,7 +2547,10 @@
         "pricing_status": "priced",
         "purchase_basis": "calculated_quantity",
         "quantity_coverage_verified": true,
-        "price_source": "retail"
+        "price_source": "retail",
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING1129",
@@ -2269,13 +2572,16 @@
         "pricing_status": "estimated",
         "purchase_basis": "minimum_retail_package",
         "quantity_coverage_verified": false,
-        "price_source": "unverified"
+        "price_source": "unverified",
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING0596",
         "name": "carrot",
-        "required_quantity": 1.0,
-        "required_unit": "pcs",
+        "required_quantity": 70.0,
+        "required_unit": "g",
         "package_quantity": 500.0,
         "package_unit": "g",
         "packages": 1,
@@ -2283,15 +2589,18 @@
         "price_per_package": 0.95,
         "purchase_cost": null,
         "estimated_purchase_cost": 0.95,
-        "leftover_quantity": null,
+        "leftover_quantity": 430.0,
         "inventory_used": 0.0,
         "recipe_ids": [
           "R21444"
         ],
         "pricing_status": "estimated",
-        "purchase_basis": "minimum_retail_package",
+        "purchase_basis": "estimated_quantity",
         "quantity_coverage_verified": false,
-        "price_source": "unverified"
+        "price_source": "retail_estimated_quantity",
+        "conversion_status": "estimated",
+        "normalization_status": "resolved",
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING2333",
@@ -2313,13 +2622,16 @@
         "pricing_status": "estimated",
         "purchase_basis": "minimum_retail_package",
         "quantity_coverage_verified": false,
-        "price_source": "unverified"
+        "price_source": "unverified",
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING3101",
         "name": "seasoned rice vinegar",
-        "required_quantity": 0.5,
-        "required_unit": "tablespoon",
+        "required_quantity": 7.5,
+        "required_unit": "ml",
         "package_quantity": 500.0,
         "package_unit": "ml",
         "packages": 1,
@@ -2335,13 +2647,16 @@
         "pricing_status": "priced",
         "purchase_basis": "calculated_quantity",
         "quantity_coverage_verified": true,
-        "price_source": "retail"
+        "price_source": "retail",
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING1962",
         "name": "lemon juice",
-        "required_quantity": 1.0,
-        "required_unit": "teaspoon",
+        "required_quantity": 5.0,
+        "required_unit": "ml",
         "package_quantity": 473.0,
         "package_unit": "ml",
         "packages": 1,
@@ -2357,32 +2672,88 @@
         "pricing_status": "priced",
         "purchase_basis": "calculated_quantity",
         "quantity_coverage_verified": true,
-        "price_source": "retail"
+        "price_source": "retail",
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING3126",
         "name": "sesame oil",
         "required_quantity": 1.0,
         "required_unit": "pinch",
-        "package_quantity": 207.0,
-        "package_unit": "ml",
-        "packages": 1,
-        "purchased_quantity": 207.0,
-        "price_per_package": 3.0,
+        "package_quantity": null,
+        "package_unit": null,
+        "packages": null,
+        "purchased_quantity": null,
+        "price_per_package": null,
         "purchase_cost": null,
-        "estimated_purchase_cost": 3.0,
+        "estimated_purchase_cost": null,
         "leftover_quantity": null,
         "inventory_used": 0.0,
         "recipe_ids": [
           "R21444"
         ],
-        "pricing_status": "estimated",
-        "purchase_basis": "minimum_retail_package",
+        "pricing_status": "unresolved_conversion",
+        "purchase_basis": null,
         "quantity_coverage_verified": false,
-        "price_source": "unverified"
+        "price_source": "unknown",
+        "conversion_status": "unresolved",
+        "normalization_status": "resolved",
+        "inventory_conversion_unresolved": false
       }
     ],
     "known_cost": 21.43,
+    "unresolved_requirements": [
+      {
+        "ingredient_id": "ING2268",
+        "ingredient_name": "mustard seed",
+        "quantity": 1.0,
+        "unit": "pinch",
+        "recipe_ids": [
+          "R21444"
+        ],
+        "conversion_status": "unresolved",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 1.0,
+            "unit": "pinch",
+            "conversion_status": "unresolved"
+          }
+        ],
+        "required_quantity": 1.0,
+        "inventory_available": 0.0,
+        "inventory_used": 0.0,
+        "purchase_required": 1.0,
+        "inventory_conversion_unresolved": false
+      },
+      {
+        "ingredient_id": "ING3126",
+        "ingredient_name": "sesame oil",
+        "quantity": 1.0,
+        "unit": "pinch",
+        "recipe_ids": [
+          "R21444"
+        ],
+        "conversion_status": "unresolved",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 1.0,
+            "unit": "pinch",
+            "conversion_status": "unresolved"
+          }
+        ],
+        "required_quantity": 1.0,
+        "inventory_available": 0.0,
+        "inventory_used": 0.0,
+        "purchase_required": 1.0,
+        "inventory_conversion_unresolved": false
+      }
+    ],
     "all_items_priced": false,
     "unpriced_items": [
       "onion",
@@ -2397,19 +2768,39 @@
       {
         "ingredient_id": "ING2367",
         "ingredient_name": "onion",
-        "quantity": 0.5,
-        "unit": "count",
+        "quantity": 75.0,
+        "unit": "g",
         "recipe_ids": [
           "R21444"
+        ],
+        "conversion_status": "estimated",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 0.5,
+            "unit": "count",
+            "conversion_status": "estimated"
+          }
         ]
       },
       {
         "ingredient_id": "ING3399",
         "ingredient_name": "sugar",
-        "quantity": 1.0,
-        "unit": "teaspoon",
+        "quantity": 4.1667,
+        "unit": "g",
         "recipe_ids": [
           "R21444"
+        ],
+        "conversion_status": "estimated",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 1.0,
+            "unit": "teaspoon",
+            "conversion_status": "estimated"
+          }
         ]
       },
       {
@@ -2419,60 +2810,130 @@
         "unit": "pinch",
         "recipe_ids": [
           "R21444"
+        ],
+        "conversion_status": "unresolved",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 1.0,
+            "unit": "pinch",
+            "conversion_status": "unresolved"
+          }
         ]
       },
       {
         "ingredient_id": "ING2900",
         "ingredient_name": "red wine vinegar",
-        "quantity": 2.0,
-        "unit": "tablespoon",
+        "quantity": 30.0,
+        "unit": "ml",
         "recipe_ids": [
           "R21444"
+        ],
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 2.0,
+            "unit": "tablespoon",
+            "conversion_status": "exact"
+          }
         ]
       },
       {
         "ingredient_id": "ING1129",
         "ingredient_name": "cucumber",
         "quantity": 1.0,
-        "unit": "count",
+        "unit": "pcs",
         "recipe_ids": [
           "R21444"
+        ],
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 1.0,
+            "unit": "count",
+            "conversion_status": "exact"
+          }
         ]
       },
       {
         "ingredient_id": "ING0596",
         "ingredient_name": "carrot",
-        "quantity": 1.0,
-        "unit": "count",
+        "quantity": 70.0,
+        "unit": "g",
         "recipe_ids": [
           "R21444"
+        ],
+        "conversion_status": "estimated",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 1.0,
+            "unit": "count",
+            "conversion_status": "estimated"
+          }
         ]
       },
       {
         "ingredient_id": "ING2333",
         "ingredient_name": "of chickpea",
         "quantity": 0.5,
-        "unit": "count",
+        "unit": "pcs",
         "recipe_ids": [
           "R21444"
+        ],
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 0.5,
+            "unit": "count",
+            "conversion_status": "exact"
+          }
         ]
       },
       {
         "ingredient_id": "ING3101",
         "ingredient_name": "seasoned rice vinegar",
-        "quantity": 0.5,
-        "unit": "tablespoon",
+        "quantity": 7.5,
+        "unit": "ml",
         "recipe_ids": [
           "R21444"
+        ],
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 0.5,
+            "unit": "tablespoon",
+            "conversion_status": "exact"
+          }
         ]
       },
       {
         "ingredient_id": "ING1962",
         "ingredient_name": "lemon juice",
-        "quantity": 1.0,
-        "unit": "teaspoon",
+        "quantity": 5.0,
+        "unit": "ml",
         "recipe_ids": [
           "R21444"
+        ],
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 1.0,
+            "unit": "teaspoon",
+            "conversion_status": "exact"
+          }
         ]
       },
       {
@@ -2482,6 +2943,16 @@
         "unit": "pinch",
         "recipe_ids": [
           "R21444"
+        ],
+        "conversion_status": "unresolved",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 1.0,
+            "unit": "pinch",
+            "conversion_status": "unresolved"
+          }
         ]
       }
     ],
@@ -2489,28 +2960,50 @@
       {
         "ingredient_id": "ING2367",
         "ingredient_name": "onion",
-        "quantity": 0.5,
-        "unit": "count",
+        "quantity": 75.0,
+        "unit": "g",
         "recipe_ids": [
           "R21444"
         ],
-        "required_quantity": 0.5,
+        "conversion_status": "estimated",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 0.5,
+            "unit": "count",
+            "conversion_status": "estimated"
+          }
+        ],
+        "required_quantity": 75.0,
         "inventory_available": 0.0,
         "inventory_used": 0.0,
-        "purchase_required": 0.5
+        "purchase_required": 75.0,
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING3399",
         "ingredient_name": "sugar",
-        "quantity": 1.0,
-        "unit": "teaspoon",
+        "quantity": 4.1667,
+        "unit": "g",
         "recipe_ids": [
           "R21444"
         ],
-        "required_quantity": 1.0,
+        "conversion_status": "estimated",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 1.0,
+            "unit": "teaspoon",
+            "conversion_status": "estimated"
+          }
+        ],
+        "required_quantity": 4.1667,
         "inventory_available": 0.0,
         "inventory_used": 0.0,
-        "purchase_required": 1.0
+        "purchase_required": 4.1667,
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING2268",
@@ -2520,88 +3013,165 @@
         "recipe_ids": [
           "R21444"
         ],
+        "conversion_status": "unresolved",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 1.0,
+            "unit": "pinch",
+            "conversion_status": "unresolved"
+          }
+        ],
         "required_quantity": 1.0,
         "inventory_available": 0.0,
         "inventory_used": 0.0,
-        "purchase_required": 1.0
+        "purchase_required": 1.0,
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING2900",
         "ingredient_name": "red wine vinegar",
-        "quantity": 2.0,
-        "unit": "tablespoon",
+        "quantity": 30.0,
+        "unit": "ml",
         "recipe_ids": [
           "R21444"
         ],
-        "required_quantity": 2.0,
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 2.0,
+            "unit": "tablespoon",
+            "conversion_status": "exact"
+          }
+        ],
+        "required_quantity": 30.0,
         "inventory_available": 0.0,
         "inventory_used": 0.0,
-        "purchase_required": 2.0
+        "purchase_required": 30.0,
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING1129",
         "ingredient_name": "cucumber",
         "quantity": 1.0,
-        "unit": "count",
+        "unit": "pcs",
         "recipe_ids": [
           "R21444"
+        ],
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 1.0,
+            "unit": "count",
+            "conversion_status": "exact"
+          }
         ],
         "required_quantity": 1.0,
         "inventory_available": 0.0,
         "inventory_used": 0.0,
-        "purchase_required": 1.0
+        "purchase_required": 1.0,
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING0596",
         "ingredient_name": "carrot",
-        "quantity": 1.0,
-        "unit": "count",
+        "quantity": 70.0,
+        "unit": "g",
         "recipe_ids": [
           "R21444"
         ],
-        "required_quantity": 1.0,
+        "conversion_status": "estimated",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 1.0,
+            "unit": "count",
+            "conversion_status": "estimated"
+          }
+        ],
+        "required_quantity": 70.0,
         "inventory_available": 0.0,
         "inventory_used": 0.0,
-        "purchase_required": 1.0
+        "purchase_required": 70.0,
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING2333",
         "ingredient_name": "of chickpea",
         "quantity": 0.5,
-        "unit": "count",
+        "unit": "pcs",
         "recipe_ids": [
           "R21444"
+        ],
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 0.5,
+            "unit": "count",
+            "conversion_status": "exact"
+          }
         ],
         "required_quantity": 0.5,
         "inventory_available": 0.0,
         "inventory_used": 0.0,
-        "purchase_required": 0.5
+        "purchase_required": 0.5,
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING3101",
         "ingredient_name": "seasoned rice vinegar",
-        "quantity": 0.5,
-        "unit": "tablespoon",
+        "quantity": 7.5,
+        "unit": "ml",
         "recipe_ids": [
           "R21444"
         ],
-        "required_quantity": 0.5,
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 0.5,
+            "unit": "tablespoon",
+            "conversion_status": "exact"
+          }
+        ],
+        "required_quantity": 7.5,
         "inventory_available": 0.0,
         "inventory_used": 0.0,
-        "purchase_required": 0.5
+        "purchase_required": 7.5,
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING1962",
         "ingredient_name": "lemon juice",
-        "quantity": 1.0,
-        "unit": "teaspoon",
+        "quantity": 5.0,
+        "unit": "ml",
         "recipe_ids": [
           "R21444"
         ],
-        "required_quantity": 1.0,
+        "conversion_status": "exact",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 1.0,
+            "unit": "teaspoon",
+            "conversion_status": "exact"
+          }
+        ],
+        "required_quantity": 5.0,
         "inventory_available": 0.0,
         "inventory_used": 0.0,
-        "purchase_required": 1.0
+        "purchase_required": 5.0,
+        "inventory_conversion_unresolved": false
       },
       {
         "ingredient_id": "ING3126",
@@ -2611,23 +3181,34 @@
         "recipe_ids": [
           "R21444"
         ],
+        "conversion_status": "unresolved",
+        "normalization_status": "resolved",
+        "source_requirements": [
+          {
+            "recipe_id": "R21444",
+            "quantity": 1.0,
+            "unit": "pinch",
+            "conversion_status": "unresolved"
+          }
+        ],
         "required_quantity": 1.0,
         "inventory_available": 0.0,
         "inventory_used": 0.0,
-        "purchase_required": 1.0
+        "purchase_required": 1.0,
+        "inventory_conversion_unresolved": false
       }
     ],
-    "projected_cost": 34.76,
-    "projected_cost_complete": true,
-    "projection_missing": [],
+    "projected_cost": null,
+    "projected_cost_complete": false,
+    "projection_missing": [
+      "mustard seed",
+      "sesame oil"
+    ],
     "warnings": [
-      "onion: incompatible recipe/package units; assuming one retail package.",
-      "sugar: incompatible recipe/package units; assuming one retail package.",
-      "mustard seed: incompatible recipe/package units; assuming one retail package.",
+      "mustard seed: unresolved quantity conversion. Purchase quantity cannot be verified.",
       "cucumber: incompatible recipe/package units; assuming one retail package.",
-      "carrot: incompatible recipe/package units; assuming one retail package.",
       "of chickpea: incompatible recipe/package units; assuming one retail package.",
-      "sesame oil: incompatible recipe/package units; assuming one retail package."
+      "sesame oil: unresolved quantity conversion. Purchase quantity cannot be verified."
     ]
   },
   "nutrition_summary": {
