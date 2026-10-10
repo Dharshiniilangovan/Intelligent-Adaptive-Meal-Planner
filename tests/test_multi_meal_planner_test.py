@@ -84,6 +84,7 @@ class FakeManager:
         recipe_id,
         user_state,
         meal_context,
+        defer_budget_to_planner=False,
     ):
         self.calls.append(recipe_id)
 

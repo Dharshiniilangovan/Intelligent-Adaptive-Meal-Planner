@@ -106,49 +106,60 @@ class MultiMealPlanner:
             current_inventory=dict(initial_inventory),
         )
         print(f"plan state: >>>>>>>>>>>{plan_state}<<<<<<<<<<<\n")
+
         # ========================================================
-        # 5. BUILD PLAN SLOT BY SLOT
+        # 5. OPTIMIZE COMPLETE MEAL PLAN
         # ========================================================
+
+        optimized_state = self._optimize_meal_plan(
+            user_state=user_state,
+            initial_state=plan_state,
+            beam_width=5,
+        )
+
+        plan_state = optimized_state
+
+        # Mark slots that were not filled.
+        selected_slot_ids = {
+            meal["slot"]["slot_id"] for meal in plan_state.selected_meals
+        }
+
         for slot in slots:
-            print(f">>>>>For each slot:{slot}<<<<<\n")
-            slot_result = self._plan_single_slot(
-                user_state=user_state,
-                slot=slot,
-                plan_state=plan_state,
-            )
-            print(f"Getting slot result: {slot_result}<<<<<<<<<\n")
-            if not slot_result["selected"]:
+            if slot.slot_id not in selected_slot_ids:
                 plan_state.mark_slot_infeasible(slot)
-                continue
-            # ----------------------------------------------------
-            # Candidate successfully selected
-            # ----------------------------------------------------
-            decision = slot_result["decision"]
-            print(f"fetch all decisions : {decision}<<<<<<<\n")
-            # ----------------------------------------------------
-            # MEMBER 3
-            # Update nutrition
-            # ----------------------------------------------------
+
+        # ========================================================
+        # 5B. UPDATE NUTRITION AFTER SELECTION
+        # ========================================================
+
+        for selected in plan_state.selected_meals:
+            slot_data = selected["slot"]
+
+            matching_slot = next(
+                slot for slot in slots if slot.slot_id == slot_data["slot_id"]
+            )
+
             self._update_nutrition(
                 plan_state=plan_state,
-                slot=slot,
-                decision=decision,
+                slot=matching_slot,
+                decision=selected["decision"],
             )
-            # ----------------------------------------------------
-            # MEMBER 3
-            # Update evolving inventory
-            # ----------------------------------------------------
-            self._update_inventory(
-                plan_state=plan_state,
-                decision=decision,
-            )
+
         # ========================================================
         # 6. MEMBER 4
         # BUILD FINAL AGGREGATED GROCERY BASKET
         # ========================================================
         final_grocery_basket = self._build_final_grocery_basket(plan_state)
         print(f"final grocery basket>>>>>{final_grocery_basket}<<<<<<<\n")
+
         plan_state.final_grocery_basket = final_grocery_basket
+
+        # Reconcile inventory after final basket selection.
+        inventory_ok = self._reconcile_final_inventory(
+            plan_state=plan_state,
+            final_grocery_basket=final_grocery_basket,
+        )
+
         # ========================================================
         # 7. NUTRITION SUMMARY
         # ========================================================
@@ -185,6 +196,10 @@ class MultiMealPlanner:
             all_items_priced=all_items_priced,
             final_grocery_cost=final_cost,
         )
+        if not inventory_ok:
+            validation["issues"].append("Final inventory reconciliation failed.")
+            validation["status"] = "infeasible"
+
         print(f"validation of plan >>>>>{validation}<<<<<<<\n")
         plan_state.status = validation["status"]
         # ========================================================
@@ -201,19 +216,21 @@ class MultiMealPlanner:
     # ============================================================
     # PLAN ONE MEAL SLOT
     # ============================================================
-    def _plan_single_slot(
+    def _evaluate_candidates_for_slot(
         self,
         user_state: dict,
         slot: MealSlot,
         plan_state: PlanState,
-    ) -> dict:
+    ) -> list[dict]:
         """
-        Select a recipe based on the incremental cost of
-        the combined plan grocery basket.
+        Evaluate recipe candidates for one meal slot.
 
-        Preserve all non-budget hard constraints.
-        Never accept incomplete grocery projections.
-        Never exceed the original plan budget.
+        Checks non-budget hard constraints and combined
+        grocery basket affordability.
+
+        Returns feasible candidates sorted by total cost.
+
+        Does not select meals or update budget.
         """
 
         candidate_ids = self._get_candidates(
@@ -262,8 +279,6 @@ class MultiMealPlanner:
                 )
                 continue
 
-            # Build a temporary combined basket.
-            # No actual plan state is modified here.
             from copy import deepcopy
 
             trial_state = deepcopy(plan_state)
@@ -277,7 +292,18 @@ class MultiMealPlanner:
                 }
             )
 
-            trial_basket = self._build_final_grocery_basket(trial_state)
+            try:
+                trial_basket = self._build_final_grocery_basket(trial_state)
+            except ValueError as exc:
+                plan_state.add_uncertain(
+                    slot=slot,
+                    recipe_id=recipe_id,
+                    reason={
+                        "type": "grocery_aggregation_error",
+                        "message": str(exc),
+                    },
+                )
+                continue
 
             projected_total = trial_basket.get("projected_cost")
             projected_complete = trial_basket.get(
@@ -322,12 +348,6 @@ class MultiMealPlanner:
                 }
             )
 
-        if not feasible_candidates:
-            return {
-                "selected": False,
-                "reason": "no_feasible_combined_basket",
-            }
-
         feasible_candidates.sort(
             key=lambda item: (
                 item["total_cost"],
@@ -335,28 +355,70 @@ class MultiMealPlanner:
             )
         )
 
-        selected = feasible_candidates[0]
+        return feasible_candidates
 
-        # Reconcile the budget with the combined basket.
-        # This allows already purchased ingredients to
-        # reduce the next recipe's incremental cost.
-        plan_state.estimated_spent = max(
-            0.0,
-            selected["total_cost"] - selected["incremental_cost"],
+    # Optimise meal plan
+
+    def _optimize_meal_plan(
+        self,
+        user_state: dict,
+        initial_state: PlanState,
+        beam_width: int = 5,
+    ) -> PlanState:
+        from copy import deepcopy
+
+        beams = [deepcopy(initial_state)]
+
+        for slot in initial_state.slots:
+            next_beams = []
+
+            for state in beams:
+                candidates = self._evaluate_candidates_for_slot(
+                    user_state=user_state,
+                    slot=slot,
+                    plan_state=state,
+                )
+
+                # Preserve a branch that skips this slot.
+                # Useful when a partial plan is unavoidable.
+                next_beams.append(deepcopy(state))
+
+                for candidate in candidates:
+                    trial = deepcopy(state)
+
+                    previous_total = trial.estimated_spent
+                    new_total = candidate["total_cost"]
+
+                    trial.add_selected_meal(
+                        slot=slot,
+                        recipe_id=candidate["recipe_id"],
+                        decision=candidate["decision"],
+                        estimated_cost=max(
+                            0.0,
+                            new_total - previous_total,
+                        ),
+                    )
+
+                    trial.estimated_spent = new_total
+                    next_beams.append(trial)
+
+            # Prefer filling more slots, then lower cost.
+            next_beams.sort(
+                key=lambda state: (
+                    -len(state.selected_meals),
+                    state.estimated_spent,
+                )
+            )
+
+            beams = next_beams[:beam_width]
+
+        return min(
+            beams,
+            key=lambda state: (
+                -len(state.selected_meals),
+                state.estimated_spent,
+            ),
         )
-
-        plan_state.add_selected_meal(
-            slot=slot,
-            recipe_id=selected["recipe_id"],
-            decision=selected["decision"],
-            estimated_cost=selected["incremental_cost"],
-        )
-
-        return {
-            "selected": True,
-            "recipe_id": selected["recipe_id"],
-            "decision": selected["decision"],
-        }
 
     # ============================================================
     # GET RECIPE CANDIDATES
@@ -447,6 +509,7 @@ class MultiMealPlanner:
             recipe_id=recipe_id,
             user_state=planning_user_state,
             meal_context=meal_context,
+            defer_budget_to_planner=True,
         )
 
     # ============================================================
@@ -529,6 +592,107 @@ class MultiMealPlanner:
                 "recipe_id": decision.get("recipe_id"),
             }
         )
+
+    def _reconcile_final_inventory(
+        self,
+        plan_state: PlanState,
+        final_grocery_basket: dict,
+    ) -> bool:
+        """
+        Reconcile inventory once after plan optimization.
+
+        Initial pantry
+        + consolidated grocery purchases
+        - all selected recipe requirements
+        = final inventory
+
+        Never commit partial inventory updates.
+        """
+        from copy import deepcopy
+
+        inventory = deepcopy(plan_state.initial_inventory)
+
+        # 1. Add purchases from the final basket only.
+        for item in final_grocery_basket.get("items", []):
+            packages = item.get("packages")
+
+            if packages is None:
+                plan_state.execution_trace.append(
+                    {
+                        "event": "inventory_reconciliation_failed",
+                        "reason": ("Unknown package count for " f"{item.get('name')}"),
+                    }
+                )
+                return False
+
+            if packages == 0:
+                continue
+
+            if item.get("package_quantity") is None or not item.get("package_unit"):
+                plan_state.execution_trace.append(
+                    {
+                        "event": "inventory_reconciliation_failed",
+                        "reason": (
+                            "Missing package quantity or unit for "
+                            f"{item.get('name')}"
+                        ),
+                    }
+                )
+                return False
+
+            purchase = {
+                "ingredient_name": item.get("name"),
+                "package_quantity": item["package_quantity"],
+                "package_unit": item["package_unit"],
+                "packages_needed": packages,
+            }
+
+            try:
+                inventory = add_purchase(
+                    inventory,
+                    purchase,
+                )
+            except ValueError as exc:
+                plan_state.execution_trace.append(
+                    {
+                        "event": "inventory_reconciliation_failed",
+                        "reason": str(exc),
+                    }
+                )
+                return False
+
+        # 2. Consume requirements of every selected recipe.
+        for selected in plan_state.selected_meals:
+            decision = selected.get("decision") or {}
+            ingredient_data = decision.get("ingredient") or {}
+
+            required = ingredient_data.get("required_ingredients", [])
+
+            try:
+                inventory = consume_inventory(
+                    inventory,
+                    required,
+                )
+            except ValueError as exc:
+                plan_state.execution_trace.append(
+                    {
+                        "event": "inventory_reconciliation_failed",
+                        "recipe_id": selected.get("recipe_id"),
+                        "reason": str(exc),
+                    }
+                )
+                return False
+
+        # 3. Commit only when everything succeeds.
+        plan_state.current_inventory = inventory
+
+        plan_state.execution_trace.append(
+            {
+                "event": "inventory_reconciled",
+                "selected_meals": len(plan_state.selected_meals),
+            }
+        )
+        return True
 
     def _update_inventory(
         self,
