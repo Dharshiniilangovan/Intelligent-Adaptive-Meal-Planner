@@ -201,7 +201,8 @@ def test_mixed_sources_keep_verified_and_estimated_separate():
     assert hoisin["purchase_cost"] is None
     assert hoisin["estimated_purchase_cost"] == 3.5
 
-    assert "hoisin sauce" in basket["unpriced_items"]
+    assert "hoisin sauce" not in basket["unpriced_items"]
+    assert basket["all_items_have_usable_cost"] is True
 
 
 def test_unknown_price_never_becomes_zero():

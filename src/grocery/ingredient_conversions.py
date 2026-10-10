@@ -50,6 +50,16 @@ INGREDIENT_CONVERSIONS = {
     "garlic powder": IngredientConversion(_SOURCE, grams_per_tablespoon=9, grams_per_pinch=0.3),
     "hoisin sauce": IngredientConversion(_SOURCE, grams_per_tablespoon=17),
     "soy sauce": IngredientConversion(_SOURCE, grams_per_tablespoon=16),
+    "mustard seed": IngredientConversion(
+        _SOURCE,
+        grams_per_tablespoon=9.0,
+        grams_per_pinch=0.3,
+    ),
+    "mustard seeds": IngredientConversion(
+        _SOURCE,
+        grams_per_tablespoon=9.0,
+        grams_per_pinch=0.3,
+    ),
 }
 
 

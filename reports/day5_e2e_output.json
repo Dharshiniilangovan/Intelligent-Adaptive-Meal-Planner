@@ -42,9 +42,9 @@
     "selected_meals": [
       {
         "slot": {
-          "slot_id": "2026-10-09_dinner",
-          "date": "2026-10-09",
-          "meal_type": "dinner",
+          "slot_id": "2026-10-07_lunch",
+          "date": "2026-10-07",
+          "meal_type": "lunch",
           "max_cooking_time": 30
         },
         "recipe_id": "R01485",
@@ -184,15 +184,50 @@
             "pantry_used": [],
             "missing_ingredients": [
               {
-                "ingredient_id": "ING3559",
-                "ingredient_name": "tofu",
+                "ingredient_id": "ING0596",
+                "ingredient_name": "carrot",
+                "quantity": "2.0",
+                "unit": "tablespoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING3969",
+                "ingredient_name": "yellow onion",
+                "quantity": "2.0",
+                "unit": "tablespoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING2006",
+                "ingredient_name": "lime",
+                "quantity": "0.5",
+                "unit": "wedge",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING3817",
+                "ingredient_name": "water chestnut",
                 "quantity": "56.5",
                 "unit": "gram",
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING0596",
-                "ingredient_name": "carrot",
+                "ingredient_id": "ING1611",
+                "ingredient_name": "green onion",
+                "quantity": "2.0",
+                "unit": "tablespoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING1724",
+                "ingredient_name": "hoisin sauce",
+                "quantity": "1.0",
+                "unit": "tablespoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING3996",
+                "ingredient_name": "zucchini",
                 "quantity": "2.0",
                 "unit": "tablespoon",
                 "status": "missing"
@@ -205,36 +240,8 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING0506",
-                "ingredient_name": "butter lettuce",
-                "quantity": "0.5",
-                "unit": "head",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING1724",
-                "ingredient_name": "hoisin sauce",
-                "quantity": "1.0",
-                "unit": "tablespoon",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING3969",
-                "ingredient_name": "yellow onion",
-                "quantity": "2.0",
-                "unit": "tablespoon",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING1611",
-                "ingredient_name": "green onion",
-                "quantity": "2.0",
-                "unit": "tablespoon",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING3817",
-                "ingredient_name": "water chestnut",
+                "ingredient_id": "ING3559",
+                "ingredient_name": "tofu",
                 "quantity": "56.5",
                 "unit": "gram",
                 "status": "missing"
@@ -247,17 +254,10 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING2006",
-                "ingredient_name": "lime",
+                "ingredient_id": "ING0506",
+                "ingredient_name": "butter lettuce",
                 "quantity": "0.5",
-                "unit": "wedge",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING3996",
-                "ingredient_name": "zucchini",
-                "quantity": "2.0",
-                "unit": "tablespoon",
+                "unit": "head",
                 "status": "missing"
               }
             ],
@@ -266,34 +266,6 @@
           "grocery": {
             "recipe_id": "R01485",
             "items": [
-              {
-                "ingredient_id": "ING3559",
-                "ingredient": "tofu",
-                "required_quantity": "56.5",
-                "required_unit": "gram",
-                "product_name": "FairPrice Silken Tofu",
-                "package_quantity": 300.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 0.9,
-                "minimum_package_cost": 0.9,
-                "purchase_basis": "exact_quantity",
-                "estimated_total_cost": null,
-                "estimated_required_quantity": 56.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": 0.9,
-                "currency": "SGD",
-                "store": "FairPrice",
-                "source_url": "https://www.fairprice.com.sg/product/fairprice-silken-tofu-300g-13233990",
-                "source_updated_at": null,
-                "date_collected": "2026-10-10T06:12:53+00:00",
-                "match_status": "matched",
-                "match_quality": "exact",
-                "purchase_channel": "in_store_only",
-                "search_query": "tofu",
-                "note": ""
-              },
               {
                 "ingredient_id": "ING3817",
                 "ingredient": "water chestnut",
@@ -315,11 +287,67 @@
                 "store": "FairPrice",
                 "source_url": "https://www.fairprice.com.sg/product/china-water-chestnut-500g-12044502",
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T06:12:53+00:00",
+                "date_collected": "2026-10-10T12:03:53+00:00",
                 "match_status": "matched",
                 "match_quality": "exact",
                 "purchase_channel": "in_store_only",
                 "search_query": "water chestnut",
+                "note": ""
+              },
+              {
+                "ingredient_id": "ING3996",
+                "ingredient": "zucchini",
+                "required_quantity": "2.0",
+                "required_unit": "tablespoon",
+                "product_name": "Agro Fresh Zucchini-Green",
+                "package_quantity": 1.0,
+                "package_unit": "pcs",
+                "packages_needed": 1,
+                "price_per_package": 2.45,
+                "minimum_package_cost": 2.45,
+                "purchase_basis": "minimum_retail_package",
+                "estimated_total_cost": null,
+                "estimated_required_quantity": 15.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": 2.45,
+                "currency": "SGD",
+                "store": "FairPrice",
+                "source_url": "https://www.fairprice.com.sg/product/orgo-fresh-premium-zucchini-green",
+                "source_updated_at": null,
+                "date_collected": "2026-10-10T12:03:53+00:00",
+                "match_status": "matched_minimum_package",
+                "match_quality": "exact",
+                "purchase_channel": "availability_unverified",
+                "search_query": "zucchini",
+                "note": "unit mismatch (need ml, package in pcs); using one retail package as the minimum purchase."
+              },
+              {
+                "ingredient_id": "ING3559",
+                "ingredient": "tofu",
+                "required_quantity": "56.5",
+                "required_unit": "gram",
+                "product_name": "FairPrice Tofu - Chinese",
+                "package_quantity": 300.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 0.86,
+                "minimum_package_cost": 0.86,
+                "purchase_basis": "exact_quantity",
+                "estimated_total_cost": null,
+                "estimated_required_quantity": 56.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": 0.86,
+                "currency": "SGD",
+                "store": "FairPrice",
+                "source_url": "https://www.fairprice.com.sg/product/fairprice-chinese-tofu-300g-10221966",
+                "source_updated_at": null,
+                "date_collected": "2026-10-10T12:03:53+00:00",
+                "match_status": "matched",
+                "match_quality": "exact",
+                "purchase_channel": "in_store_only",
+                "search_query": "tofu",
                 "note": ""
               },
               {
@@ -343,7 +371,7 @@
                 "store": "FairPrice",
                 "source_url": "https://www.fairprice.com.sg/product/fairprice-canola-oil-500ml-13241557",
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T06:12:53+00:00",
+                "date_collected": "2026-10-10T12:03:53+00:00",
                 "match_status": "matched",
                 "match_quality": "exact",
                 "purchase_channel": "availability_unverified",
@@ -371,7 +399,7 @@
                 "store": "FairPrice",
                 "source_url": "https://www.fairprice.com.sg/product/sumich-fresh-carrots-500g-10733611",
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T06:12:53+00:00",
+                "date_collected": "2026-10-10T12:03:53+00:00",
                 "match_status": "matched_estimated_quantity",
                 "match_quality": "exact",
                 "purchase_channel": "availability_unverified",
@@ -379,47 +407,75 @@
                 "note": "purchase quantity calculated using an approximate ingredient-specific conversion; cost is an estimate, not a verified quantity calculation."
               },
               {
-                "ingredient_id": "ING2197",
-                "ingredient": "mint",
-                "required_quantity": "1.0",
-                "required_unit": "teaspoon",
-                "product_name": "Simply Finest Fresh Mint Leaf",
-                "package_quantity": 50.0,
+                "ingredient_id": "ING3969",
+                "ingredient": "yellow onion",
+                "required_quantity": "2.0",
+                "required_unit": "tablespoon",
+                "product_name": "Chef Yellow Onion - Large",
+                "package_quantity": 700.0,
                 "package_unit": "g",
                 "packages_needed": 1,
-                "price_per_package": 1.6,
-                "minimum_package_cost": 1.6,
+                "price_per_package": 1.85,
+                "minimum_package_cost": 1.85,
                 "purchase_basis": "estimated_quantity",
-                "estimated_total_cost": 1.6,
-                "estimated_required_quantity": 1.9,
+                "estimated_total_cost": 1.85,
+                "estimated_required_quantity": 20.0,
                 "estimated_required_unit": "g",
                 "quantity_estimated": true,
                 "total_cost": null,
                 "currency": "SGD",
                 "store": "FairPrice",
-                "source_url": "https://www.fairprice.com.sg/product/simply-finest-fresh-mint-leaf-50g-13167535",
+                "source_url": "https://www.fairprice.com.sg/product/chef-yellow-onion-large-700g-10736476",
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T06:12:53+00:00",
+                "date_collected": "2026-10-10T12:03:53+00:00",
                 "match_status": "matched_estimated_quantity",
                 "match_quality": "exact",
-                "purchase_channel": "in_store_only",
-                "search_query": "mint",
+                "purchase_channel": "availability_unverified",
+                "search_query": "yellow onion",
                 "note": "purchase quantity calculated using an approximate ingredient-specific conversion; cost is an estimate, not a verified quantity calculation."
               },
               {
-                "ingredient_id": "ING0506",
-                "ingredient": "butter lettuce",
+                "ingredient_id": "ING2006",
+                "ingredient": "lime",
                 "required_quantity": "0.5",
-                "required_unit": "head",
-                "product_name": "Butterhead Lettuce",
-                "package_quantity": 1.0,
-                "package_unit": "head",
+                "required_unit": "wedge",
+                "product_name": "Go Fresh Big Lime",
+                "package_quantity": 300.0,
+                "package_unit": "g",
                 "packages_needed": 1,
-                "price_per_package": 2.98,
+                "price_per_package": 1.25,
+                "minimum_package_cost": 1.25,
+                "purchase_basis": "estimated_quantity",
+                "estimated_total_cost": 1.25,
+                "estimated_required_quantity": 4.0,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": "FairPrice",
+                "source_url": "https://www.fairprice.com.sg/product/go-fresh-big-lime-300g-13191903",
+                "source_updated_at": null,
+                "date_collected": "2026-10-10T12:03:53+00:00",
+                "match_status": "matched_estimated_quantity",
+                "match_quality": "exact",
+                "purchase_channel": "in_store_only",
+                "search_query": "fresh limes",
+                "note": "required unit 'wedge' cannot be converted to an exact package quantity; minimum retail purchase will be used when a valid product is found. purchase quantity calculated using an approximate ingredient-specific conversion; cost is an estimate, not a verified quantity calculation."
+              },
+              {
+                "ingredient_id": "ING1611",
+                "ingredient": "green onion",
+                "required_quantity": "2.0",
+                "required_unit": "tablespoon",
+                "product_name": "Fresh Spring Onion",
+                "package_quantity": 1.0,
+                "package_unit": "bunch",
+                "packages_needed": 1,
+                "price_per_package": 1.2,
                 "minimum_package_cost": null,
                 "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 2.98,
-                "estimated_required_quantity": 81.5,
+                "estimated_total_cost": 1.2,
+                "estimated_required_quantity": 12.0,
                 "estimated_required_unit": "g",
                 "quantity_estimated": true,
                 "total_cost": null,
@@ -427,7 +483,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T06:12:53+00:00",
+                "date_collected": "2026-10-10T12:03:53+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -455,7 +511,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T06:12:53+00:00",
+                "date_collected": "2026-10-10T12:03:53+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -463,75 +519,47 @@
                 "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
               },
               {
-                "ingredient_id": "ING3969",
-                "ingredient": "yellow onion",
-                "required_quantity": "2.0",
-                "required_unit": "tablespoon",
-                "product_name": "Chef Yellow Onion - Large",
-                "package_quantity": 700.0,
+                "ingredient_id": "ING2197",
+                "ingredient": "mint",
+                "required_quantity": "1.0",
+                "required_unit": "teaspoon",
+                "product_name": "Simply Finest Fresh Mint Leaf",
+                "package_quantity": 50.0,
                 "package_unit": "g",
                 "packages_needed": 1,
-                "price_per_package": 1.85,
-                "minimum_package_cost": 1.85,
+                "price_per_package": 1.6,
+                "minimum_package_cost": 1.6,
                 "purchase_basis": "estimated_quantity",
-                "estimated_total_cost": 1.85,
-                "estimated_required_quantity": 20.0,
+                "estimated_total_cost": 1.6,
+                "estimated_required_quantity": 1.9,
                 "estimated_required_unit": "g",
                 "quantity_estimated": true,
                 "total_cost": null,
                 "currency": "SGD",
                 "store": "FairPrice",
-                "source_url": "https://www.fairprice.com.sg/product/chef-yellow-onion-large-700g-10736476",
+                "source_url": "https://www.fairprice.com.sg/product/simply-finest-fresh-mint-leaf-50g-13167535",
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T06:12:53+00:00",
+                "date_collected": "2026-10-10T12:03:53+00:00",
                 "match_status": "matched_estimated_quantity",
                 "match_quality": "exact",
-                "purchase_channel": "availability_unverified",
-                "search_query": "yellow onion",
+                "purchase_channel": "in_store_only",
+                "search_query": "mint",
                 "note": "purchase quantity calculated using an approximate ingredient-specific conversion; cost is an estimate, not a verified quantity calculation."
               },
               {
-                "ingredient_id": "ING1611",
-                "ingredient": "green onion",
-                "required_quantity": "2.0",
-                "required_unit": "tablespoon",
-                "product_name": "Fresh Spring Onion",
-                "package_quantity": 1.0,
-                "package_unit": "bunch",
-                "packages_needed": 1,
-                "price_per_package": 1.2,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 1.2,
-                "estimated_required_quantity": 12.0,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-10T06:12:53+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING2006",
-                "ingredient": "lime",
+                "ingredient_id": "ING0506",
+                "ingredient": "butter lettuce",
                 "required_quantity": "0.5",
-                "required_unit": "wedge",
-                "product_name": "Fresh Lime",
+                "required_unit": "head",
+                "product_name": "Butterhead Lettuce",
                 "package_quantity": 1.0,
-                "package_unit": "pcs",
+                "package_unit": "head",
                 "packages_needed": 1,
-                "price_per_package": 0.6,
+                "price_per_package": 2.98,
                 "minimum_package_cost": null,
                 "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 0.6,
-                "estimated_required_quantity": 4.0,
+                "estimated_total_cost": 2.98,
+                "estimated_required_quantity": 81.5,
                 "estimated_required_unit": "g",
                 "quantity_estimated": true,
                 "total_cost": null,
@@ -539,35 +567,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-10T06:12:53+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING3996",
-                "ingredient": "zucchini",
-                "required_quantity": "2.0",
-                "required_unit": "tablespoon",
-                "product_name": "Fresh Zucchini",
-                "package_quantity": 300.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 2.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 2.5,
-                "estimated_required_quantity": 15.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-10T06:12:55+00:00",
+                "date_collected": "2026-10-10T12:03:53+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -575,21 +575,20 @@
                 "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
               }
             ],
-            "known_cost": 5.8,
-            "projected_cost": 20.98,
+            "known_cost": 8.21,
+            "projected_cost": 21.54,
             "projected_cost_complete": true,
             "projected_items": 11,
             "projection_missing": [],
             "all_items_priced": false,
             "unpriced_items": [
               "carrot",
-              "mint",
-              "butter lettuce",
-              "hoisin sauce",
               "yellow onion",
-              "green onion",
               "lime",
-              "zucchini"
+              "green onion",
+              "hoisin sauce",
+              "mint",
+              "butter lettuce"
             ],
             "budget": null,
             "budget_status": "not_checked",
@@ -602,7 +601,7 @@
               "budget_status": "not_checked",
               "provisional": true,
               "reason": "No remaining budget provided.",
-              "projected_cost": 20.98,
+              "projected_cost": 21.54,
               "budget_after_purchase": null
             },
             "remaining_budget": null,
@@ -672,13 +671,13 @@
           },
           "warnings": [
             "No complete purchase price found for carrot",
+            "No complete purchase price found for yellow onion",
+            "No complete purchase price found for lime",
+            "No complete purchase price found for green onion",
+            "No complete purchase price found for hoisin sauce",
             "No complete purchase price found for mint",
             "No complete purchase price found for butter lettuce",
-            "No complete purchase price found for hoisin sauce",
-            "No complete purchase price found for yellow onion",
-            "No complete purchase price found for green onion",
-            "No complete purchase price found for lime",
-            "No complete purchase price found for zucchini"
+            "zucchini: one retail package is assumed sufficient; exact quantity coverage is not verified."
           ],
           "execution_trace": [
             {
@@ -690,7 +689,7 @@
               "step": "grocery_agent",
               "recipe_id": "R01485",
               "status": "partial",
-              "known_cost": 5.8,
+              "known_cost": 8.21,
               "all_items_priced": false
             },
             {
@@ -701,7 +700,7 @@
             }
           ]
         },
-        "estimated_cost": 20.98
+        "estimated_cost": 21.54
       }
     ],
     "used_recipe_ids": [
@@ -709,8 +708,8 @@
     ],
     "budget": {
       "initial": 50.0,
-      "estimated_spent": 20.98,
-      "remaining": 29.02
+      "estimated_spent": 21.54,
+      "remaining": 28.46
     },
     "inventory": {
       "initial": {
@@ -735,7 +734,7 @@
       }
     },
     "nutrition": {
-      "2026-10-09": {
+      "2026-10-07": {
         "calories": 181.9324042,
         "protein_g": 7.550909138008953,
         "carbs_g": 21.69466675699429,
@@ -758,21 +757,25 @@
           "package_unit": "g",
           "packages": 1,
           "purchased_quantity": 300.0,
-          "price_per_package": 0.9,
-          "purchase_cost": 0.9,
-          "estimated_purchase_cost": null,
+          "price_per_package": 0.86,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 0.86,
           "leftover_quantity": 243.5,
           "inventory_used": 0.0,
           "recipe_ids": [
             "R01485"
           ],
-          "pricing_status": "priced",
+          "pricing_status": "estimated",
           "purchase_basis": "calculated_quantity",
           "quantity_coverage_verified": true,
-          "price_source": "retail",
+          "price_source": "retail_estimated_quantity",
           "conversion_status": "exact",
           "normalization_status": "resolved",
-          "inventory_conversion_unresolved": false
+          "inventory_conversion_unresolved": false,
+          "effective_purchase_cost": 0.86,
+          "display_cost": 0.86,
+          "has_usable_price": true,
+          "cost_is_estimated": true
         },
         {
           "ingredient_id": "ING0506",
@@ -794,10 +797,14 @@
           "pricing_status": "estimated",
           "purchase_basis": "minimum_retail_package",
           "quantity_coverage_verified": false,
-          "price_source": "retail_estimated_quantity",
+          "price_source": "ollama_estimate",
           "conversion_status": "estimated",
           "normalization_status": "resolved",
-          "inventory_conversion_unresolved": false
+          "inventory_conversion_unresolved": false,
+          "effective_purchase_cost": 2.98,
+          "display_cost": 2.98,
+          "has_usable_price": true,
+          "cost_is_estimated": true
         },
         {
           "ingredient_id": "ING0565",
@@ -809,20 +816,24 @@
           "packages": 1,
           "purchased_quantity": 500.0,
           "price_per_package": 2.9,
-          "purchase_cost": 2.9,
-          "estimated_purchase_cost": null,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 2.9,
           "leftover_quantity": 492.5,
           "inventory_used": 0.0,
           "recipe_ids": [
             "R01485"
           ],
-          "pricing_status": "priced",
+          "pricing_status": "estimated",
           "purchase_basis": "calculated_quantity",
           "quantity_coverage_verified": true,
-          "price_source": "retail",
+          "price_source": "retail_estimated_quantity",
           "conversion_status": "exact",
           "normalization_status": "resolved",
-          "inventory_conversion_unresolved": false
+          "inventory_conversion_unresolved": false,
+          "effective_purchase_cost": 2.9,
+          "display_cost": 2.9,
+          "has_usable_price": true,
+          "cost_is_estimated": true
         },
         {
           "ingredient_id": "ING1611",
@@ -844,10 +855,14 @@
           "pricing_status": "estimated",
           "purchase_basis": "minimum_retail_package",
           "quantity_coverage_verified": false,
-          "price_source": "retail_estimated_quantity",
+          "price_source": "ollama_estimate",
           "conversion_status": "estimated",
           "normalization_status": "resolved",
-          "inventory_conversion_unresolved": false
+          "inventory_conversion_unresolved": false,
+          "effective_purchase_cost": 1.2,
+          "display_cost": 1.2,
+          "has_usable_price": true,
+          "cost_is_estimated": true
         },
         {
           "ingredient_id": "ING0596",
@@ -872,7 +887,11 @@
           "price_source": "retail_estimated_quantity",
           "conversion_status": "estimated",
           "normalization_status": "resolved",
-          "inventory_conversion_unresolved": false
+          "inventory_conversion_unresolved": false,
+          "effective_purchase_cost": 0.95,
+          "display_cost": 0.95,
+          "has_usable_price": true,
+          "cost_is_estimated": true
         },
         {
           "ingredient_id": "ING3969",
@@ -897,7 +916,11 @@
           "price_source": "retail_estimated_quantity",
           "conversion_status": "estimated",
           "normalization_status": "resolved",
-          "inventory_conversion_unresolved": false
+          "inventory_conversion_unresolved": false,
+          "effective_purchase_cost": 1.85,
+          "display_cost": 1.85,
+          "has_usable_price": true,
+          "cost_is_estimated": true
         },
         {
           "ingredient_id": "ING3817",
@@ -922,45 +945,24 @@
           "price_source": "retail",
           "conversion_status": "exact",
           "normalization_status": "resolved",
-          "inventory_conversion_unresolved": false
+          "inventory_conversion_unresolved": false,
+          "effective_purchase_cost": 2.0,
+          "display_cost": 2.0,
+          "has_usable_price": true,
+          "cost_is_estimated": false
         },
         {
           "ingredient_id": "ING3996",
           "name": "zucchini",
           "required_quantity": 18.0,
           "required_unit": "g",
-          "package_quantity": 300.0,
-          "package_unit": "g",
-          "packages": 1,
-          "purchased_quantity": 300.0,
-          "price_per_package": 2.5,
-          "purchase_cost": null,
-          "estimated_purchase_cost": 2.5,
-          "leftover_quantity": 282.0,
-          "inventory_used": 0.0,
-          "recipe_ids": [
-            "R01485"
-          ],
-          "pricing_status": "estimated",
-          "purchase_basis": "estimated_quantity",
-          "quantity_coverage_verified": false,
-          "price_source": "retail_estimated_quantity",
-          "conversion_status": "estimated",
-          "normalization_status": "resolved",
-          "inventory_conversion_unresolved": false
-        },
-        {
-          "ingredient_id": "ING2006",
-          "name": "lime",
-          "required_quantity": 4.0,
-          "required_unit": "g",
           "package_quantity": 1.0,
           "package_unit": "pcs",
           "packages": 1,
           "purchased_quantity": 1.0,
-          "price_per_package": 0.6,
+          "price_per_package": 2.45,
           "purchase_cost": null,
-          "estimated_purchase_cost": 0.6,
+          "estimated_purchase_cost": 2.45,
           "leftover_quantity": null,
           "inventory_used": 0.0,
           "recipe_ids": [
@@ -972,7 +974,40 @@
           "price_source": "retail_estimated_quantity",
           "conversion_status": "estimated",
           "normalization_status": "resolved",
-          "inventory_conversion_unresolved": false
+          "inventory_conversion_unresolved": false,
+          "effective_purchase_cost": 2.45,
+          "display_cost": 2.45,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING2006",
+          "name": "lime",
+          "required_quantity": 4.0,
+          "required_unit": "g",
+          "package_quantity": 300.0,
+          "package_unit": "g",
+          "packages": 1,
+          "purchased_quantity": 300.0,
+          "price_per_package": 1.25,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 1.25,
+          "leftover_quantity": 296.0,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R01485"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "estimated_quantity",
+          "quantity_coverage_verified": false,
+          "price_source": "retail_estimated_quantity",
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "effective_purchase_cost": 1.25,
+          "display_cost": 1.25,
+          "has_usable_price": true,
+          "cost_is_estimated": true
         },
         {
           "ingredient_id": "ING1724",
@@ -992,12 +1027,16 @@
             "R01485"
           ],
           "pricing_status": "estimated",
-          "purchase_basis": "estimated_quantity",
+          "purchase_basis": "minimum_retail_package",
           "quantity_coverage_verified": false,
-          "price_source": "retail_estimated_quantity",
+          "price_source": "ollama_estimate",
           "conversion_status": "estimated",
           "normalization_status": "resolved",
-          "inventory_conversion_unresolved": false
+          "inventory_conversion_unresolved": false,
+          "effective_purchase_cost": 3.5,
+          "display_cost": 3.5,
+          "has_usable_price": true,
+          "cost_is_estimated": true
         },
         {
           "ingredient_id": "ING2197",
@@ -1022,22 +1061,18 @@
           "price_source": "retail_estimated_quantity",
           "conversion_status": "estimated",
           "normalization_status": "resolved",
-          "inventory_conversion_unresolved": false
+          "inventory_conversion_unresolved": false,
+          "effective_purchase_cost": 1.6,
+          "display_cost": 1.6,
+          "has_usable_price": true,
+          "cost_is_estimated": true
         }
       ],
-      "known_cost": 5.8,
+      "known_cost": 2.0,
       "unresolved_requirements": [],
       "all_items_priced": false,
-      "unpriced_items": [
-        "butter lettuce",
-        "green onion",
-        "carrot",
-        "yellow onion",
-        "zucchini",
-        "lime",
-        "hoisin sauce",
-        "mint"
-      ],
+      "all_items_have_usable_cost": true,
+      "unpriced_items": [],
       "aggregated_requirements": [
         {
           "ingredient_id": "ING3559",
@@ -1052,7 +1087,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 56.5,
+              "quantity": "56.5",
               "unit": "g",
               "conversion_status": "exact"
             }
@@ -1071,7 +1106,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 0.5,
+              "quantity": "0.5",
               "unit": "head",
               "conversion_status": "estimated"
             }
@@ -1090,7 +1125,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 0.5,
+              "quantity": "0.5",
               "unit": "tablespoon",
               "conversion_status": "exact"
             }
@@ -1109,7 +1144,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 2.0,
+              "quantity": "2.0",
               "unit": "tablespoon",
               "conversion_status": "estimated"
             }
@@ -1128,7 +1163,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 2.0,
+              "quantity": "2.0",
               "unit": "tablespoon",
               "conversion_status": "estimated"
             }
@@ -1147,7 +1182,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 2.0,
+              "quantity": "2.0",
               "unit": "tablespoon",
               "conversion_status": "estimated"
             }
@@ -1166,7 +1201,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 56.5,
+              "quantity": "56.5",
               "unit": "g",
               "conversion_status": "exact"
             }
@@ -1185,7 +1220,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 2.0,
+              "quantity": "2.0",
               "unit": "tablespoon",
               "conversion_status": "estimated"
             }
@@ -1204,7 +1239,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 0.5,
+              "quantity": "0.5",
               "unit": "wedge",
               "conversion_status": "estimated"
             }
@@ -1223,7 +1258,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 1.0,
+              "quantity": "1.0",
               "unit": "tablespoon",
               "conversion_status": "estimated"
             }
@@ -1242,7 +1277,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 1.0,
+              "quantity": "1.0",
               "unit": "teaspoon",
               "conversion_status": "estimated"
             }
@@ -1263,7 +1298,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 56.5,
+              "quantity": "56.5",
               "unit": "g",
               "conversion_status": "exact"
             }
@@ -1287,7 +1322,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 0.5,
+              "quantity": "0.5",
               "unit": "head",
               "conversion_status": "estimated"
             }
@@ -1311,7 +1346,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 0.5,
+              "quantity": "0.5",
               "unit": "tablespoon",
               "conversion_status": "exact"
             }
@@ -1335,7 +1370,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 2.0,
+              "quantity": "2.0",
               "unit": "tablespoon",
               "conversion_status": "estimated"
             }
@@ -1359,7 +1394,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 2.0,
+              "quantity": "2.0",
               "unit": "tablespoon",
               "conversion_status": "estimated"
             }
@@ -1383,7 +1418,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 2.0,
+              "quantity": "2.0",
               "unit": "tablespoon",
               "conversion_status": "estimated"
             }
@@ -1407,7 +1442,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 56.5,
+              "quantity": "56.5",
               "unit": "g",
               "conversion_status": "exact"
             }
@@ -1431,7 +1466,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 2.0,
+              "quantity": "2.0",
               "unit": "tablespoon",
               "conversion_status": "estimated"
             }
@@ -1455,7 +1490,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 0.5,
+              "quantity": "0.5",
               "unit": "wedge",
               "conversion_status": "estimated"
             }
@@ -1479,7 +1514,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 1.0,
+              "quantity": "1.0",
               "unit": "tablespoon",
               "conversion_status": "estimated"
             }
@@ -1503,7 +1538,7 @@
           "source_requirements": [
             {
               "recipe_id": "R01485",
-              "quantity": 1.0,
+              "quantity": "1.0",
               "unit": "teaspoon",
               "conversion_status": "estimated"
             }
@@ -1515,13 +1550,13 @@
           "inventory_conversion_unresolved": false
         }
       ],
-      "projected_cost": 20.98,
+      "projected_cost": 21.54,
       "projected_cost_complete": true,
       "projection_missing": [],
       "warnings": [
         "butter lettuce: incompatible recipe/package units; assuming one retail package.",
         "green onion: incompatible recipe/package units; assuming one retail package.",
-        "lime: incompatible recipe/package units; assuming one retail package."
+        "zucchini: incompatible recipe/package units; assuming one retail package."
       ]
     },
     "rejected_candidates": [
@@ -1557,6 +1592,16 @@
       },
       {
         "slot_id": "2026-10-07_dinner",
+        "recipe_id": "R21444",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.7,
+          "budget": 50.0
+        }
+      },
+      {
+        "slot_id": "2026-10-07_dinner",
         "recipe_id": "R01732",
         "reason": [
           {
@@ -1584,6 +1629,26 @@
             "reason": "All ingredients have valid ingredient IDs and names"
           }
         ]
+      },
+      {
+        "slot_id": "2026-10-07_dinner",
+        "recipe_id": "R13652",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.18,
+          "budget": 50.0
+        }
+      },
+      {
+        "slot_id": "2026-10-08_lunch",
+        "recipe_id": "R21444",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.7,
+          "budget": 50.0
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
@@ -1614,6 +1679,26 @@
             "reason": "All ingredients have valid ingredient IDs and names"
           }
         ]
+      },
+      {
+        "slot_id": "2026-10-08_lunch",
+        "recipe_id": "R13652",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.18,
+          "budget": 50.0
+        }
+      },
+      {
+        "slot_id": "2026-10-08_dinner",
+        "recipe_id": "R21444",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.7,
+          "budget": 50.0
+        }
       },
       {
         "slot_id": "2026-10-08_dinner",
@@ -1646,6 +1731,26 @@
         ]
       },
       {
+        "slot_id": "2026-10-08_dinner",
+        "recipe_id": "R13652",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.18,
+          "budget": 50.0
+        }
+      },
+      {
+        "slot_id": "2026-10-09_lunch",
+        "recipe_id": "R21444",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.7,
+          "budget": 50.0
+        }
+      },
+      {
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R01732",
         "reason": [
@@ -1676,6 +1781,26 @@
         ]
       },
       {
+        "slot_id": "2026-10-09_lunch",
+        "recipe_id": "R13652",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.18,
+          "budget": 50.0
+        }
+      },
+      {
+        "slot_id": "2026-10-09_dinner",
+        "recipe_id": "R21444",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.7,
+          "budget": 50.0
+        }
+      },
+      {
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R01732",
         "reason": [
@@ -1704,290 +1829,23 @@
             "reason": "All ingredients have valid ingredient IDs and names"
           }
         ]
-      }
-    ],
-    "uncertain_candidates": [
-      {
-        "slot_id": "2026-10-07_lunch",
-        "recipe_id": "R21444",
-        "reason": "Combined basket cost incomplete"
-      },
-      {
-        "slot_id": "2026-10-07_lunch",
-        "recipe_id": "R01485",
-        "reason": "Incomplete grocery projection"
-      },
-      {
-        "slot_id": "2026-10-07_dinner",
-        "recipe_id": "R21444",
-        "reason": "Combined basket cost incomplete"
-      },
-      {
-        "slot_id": "2026-10-07_dinner",
-        "recipe_id": "R01485",
-        "reason": "Incomplete grocery projection"
-      },
-      {
-        "slot_id": "2026-10-08_lunch",
-        "recipe_id": "R21444",
-        "reason": "Combined basket cost incomplete"
-      },
-      {
-        "slot_id": "2026-10-08_lunch",
-        "recipe_id": "R01485",
-        "reason": "Incomplete grocery projection"
-      },
-      {
-        "slot_id": "2026-10-08_dinner",
-        "recipe_id": "R21444",
-        "reason": "Combined basket cost incomplete"
-      },
-      {
-        "slot_id": "2026-10-08_dinner",
-        "recipe_id": "R01485",
-        "reason": "Incomplete grocery projection"
-      },
-      {
-        "slot_id": "2026-10-09_lunch",
-        "recipe_id": "R21444",
-        "reason": "Combined basket cost incomplete"
-      },
-      {
-        "slot_id": "2026-10-09_lunch",
-        "recipe_id": "R01485",
-        "reason": "Incomplete grocery projection"
       },
       {
         "slot_id": "2026-10-09_dinner",
-        "recipe_id": "R21444",
-        "reason": "Combined basket cost incomplete"
+        "recipe_id": "R13652",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.18,
+          "budget": 50.0
+        }
       }
     ],
+    "uncertain_candidates": [],
     "execution_trace": [
       {
-        "event": "candidate_uncertain",
-        "slot_id": "2026-10-07_lunch",
-        "recipe_id": "R21444",
-        "reason": "Combined basket cost incomplete"
-      },
-      {
-        "event": "candidate_uncertain",
-        "slot_id": "2026-10-07_lunch",
-        "recipe_id": "R01485",
-        "reason": "Incomplete grocery projection"
-      },
-      {
         "event": "candidate_rejected",
         "slot_id": "2026-10-07_lunch",
-        "recipe_id": "R01732",
-        "reason": [
-          {
-            "constraint": "diet",
-            "source": "dietary_requirements",
-            "status": "pass",
-            "reason": "Recipe satisfies dietary requirement(s): vegetarian"
-          },
-          {
-            "constraint": "allergy",
-            "source": "dietary_requirements",
-            "status": "pass",
-            "reason": "Recipe satisfies specified allergy requirements"
-          },
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "fail",
-            "reason": "Recipe time 45 min exceeds user's 30 min limit"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "pass",
-            "reason": "All ingredients have valid ingredient IDs and names"
-          }
-        ]
-      },
-      {
-        "event": "candidate_uncertain",
-        "slot_id": "2026-10-07_dinner",
-        "recipe_id": "R21444",
-        "reason": "Combined basket cost incomplete"
-      },
-      {
-        "event": "candidate_uncertain",
-        "slot_id": "2026-10-07_dinner",
-        "recipe_id": "R01485",
-        "reason": "Incomplete grocery projection"
-      },
-      {
-        "event": "candidate_rejected",
-        "slot_id": "2026-10-07_dinner",
-        "recipe_id": "R01732",
-        "reason": [
-          {
-            "constraint": "diet",
-            "source": "dietary_requirements",
-            "status": "pass",
-            "reason": "Recipe satisfies dietary requirement(s): vegetarian"
-          },
-          {
-            "constraint": "allergy",
-            "source": "dietary_requirements",
-            "status": "pass",
-            "reason": "Recipe satisfies specified allergy requirements"
-          },
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "fail",
-            "reason": "Recipe time 45 min exceeds user's 30 min limit"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "pass",
-            "reason": "All ingredients have valid ingredient IDs and names"
-          }
-        ]
-      },
-      {
-        "event": "candidate_uncertain",
-        "slot_id": "2026-10-08_lunch",
-        "recipe_id": "R21444",
-        "reason": "Combined basket cost incomplete"
-      },
-      {
-        "event": "candidate_uncertain",
-        "slot_id": "2026-10-08_lunch",
-        "recipe_id": "R01485",
-        "reason": "Incomplete grocery projection"
-      },
-      {
-        "event": "candidate_rejected",
-        "slot_id": "2026-10-08_lunch",
-        "recipe_id": "R01732",
-        "reason": [
-          {
-            "constraint": "diet",
-            "source": "dietary_requirements",
-            "status": "pass",
-            "reason": "Recipe satisfies dietary requirement(s): vegetarian"
-          },
-          {
-            "constraint": "allergy",
-            "source": "dietary_requirements",
-            "status": "pass",
-            "reason": "Recipe satisfies specified allergy requirements"
-          },
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "fail",
-            "reason": "Recipe time 45 min exceeds user's 30 min limit"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "pass",
-            "reason": "All ingredients have valid ingredient IDs and names"
-          }
-        ]
-      },
-      {
-        "event": "candidate_uncertain",
-        "slot_id": "2026-10-08_dinner",
-        "recipe_id": "R21444",
-        "reason": "Combined basket cost incomplete"
-      },
-      {
-        "event": "candidate_uncertain",
-        "slot_id": "2026-10-08_dinner",
-        "recipe_id": "R01485",
-        "reason": "Incomplete grocery projection"
-      },
-      {
-        "event": "candidate_rejected",
-        "slot_id": "2026-10-08_dinner",
-        "recipe_id": "R01732",
-        "reason": [
-          {
-            "constraint": "diet",
-            "source": "dietary_requirements",
-            "status": "pass",
-            "reason": "Recipe satisfies dietary requirement(s): vegetarian"
-          },
-          {
-            "constraint": "allergy",
-            "source": "dietary_requirements",
-            "status": "pass",
-            "reason": "Recipe satisfies specified allergy requirements"
-          },
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "fail",
-            "reason": "Recipe time 45 min exceeds user's 20 min limit"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "pass",
-            "reason": "All ingredients have valid ingredient IDs and names"
-          }
-        ]
-      },
-      {
-        "event": "candidate_uncertain",
-        "slot_id": "2026-10-09_lunch",
-        "recipe_id": "R21444",
-        "reason": "Combined basket cost incomplete"
-      },
-      {
-        "event": "candidate_uncertain",
-        "slot_id": "2026-10-09_lunch",
-        "recipe_id": "R01485",
-        "reason": "Incomplete grocery projection"
-      },
-      {
-        "event": "candidate_rejected",
-        "slot_id": "2026-10-09_lunch",
-        "recipe_id": "R01732",
-        "reason": [
-          {
-            "constraint": "diet",
-            "source": "dietary_requirements",
-            "status": "pass",
-            "reason": "Recipe satisfies dietary requirement(s): vegetarian"
-          },
-          {
-            "constraint": "allergy",
-            "source": "dietary_requirements",
-            "status": "pass",
-            "reason": "Recipe satisfies specified allergy requirements"
-          },
-          {
-            "constraint": "cooking_time",
-            "source": "feasibility",
-            "status": "fail",
-            "reason": "Recipe time 45 min exceeds user's 30 min limit"
-          },
-          {
-            "constraint": "ingredient_feasibility",
-            "source": "feasibility",
-            "status": "pass",
-            "reason": "All ingredients have valid ingredient IDs and names"
-          }
-        ]
-      },
-      {
-        "event": "candidate_uncertain",
-        "slot_id": "2026-10-09_dinner",
-        "recipe_id": "R21444",
-        "reason": "Combined basket cost incomplete"
-      },
-      {
-        "event": "candidate_rejected",
-        "slot_id": "2026-10-09_dinner",
         "recipe_id": "R01732",
         "reason": [
           {
@@ -2018,12 +1876,273 @@
       },
       {
         "event": "meal_selected",
-        "slot_id": "2026-10-09_dinner",
+        "slot_id": "2026-10-07_lunch",
         "recipe_id": "R01485"
       },
       {
-        "event": "slot_infeasible",
-        "slot_id": "2026-10-07_lunch"
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-07_dinner",
+        "recipe_id": "R21444",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.7,
+          "budget": 50.0
+        }
+      },
+      {
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-07_dinner",
+        "recipe_id": "R01732",
+        "reason": [
+          {
+            "constraint": "diet",
+            "source": "dietary_requirements",
+            "status": "pass",
+            "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+          },
+          {
+            "constraint": "allergy",
+            "source": "dietary_requirements",
+            "status": "pass",
+            "reason": "Recipe satisfies specified allergy requirements"
+          },
+          {
+            "constraint": "cooking_time",
+            "source": "feasibility",
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          },
+          {
+            "constraint": "ingredient_feasibility",
+            "source": "feasibility",
+            "status": "pass",
+            "reason": "All ingredients have valid ingredient IDs and names"
+          }
+        ]
+      },
+      {
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-07_dinner",
+        "recipe_id": "R13652",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.18,
+          "budget": 50.0
+        }
+      },
+      {
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-08_lunch",
+        "recipe_id": "R21444",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.7,
+          "budget": 50.0
+        }
+      },
+      {
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-08_lunch",
+        "recipe_id": "R01732",
+        "reason": [
+          {
+            "constraint": "diet",
+            "source": "dietary_requirements",
+            "status": "pass",
+            "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+          },
+          {
+            "constraint": "allergy",
+            "source": "dietary_requirements",
+            "status": "pass",
+            "reason": "Recipe satisfies specified allergy requirements"
+          },
+          {
+            "constraint": "cooking_time",
+            "source": "feasibility",
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          },
+          {
+            "constraint": "ingredient_feasibility",
+            "source": "feasibility",
+            "status": "pass",
+            "reason": "All ingredients have valid ingredient IDs and names"
+          }
+        ]
+      },
+      {
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-08_lunch",
+        "recipe_id": "R13652",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.18,
+          "budget": 50.0
+        }
+      },
+      {
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-08_dinner",
+        "recipe_id": "R21444",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.7,
+          "budget": 50.0
+        }
+      },
+      {
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-08_dinner",
+        "recipe_id": "R01732",
+        "reason": [
+          {
+            "constraint": "diet",
+            "source": "dietary_requirements",
+            "status": "pass",
+            "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+          },
+          {
+            "constraint": "allergy",
+            "source": "dietary_requirements",
+            "status": "pass",
+            "reason": "Recipe satisfies specified allergy requirements"
+          },
+          {
+            "constraint": "cooking_time",
+            "source": "feasibility",
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 20 min limit"
+          },
+          {
+            "constraint": "ingredient_feasibility",
+            "source": "feasibility",
+            "status": "pass",
+            "reason": "All ingredients have valid ingredient IDs and names"
+          }
+        ]
+      },
+      {
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-08_dinner",
+        "recipe_id": "R13652",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.18,
+          "budget": 50.0
+        }
+      },
+      {
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-09_lunch",
+        "recipe_id": "R21444",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.7,
+          "budget": 50.0
+        }
+      },
+      {
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-09_lunch",
+        "recipe_id": "R01732",
+        "reason": [
+          {
+            "constraint": "diet",
+            "source": "dietary_requirements",
+            "status": "pass",
+            "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+          },
+          {
+            "constraint": "allergy",
+            "source": "dietary_requirements",
+            "status": "pass",
+            "reason": "Recipe satisfies specified allergy requirements"
+          },
+          {
+            "constraint": "cooking_time",
+            "source": "feasibility",
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          },
+          {
+            "constraint": "ingredient_feasibility",
+            "source": "feasibility",
+            "status": "pass",
+            "reason": "All ingredients have valid ingredient IDs and names"
+          }
+        ]
+      },
+      {
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-09_lunch",
+        "recipe_id": "R13652",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.18,
+          "budget": 50.0
+        }
+      },
+      {
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-09_dinner",
+        "recipe_id": "R21444",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.7,
+          "budget": 50.0
+        }
+      },
+      {
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-09_dinner",
+        "recipe_id": "R01732",
+        "reason": [
+          {
+            "constraint": "diet",
+            "source": "dietary_requirements",
+            "status": "pass",
+            "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+          },
+          {
+            "constraint": "allergy",
+            "source": "dietary_requirements",
+            "status": "pass",
+            "reason": "Recipe satisfies specified allergy requirements"
+          },
+          {
+            "constraint": "cooking_time",
+            "source": "feasibility",
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          },
+          {
+            "constraint": "ingredient_feasibility",
+            "source": "feasibility",
+            "status": "pass",
+            "reason": "All ingredients have valid ingredient IDs and names"
+          }
+        ]
+      },
+      {
+        "event": "candidate_rejected",
+        "slot_id": "2026-10-09_dinner",
+        "recipe_id": "R13652",
+        "reason": {
+          "constraint": "budget",
+          "status": "fail",
+          "projected_plan_cost": 52.18,
+          "budget": 50.0
+        }
       },
       {
         "event": "slot_infeasible",
@@ -2042,8 +2161,12 @@
         "slot_id": "2026-10-09_lunch"
       },
       {
+        "event": "slot_infeasible",
+        "slot_id": "2026-10-09_dinner"
+      },
+      {
         "event": "nutrition_updated",
-        "slot_id": "2026-10-09_dinner",
+        "slot_id": "2026-10-07_lunch",
         "recipe_id": "R01485"
       },
       {
@@ -2072,21 +2195,25 @@
         "package_unit": "g",
         "packages": 1,
         "purchased_quantity": 300.0,
-        "price_per_package": 0.9,
-        "purchase_cost": 0.9,
-        "estimated_purchase_cost": null,
+        "price_per_package": 0.86,
+        "purchase_cost": null,
+        "estimated_purchase_cost": 0.86,
         "leftover_quantity": 243.5,
         "inventory_used": 0.0,
         "recipe_ids": [
           "R01485"
         ],
-        "pricing_status": "priced",
+        "pricing_status": "estimated",
         "purchase_basis": "calculated_quantity",
         "quantity_coverage_verified": true,
-        "price_source": "retail",
+        "price_source": "retail_estimated_quantity",
         "conversion_status": "exact",
         "normalization_status": "resolved",
-        "inventory_conversion_unresolved": false
+        "inventory_conversion_unresolved": false,
+        "effective_purchase_cost": 0.86,
+        "display_cost": 0.86,
+        "has_usable_price": true,
+        "cost_is_estimated": true
       },
       {
         "ingredient_id": "ING0506",
@@ -2108,10 +2235,14 @@
         "pricing_status": "estimated",
         "purchase_basis": "minimum_retail_package",
         "quantity_coverage_verified": false,
-        "price_source": "retail_estimated_quantity",
+        "price_source": "ollama_estimate",
         "conversion_status": "estimated",
         "normalization_status": "resolved",
-        "inventory_conversion_unresolved": false
+        "inventory_conversion_unresolved": false,
+        "effective_purchase_cost": 2.98,
+        "display_cost": 2.98,
+        "has_usable_price": true,
+        "cost_is_estimated": true
       },
       {
         "ingredient_id": "ING0565",
@@ -2123,20 +2254,24 @@
         "packages": 1,
         "purchased_quantity": 500.0,
         "price_per_package": 2.9,
-        "purchase_cost": 2.9,
-        "estimated_purchase_cost": null,
+        "purchase_cost": null,
+        "estimated_purchase_cost": 2.9,
         "leftover_quantity": 492.5,
         "inventory_used": 0.0,
         "recipe_ids": [
           "R01485"
         ],
-        "pricing_status": "priced",
+        "pricing_status": "estimated",
         "purchase_basis": "calculated_quantity",
         "quantity_coverage_verified": true,
-        "price_source": "retail",
+        "price_source": "retail_estimated_quantity",
         "conversion_status": "exact",
         "normalization_status": "resolved",
-        "inventory_conversion_unresolved": false
+        "inventory_conversion_unresolved": false,
+        "effective_purchase_cost": 2.9,
+        "display_cost": 2.9,
+        "has_usable_price": true,
+        "cost_is_estimated": true
       },
       {
         "ingredient_id": "ING1611",
@@ -2158,10 +2293,14 @@
         "pricing_status": "estimated",
         "purchase_basis": "minimum_retail_package",
         "quantity_coverage_verified": false,
-        "price_source": "retail_estimated_quantity",
+        "price_source": "ollama_estimate",
         "conversion_status": "estimated",
         "normalization_status": "resolved",
-        "inventory_conversion_unresolved": false
+        "inventory_conversion_unresolved": false,
+        "effective_purchase_cost": 1.2,
+        "display_cost": 1.2,
+        "has_usable_price": true,
+        "cost_is_estimated": true
       },
       {
         "ingredient_id": "ING0596",
@@ -2186,7 +2325,11 @@
         "price_source": "retail_estimated_quantity",
         "conversion_status": "estimated",
         "normalization_status": "resolved",
-        "inventory_conversion_unresolved": false
+        "inventory_conversion_unresolved": false,
+        "effective_purchase_cost": 0.95,
+        "display_cost": 0.95,
+        "has_usable_price": true,
+        "cost_is_estimated": true
       },
       {
         "ingredient_id": "ING3969",
@@ -2211,7 +2354,11 @@
         "price_source": "retail_estimated_quantity",
         "conversion_status": "estimated",
         "normalization_status": "resolved",
-        "inventory_conversion_unresolved": false
+        "inventory_conversion_unresolved": false,
+        "effective_purchase_cost": 1.85,
+        "display_cost": 1.85,
+        "has_usable_price": true,
+        "cost_is_estimated": true
       },
       {
         "ingredient_id": "ING3817",
@@ -2236,45 +2383,24 @@
         "price_source": "retail",
         "conversion_status": "exact",
         "normalization_status": "resolved",
-        "inventory_conversion_unresolved": false
+        "inventory_conversion_unresolved": false,
+        "effective_purchase_cost": 2.0,
+        "display_cost": 2.0,
+        "has_usable_price": true,
+        "cost_is_estimated": false
       },
       {
         "ingredient_id": "ING3996",
         "name": "zucchini",
         "required_quantity": 18.0,
         "required_unit": "g",
-        "package_quantity": 300.0,
-        "package_unit": "g",
-        "packages": 1,
-        "purchased_quantity": 300.0,
-        "price_per_package": 2.5,
-        "purchase_cost": null,
-        "estimated_purchase_cost": 2.5,
-        "leftover_quantity": 282.0,
-        "inventory_used": 0.0,
-        "recipe_ids": [
-          "R01485"
-        ],
-        "pricing_status": "estimated",
-        "purchase_basis": "estimated_quantity",
-        "quantity_coverage_verified": false,
-        "price_source": "retail_estimated_quantity",
-        "conversion_status": "estimated",
-        "normalization_status": "resolved",
-        "inventory_conversion_unresolved": false
-      },
-      {
-        "ingredient_id": "ING2006",
-        "name": "lime",
-        "required_quantity": 4.0,
-        "required_unit": "g",
         "package_quantity": 1.0,
         "package_unit": "pcs",
         "packages": 1,
         "purchased_quantity": 1.0,
-        "price_per_package": 0.6,
+        "price_per_package": 2.45,
         "purchase_cost": null,
-        "estimated_purchase_cost": 0.6,
+        "estimated_purchase_cost": 2.45,
         "leftover_quantity": null,
         "inventory_used": 0.0,
         "recipe_ids": [
@@ -2286,7 +2412,40 @@
         "price_source": "retail_estimated_quantity",
         "conversion_status": "estimated",
         "normalization_status": "resolved",
-        "inventory_conversion_unresolved": false
+        "inventory_conversion_unresolved": false,
+        "effective_purchase_cost": 2.45,
+        "display_cost": 2.45,
+        "has_usable_price": true,
+        "cost_is_estimated": true
+      },
+      {
+        "ingredient_id": "ING2006",
+        "name": "lime",
+        "required_quantity": 4.0,
+        "required_unit": "g",
+        "package_quantity": 300.0,
+        "package_unit": "g",
+        "packages": 1,
+        "purchased_quantity": 300.0,
+        "price_per_package": 1.25,
+        "purchase_cost": null,
+        "estimated_purchase_cost": 1.25,
+        "leftover_quantity": 296.0,
+        "inventory_used": 0.0,
+        "recipe_ids": [
+          "R01485"
+        ],
+        "pricing_status": "estimated",
+        "purchase_basis": "estimated_quantity",
+        "quantity_coverage_verified": false,
+        "price_source": "retail_estimated_quantity",
+        "conversion_status": "estimated",
+        "normalization_status": "resolved",
+        "inventory_conversion_unresolved": false,
+        "effective_purchase_cost": 1.25,
+        "display_cost": 1.25,
+        "has_usable_price": true,
+        "cost_is_estimated": true
       },
       {
         "ingredient_id": "ING1724",
@@ -2306,12 +2465,16 @@
           "R01485"
         ],
         "pricing_status": "estimated",
-        "purchase_basis": "estimated_quantity",
+        "purchase_basis": "minimum_retail_package",
         "quantity_coverage_verified": false,
-        "price_source": "retail_estimated_quantity",
+        "price_source": "ollama_estimate",
         "conversion_status": "estimated",
         "normalization_status": "resolved",
-        "inventory_conversion_unresolved": false
+        "inventory_conversion_unresolved": false,
+        "effective_purchase_cost": 3.5,
+        "display_cost": 3.5,
+        "has_usable_price": true,
+        "cost_is_estimated": true
       },
       {
         "ingredient_id": "ING2197",
@@ -2336,22 +2499,18 @@
         "price_source": "retail_estimated_quantity",
         "conversion_status": "estimated",
         "normalization_status": "resolved",
-        "inventory_conversion_unresolved": false
+        "inventory_conversion_unresolved": false,
+        "effective_purchase_cost": 1.6,
+        "display_cost": 1.6,
+        "has_usable_price": true,
+        "cost_is_estimated": true
       }
     ],
-    "known_cost": 5.8,
+    "known_cost": 2.0,
     "unresolved_requirements": [],
     "all_items_priced": false,
-    "unpriced_items": [
-      "butter lettuce",
-      "green onion",
-      "carrot",
-      "yellow onion",
-      "zucchini",
-      "lime",
-      "hoisin sauce",
-      "mint"
-    ],
+    "all_items_have_usable_cost": true,
+    "unpriced_items": [],
     "aggregated_requirements": [
       {
         "ingredient_id": "ING3559",
@@ -2366,7 +2525,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 56.5,
+            "quantity": "56.5",
             "unit": "g",
             "conversion_status": "exact"
           }
@@ -2385,7 +2544,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 0.5,
+            "quantity": "0.5",
             "unit": "head",
             "conversion_status": "estimated"
           }
@@ -2404,7 +2563,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 0.5,
+            "quantity": "0.5",
             "unit": "tablespoon",
             "conversion_status": "exact"
           }
@@ -2423,7 +2582,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 2.0,
+            "quantity": "2.0",
             "unit": "tablespoon",
             "conversion_status": "estimated"
           }
@@ -2442,7 +2601,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 2.0,
+            "quantity": "2.0",
             "unit": "tablespoon",
             "conversion_status": "estimated"
           }
@@ -2461,7 +2620,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 2.0,
+            "quantity": "2.0",
             "unit": "tablespoon",
             "conversion_status": "estimated"
           }
@@ -2480,7 +2639,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 56.5,
+            "quantity": "56.5",
             "unit": "g",
             "conversion_status": "exact"
           }
@@ -2499,7 +2658,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 2.0,
+            "quantity": "2.0",
             "unit": "tablespoon",
             "conversion_status": "estimated"
           }
@@ -2518,7 +2677,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 0.5,
+            "quantity": "0.5",
             "unit": "wedge",
             "conversion_status": "estimated"
           }
@@ -2537,7 +2696,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 1.0,
+            "quantity": "1.0",
             "unit": "tablespoon",
             "conversion_status": "estimated"
           }
@@ -2556,7 +2715,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 1.0,
+            "quantity": "1.0",
             "unit": "teaspoon",
             "conversion_status": "estimated"
           }
@@ -2577,7 +2736,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 56.5,
+            "quantity": "56.5",
             "unit": "g",
             "conversion_status": "exact"
           }
@@ -2601,7 +2760,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 0.5,
+            "quantity": "0.5",
             "unit": "head",
             "conversion_status": "estimated"
           }
@@ -2625,7 +2784,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 0.5,
+            "quantity": "0.5",
             "unit": "tablespoon",
             "conversion_status": "exact"
           }
@@ -2649,7 +2808,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 2.0,
+            "quantity": "2.0",
             "unit": "tablespoon",
             "conversion_status": "estimated"
           }
@@ -2673,7 +2832,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 2.0,
+            "quantity": "2.0",
             "unit": "tablespoon",
             "conversion_status": "estimated"
           }
@@ -2697,7 +2856,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 2.0,
+            "quantity": "2.0",
             "unit": "tablespoon",
             "conversion_status": "estimated"
           }
@@ -2721,7 +2880,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 56.5,
+            "quantity": "56.5",
             "unit": "g",
             "conversion_status": "exact"
           }
@@ -2745,7 +2904,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 2.0,
+            "quantity": "2.0",
             "unit": "tablespoon",
             "conversion_status": "estimated"
           }
@@ -2769,7 +2928,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 0.5,
+            "quantity": "0.5",
             "unit": "wedge",
             "conversion_status": "estimated"
           }
@@ -2793,7 +2952,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 1.0,
+            "quantity": "1.0",
             "unit": "tablespoon",
             "conversion_status": "estimated"
           }
@@ -2817,7 +2976,7 @@
         "source_requirements": [
           {
             "recipe_id": "R01485",
-            "quantity": 1.0,
+            "quantity": "1.0",
             "unit": "teaspoon",
             "conversion_status": "estimated"
           }
@@ -2829,17 +2988,17 @@
         "inventory_conversion_unresolved": false
       }
     ],
-    "projected_cost": 20.98,
+    "projected_cost": 21.54,
     "projected_cost_complete": true,
     "projection_missing": [],
     "warnings": [
       "butter lettuce: incompatible recipe/package units; assuming one retail package.",
       "green onion: incompatible recipe/package units; assuming one retail package.",
-      "lime: incompatible recipe/package units; assuming one retail package."
+      "zucchini: incompatible recipe/package units; assuming one retail package."
     ]
   },
   "nutrition_summary": {
-    "2026-10-09": {
+    "2026-10-07": {
       "calories": 181.9324,
       "protein_g": 7.5509,
       "carbs_g": 21.6947,
@@ -2853,7 +3012,7 @@
   },
   "nutrition_deviation": {
     "daily": {
-      "2026-10-09": {
+      "2026-10-07": {
         "calories": 1618.0676,
         "protein_g": 62.4491
       }
