@@ -1,0 +1,692 @@
+import pandas as pd
+
+from src.agents.recipe_agent import RecipeAgent
+
+from scripts.candidate_recipe import (
+    load_recipe_kb,
+    _contains_label,
+)
+
+
+# ============================================================
+# HELPERS
+# ============================================================
+
+def print_result(
+    title,
+    meal_slot,
+    plan_context,
+    result,
+):
+    """
+    Print compact Day-5 test output.
+    """
+
+    print("\n" + "=" * 70)
+    print(title)
+    print("=" * 70)
+
+    print(
+        "Meal Slot:",
+        meal_slot,
+    )
+
+    print(
+        "Plan Context:",
+        plan_context,
+    )
+
+    print(
+        "Status:",
+        result.get("status"),
+    )
+
+    candidate_ids = (
+        result
+        .get("data", {})
+        .get(
+            "candidate_recipe_ids",
+            [],
+        )
+    )
+
+    print(
+        "Candidate Count:",
+        len(candidate_ids),
+    )
+
+    print(
+        "Candidate IDs:",
+        candidate_ids,
+    )
+
+    if result.get("warnings"):
+        print(
+            "Warnings:",
+            result["warnings"],
+        )
+
+    if result.get("errors"):
+        print(
+            "Errors:",
+            result["errors"],
+        )
+
+
+def get_candidate_recipes(
+    candidate_ids,
+):
+    """
+    Retrieve candidate rows from the real Recipe KB.
+    """
+
+    df = load_recipe_kb()
+
+    return df[
+        df["recipe_id"].isin(
+            candidate_ids
+        )
+    ]
+
+
+def basic_user_state():
+    """
+    Basic User State used by Day-5 tests.
+    """
+
+    return {
+        "dietary_restrictions": [],
+        "preferred_cuisines": [],
+        "preferred_meal_types": [],
+    }
+
+
+# ============================================================
+# TEST 1
+# LUNCH SLOT
+# ============================================================
+
+def test_day5_lunch_slot():
+
+    agent = RecipeAgent(
+        max_candidates=5
+    )
+
+    user_state = basic_user_state()
+
+    meal_slot = {
+        "meal_type": "lunch",
+        "max_cooking_time": None,
+    }
+
+    plan_context = {
+        "used_recipe_ids": [],
+        "recent_cuisines": [],
+    }
+
+    result = agent.run(
+        user_state=user_state,
+        meal_slot=meal_slot,
+        plan_context=plan_context,
+    )
+
+    print_result(
+        "DAY 5 TEST 1: Lunch Slot",
+        meal_slot,
+        plan_context,
+        result,
+    )
+
+    assert result["status"] == "success"
+
+    candidate_ids = (
+        result["data"][
+            "candidate_recipe_ids"
+        ]
+    )
+
+    assert candidate_ids
+
+    recipes = get_candidate_recipes(
+        candidate_ids
+    )
+
+    for _, recipe in recipes.iterrows():
+
+        assert _contains_label(
+            recipe.get(
+                "meal_type",
+                "",
+            ),
+            "lunch",
+        )
+
+
+# ============================================================
+# TEST 2
+# DINNER SLOT
+# ============================================================
+
+def test_day5_dinner_slot():
+
+    agent = RecipeAgent(
+        max_candidates=5
+    )
+
+    user_state = basic_user_state()
+
+    meal_slot = {
+        "meal_type": "dinner",
+        "max_cooking_time": None,
+    }
+
+    plan_context = {
+        "used_recipe_ids": [],
+        "recent_cuisines": [],
+    }
+
+    result = agent.run(
+        user_state=user_state,
+        meal_slot=meal_slot,
+        plan_context=plan_context,
+    )
+
+    print_result(
+        "DAY 5 TEST 2: Dinner Slot",
+        meal_slot,
+        plan_context,
+        result,
+    )
+
+    assert result["status"] == "success"
+
+    candidate_ids = (
+        result["data"][
+            "candidate_recipe_ids"
+        ]
+    )
+
+    assert candidate_ids
+
+    recipes = get_candidate_recipes(
+        candidate_ids
+    )
+
+    for _, recipe in recipes.iterrows():
+
+        assert _contains_label(
+            recipe.get(
+                "meal_type",
+                "",
+            ),
+            "dinner",
+        )
+
+
+# ============================================================
+# TEST 3
+# USED RECIPE EXCLUSION
+# ============================================================
+
+def test_day5_used_recipe_exclusion():
+
+    agent = RecipeAgent(
+        max_candidates=5
+    )
+
+    user_state = basic_user_state()
+
+    meal_slot = {
+        "meal_type": "dinner",
+        "max_cooking_time": None,
+    }
+
+    # First retrieval
+    first_result = agent.run(
+        user_state=user_state,
+        meal_slot=meal_slot,
+        plan_context={
+            "used_recipe_ids": [],
+            "recent_cuisines": [],
+        },
+    )
+
+    first_ids = (
+        first_result["data"][
+            "candidate_recipe_ids"
+        ]
+    )
+
+    assert first_ids
+
+    used_recipe_id = first_ids[0]
+
+    # Simulate that recipe being selected
+    plan_context = {
+        "used_recipe_ids": [
+            used_recipe_id
+        ],
+        "recent_cuisines": [],
+    }
+
+    result = agent.run(
+        user_state=user_state,
+        meal_slot=meal_slot,
+        plan_context=plan_context,
+    )
+
+    print_result(
+        "DAY 5 TEST 3: Used Recipe Exclusion",
+        meal_slot,
+        plan_context,
+        result,
+    )
+
+    candidate_ids = (
+        result["data"][
+            "candidate_recipe_ids"
+        ]
+    )
+
+    print(
+        "Previously Used Recipe:",
+        used_recipe_id,
+    )
+
+    assert (
+        used_recipe_id
+        not in candidate_ids
+    )
+
+
+# ============================================================
+# TEST 4
+# CANDIDATE LIMIT
+# ============================================================
+
+def test_day5_candidate_limit():
+
+    agent = RecipeAgent(
+        max_candidates=3
+    )
+
+    user_state = basic_user_state()
+
+    meal_slot = {
+        "meal_type": "dinner",
+        "max_cooking_time": None,
+    }
+
+    plan_context = {
+        "used_recipe_ids": [],
+        "recent_cuisines": [],
+    }
+
+    result = agent.run(
+        user_state=user_state,
+        meal_slot=meal_slot,
+        plan_context=plan_context,
+    )
+
+    print_result(
+        "DAY 5 TEST 4: Candidate Limit",
+        meal_slot,
+        plan_context,
+        result,
+    )
+
+    candidate_ids = (
+        result["data"][
+            "candidate_recipe_ids"
+        ]
+    )
+
+    assert (
+        len(candidate_ids)
+        <= 3
+    )
+
+
+# ============================================================
+# TEST 5
+# COOKING-TIME CONTEXT
+# ============================================================
+
+def test_day5_cooking_time_context():
+
+    agent = RecipeAgent(
+        max_candidates=5
+    )
+
+    user_state = basic_user_state()
+
+    meal_slot = {
+        "meal_type": "dinner",
+        "max_cooking_time": 20,
+    }
+
+    plan_context = {
+        "used_recipe_ids": [],
+        "recent_cuisines": [],
+    }
+
+    result = agent.run(
+        user_state=user_state,
+        meal_slot=meal_slot,
+        plan_context=plan_context,
+    )
+
+    print_result(
+        "DAY 5 TEST 5: Cooking Time Context",
+        meal_slot,
+        plan_context,
+        result,
+    )
+
+    assert result["status"] == "success"
+
+    candidate_ids = (
+        result["data"][
+            "candidate_recipe_ids"
+        ]
+    )
+
+    assert isinstance(
+        candidate_ids,
+        list,
+    )
+
+    df = load_recipe_kb()
+
+    # --------------------------------------------------------
+    # CURRENT KB MAY NOT HAVE KNOWN COOKING TIMES
+    # --------------------------------------------------------
+
+    if (
+        "cooking_time_min"
+        not in df.columns
+    ):
+
+        assert any(
+            "cooking-time"
+            in warning.lower()
+
+            for warning
+            in result["warnings"]
+        )
+
+        return
+
+    cooking_times = pd.to_numeric(
+        df["cooking_time_min"],
+        errors="coerce",
+    )
+
+    if not cooking_times.notna().any():
+
+        # No time values available:
+        # agent must warn instead of inventing values.
+
+        assert any(
+            "cooking-time"
+            in warning.lower()
+
+            for warning
+            in result["warnings"]
+        )
+
+    else:
+
+        recipes = get_candidate_recipes(
+            candidate_ids
+        )
+
+        candidate_times = pd.to_numeric(
+            recipes[
+                "cooking_time_min"
+            ],
+            errors="coerce",
+        )
+
+        known_times = (
+            candidate_times
+            .dropna()
+        )
+
+        assert all(
+            known_times <= 20
+        )
+
+
+# ============================================================
+# TEST 6
+# NO CANDIDATES
+# ============================================================
+
+def test_day5_no_candidates():
+
+    agent = RecipeAgent(
+        max_candidates=5
+    )
+
+    user_state = {
+        "dietary_restrictions": [
+            "THIS_DIET_DOES_NOT_EXIST"
+        ],
+        "preferred_cuisines": [],
+        "preferred_meal_types": [],
+    }
+
+    meal_slot = {
+        "meal_type": "dinner",
+        "max_cooking_time": None,
+    }
+
+    plan_context = {
+        "used_recipe_ids": [],
+        "recent_cuisines": [],
+    }
+
+    result = agent.run(
+        user_state=user_state,
+        meal_slot=meal_slot,
+        plan_context=plan_context,
+    )
+
+    print_result(
+        "DAY 5 TEST 6: No Candidates",
+        meal_slot,
+        plan_context,
+        result,
+    )
+
+    assert result["status"] == "success"
+
+    assert (
+        result["data"][
+            "candidate_recipe_ids"
+        ]
+        == []
+    )
+
+    assert result["warnings"]
+
+    assert any(
+        "No candidates available"
+        in warning
+
+        for warning
+        in result["warnings"]
+    )
+
+
+# ============================================================
+# TEST 7
+# NO DUPLICATE RECIPE IDS
+# ============================================================
+
+def test_day5_no_duplicate_ids():
+
+    agent = RecipeAgent(
+        max_candidates=10
+    )
+
+    user_state = {
+        "dietary_restrictions": [],
+        "preferred_cuisines": [
+            "Indian",
+            "Asian",
+        ],
+        "preferred_meal_types": [],
+    }
+
+    meal_slot = {
+        "meal_type": "dinner",
+        "max_cooking_time": None,
+    }
+
+    plan_context = {
+        "used_recipe_ids": [],
+        "recent_cuisines": [],
+    }
+
+    result = agent.run(
+        user_state=user_state,
+        meal_slot=meal_slot,
+        plan_context=plan_context,
+    )
+
+    print_result(
+        "DAY 5 TEST 7: No Duplicate IDs",
+        meal_slot,
+        plan_context,
+        result,
+    )
+
+    candidate_ids = (
+        result["data"][
+            "candidate_recipe_ids"
+        ]
+    )
+
+    assert (
+        len(candidate_ids)
+        == len(
+            set(candidate_ids)
+        )
+    )
+
+
+# ============================================================
+# TEST 8
+# BASIC CUISINE VARIETY
+# ============================================================
+
+def test_day5_variety_behavior():
+
+    agent = RecipeAgent(
+        max_candidates=10
+    )
+
+    user_state = {
+        "dietary_restrictions": [],
+        "preferred_cuisines": [
+            "Asian"
+        ],
+        "preferred_meal_types": [],
+    }
+
+    meal_slot = {
+        "meal_type": "dinner",
+        "max_cooking_time": None,
+    }
+
+    # --------------------------------------------------------
+    # WITHOUT RECENT CUISINE HISTORY
+    # --------------------------------------------------------
+
+    baseline = agent.run(
+        user_state=user_state,
+        meal_slot=meal_slot,
+        plan_context={
+            "used_recipe_ids": [],
+            "recent_cuisines": [],
+        },
+    )
+
+    baseline_ids = (
+        baseline["data"][
+            "candidate_recipe_ids"
+        ]
+    )
+
+    # --------------------------------------------------------
+    # AFTER SEVERAL ASIAN MEALS
+    # --------------------------------------------------------
+
+    plan_context = {
+        "used_recipe_ids": [],
+        "recent_cuisines": [
+            "Asian",
+            "Asian",
+            "Asian",
+        ],
+    }
+
+    result = agent.run(
+        user_state=user_state,
+        meal_slot=meal_slot,
+        plan_context=plan_context,
+    )
+
+    print_result(
+        "DAY 5 TEST 8: Cuisine Variety",
+        meal_slot,
+        plan_context,
+        result,
+    )
+
+    candidate_ids = (
+        result["data"][
+            "candidate_recipe_ids"
+        ]
+    )
+
+    assert result["status"] == "success"
+
+    assert isinstance(
+        candidate_ids,
+        list,
+    )
+
+    # Variety is a ranking preference,
+    # not a hard constraint.
+    #
+    # All returned IDs must remain valid.
+
+    df = load_recipe_kb()
+
+    valid_ids = set(
+        df[
+            "recipe_id"
+        ]
+        .astype(str)
+        .tolist()
+    )
+
+    assert all(
+        recipe_id in valid_ids
+
+        for recipe_id
+        in candidate_ids
+    )
+
+    print(
+        "Baseline Candidates:",
+        baseline_ids,
+    )
+
+    print(
+        "After Variety Ranking:",
+        candidate_ids,
+    )
