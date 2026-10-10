@@ -15,6 +15,10 @@ from src.reasoning.dietary_requirements import evaluate_dietary_requirements
 from src.reasoning.feasibility import evaluate_recipe as evaluate_feasibility
 from src.reasoning.reasoning_engine import evaluate_candidate
 from src.state.workflow_state import WorkflowState
+from src.reasoning.budget_service import (
+    check_budget,
+    check_provisional_grocery_budget,
+)
 
 
 class ManagerAgent:
@@ -35,6 +39,7 @@ class ManagerAgent:
         feasibility_evaluator: Callable[[dict, dict], dict] = evaluate_feasibility,
         budget_evaluator: Callable[..., dict] = check_budget,
         candidate_evaluator: Callable[..., dict] = evaluate_candidate,
+        allow_provisional_budget: bool = False,
     ) -> None:
         self.recipe_agent = recipe_agent
         self.ingredient_agent = ingredient_agent
@@ -44,6 +49,7 @@ class ManagerAgent:
         self.feasibility_evaluator = feasibility_evaluator
         self.budget_evaluator = budget_evaluator
         self.candidate_evaluator = candidate_evaluator
+        self.allow_provisional_budget = allow_provisional_budget
 
     def plan(
         self,
@@ -94,7 +100,9 @@ class ManagerAgent:
             return self._final_response(workflow, result="invalid_recipe_agent_output")
 
         # Preserve order, remove duplicates, cap downstream work.
-        candidate_ids = list(dict.fromkeys(str(x) for x in candidate_ids))[:max_candidates]
+        candidate_ids = list(dict.fromkeys(str(x) for x in candidate_ids))[
+            :max_candidates
+        ]
         workflow.candidate_recipe_ids = candidate_ids
         workflow.trace(
             "recipe_agent",
@@ -114,21 +122,25 @@ class ManagerAgent:
                 workflow=workflow,
                 recipe_id=recipe_id,
                 user_state=user_state,
+                meal_context=meal_context,
             )
 
         # ------------------------------------------------------------
         # 3. Partition results and rank FEASIBLE candidates only
         # ------------------------------------------------------------
         feasible = [
-            item for item in workflow.candidate_results.values()
+            item
+            for item in workflow.candidate_results.values()
             if item.get("status") == "feasible"
         ]
         uncertain = [
-            item for item in workflow.candidate_results.values()
+            item
+            for item in workflow.candidate_results.values()
             if item.get("status") == "uncertain"
         ]
         rejected = [
-            item for item in workflow.candidate_results.values()
+            item
+            for item in workflow.candidate_results.values()
             if item.get("status") in {"rejected", "failed"}
         ]
 
@@ -172,6 +184,8 @@ class ManagerAgent:
         workflow: WorkflowState,
         recipe_id: str,
         user_state: Any,
+        meal_context: dict | None = None,
+        defer_budget_to_planner: bool = False,
     ) -> None:
         recipe = self.recipe_lookup(recipe_id)
         if recipe is None:
@@ -252,9 +266,41 @@ class ManagerAgent:
 
         # Domain reasoning -------------------------------------------------
         try:
+
             dietary_result = self.dietary_evaluator(candidate_recipe, user_state)
-            feasibility_result = self.feasibility_evaluator(candidate_recipe, self._state_as_dict(user_state))
-            budget_result = self._evaluate_budget(grocery_data, user_state)
+            feasibility_state = dict(self._state_as_dict(user_state))
+
+            if meal_context:
+                max_time = meal_context.get("max_cooking_time")
+
+                if max_time is not None:
+                    # MealSlot uses minutes.
+                    # Feasibility Engine expects hours.
+                    feasibility_state["cook_time_preference_hrs"] = (
+                        float(max_time) / 60.0
+                    )
+
+            feasibility_result = self.feasibility_evaluator(
+                candidate_recipe,
+                feasibility_state,
+            )
+
+            if defer_budget_to_planner:
+                budget_result = {
+                    "status": "pass",
+                    "budget_status": "pass",
+                    "budget_deferred": True,
+                    "reason": (
+                        "Final budget feasibility will be checked "
+                        "against the consolidated multi-meal basket."
+                    ),
+                }
+            else:
+                budget_result = self._evaluate_budget(
+                    grocery_data,
+                    user_state,
+                )
+
             reasoning = self.candidate_evaluator(
                 recipe_id=recipe_id,
                 dietary_result=dietary_result,
@@ -281,20 +327,49 @@ class ManagerAgent:
             "ingredient": ingredient_data,
             "grocery": grocery_data,
             "reasoning": reasoning,
-            "warnings": (
-                ingredient_result["warnings"] + grocery_result["warnings"]
-            ),
+            "budget_assessment": budget_result,
+            "warnings": (ingredient_result["warnings"] + grocery_result["warnings"]),
         }
 
-    def _evaluate_budget(self, grocery_data: dict[str, Any], user_state: Any) -> dict:
-        known_cost = float(grocery_data.get("known_cost", 0.0) or 0.0)
-        all_items_priced = bool(grocery_data.get("all_items_priced", False))
+    def _evaluate_budget(self, grocery_data: dict, user_state) -> dict:
+        known_cost = float(grocery_data.get("known_cost") or 0)
+        all_items_priced = grocery_data.get("all_items_priced") is True
         remaining_budget = self._remaining_budget(user_state)
-        return self.budget_evaluator(
+
+        strict = self.budget_evaluator(
             purchase_cost=known_cost,
             remaining_budget=remaining_budget,
             has_unknown_cost=not all_items_priced,
         )
+
+        if not self.allow_provisional_budget:
+            return strict
+
+        strict_status = strict.get("budget_status", strict.get("status"))
+
+        if strict_status != "uncertain":
+            return strict
+
+        if grocery_data.get("projected_cost_complete") is not True:
+            return strict
+
+        provisional = check_provisional_grocery_budget(
+            projected_cost=grocery_data.get("projected_cost"),
+            projected_cost_complete=True,
+            remaining_budget=remaining_budget,
+        )
+
+        result = dict(strict)
+        result["strict_budget"] = strict
+        result["provisional_budget"] = provisional
+
+        if provisional.get("budget_status") == "pass":
+            result["budget_status"] = "pass"
+            result["status"] = "pass"
+            result["provisionally_accepted"] = True
+            result["pricing_mode"] = "provisional"
+
+        return result
 
     @staticmethod
     def _remaining_budget(user_state: Any) -> float:
@@ -379,13 +454,15 @@ class ManagerAgent:
             "errors": workflow.errors,
             "execution_trace": workflow.execution_trace,
         }
-    
+
     def evaluate_candidate(
-    self,
-    recipe_id: str,
-    user_state: Any,
-    meal_context: dict[str, Any] | None = None,
-) -> dict[str, Any]:
+        self,
+        recipe_id: str,
+        user_state: Any,
+        meal_context: dict[str, Any] | None = None,
+        *,
+        defer_budget_to_planner: bool = False,
+    ) -> dict[str, Any]:
 
         workflow = WorkflowState(
             request_id=str(uuid4()),
@@ -396,27 +473,22 @@ class ManagerAgent:
             workflow=workflow,
             recipe_id=recipe_id,
             user_state=user_state,
+            meal_context=meal_context,
+            defer_budget_to_planner=defer_budget_to_planner,
         )
 
-        result = workflow.candidate_results.get(
-            recipe_id
-        )
+        result = workflow.candidate_results.get(recipe_id)
 
         if result is None:
             return {
                 "recipe_id": recipe_id,
                 "status": "failed",
-                "reason": (
-                    "Candidate evaluation produced no result."
-                ),
-                "execution_trace":
-                    workflow.execution_trace,
+                "reason": ("Candidate evaluation produced no result."),
+                "execution_trace": workflow.execution_trace,
             }
 
         result = dict(result)
 
-        result["execution_trace"] = (
-            workflow.execution_trace
-        )
+        result["execution_trace"] = workflow.execution_trace
 
         return result

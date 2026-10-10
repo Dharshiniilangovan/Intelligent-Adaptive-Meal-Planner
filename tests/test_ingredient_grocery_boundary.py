@@ -6,7 +6,7 @@ from src.grocery.grocery_service import GroceryOption
 class TestGroceryService:
     """Deterministic service for boundary testing."""
 
-    def get_grocery_list(self, items):
+    def get_grocery_list(self, items,  recipe_id=None):
         return [
             GroceryOption(
                 ingredient_id=item["ingredient_id"],

@@ -1,12 +1,21 @@
-"""src/budget/budget_service.py
+
+"""
+src/budget/budget_service.py
 
 Budget constraint logic for grocery purchase costs.
 
 Supports:
-- direct purchase-cost checks
-- existing basket_summary format
-- new GroceryService result format
+- Direct purchase-cost checks
+- Existing basket_summary format
+- GroceryService result format
+- Provisional Tavily and Ollama grocery prices
+- Complete projected grocery budget calculations
+
+Tavily and Ollama prices are equally usable for planning.
+Verified and estimated price provenance remains separate.
 """
+
+import math
 
 
 def check_budget(
@@ -19,18 +28,23 @@ def check_budget(
 
     Returns:
         pass:
-            Known cost is within budget and no costs are unknown.
+            Cost fits and no costs are unknown.
 
         hard_fail:
-            Known cost already exceeds the remaining budget.
+            Cost exceeds the remaining budget.
 
         uncertain:
-            Known cost is within budget, but one or more costs
-            are still unknown.
+            Cost fits, but some costs are unknown.
     """
 
     purchase_cost = float(purchase_cost)
     remaining_budget = float(remaining_budget)
+
+    if not math.isfinite(purchase_cost):
+        raise ValueError("purchase_cost must be finite")
+
+    if not math.isfinite(remaining_budget):
+        raise ValueError("remaining_budget must be finite")
 
     if purchase_cost < 0:
         raise ValueError(
@@ -42,18 +56,14 @@ def check_budget(
             "remaining_budget cannot be negative"
         )
 
-    # Known cost already exceeds budget.
-    # This is a hard fail even if other costs are unknown.
     if purchase_cost > remaining_budget:
         return {
             "budget_status": "hard_fail",
             "known_purchase_cost": round(
-                purchase_cost,
-                2,
+                purchase_cost, 2
             ),
             "remaining_budget": round(
-                remaining_budget,
-                2,
+                remaining_budget, 2
             ),
             "budget_after_purchase": None,
             "reason": (
@@ -62,17 +72,14 @@ def check_budget(
             ),
         }
 
-    # Known cost fits, but some prices are unknown.
     if has_unknown_cost:
         return {
             "budget_status": "uncertain",
             "known_purchase_cost": round(
-                purchase_cost,
-                2,
+                purchase_cost, 2
             ),
             "remaining_budget": round(
-                remaining_budget,
-                2,
+                remaining_budget, 2
             ),
             "budget_after_purchase": None,
             "reason": (
@@ -81,24 +88,19 @@ def check_budget(
             ),
         }
 
-    # Complete known cost fits budget.
     budget_after_purchase = round(
-        remaining_budget - purchase_cost,
-        2,
+        remaining_budget - purchase_cost, 2
     )
 
     return {
         "budget_status": "pass",
         "known_purchase_cost": round(
-            purchase_cost,
-            2,
+            purchase_cost, 2
         ),
         "remaining_budget": round(
-            remaining_budget,
-            2,
+            remaining_budget, 2
         ),
-        "budget_after_purchase":
-            budget_after_purchase,
+        "budget_after_purchase": budget_after_purchase,
         "reason": (
             "Purchase cost is within the "
             "remaining budget."
@@ -111,10 +113,9 @@ def check_basket_budget(
     remaining_budget: float,
 ) -> dict:
     """
-    Check the existing basket_summary() output against the budget.
+    Check the existing basket_summary output.
 
-    Expected basket format:
-
+    Expected format:
         {
             "estimated_total": 12.0,
             "known_subtotal": 12.0,
@@ -122,8 +123,7 @@ def check_basket_budget(
             "cost_complete": True
         }
 
-    This function is kept for compatibility with existing project
-    code and tests.
+    Preserves backward compatibility.
     """
 
     if not isinstance(basket, dict):
@@ -131,21 +131,15 @@ def check_basket_budget(
             "basket must be a dictionary"
         )
 
-    # Support the old known_subtotal field first.
-    # Fall back to estimated_total if known_subtotal is absent.
-    purchase_cost = basket.get(
-        "known_subtotal"
-    )
+    purchase_cost = basket.get("known_subtotal")
 
     if purchase_cost is None:
         purchase_cost = basket.get(
-            "estimated_total",
-            0,
+            "estimated_total", 0
         )
 
     unknown_items = basket.get(
-        "unknown_cost_items",
-        [],
+        "unknown_cost_items", []
     )
 
     cost_complete = basket.get(
@@ -170,49 +164,41 @@ def check_grocery_budget(
     remaining_budget: float,
 ) -> dict:
     """
-    Check the newer GroceryService output against the budget.
+    Check GroceryService results against the budget.
 
-    GroceryService returns:
-
+    Expected format:
         {
             "priced_products": [...],
             "incomplete_products": [...],
             "missing_products": [...]
         }
 
-    This function allows the budget layer to consume that output
-    directly.
+    Preserves the existing strict GroceryService
+    result contract.
     """
 
-    if not isinstance(
-        grocery_results,
-        dict,
-    ):
+    if not isinstance(grocery_results, dict):
         raise TypeError(
             "grocery_results must be a dictionary"
         )
 
     priced_products = grocery_results.get(
-        "priced_products",
-        [],
+        "priced_products", []
     )
 
     incomplete_products = grocery_results.get(
-        "incomplete_products",
-        [],
+        "incomplete_products", []
     )
 
     missing_products = grocery_results.get(
-        "missing_products",
-        [],
+        "missing_products", []
     )
 
     known_purchase_cost = round(
         sum(
             float(item["total_cost"])
             for item in priced_products
-            if item.get("total_cost")
-            is not None
+            if item.get("total_cost") is not None
         ),
         2,
     )
@@ -238,30 +224,146 @@ def check_grocery_budget(
     result = check_budget(
         purchase_cost=known_purchase_cost,
         remaining_budget=remaining_budget,
-        has_unknown_cost=bool(
-            unknown_items
-        ),
+        has_unknown_cost=bool(unknown_items),
     )
 
-    # Extra information useful to the next feature.
     result["items_priced"] = len(
         priced_products
     )
 
-    result["unknown_items"] = (
-        unknown_items
-    )
+    result["unknown_items"] = unknown_items
 
     return result
+
+
+def check_provisional_grocery_budget(
+    projected_cost,
+    projected_cost_complete,
+    remaining_budget,
+    safety_margin=0.0,
+):
+    """
+    Evaluate a complete projected grocery purchase cost.
+
+    Both Tavily and Ollama prices are accepted equally
+    for budget planning.
+
+    A projected cost can pass the budget check even
+    when individual prices are estimates.
+
+    Missing or incomplete costs are not treated as zero.
+
+    The result remains provisional because the prices
+    may not all be independently verified.
+    """
+
+    if remaining_budget is None:
+        return {
+            "budget_status": "not_checked",
+            "provisional": True,
+            "reason": "No remaining budget provided.",
+            "projected_cost": projected_cost,
+            "budget_after_purchase": None,
+        }
+
+    try:
+        budget = float(remaining_budget)
+    except (TypeError, ValueError, OverflowError):
+        raise ValueError(
+            "remaining_budget must be numeric"
+        )
+
+    if not math.isfinite(budget) or budget < 0:
+        raise ValueError(
+            "remaining_budget must be finite and nonnegative"
+        )
+
+    if (
+        not projected_cost_complete
+        or projected_cost is None
+    ):
+        return {
+            "budget_status": "uncertain",
+            "provisional": True,
+            "reason": (
+                "Projected grocery costs are incomplete."
+            ),
+            "projected_cost": projected_cost,
+            "budget_after_purchase": None,
+        }
+
+    try:
+        cost = float(projected_cost)
+    except (TypeError, ValueError, OverflowError):
+        raise ValueError(
+            "projected_cost must be numeric"
+        )
+
+    if not math.isfinite(cost) or cost < 0:
+        raise ValueError(
+            "projected_cost must be finite and nonnegative"
+        )
+
+    try:
+        safety_margin = float(safety_margin)
+    except (TypeError, ValueError, OverflowError):
+        raise ValueError(
+            "safety_margin must be numeric"
+        )
+
+    if (
+        not math.isfinite(safety_margin)
+        or not 0 <= safety_margin < 1
+    ):
+        raise ValueError(
+            "safety_margin must be between 0 and 1"
+        )
+
+    remaining = round(
+        budget - cost, 2
+    )
+
+    allowed_cost = budget * (
+        1 - safety_margin
+    )
+
+    if cost <= allowed_cost:
+        status = "pass"
+        reason = (
+            "Projected grocery cost fits within the "
+            "budget including the provisional safety margin."
+        )
+
+    elif cost > budget:
+        status = "hard_fail"
+        reason = (
+            "Projected grocery cost exceeds the budget."
+        )
+
+    else:
+        status = "uncertain"
+        reason = (
+            "Projected grocery cost fits the nominal budget "
+            "but exceeds the provisional safety-margin limit."
+        )
+
+    return {
+        "budget_status": status,
+        "provisional": True,
+        "reason": reason,
+        "projected_cost": round(cost, 2),
+        "budget_after_purchase": remaining,
+        "safety_margin": safety_margin,
+    }
 
 
 def print_budget_result(
     result: dict,
 ) -> None:
     """
-    Print a short readable budget result.
+    Print a readable budget result.
 
-    The complete dictionary is still returned to other features.
+    Preserves the existing output structure.
     """
 
     print()
@@ -318,56 +420,87 @@ def print_budget_result(
         print("Status: UNCERTAIN")
 
     unknown_items = result.get(
-        "unknown_items",
-        [],
+        "unknown_items", []
     )
 
     if unknown_items:
         print()
         print(
             "Unknown costs: "
-            + ", ".join(
-                unknown_items
-            )
+            + ", ".join(unknown_items)
         )
 
     print()
-    print(
-        result["reason"]
-    )
+    print(result["reason"])
 
-# if __name__ == "__main__":
 
-#     test_grocery_results = {
-#         "priced_products": [
-#             {
-#                 "ingredient": "sour cream",
-#                 "total_cost": 4.59,
-#             },
-#             {
-#                 "ingredient": "cheddar cheese",
-#                 "total_cost": 10.04,
-#             },
-#             {
-#                 "ingredient": "cilantro",
-#                 "total_cost": 1.80,
-#             },
-#             {
-#                 "ingredient": "dijon mustard",
-#                 "total_cost": 5.60,
-#             },
-#         ],
-#         "incomplete_products": [],
-#         "missing_products": [],
-#     }
+def get_usable_grocery_cost(
+    grocery: dict,
+) -> float | None:
+    """
+    Return the complete grocery cost usable for planning.
 
-#     test_remaining_budget = 50.00
+    Tavily and Ollama prices are treated equally
+    when calculating the projected budget.
 
-#     result = check_grocery_budget(
-#         grocery_results=test_grocery_results,
-#         remaining_budget=test_remaining_budget,
-#     )
+    Priority:
+        1. Complete projected grocery cost
+        2. Complete verified grocery cost
 
-#     print_budget_result(
-#         result
-#     )
+    Never treat missing prices as zero.
+    """
+
+    if not isinstance(grocery, dict):
+        return None
+
+    if grocery.get(
+        "projected_cost_complete"
+    ) is True:
+
+        cost = grocery.get(
+            "projected_cost"
+        )
+
+        if cost is not None:
+            try:
+                cost = float(cost)
+            except (
+                TypeError,
+                ValueError,
+                OverflowError,
+            ):
+                return None
+
+            if (
+                math.isfinite(cost)
+                and cost >= 0
+            ):
+                return round(cost, 2)
+
+            return None
+
+    if grocery.get(
+        "all_items_priced"
+    ) is True:
+
+        cost = grocery.get(
+            "known_cost"
+        )
+
+        if cost is not None:
+            try:
+                cost = float(cost)
+            except (
+                TypeError,
+                ValueError,
+                OverflowError,
+            ):
+                return None
+
+            if (
+                math.isfinite(cost)
+                and cost >= 0
+            ):
+                return round(cost, 2)
+
+    return None

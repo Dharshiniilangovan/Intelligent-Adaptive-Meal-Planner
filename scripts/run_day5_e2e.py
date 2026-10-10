@@ -24,7 +24,9 @@ from __future__ import annotations
 import json
 from datetime import date
 from pathlib import Path
-
+from src.grocery.ollama_fallback_service import (
+    OllamaFallbackGroceryService,
+)
 
 # ============================================================
 # PROJECT IMPORTS
@@ -37,7 +39,6 @@ from src.agents.grocery_agent import GroceryAgent
 
 from src.planning.multi_meal_planner import MultiMealPlanner
 
-
 # ============================================================
 # CONFIGURATION
 # ============================================================
@@ -49,7 +50,7 @@ MEAL_TYPES = [
     "dinner",
 ]
 
-MAX_CANDIDATES_PER_SLOT = 5
+MAX_CANDIDATES_PER_SLOT = 10
 
 
 # ============================================================
@@ -58,53 +59,40 @@ MAX_CANDIDATES_PER_SLOT = 5
 
 USER_STATE = {
     "user_id": "DAY5_E2E_USER",
-
     # -----------------------------------------
     # Budget
     # -----------------------------------------
-
-    "budget": 50.0,
-    "remaining_budget": 50.0,
-
+    "budget": 100.0,
+    "remaining_budget": 100.0,
     # -----------------------------------------
     # Dietary requirements
     # -----------------------------------------
-
     "dietary_restrictions": [
         "vegetarian",
     ],
-
     "allergies": [
         "peanut",
     ],
-
     # -----------------------------------------
     # Preferences
     # -----------------------------------------
-
     "preferred_cuisines": [
         "asian",
     ],
-
     "preferred_meal_types": [
         "lunch",
         "dinner",
     ],
-
     "disliked_ingredients": [],
-
     # -----------------------------------------
     # Cooking
     # -----------------------------------------
-
     # Your existing user model stores cooking
     # preference in hours.
     "cook_time_preference_hrs": 0.5,
-
     # -----------------------------------------
     # Pantry
     # -----------------------------------------
-
     "pantry": [
         {
             "ingredient_name": "rice",
@@ -117,11 +105,9 @@ USER_STATE = {
             "unit": "ml",
         },
     ],
-
     # -----------------------------------------
     # Nutrition
     # -----------------------------------------
-
     "nutrition_targets": {
         "calories": 1800,
         "protein_g": 70,
@@ -148,7 +134,6 @@ SCHEDULE = {
             "max_cooking_time": 30,
         },
     },
-
     "2026-10-08": {
         "lunch": {
             "max_cooking_time": 30,
@@ -157,7 +142,6 @@ SCHEDULE = {
             "max_cooking_time": 20,
         },
     },
-
     "2026-10-09": {
         "lunch": {
             "max_cooking_time": 30,
@@ -172,6 +156,7 @@ SCHEDULE = {
 # ============================================================
 # BUILD REAL SYSTEM
 # ============================================================
+
 
 def build_system():
     """
@@ -188,9 +173,7 @@ def build_system():
     # 1. RECIPE AGENT
     # ========================================================
 
-    recipe_agent = RecipeAgent(
-        max_candidates=MAX_CANDIDATES_PER_SLOT
-    )
+    recipe_agent = RecipeAgent(max_candidates=MAX_CANDIDATES_PER_SLOT)
 
     # ========================================================
     # 2. INGREDIENT AGENT
@@ -202,8 +185,7 @@ def build_system():
     # 3. GROCERY AGENT
     # ========================================================
 
-    grocery_agent = GroceryAgent()
-
+    grocery_agent = GroceryAgent(grocery_service=OllamaFallbackGroceryService())
     # ========================================================
     # 4. RECIPE LOOKUP
     # ========================================================
@@ -215,9 +197,7 @@ def build_system():
         recipe_id: str,
     ) -> dict | None:
 
-        return repository.get_recipe(
-            recipe_id
-        )
+        return repository.get_recipe(recipe_id)
 
     # ========================================================
     # 5. MANAGER
@@ -228,6 +208,7 @@ def build_system():
         ingredient_agent=ingredient_agent,
         grocery_agent=grocery_agent,
         recipe_lookup=recipe_lookup,
+        allow_provisional_budget=True,
     )
 
     # ========================================================
@@ -236,9 +217,7 @@ def build_system():
 
     planner = MultiMealPlanner(
         manager=manager,
-        max_candidates_per_slot=(
-            MAX_CANDIDATES_PER_SLOT
-        ),
+        max_candidates_per_slot=(MAX_CANDIDATES_PER_SLOT),
     )
 
     print("[SETUP] Components initialized.")
@@ -249,6 +228,7 @@ def build_system():
 # ============================================================
 # DISPLAY HELPERS
 # ============================================================
+
 
 def print_heading(title: str) -> None:
 
@@ -262,19 +242,14 @@ def print_selected_meals(
     plan: dict,
 ) -> None:
 
-    print_heading(
-        "SELECTED MEALS"
-    )
+    print_heading("SELECTED MEALS")
 
     selected = plan.get(
         "selected_meals",
         [],
     )
 
-    print(
-        f"Meals selected: "
-        f"{len(selected)}"
-    )
+    print(f"Meals selected: " f"{len(selected)}")
 
     for index, meal in enumerate(
         selected,
@@ -286,24 +261,16 @@ def print_selected_meals(
             {},
         )
 
-        print(
-            f"\n{index}. "
-            f"{slot.get('date')} "
-            f"{slot.get('meal_type')}"
-        )
+        print(f"\n{index}. " f"{slot.get('date')} " f"{slot.get('meal_type')}")
 
         print(
             "   Recipe:",
-            meal.get(
-                "recipe_id"
-            ),
+            meal.get("recipe_id"),
         )
 
         print(
             "   Estimated cost:",
-            meal.get(
-                "estimated_cost"
-            ),
+            meal.get("estimated_cost"),
         )
 
 
@@ -311,9 +278,7 @@ def print_rejections(
     plan: dict,
 ) -> None:
 
-    print_heading(
-        "REJECTIONS / RETRIES"
-    )
+    print_heading("REJECTIONS / RETRIES")
 
     rejected = plan.get(
         "rejected_candidates",
@@ -363,9 +328,7 @@ def print_budget(
     result: dict,
 ) -> None:
 
-    print_heading(
-        "BUDGET"
-    )
+    print_heading("BUDGET")
 
     budget = plan.get(
         "budget",
@@ -384,23 +347,17 @@ def print_budget(
 
     print(
         "Per-candidate estimated spent:",
-        budget.get(
-            "estimated_spent"
-        ),
+        budget.get("estimated_spent"),
     )
 
     print(
         "Final aggregated known cost:",
-        basket.get(
-            "known_cost"
-        ),
+        basket.get("known_cost"),
     )
 
     print(
         "All items priced:",
-        basket.get(
-            "all_items_priced"
-        ),
+        basket.get("all_items_priced"),
     )
 
     print(
@@ -416,18 +373,14 @@ def print_inventory(
     plan: dict,
 ) -> None:
 
-    print_heading(
-        "INVENTORY"
-    )
+    print_heading("INVENTORY")
 
     inventory = plan.get(
         "inventory",
         {},
     )
 
-    print(
-        "\nInitial inventory:"
-    )
+    print("\nInitial inventory:")
 
     print(
         json.dumps(
@@ -440,9 +393,7 @@ def print_inventory(
         )
     )
 
-    print(
-        "\nFinal inventory:"
-    )
+    print("\nFinal inventory:")
 
     print(
         json.dumps(
@@ -460,13 +411,9 @@ def print_nutrition(
     result: dict,
 ) -> None:
 
-    print_heading(
-        "NUTRITION"
-    )
+    print_heading("NUTRITION")
 
-    print(
-        "Summary:"
-    )
+    print("Summary:")
 
     print(
         json.dumps(
@@ -479,9 +426,7 @@ def print_nutrition(
         )
     )
 
-    print(
-        "\nDeviation:"
-    )
+    print("\nDeviation:")
 
     print(
         json.dumps(
@@ -499,9 +444,7 @@ def print_grocery_basket(
     result: dict,
 ) -> None:
 
-    print_heading(
-        "FINAL GROCERY BASKET"
-    )
+    print_heading("FINAL GROCERY BASKET")
 
     basket = result.get(
         "grocery_basket",
@@ -522,71 +465,42 @@ def print_grocery_basket(
 
         print(
             "\n-",
-            (
-                item.get(
-                    "ingredient_name"
-                )
-                or item.get(
-                    "ingredient"
-                )
-                or item.get(
-                    "name"
-                )
-            ),
+            (item.get("ingredient_name") or item.get("ingredient") or item.get("name")),
         )
 
         print(
             "  Required:",
-            item.get(
-                "required_quantity"
-            ),
-            item.get(
-                "required_unit"
-            ),
+            item.get("required_quantity"),
+            item.get("required_unit"),
         )
 
         print(
             "  Package:",
-            item.get(
-                "package_quantity"
-            ),
-            item.get(
-                "package_unit"
-            ),
+            item.get("package_quantity"),
+            item.get("package_unit"),
         )
 
         print(
             "  Packages:",
-            (
-                item.get(
-                    "packages_needed"
-                )
-                or item.get(
-                    "packages"
-                )
-            ),
+            (item.get("packages_needed") or item.get("packages")),
         )
 
-        print(
-            "  Cost:",
-            (
-                item.get(
-                    "purchase_cost"
-                )
-                or item.get(
-                    "total_cost"
-                )
-            ),
-        )
+        cost = item.get("effective_purchase_cost")
+
+        if cost is None:
+            cost = item.get("purchase_cost")
+
+        if cost is None:
+            cost = item.get("estimated_purchase_cost")
+
+        print(f"  Cost: S${cost:.2f}" if cost is not None else "  Cost: Unavailable")
 
 
 def print_execution_trace(
     plan: dict,
 ) -> None:
 
-    print_heading(
-        "EXECUTION TRACE"
-    )
+    print_heading("EXECUTION TRACE")
 
     trace = plan.get(
         "execution_trace",
@@ -611,13 +525,12 @@ def print_execution_trace(
 # ACCEPTANCE CHECKS
 # ============================================================
 
+
 def run_acceptance_checks(
     result: dict,
 ) -> None:
 
-    print_heading(
-        "DAY 5 ACCEPTANCE CHECKS"
-    )
+    print_heading("DAY 5 ACCEPTANCE CHECKS")
 
     plan = result.get(
         "plan",
@@ -666,11 +579,15 @@ def run_acceptance_checks(
     # 2. No duplicate selected recipes
     # --------------------------------------------------------
 
+    # Recipe repetition is allowed.
+    # A meal slot must still be assigned at most once.
+
+    selected_slot_ids = [meal["slot"]["slot_id"] for meal in selected]
+
     checks.append(
         (
-            "No duplicate selected recipes",
-            len(used_ids)
-            == len(set(used_ids)),
+            "No duplicate meal-slot assignments",
+            len(selected_slot_ids) == len(set(selected_slot_ids)),
         )
     )
 
@@ -692,10 +609,7 @@ def run_acceptance_checks(
     checks.append(
         (
             "Nutrition summary available",
-            result.get(
-                "nutrition_summary"
-            )
-            is not None,
+            result.get("nutrition_summary") is not None,
         )
     )
 
@@ -720,16 +634,15 @@ def run_acceptance_checks(
     checks.append(
         (
             "Pricing completeness available",
-            "all_items_priced"
-            in basket,
+            "all_items_priced" in basket,
         )
     )
 
     checks.append(
-    (
-        "At least one meal selected",
-        len(selected) > 0,
-    )
+        (
+            "At least one meal selected",
+            len(selected) > 0,
+        )
     )
 
     checks.append(
@@ -753,10 +666,7 @@ def run_acceptance_checks(
     checks.append(
         (
             "Valid final plan status",
-            validation.get(
-                "status"
-            )
-            in allowed_statuses,
+            validation.get("status") in allowed_statuses,
         )
     )
 
@@ -768,15 +678,9 @@ def run_acceptance_checks(
 
     for label, passed in checks:
 
-        marker = (
-            "PASS"
-            if passed
-            else "FAIL"
-        )
+        marker = "PASS" if passed else "FAIL"
 
-        print(
-            f"[{marker}] {label}"
-        )
+        print(f"[{marker}] {label}")
 
         if not passed:
             all_passed = False
@@ -785,36 +689,25 @@ def run_acceptance_checks(
 
     if all_passed:
 
-        print(
-            "DAY 5 STRUCTURAL "
-            "E2E CHECKS PASSED."
-        )
+        print("DAY 5 STRUCTURAL " "E2E CHECKS PASSED.")
 
     else:
 
-        print(
-            "DAY 5 E2E HAS "
-            "FAILED CHECKS."
-        )
+        print("DAY 5 E2E HAS " "FAILED CHECKS.")
 
 
 # ============================================================
 # MAIN
 # ============================================================
 
+
 def main():
 
-    print_heading(
-        "DAY 5 REAL END-TO-END RUN"
-    )
+    print_heading("DAY 5 REAL END-TO-END RUN")
 
     planner = build_system()
 
-    print(
-        "\nPlanning:"
-        f" {DAYS} days x "
-        f"{len(MEAL_TYPES)} meals"
-    )
+    print("\nPlanning:" f" {DAYS} days x " f"{len(MEAL_TYPES)} meals")
 
     print(
         "Expected slots:",
@@ -827,20 +720,11 @@ def main():
 
     result = planner.plan_meals(
         user_state=USER_STATE,
-
         start_date=START_DATE,
-
         days=DAYS,
-
         meal_types=MEAL_TYPES,
-
         schedule=SCHEDULE,
-
-        nutrition_targets=(
-            USER_STATE.get(
-                "nutrition_targets"
-            )
-        ),
+        nutrition_targets=(USER_STATE.get("nutrition_targets")),
     )
 
     # --------------------------------------------------------
@@ -852,9 +736,7 @@ def main():
         {},
     )
 
-    print_heading(
-        "FINAL PLAN STATUS"
-    )
+    print_heading("FINAL PLAN STATUS")
 
     print(
         json.dumps(
@@ -867,46 +749,30 @@ def main():
         )
     )
 
-    print_selected_meals(
-        plan
-    )
+    print_selected_meals(plan)
 
-    print_rejections(
-        plan
-    )
+    print_rejections(plan)
 
     print_budget(
         plan,
         result,
     )
 
-    print_inventory(
-        plan
-    )
+    print_inventory(plan)
 
-    print_nutrition(
-        result
-    )
+    print_nutrition(result)
 
-    print_grocery_basket(
-        result
-    )
+    print_grocery_basket(result)
 
-    print_execution_trace(
-        plan
-    )
+    print_execution_trace(plan)
 
-    run_acceptance_checks(
-        result
-    )
+    run_acceptance_checks(result)
 
     # --------------------------------------------------------
     # Save complete output for inspection/reporting
     # --------------------------------------------------------
 
-    output_path = Path(
-        "reports/day5_e2e_output.json"
-    )
+    output_path = Path("reports/day5_e2e_output.json")
 
     output_path.parent.mkdir(
         parents=True,
