@@ -14,6 +14,9 @@ from __future__ import annotations
 
 import os
 import math
+from dataclasses import asdict
+from src.cache.cache_service import cache_key as cache_key_fn
+from src.grocery.ollama_price_estimator import GroceryPriceEstimate, OLLAMA_MODEL
 
 from src.grocery.grocery_service import GroceryService
 from src.grocery.ollama_price_estimator import (
@@ -71,25 +74,29 @@ class OllamaFallbackGroceryService(GroceryService):
             str(unit).strip().lower(),
         )
 
+        persistent_key = cache_key_fn("ollama_grocery_v1", {
+            "ingredient": cache_key[0], "quantity": cache_key[1],
+            "unit": cache_key[2], "model": OLLAMA_MODEL,
+        })
         if cache_key in self._ollama_estimate_cache:
-            estimate = self._ollama_estimate_cache[
-                cache_key
-            ]
+            estimate = self._ollama_estimate_cache[cache_key]
         else:
-            print(
-                "[OLLAMA GROCERY FALLBACK]",
-                ingredient_name,
-            )
-
-            estimate = estimate_grocery_price(
-                ingredient_name=ingredient_name,
-                required_quantity=required_quantity,
-                required_unit=unit,
-            )
-
-            self._ollama_estimate_cache[
-                cache_key
-            ] = estimate
+            saved = self.persistent_cache.get("ollama_grocery_v1", persistent_key)
+            try:
+                estimate = GroceryPriceEstimate(**saved) if isinstance(saved, dict) else None
+            except (TypeError, ValueError):
+                estimate = None
+            if estimate is not None:
+                print(f"[SQLITE OLLAMA CACHE HIT] {ingredient_name}")
+            else:
+                print("[OLLAMA GROCERY FALLBACK]", ingredient_name)
+                estimate = estimate_grocery_price(
+                    ingredient_name=ingredient_name,
+                    required_quantity=required_quantity,
+                    required_unit=unit,
+                )
+            if estimate is not None:
+                self._ollama_estimate_cache[cache_key] = estimate
 
         if estimate is None:
             option.note = (
@@ -156,6 +163,12 @@ class OllamaFallbackGroceryService(GroceryService):
                 )
 
             return option
+
+        # Save only validated, successfully parsed estimates.
+        if self.persistent_cache.get("ollama_grocery_v1", persistent_key) is None:
+            self.persistent_cache.set(
+                "ollama_grocery_v1", persistent_key, asdict(estimate), 7 * 86400
+            )
 
         # Populate existing GroceryOption fields.
         # Do not claim a real retailer or verified price.

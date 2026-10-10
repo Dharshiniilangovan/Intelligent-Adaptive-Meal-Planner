@@ -47,34 +47,35 @@
           "meal_type": "lunch",
           "max_cooking_time": 30
         },
-        "recipe_id": "R01485",
+        "recipe_id": "R21444",
         "decision": {
-          "recipe_id": "R01485",
+          "recipe_id": "R21444",
           "status": "feasible",
           "recipe": {
-            "recipe_id": "R01485",
-            "recipe_name": "Savory Tofu Lettuce Wraps",
-            "url": "http://www.wholefoodsmarket.com/recipes/1906",
+            "recipe_id": "R21444",
+            "recipe_name": "Asian Spiral Cucumber Carrot Chickpea Salad",
+            "url": "http://sabrinasorganizing.com/asian-spiral-cucumber-carrot-chickpea-salad/",
             "servings": 4.0,
             "diet_labels": [
-              "balanced"
+              "high fiber"
             ],
             "health_labels": [
               "vegan",
               "vegetarian",
               "dairy free",
+              "gluten free",
               "egg free",
               "peanut free",
               "tree nut free",
+              "soy free",
               "fish free",
               "shellfish free"
             ],
             "cautions": [
-              "gluten",
-              "wheat",
               "sulfites"
             ],
             "cuisine_type": [
+              "indian",
               "asian"
             ],
             "meal_type": [
@@ -82,159 +83,180 @@
               "dinner"
             ],
             "dish_type": [
-              "main course"
+              "salad"
             ],
-            "calories_per_serving": 181.9324042,
-            "weight_g_per_serving": 242.9168425,
-            "protein_g_per_serving": 7.550909138008953,
-            "carbs_g_per_serving": 21.69466675699429,
-            "fat_g_per_serving": 8.42675965638417,
-            "fiber_g_per_serving": 4.247542572507575,
-            "sugar_g_per_serving": 0.0,
-            "sodium_mg_per_serving": 288.12668425438227,
-            "calcium_mg_per_serving": 160.50223231258656,
-            "iron_mg_per_serving": 2.5875238470027324,
+            "calories_per_serving": 172.614832875,
+            "weight_g_per_serving": 329.66687575,
+            "protein_g_per_serving": 6.38623065,
+            "carbs_g_per_serving": 30.686014,
+            "fat_g_per_serving": 3.1991607975,
+            "fiber_g_per_serving": 6.6158311125,
+            "sugar_g_per_serving": 11.36967804,
+            "sodium_mg_per_serving": 763.0601302905,
+            "calcium_mg_per_serving": 79.12280604373638,
+            "iron_mg_per_serving": 1.5187836823201253,
             "is_vegetarian": true,
             "is_vegan": true,
-            "cooking_time_min": 15.0,
-            "cooking_time_source": "ollama_estimate",
-            "cooking_time_confidence": "LOW"
+            "cooking_time_min": 5.0,
+            "cooking_time_source": "url_json_ld",
+            "cooking_time_confidence": "HIGH"
           },
           "ingredient": {
-            "recipe_id": "R01485",
+            "recipe_id": "R21444",
             "required_ingredients": [
               {
-                "ingredient_id": "ING3559",
-                "ingredient_name": "tofu",
-                "alias_name": "['tofu']",
-                "quantity": "56.5",
-                "unit": "g"
-              },
-              {
-                "ingredient_id": "ING0506",
-                "ingredient_name": "butter lettuce",
-                "alias_name": "['butter lettuce', 'butter lettuces']",
+                "ingredient_id": "ING2367",
+                "ingredient_name": "onion",
+                "alias_name": "['onion', 'baby onions', 'cooked onion', 'onion), raw', 'onions', 'onions, raw', 'roasted onion', 'sauteed onion', 'sauteed onions', \"sauteed' onion\", 'saut\u00e9ed onions']",
                 "quantity": "0.5",
-                "unit": "head"
+                "unit": "count"
               },
               {
-                "ingredient_id": "ING0565",
-                "ingredient_name": "canola oil",
-                "alias_name": "['canola oil']",
-                "quantity": "0.5",
-                "unit": "tablespoon"
+                "ingredient_id": "ING3399",
+                "ingredient_name": "sugar",
+                "alias_name": "['sugar', 'powdered sugar', 'raw sugar', 'sugars']",
+                "quantity": "1.0",
+                "unit": "teaspoon"
               },
               {
-                "ingredient_id": "ING1611",
-                "ingredient_name": "green onion",
-                "alias_name": "['green onion', 'green onions']",
+                "ingredient_id": "ING3046",
+                "ingredient_name": "salt",
+                "alias_name": "['salt']",
+                "quantity": "required",
+                "unit": "to taste"
+              },
+              {
+                "ingredient_id": "ING2268",
+                "ingredient_name": "mustard seed",
+                "alias_name": "['mustard seed', 'ground mustard seed', 'ground mustard seeds', 'mustard seeds']",
+                "quantity": "1.0",
+                "unit": "pinch"
+              },
+              {
+                "ingredient_id": "ING2900",
+                "ingredient_name": "red wine vinegar",
+                "alias_name": "['red wine vinegar', 'red-wine vinegar']",
                 "quantity": "2.0",
                 "unit": "tablespoon"
+              },
+              {
+                "ingredient_id": "ING1129",
+                "ingredient_name": "cucumber",
+                "alias_name": "['cucumber', 'cucumbers']",
+                "quantity": "1.0",
+                "unit": "count"
               },
               {
                 "ingredient_id": "ING0596",
                 "ingredient_name": "carrot",
                 "alias_name": "['carrot', 'baby carrot', 'baby carrots', 'canned carrot', 'canned carrots', 'carrots', 'carrots, raw', 'frozen carrots']",
-                "quantity": "2.0",
-                "unit": "tablespoon"
-              },
-              {
-                "ingredient_id": "ING3969",
-                "ingredient_name": "yellow onion",
-                "alias_name": "['yellow onion', 'yellow onions']",
-                "quantity": "2.0",
-                "unit": "tablespoon"
-              },
-              {
-                "ingredient_id": "ING3817",
-                "ingredient_name": "water chestnut",
-                "alias_name": "['water chestnut', 'canned water chestnut', 'canned water chestnuts', 'water chestnuts']",
-                "quantity": "56.5",
-                "unit": "g"
-              },
-              {
-                "ingredient_id": "ING3996",
-                "ingredient_name": "zucchini",
-                "alias_name": "['zucchini', 'baby zucchini']",
-                "quantity": "2.0",
-                "unit": "tablespoon"
-              },
-              {
-                "ingredient_id": "ING2006",
-                "ingredient_name": "lime",
-                "alias_name": "['lime', 'limes']",
-                "quantity": "0.5",
-                "unit": "wedge"
-              },
-              {
-                "ingredient_id": "ING1724",
-                "ingredient_name": "hoisin sauce",
-                "alias_name": "['hoisin sauce']",
                 "quantity": "1.0",
+                "unit": "count"
+              },
+              {
+                "ingredient_id": "ING2333",
+                "ingredient_name": "of chickpea",
+                "alias_name": "['of chickpea', 'can of chickpea', 'can of chickpeas', 'cans of chickpeas']",
+                "quantity": "0.5",
+                "unit": "count"
+              },
+              {
+                "ingredient_id": "ING3101",
+                "ingredient_name": "seasoned rice vinegar",
+                "alias_name": "['seasoned rice vinegar']",
+                "quantity": "0.5",
                 "unit": "tablespoon"
               },
               {
-                "ingredient_id": "ING2197",
-                "ingredient_name": "mint",
-                "alias_name": "['mint', 'dried (mint', 'dried mint', 'mints']",
+                "ingredient_id": "ING1962",
+                "ingredient_name": "lemon juice",
+                "alias_name": "['lemon juice', 'lemon) juice']",
                 "quantity": "1.0",
                 "unit": "teaspoon"
+              },
+              {
+                "ingredient_id": "ING3126",
+                "ingredient_name": "sesame oil",
+                "alias_name": "['sesame oil']",
+                "quantity": "1.0",
+                "unit": "pinch"
+              },
+              {
+                "ingredient_id": "ING2536",
+                "ingredient_name": "pepper",
+                "alias_name": "['pepper', 'canned peppers', 'ground pepper', 'ground peppers', 'peppers', 'roasted pepper', 'roasted peppers']",
+                "quantity": "required",
+                "unit": "to taste"
               }
             ],
             "pantry_used": [],
             "missing_ingredients": [
               {
-                "ingredient_id": "ING0506",
-                "ingredient_name": "butter lettuce",
-                "quantity": "0.5",
-                "unit": "head",
+                "ingredient_id": "ING2536",
+                "ingredient_name": "pepper",
+                "quantity": "required",
+                "unit": "to taste",
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING1724",
-                "ingredient_name": "hoisin sauce",
-                "quantity": "1.0",
+                "ingredient_id": "ING3101",
+                "ingredient_name": "seasoned rice vinegar",
+                "quantity": "0.5",
                 "unit": "tablespoon",
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING3559",
-                "ingredient_name": "tofu",
-                "quantity": "56.5",
-                "unit": "gram",
+                "ingredient_id": "ING1129",
+                "ingredient_name": "cucumber",
+                "quantity": "1.0",
+                "unit": "count",
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING2197",
-                "ingredient_name": "mint",
+                "ingredient_id": "ING3399",
+                "ingredient_name": "sugar",
                 "quantity": "1.0",
                 "unit": "teaspoon",
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING2006",
-                "ingredient_name": "lime",
+                "ingredient_id": "ING2268",
+                "ingredient_name": "mustard seed",
+                "quantity": "1.0",
+                "unit": "pinch",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING1962",
+                "ingredient_name": "lemon juice",
+                "quantity": "1.0",
+                "unit": "teaspoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING2367",
+                "ingredient_name": "onion",
                 "quantity": "0.5",
-                "unit": "wedge",
+                "unit": "count",
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING3817",
-                "ingredient_name": "water chestnut",
-                "quantity": "56.5",
-                "unit": "gram",
+                "ingredient_id": "ING3046",
+                "ingredient_name": "salt",
+                "quantity": "required",
+                "unit": "to taste",
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING0565",
-                "ingredient_name": "canola oil",
+                "ingredient_id": "ING2333",
+                "ingredient_name": "of chickpea",
                 "quantity": "0.5",
-                "unit": "tablespoon",
+                "unit": "count",
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING1611",
-                "ingredient_name": "green onion",
+                "ingredient_id": "ING2900",
+                "ingredient_name": "red wine vinegar",
                 "quantity": "2.0",
                 "unit": "tablespoon",
                 "status": "missing"
@@ -242,354 +264,370 @@
               {
                 "ingredient_id": "ING0596",
                 "ingredient_name": "carrot",
-                "quantity": "2.0",
-                "unit": "tablespoon",
+                "quantity": "1.0",
+                "unit": "count",
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING3969",
-                "ingredient_name": "yellow onion",
-                "quantity": "2.0",
-                "unit": "tablespoon",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING3996",
-                "ingredient_name": "zucchini",
-                "quantity": "2.0",
-                "unit": "tablespoon",
+                "ingredient_id": "ING3126",
+                "ingredient_name": "sesame oil",
+                "quantity": "1.0",
+                "unit": "pinch",
                 "status": "missing"
               }
             ],
             "unsupported_items": []
           },
           "grocery": {
-            "recipe_id": "R01485",
+            "recipe_id": "R21444",
             "items": [
               {
-                "ingredient_id": "ING3559",
-                "ingredient": "tofu",
-                "required_quantity": "56.5",
-                "required_unit": "gram",
-                "product_name": "FairPrice Tofu - Chinese",
-                "package_quantity": 300.0,
+                "ingredient_id": "ING2536",
+                "ingredient": "pepper",
+                "required_quantity": "required",
+                "required_unit": "to taste",
+                "product_name": "FairPrice Black Pepper - Ground",
+                "package_quantity": 100.0,
                 "package_unit": "g",
                 "packages_needed": 1,
-                "price_per_package": 0.86,
-                "minimum_package_cost": 0.86,
-                "purchase_basis": "exact_quantity",
-                "estimated_total_cost": null,
-                "estimated_required_quantity": 56.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": 0.86,
-                "currency": "SGD",
-                "store": "FairPrice",
-                "source_url": "https://www.fairprice.com.sg/product/fairprice-chinese-tofu-300g-10221966",
-                "source_updated_at": null,
-                "date_collected": "2026-10-09T17:30:15+00:00",
-                "match_status": "matched",
-                "match_quality": "exact",
-                "purchase_channel": "in_store_only",
-                "search_query": "tofu",
-                "note": ""
-              },
-              {
-                "ingredient_id": "ING3817",
-                "ingredient": "water chestnut",
-                "required_quantity": "56.5",
-                "required_unit": "gram",
-                "product_name": "China Water Chestnut",
-                "package_quantity": 500.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 2.0,
-                "minimum_package_cost": 2.0,
-                "purchase_basis": "exact_quantity",
+                "price_per_package": 4.13,
+                "minimum_package_cost": 4.13,
+                "purchase_basis": "minimum_retail_package",
                 "estimated_total_cost": null,
                 "estimated_required_quantity": null,
                 "estimated_required_unit": null,
                 "quantity_estimated": false,
-                "total_cost": 2.0,
+                "total_cost": 4.13,
                 "currency": "SGD",
                 "store": "FairPrice",
-                "source_url": "https://www.fairprice.com.sg/product/china-water-chestnut-500g-12044502",
+                "source_url": "https://www.fairprice.com.sg/product/fairprice-ground-black-pepper-100g-11046813",
                 "source_updated_at": null,
-                "date_collected": "2026-10-09T17:30:59+00:00",
-                "match_status": "matched",
-                "match_quality": "exact",
-                "purchase_channel": "in_store_only",
-                "search_query": "water chestnut",
-                "note": ""
-              },
-              {
-                "ingredient_id": "ING0565",
-                "ingredient": "canola oil",
-                "required_quantity": "0.5",
-                "required_unit": "tablespoon",
-                "product_name": "FairPrice Canola Oil",
-                "package_quantity": 500.0,
-                "package_unit": "ml",
-                "packages_needed": 1,
-                "price_per_package": 2.9,
-                "minimum_package_cost": 2.9,
-                "purchase_basis": "exact_quantity",
-                "estimated_total_cost": null,
-                "estimated_required_quantity": 7.0,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": 2.9,
-                "currency": "SGD",
-                "store": "FairPrice",
-                "source_url": "https://www.fairprice.com.sg/product/fairprice-canola-oil-500ml-13241557",
-                "source_updated_at": null,
-                "date_collected": "2026-10-09T17:31:12+00:00",
-                "match_status": "matched",
+                "date_collected": "2026-10-10T02:57:42+00:00",
+                "match_status": "matched_minimum_package",
                 "match_quality": "exact",
                 "purchase_channel": "availability_unverified",
-                "search_query": "canola oil",
-                "note": ""
+                "search_query": "pepper",
+                "note": "required unit 'to taste' cannot be converted to an exact package quantity; minimum retail purchase will be used when a valid product is found. recipe quantity cannot be converted exactly to the retail package unit; using one retail package as the minimum purchase."
               },
               {
-                "ingredient_id": "ING0506",
-                "ingredient": "butter lettuce",
-                "required_quantity": "0.5",
-                "required_unit": "head",
-                "product_name": "Butterhead Lettuce",
-                "package_quantity": 1.0,
-                "package_unit": "head",
-                "packages_needed": 1,
-                "price_per_package": 3.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 3.5,
-                "estimated_required_quantity": 81.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-09T17:29:24+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING1724",
-                "ingredient": "hoisin sauce",
+                "ingredient_id": "ING1129",
+                "ingredient": "cucumber",
                 "required_quantity": "1.0",
-                "required_unit": "tablespoon",
-                "product_name": "Hoisin Sauce",
-                "package_quantity": 265.0,
+                "required_unit": "count",
+                "product_name": "Fresh Cucumber",
+                "package_quantity": 660.0,
                 "package_unit": "g",
                 "packages_needed": 1,
-                "price_per_package": 3.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 3.5,
-                "estimated_required_quantity": 16.0,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
+                "price_per_package": 1.26,
+                "minimum_package_cost": 1.26,
+                "purchase_basis": "minimum_retail_package",
+                "estimated_total_cost": null,
+                "estimated_required_quantity": null,
+                "estimated_required_unit": null,
+                "quantity_estimated": false,
+                "total_cost": 1.26,
                 "currency": "SGD",
-                "store": null,
-                "source_url": null,
+                "store": "FairPrice",
+                "source_url": "https://www.fairprice.com.sg/product/fresh-cucumber-0-66kg-10422143",
                 "source_updated_at": null,
-                "date_collected": "2026-10-09T17:29:49+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                "date_collected": "2026-10-10T02:57:43+00:00",
+                "match_status": "matched_minimum_package",
+                "match_quality": "exact",
+                "purchase_channel": "in_store_only",
+                "search_query": "cucumber",
+                "note": "unit mismatch (need pcs, package in g); using one retail package as the minimum purchase."
               },
               {
-                "ingredient_id": "ING2197",
-                "ingredient": "mint",
+                "ingredient_id": "ING2268",
+                "ingredient": "mustard seed",
                 "required_quantity": "1.0",
-                "required_unit": "teaspoon",
-                "product_name": "Simply Finest Fresh Mint Leaf",
+                "required_unit": "pinch",
+                "product_name": "Max's Seeds - Mustard",
                 "package_quantity": 50.0,
                 "package_unit": "g",
                 "packages_needed": 1,
-                "price_per_package": 1.6,
-                "minimum_package_cost": 1.6,
-                "purchase_basis": "estimated_quantity",
-                "estimated_total_cost": 1.6,
-                "estimated_required_quantity": 1.9,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
+                "price_per_package": 0.71,
+                "minimum_package_cost": 0.71,
+                "purchase_basis": "minimum_retail_package",
+                "estimated_total_cost": null,
+                "estimated_required_quantity": null,
+                "estimated_required_unit": null,
+                "quantity_estimated": false,
+                "total_cost": 0.71,
                 "currency": "SGD",
                 "store": "FairPrice",
-                "source_url": "https://www.fairprice.com.sg/product/simply-finest-fresh-mint-leaf-50g-13167535",
+                "source_url": "https://www.fairprice.com.sg/product/13157380",
                 "source_updated_at": null,
-                "date_collected": "2026-10-09T17:30:20+00:00",
-                "match_status": "matched_estimated_quantity",
+                "date_collected": "2026-10-10T02:57:43+00:00",
+                "match_status": "matched_minimum_package",
                 "match_quality": "exact",
                 "purchase_channel": "in_store_only",
-                "search_query": "mint",
-                "note": "purchase quantity calculated using an approximate ingredient-specific conversion; cost is an estimate, not a verified quantity calculation."
+                "search_query": "mustard seed",
+                "note": "required unit 'pinch' cannot be converted to an exact package quantity; minimum retail purchase will be used when a valid product is found. recipe quantity cannot be converted exactly to the retail package unit; using one retail package as the minimum purchase."
               },
               {
-                "ingredient_id": "ING2006",
-                "ingredient": "lime",
-                "required_quantity": "0.5",
-                "required_unit": "wedge",
-                "product_name": "Go Fresh Big Lime",
-                "package_quantity": 300.0,
+                "ingredient_id": "ING1962",
+                "ingredient": "lemon juice",
+                "required_quantity": "1.0",
+                "required_unit": "teaspoon",
+                "product_name": "Santa Cruz Organic Bottle Juice - Pure Lemon",
+                "package_quantity": 473.0,
+                "package_unit": "ml",
+                "packages_needed": 1,
+                "price_per_package": 10.65,
+                "minimum_package_cost": 10.65,
+                "purchase_basis": "exact_quantity",
+                "estimated_total_cost": null,
+                "estimated_required_quantity": 5.08,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": 10.65,
+                "currency": "SGD",
+                "store": "FairPrice",
+                "source_url": "https://www.fairprice.com.sg/product/13112025",
+                "source_updated_at": null,
+                "date_collected": "2026-10-10T02:57:43+00:00",
+                "match_status": "matched",
+                "match_quality": "exact",
+                "purchase_channel": "in_store_only",
+                "search_query": "lemon juice",
+                "note": ""
+              },
+              {
+                "ingredient_id": "ING3046",
+                "ingredient": "salt",
+                "required_quantity": "required",
+                "required_unit": "to taste",
+                "product_name": "FairPrice Premium Quality Fine Salt",
+                "package_quantity": 500.0,
                 "package_unit": "g",
                 "packages_needed": 1,
-                "price_per_package": 1.25,
-                "minimum_package_cost": 1.25,
-                "purchase_basis": "estimated_quantity",
-                "estimated_total_cost": 1.25,
-                "estimated_required_quantity": 4.0,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
+                "price_per_package": 0.45,
+                "minimum_package_cost": 0.45,
+                "purchase_basis": "minimum_retail_package",
+                "estimated_total_cost": null,
+                "estimated_required_quantity": null,
+                "estimated_required_unit": null,
+                "quantity_estimated": false,
+                "total_cost": 0.45,
                 "currency": "SGD",
                 "store": "FairPrice",
-                "source_url": "https://www.fairprice.com.sg/product/go-fresh-big-lime-300g-13191903",
+                "source_url": "https://www.fairprice.com.sg/product/fairprice-premium-fine-salt-500g-432823",
                 "source_updated_at": null,
-                "date_collected": "2026-10-09T17:30:25+00:00",
-                "match_status": "matched_estimated_quantity",
+                "date_collected": "2026-10-10T02:57:43+00:00",
+                "match_status": "matched_minimum_package",
                 "match_quality": "exact",
-                "purchase_channel": "in_store_only",
-                "search_query": "fresh limes",
-                "note": "required unit 'wedge' cannot be converted to an exact package quantity; minimum retail purchase will be used when a valid product is found. purchase quantity calculated using an approximate ingredient-specific conversion; cost is an estimate, not a verified quantity calculation."
+                "purchase_channel": "availability_unverified",
+                "search_query": "salt",
+                "note": "required unit 'to taste' cannot be converted to an exact package quantity; minimum retail purchase will be used when a valid product is found. recipe quantity cannot be converted exactly to the retail package unit; using one retail package as the minimum purchase."
               },
               {
-                "ingredient_id": "ING1611",
-                "ingredient": "green onion",
+                "ingredient_id": "ING2333",
+                "ingredient": "of chickpea",
+                "required_quantity": "0.5",
+                "required_unit": "count",
+                "product_name": "Laobanniang Raw Chickpeas",
+                "package_quantity": 500.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 3.36,
+                "minimum_package_cost": 3.36,
+                "purchase_basis": "minimum_retail_package",
+                "estimated_total_cost": null,
+                "estimated_required_quantity": null,
+                "estimated_required_unit": null,
+                "quantity_estimated": false,
+                "total_cost": 3.36,
+                "currency": "SGD",
+                "store": "FairPrice",
+                "source_url": "https://www.fairprice.com.sg/product/laobanniang-raw-chickpeas-500-g-90067240",
+                "source_updated_at": null,
+                "date_collected": "2026-10-10T02:57:43+00:00",
+                "match_status": "matched_minimum_package",
+                "match_quality": "exact",
+                "purchase_channel": "availability_unverified",
+                "search_query": "chickpea",
+                "note": "unit mismatch (need pcs, package in g); using one retail package as the minimum purchase."
+              },
+              {
+                "ingredient_id": "ING2900",
+                "ingredient": "red wine vinegar",
                 "required_quantity": "2.0",
                 "required_unit": "tablespoon",
-                "product_name": "Fresh Spring Onion",
-                "package_quantity": 100.0,
-                "package_unit": "g",
+                "product_name": "De Nigris Red Wine Vinegar - Cabernet",
+                "package_quantity": 250.0,
+                "package_unit": "ml",
                 "packages_needed": 1,
-                "price_per_package": 1.2,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 1.2,
-                "estimated_required_quantity": 12.0,
+                "price_per_package": 7.28,
+                "minimum_package_cost": 7.28,
+                "purchase_basis": "exact_quantity",
+                "estimated_total_cost": null,
+                "estimated_required_quantity": 29.88,
                 "estimated_required_unit": "g",
                 "quantity_estimated": true,
-                "total_cost": null,
+                "total_cost": 7.28,
                 "currency": "SGD",
-                "store": null,
-                "source_url": null,
+                "store": "FairPrice",
+                "source_url": "https://www.fairprice.com.sg/product/de-nigris-red-wine-vinegar-cabernet-250ml-13042323",
                 "source_updated_at": null,
-                "date_collected": "2026-10-09T17:31:27+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                "date_collected": "2026-10-10T02:57:43+00:00",
+                "match_status": "matched",
+                "match_quality": "exact",
+                "purchase_channel": "in_store_only",
+                "search_query": "red wine vinegar",
+                "note": ""
               },
               {
                 "ingredient_id": "ING0596",
                 "ingredient": "carrot",
-                "required_quantity": "2.0",
-                "required_unit": "tablespoon",
+                "required_quantity": "1.0",
+                "required_unit": "count",
                 "product_name": "Sumich Fresh Carrots",
                 "package_quantity": 500.0,
                 "package_unit": "g",
                 "packages_needed": 1,
                 "price_per_package": 0.95,
                 "minimum_package_cost": 0.95,
-                "purchase_basis": "estimated_quantity",
-                "estimated_total_cost": 0.95,
-                "estimated_required_quantity": 16.0,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
+                "purchase_basis": "minimum_retail_package",
+                "estimated_total_cost": null,
+                "estimated_required_quantity": null,
+                "estimated_required_unit": null,
+                "quantity_estimated": false,
+                "total_cost": 0.95,
                 "currency": "SGD",
                 "store": "FairPrice",
                 "source_url": "https://www.fairprice.com.sg/product/sumich-fresh-carrots-500g-10733611",
                 "source_updated_at": null,
-                "date_collected": "2026-10-09T17:32:01+00:00",
-                "match_status": "matched_estimated_quantity",
+                "date_collected": "2026-10-10T02:57:43+00:00",
+                "match_status": "matched_minimum_package",
                 "match_quality": "exact",
                 "purchase_channel": "availability_unverified",
                 "search_query": "carrot",
+                "note": "unit mismatch (need pcs, package in g); using one retail package as the minimum purchase."
+              },
+              {
+                "ingredient_id": "ING3126",
+                "ingredient": "sesame oil",
+                "required_quantity": "1.0",
+                "required_unit": "pinch",
+                "product_name": "Lee Kum Kee Pure Sesame Oil",
+                "package_quantity": 207.0,
+                "package_unit": "ml",
+                "packages_needed": 1,
+                "price_per_package": 3.0,
+                "minimum_package_cost": 3.0,
+                "purchase_basis": "minimum_retail_package",
+                "estimated_total_cost": null,
+                "estimated_required_quantity": null,
+                "estimated_required_unit": null,
+                "quantity_estimated": false,
+                "total_cost": 3.0,
+                "currency": "SGD",
+                "store": "FairPrice",
+                "source_url": "https://www.fairprice.com.sg/product/lee-kum-kee-pure-sesame-oil-207ml-13160717",
+                "source_updated_at": null,
+                "date_collected": "2026-10-10T02:57:43+00:00",
+                "match_status": "matched_minimum_package",
+                "match_quality": "exact",
+                "purchase_channel": "availability_unverified",
+                "search_query": "sesame oil",
+                "note": "required unit 'pinch' cannot be converted to an exact package quantity; minimum retail purchase will be used when a valid product is found. recipe quantity cannot be converted exactly to the retail package unit; using one retail package as the minimum purchase."
+              },
+              {
+                "ingredient_id": "ING3101",
+                "ingredient": "seasoned rice vinegar",
+                "required_quantity": "0.5",
+                "required_unit": "tablespoon",
+                "product_name": "Seasoned Rice Vinegar",
+                "package_quantity": 500.0,
+                "package_unit": "ml",
+                "packages_needed": 1,
+                "price_per_package": 3.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 3.5,
+                "estimated_required_quantity": 7.45,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-10T02:57:42+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING3399",
+                "ingredient": "sugar",
+                "required_quantity": "1.0",
+                "required_unit": "teaspoon",
+                "product_name": "SIS White Sugar - Fine Grain",
+                "package_quantity": 1.0,
+                "package_unit": "kg",
+                "packages_needed": 1,
+                "price_per_package": 2.35,
+                "minimum_package_cost": 2.35,
+                "purchase_basis": "estimated_quantity",
+                "estimated_total_cost": 2.35,
+                "estimated_required_quantity": 4.17,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": "FairPrice",
+                "source_url": "https://www.fairprice.com.sg/product/13108806",
+                "source_updated_at": null,
+                "date_collected": "2026-10-10T02:57:43+00:00",
+                "match_status": "matched_estimated_quantity",
+                "match_quality": "exact",
+                "purchase_channel": "availability_unverified",
+                "search_query": "white granulated sugar",
                 "note": "purchase quantity calculated using an approximate ingredient-specific conversion; cost is an estimate, not a verified quantity calculation."
               },
               {
-                "ingredient_id": "ING3969",
-                "ingredient": "yellow onion",
-                "required_quantity": "2.0",
-                "required_unit": "tablespoon",
-                "product_name": "Chef Yellow Onion - Large",
+                "ingredient_id": "ING2367",
+                "ingredient": "onion",
+                "required_quantity": "0.5",
+                "required_unit": "count",
+                "product_name": "Chef Red Onion - Large",
                 "package_quantity": 700.0,
                 "package_unit": "g",
                 "packages_needed": 1,
-                "price_per_package": 1.85,
-                "minimum_package_cost": 1.85,
+                "price_per_package": 1.7,
+                "minimum_package_cost": 1.7,
                 "purchase_basis": "estimated_quantity",
-                "estimated_total_cost": 1.85,
-                "estimated_required_quantity": 20.0,
+                "estimated_total_cost": 1.7,
+                "estimated_required_quantity": 62.5,
                 "estimated_required_unit": "g",
                 "quantity_estimated": true,
                 "total_cost": null,
                 "currency": "SGD",
                 "store": "FairPrice",
-                "source_url": "https://www.fairprice.com.sg/product/chef-yellow-onion-large-700g-10736476",
+                "source_url": "https://www.fairprice.com.sg/product/chef-red-onion-large-700g-10736396",
                 "source_updated_at": null,
-                "date_collected": "2026-10-09T17:32:01+00:00",
+                "date_collected": "2026-10-10T02:57:43+00:00",
                 "match_status": "matched_estimated_quantity",
                 "match_quality": "exact",
                 "purchase_channel": "availability_unverified",
-                "search_query": "yellow onion",
-                "note": "purchase quantity calculated using an approximate ingredient-specific conversion; cost is an estimate, not a verified quantity calculation."
-              },
-              {
-                "ingredient_id": "ING3996",
-                "ingredient": "zucchini",
-                "required_quantity": "2.0",
-                "required_unit": "tablespoon",
-                "product_name": "Yuan Zhen Yuan Zucchini Yellow",
-                "package_quantity": 600.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 4.5,
-                "minimum_package_cost": 4.5,
-                "purchase_basis": "estimated_quantity",
-                "estimated_total_cost": 4.5,
-                "estimated_required_quantity": 15.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": "FairPrice",
-                "source_url": "https://fairprice.com.sg/product/yuan-zhen-yuan-zucchini-yellow-600-g-90189718",
-                "source_updated_at": null,
-                "date_collected": "2026-10-09T17:32:10+00:00",
-                "match_status": "matched_estimated_quantity",
-                "match_quality": "exact",
-                "purchase_channel": "availability_unverified",
-                "search_query": "zucchini",
+                "search_query": "onion",
                 "note": "purchase quantity calculated using an approximate ingredient-specific conversion; cost is an estimate, not a verified quantity calculation."
               }
             ],
-            "known_cost": 5.76,
-            "projected_cost": 24.11,
+            "known_cost": 31.79,
+            "projected_cost": 39.34,
             "projected_cost_complete": true,
-            "projected_items": 11,
+            "projected_items": 12,
             "projection_missing": [],
             "all_items_priced": false,
             "unpriced_items": [
-              "butter lettuce",
-              "hoisin sauce",
-              "mint",
-              "lime",
-              "green onion",
-              "carrot",
-              "yellow onion",
-              "zucchini"
+              "seasoned rice vinegar",
+              "sugar",
+              "onion"
             ],
             "budget": null,
             "budget_status": "not_checked",
@@ -602,14 +640,14 @@
               "budget_status": "not_checked",
               "provisional": true,
               "reason": "No remaining budget provided.",
-              "projected_cost": 24.11,
+              "projected_cost": 39.34,
               "budget_after_purchase": null
             },
             "remaining_budget": null,
             "budget_after_purchase": null
           },
           "reasoning": {
-            "recipe_id": "R01485",
+            "recipe_id": "R21444",
             "status": "feasible",
             "feasible": true,
             "hard_constraints": [
@@ -629,7 +667,7 @@
                 "constraint": "cooking_time",
                 "source": "feasibility",
                 "status": "pass",
-                "reason": "Recipe time 15 min is within user's 30 min limit"
+                "reason": "Recipe time 5 min is within user's 30 min limit"
               },
               {
                 "constraint": "ingredient_feasibility",
@@ -642,7 +680,7 @@
                 "source": "budget_service",
                 "status": "pass",
                 "reason": "One or more required grocery costs are unknown.",
-                "known_purchase_cost": 5.76,
+                "known_purchase_cost": 31.79,
                 "remaining_budget": 50.0
               }
             ],
@@ -666,13 +704,13 @@
           },
           "budget_assessment": {
             "budget_status": "pass",
-            "known_purchase_cost": 5.76,
+            "known_purchase_cost": 31.79,
             "remaining_budget": 50.0,
             "budget_after_purchase": null,
             "reason": "One or more required grocery costs are unknown.",
             "strict_budget": {
               "budget_status": "uncertain",
-              "known_purchase_cost": 5.76,
+              "known_purchase_cost": 31.79,
               "remaining_budget": 50.0,
               "budget_after_purchase": null,
               "reason": "One or more required grocery costs are unknown."
@@ -681,8 +719,8 @@
               "budget_status": "pass",
               "provisional": true,
               "reason": "Projected grocery cost fits within the budget including the provisional safety margin.",
-              "projected_cost": 24.11,
-              "budget_after_purchase": 25.89,
+              "projected_cost": 39.34,
+              "budget_after_purchase": 10.66,
               "safety_margin": 0.2
             },
             "status": "pass",
@@ -690,46 +728,48 @@
             "pricing_mode": "provisional"
           },
           "warnings": [
-            "No complete purchase price found for butter lettuce",
-            "No complete purchase price found for hoisin sauce",
-            "No complete purchase price found for mint",
-            "No complete purchase price found for lime",
-            "No complete purchase price found for green onion",
-            "No complete purchase price found for carrot",
-            "No complete purchase price found for yellow onion",
-            "No complete purchase price found for zucchini"
+            "No complete purchase price found for seasoned rice vinegar",
+            "No complete purchase price found for sugar",
+            "No complete purchase price found for onion",
+            "pepper: one retail package is assumed sufficient; exact quantity coverage is not verified.",
+            "cucumber: one retail package is assumed sufficient; exact quantity coverage is not verified.",
+            "mustard seed: one retail package is assumed sufficient; exact quantity coverage is not verified.",
+            "salt: one retail package is assumed sufficient; exact quantity coverage is not verified.",
+            "of chickpea: one retail package is assumed sufficient; exact quantity coverage is not verified.",
+            "carrot: one retail package is assumed sufficient; exact quantity coverage is not verified.",
+            "sesame oil: one retail package is assumed sufficient; exact quantity coverage is not verified."
           ],
           "execution_trace": [
             {
               "step": "ingredient_agent",
-              "recipe_id": "R01485",
+              "recipe_id": "R21444",
               "status": "success"
             },
             {
               "step": "grocery_agent",
-              "recipe_id": "R01485",
+              "recipe_id": "R21444",
               "status": "partial",
-              "known_cost": 5.76,
+              "known_cost": 31.79,
               "all_items_priced": false
             },
             {
               "step": "reasoning",
-              "recipe_id": "R01485",
+              "recipe_id": "R21444",
               "decision": "feasible",
               "overall_score": 0.5
             }
           ]
         },
-        "estimated_cost": 24.11
+        "estimated_cost": 39.34
       }
     ],
     "used_recipe_ids": [
-      "R01485"
+      "R21444"
     ],
     "budget": {
       "initial": 50.0,
-      "estimated_spent": 24.11,
-      "remaining": 25.89
+      "estimated_spent": 39.34,
+      "remaining": 10.659999999999997
     },
     "inventory": {
       "initial": {
@@ -751,160 +791,186 @@
           "quantity": 250.0,
           "unit": "ml"
         },
-        "tofu": {
-          "quantity": 300.0,
+        "pepper": {
+          "quantity": 100.0,
           "unit": "g"
         },
-        "water chestnut": {
-          "quantity": 500.0,
+        "cucumber": {
+          "quantity": 660.0,
           "unit": "g"
         },
-        "canola oil": {
-          "quantity": 500.0,
-          "unit": "ml"
-        },
-        "butter lettuce": {
-          "quantity": 1.0,
-          "unit": "head"
-        },
-        "hoisin sauce": {
-          "quantity": 265.0,
-          "unit": "g"
-        },
-        "mint": {
+        "mustard seed": {
           "quantity": 50.0,
           "unit": "g"
         },
-        "lime": {
-          "quantity": 300.0,
+        "lemon juice": {
+          "quantity": 473.0,
+          "unit": "ml"
+        },
+        "salt": {
+          "quantity": 500.0,
           "unit": "g"
         },
-        "green onion": {
-          "quantity": 100.0,
+        "of chickpea": {
+          "quantity": 500.0,
           "unit": "g"
+        },
+        "red wine vinegar": {
+          "quantity": 250.0,
+          "unit": "ml"
         },
         "carrot": {
           "quantity": 500.0,
           "unit": "g"
         },
-        "yellow onion": {
-          "quantity": 700.0,
-          "unit": "g"
+        "sesame oil": {
+          "quantity": 207.0,
+          "unit": "ml"
         },
-        "zucchini": {
-          "quantity": 600.0,
+        "seasoned rice vinegar": {
+          "quantity": 500.0,
+          "unit": "ml"
+        },
+        "sugar": {
+          "quantity": 1.0,
+          "unit": "kg"
+        },
+        "onion": {
+          "quantity": 700.0,
           "unit": "g"
         }
       }
     },
     "nutrition": {
       "2026-10-07": {
-        "calories": 181.9324042,
-        "protein_g": 7.550909138008953,
-        "carbs_g": 21.69466675699429,
-        "fat_g": 8.42675965638417,
-        "fiber_g": 4.247542572507575,
-        "sugar_g": 0.0,
-        "sodium_mg": 288.12668425438227,
-        "calcium_mg": 160.50223231258656,
-        "iron_mg": 2.5875238470027324
+        "calories": 172.614832875,
+        "protein_g": 6.38623065,
+        "carbs_g": 30.686014,
+        "fat_g": 3.1991607975,
+        "fiber_g": 6.6158311125,
+        "sugar_g": 11.36967804,
+        "sodium_mg": 763.0601302905,
+        "calcium_mg": 79.12280604373638,
+        "iron_mg": 1.5187836823201253
       }
     },
     "final_grocery_basket": {
       "items": [
         {
-          "ingredient_id": "ING3559",
-          "name": "tofu",
-          "required_quantity": 56.5,
-          "required_unit": "g",
-          "package_quantity": 300.0,
+          "ingredient_id": "ING2367",
+          "name": "onion",
+          "required_quantity": 0.5,
+          "required_unit": "pcs",
+          "package_quantity": 700.0,
           "package_unit": "g",
           "packages": 1,
-          "purchased_quantity": 300.0,
-          "price_per_package": 0.86,
+          "purchased_quantity": 700.0,
+          "price_per_package": 1.7,
           "purchase_cost": null,
-          "estimated_purchase_cost": 0.86,
-          "leftover_quantity": 243.5,
-          "inventory_used": 0.0,
-          "recipe_ids": [
-            "R01485"
-          ],
-          "pricing_status": "estimated",
-          "purchase_basis": "calculated_quantity",
-          "quantity_coverage_verified": true,
-          "price_source": "retail_estimated_quantity"
-        },
-        {
-          "ingredient_id": "ING0506",
-          "name": "butter lettuce",
-          "required_quantity": 0.5,
-          "required_unit": "head",
-          "package_quantity": 1.0,
-          "package_unit": "head",
-          "packages": 1,
-          "purchased_quantity": 1.0,
-          "price_per_package": 3.5,
-          "purchase_cost": null,
-          "estimated_purchase_cost": 3.5,
-          "leftover_quantity": 0.5,
-          "inventory_used": 0.0,
-          "recipe_ids": [
-            "R01485"
-          ],
-          "pricing_status": "estimated",
-          "purchase_basis": "calculated_quantity",
-          "quantity_coverage_verified": true,
-          "price_source": "ollama_estimate"
-        },
-        {
-          "ingredient_id": "ING0565",
-          "name": "canola oil",
-          "required_quantity": 0.5,
-          "required_unit": "tablespoon",
-          "package_quantity": 500.0,
-          "package_unit": "ml",
-          "packages": 1,
-          "purchased_quantity": 500.0,
-          "price_per_package": 2.9,
-          "purchase_cost": null,
-          "estimated_purchase_cost": 2.9,
-          "leftover_quantity": 492.5,
-          "inventory_used": 0.0,
-          "recipe_ids": [
-            "R01485"
-          ],
-          "pricing_status": "estimated",
-          "purchase_basis": "calculated_quantity",
-          "quantity_coverage_verified": true,
-          "price_source": "retail_estimated_quantity"
-        },
-        {
-          "ingredient_id": "ING1611",
-          "name": "green onion",
-          "required_quantity": 2.0,
-          "required_unit": "tablespoon",
-          "package_quantity": 100.0,
-          "package_unit": "g",
-          "packages": 1,
-          "purchased_quantity": 100.0,
-          "price_per_package": 1.2,
-          "purchase_cost": null,
-          "estimated_purchase_cost": 1.2,
+          "estimated_purchase_cost": 1.7,
           "leftover_quantity": null,
           "inventory_used": 0.0,
           "recipe_ids": [
-            "R01485"
+            "R21444"
           ],
           "pricing_status": "estimated",
           "purchase_basis": "minimum_retail_package",
           "quantity_coverage_verified": false,
-          "price_source": "ollama_estimate"
+          "price_source": "unverified"
+        },
+        {
+          "ingredient_id": "ING3399",
+          "name": "sugar",
+          "required_quantity": 1.0,
+          "required_unit": "teaspoon",
+          "package_quantity": 1.0,
+          "package_unit": "kg",
+          "packages": 1,
+          "purchased_quantity": 1.0,
+          "price_per_package": 2.35,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 2.35,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R21444"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "unverified"
+        },
+        {
+          "ingredient_id": "ING2268",
+          "name": "mustard seed",
+          "required_quantity": 1.0,
+          "required_unit": "pinch",
+          "package_quantity": 50.0,
+          "package_unit": "g",
+          "packages": 1,
+          "purchased_quantity": 50.0,
+          "price_per_package": 0.71,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 0.71,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R21444"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "unverified"
+        },
+        {
+          "ingredient_id": "ING2900",
+          "name": "red wine vinegar",
+          "required_quantity": 2.0,
+          "required_unit": "tablespoon",
+          "package_quantity": 250.0,
+          "package_unit": "ml",
+          "packages": 1,
+          "purchased_quantity": 250.0,
+          "price_per_package": 7.28,
+          "purchase_cost": 7.28,
+          "estimated_purchase_cost": null,
+          "leftover_quantity": 220.0,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R21444"
+          ],
+          "pricing_status": "priced",
+          "purchase_basis": "calculated_quantity",
+          "quantity_coverage_verified": true,
+          "price_source": "retail"
+        },
+        {
+          "ingredient_id": "ING1129",
+          "name": "cucumber",
+          "required_quantity": 1.0,
+          "required_unit": "pcs",
+          "package_quantity": 660.0,
+          "package_unit": "g",
+          "packages": 1,
+          "purchased_quantity": 660.0,
+          "price_per_package": 1.26,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 1.26,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R21444"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "unverified"
         },
         {
           "ingredient_id": "ING0596",
           "name": "carrot",
-          "required_quantity": 2.0,
-          "required_unit": "tablespoon",
+          "required_quantity": 1.0,
+          "required_unit": "pcs",
           "package_quantity": 500.0,
           "package_unit": "g",
           "packages": 1,
@@ -915,51 +981,51 @@
           "leftover_quantity": null,
           "inventory_used": 0.0,
           "recipe_ids": [
-            "R01485"
+            "R21444"
           ],
           "pricing_status": "estimated",
           "purchase_basis": "minimum_retail_package",
           "quantity_coverage_verified": false,
-          "price_source": "retail_estimated_quantity"
+          "price_source": "unverified"
         },
         {
-          "ingredient_id": "ING3969",
-          "name": "yellow onion",
-          "required_quantity": 2.0,
-          "required_unit": "tablespoon",
-          "package_quantity": 700.0,
-          "package_unit": "g",
-          "packages": 1,
-          "purchased_quantity": 700.0,
-          "price_per_package": 1.85,
-          "purchase_cost": null,
-          "estimated_purchase_cost": 1.85,
-          "leftover_quantity": null,
-          "inventory_used": 0.0,
-          "recipe_ids": [
-            "R01485"
-          ],
-          "pricing_status": "estimated",
-          "purchase_basis": "minimum_retail_package",
-          "quantity_coverage_verified": false,
-          "price_source": "retail_estimated_quantity"
-        },
-        {
-          "ingredient_id": "ING3817",
-          "name": "water chestnut",
-          "required_quantity": 56.5,
-          "required_unit": "g",
+          "ingredient_id": "ING2333",
+          "name": "of chickpea",
+          "required_quantity": 0.5,
+          "required_unit": "pcs",
           "package_quantity": 500.0,
           "package_unit": "g",
           "packages": 1,
           "purchased_quantity": 500.0,
-          "price_per_package": 2.0,
-          "purchase_cost": 2.0,
-          "estimated_purchase_cost": null,
-          "leftover_quantity": 443.5,
+          "price_per_package": 3.36,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 3.36,
+          "leftover_quantity": null,
           "inventory_used": 0.0,
           "recipe_ids": [
-            "R01485"
+            "R21444"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "unverified"
+        },
+        {
+          "ingredient_id": "ING3101",
+          "name": "seasoned rice vinegar",
+          "required_quantity": 0.5,
+          "required_unit": "tablespoon",
+          "package_quantity": 500.0,
+          "package_unit": "ml",
+          "packages": 1,
+          "purchased_quantity": 500.0,
+          "price_per_package": 3.5,
+          "purchase_cost": 3.5,
+          "estimated_purchase_cost": null,
+          "leftover_quantity": 492.5,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R21444"
           ],
           "pricing_status": "priced",
           "purchase_basis": "calculated_quantity",
@@ -967,230 +1033,161 @@
           "price_source": "retail"
         },
         {
-          "ingredient_id": "ING3996",
-          "name": "zucchini",
-          "required_quantity": 2.0,
-          "required_unit": "tablespoon",
-          "package_quantity": 600.0,
-          "package_unit": "g",
-          "packages": 1,
-          "purchased_quantity": 600.0,
-          "price_per_package": 4.5,
-          "purchase_cost": null,
-          "estimated_purchase_cost": 4.5,
-          "leftover_quantity": null,
-          "inventory_used": 0.0,
-          "recipe_ids": [
-            "R01485"
-          ],
-          "pricing_status": "estimated",
-          "purchase_basis": "minimum_retail_package",
-          "quantity_coverage_verified": false,
-          "price_source": "retail_estimated_quantity"
-        },
-        {
-          "ingredient_id": "ING2006",
-          "name": "lime",
-          "required_quantity": 0.5,
-          "required_unit": "wedge",
-          "package_quantity": 300.0,
-          "package_unit": "g",
-          "packages": 1,
-          "purchased_quantity": 300.0,
-          "price_per_package": 1.25,
-          "purchase_cost": null,
-          "estimated_purchase_cost": 1.25,
-          "leftover_quantity": null,
-          "inventory_used": 0.0,
-          "recipe_ids": [
-            "R01485"
-          ],
-          "pricing_status": "estimated",
-          "purchase_basis": "minimum_retail_package",
-          "quantity_coverage_verified": false,
-          "price_source": "retail_estimated_quantity"
-        },
-        {
-          "ingredient_id": "ING1724",
-          "name": "hoisin sauce",
-          "required_quantity": 1.0,
-          "required_unit": "tablespoon",
-          "package_quantity": 265.0,
-          "package_unit": "g",
-          "packages": 1,
-          "purchased_quantity": 265.0,
-          "price_per_package": 3.5,
-          "purchase_cost": null,
-          "estimated_purchase_cost": 3.5,
-          "leftover_quantity": null,
-          "inventory_used": 0.0,
-          "recipe_ids": [
-            "R01485"
-          ],
-          "pricing_status": "estimated",
-          "purchase_basis": "minimum_retail_package",
-          "quantity_coverage_verified": false,
-          "price_source": "ollama_estimate"
-        },
-        {
-          "ingredient_id": "ING2197",
-          "name": "mint",
+          "ingredient_id": "ING1962",
+          "name": "lemon juice",
           "required_quantity": 1.0,
           "required_unit": "teaspoon",
-          "package_quantity": 50.0,
-          "package_unit": "g",
+          "package_quantity": 473.0,
+          "package_unit": "ml",
           "packages": 1,
-          "purchased_quantity": 50.0,
-          "price_per_package": 1.6,
+          "purchased_quantity": 473.0,
+          "price_per_package": 10.65,
+          "purchase_cost": 10.65,
+          "estimated_purchase_cost": null,
+          "leftover_quantity": 468.0,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R21444"
+          ],
+          "pricing_status": "priced",
+          "purchase_basis": "calculated_quantity",
+          "quantity_coverage_verified": true,
+          "price_source": "retail"
+        },
+        {
+          "ingredient_id": "ING3126",
+          "name": "sesame oil",
+          "required_quantity": 1.0,
+          "required_unit": "pinch",
+          "package_quantity": 207.0,
+          "package_unit": "ml",
+          "packages": 1,
+          "purchased_quantity": 207.0,
+          "price_per_package": 3.0,
           "purchase_cost": null,
-          "estimated_purchase_cost": 1.6,
+          "estimated_purchase_cost": 3.0,
           "leftover_quantity": null,
           "inventory_used": 0.0,
           "recipe_ids": [
-            "R01485"
+            "R21444"
           ],
           "pricing_status": "estimated",
           "purchase_basis": "minimum_retail_package",
           "quantity_coverage_verified": false,
-          "price_source": "retail_estimated_quantity"
+          "price_source": "unverified"
         }
       ],
-      "known_cost": 2.0,
+      "known_cost": 21.43,
       "all_items_priced": false,
       "unpriced_items": [
-        "tofu",
-        "butter lettuce",
-        "canola oil",
-        "green onion",
+        "onion",
+        "sugar",
+        "mustard seed",
+        "cucumber",
         "carrot",
-        "yellow onion",
-        "zucchini",
-        "lime",
-        "hoisin sauce",
-        "mint"
+        "of chickpea",
+        "sesame oil"
       ],
       "aggregated_requirements": [
         {
-          "ingredient_id": "ING3559",
-          "ingredient_name": "tofu",
-          "quantity": 56.5,
-          "unit": "g",
-          "recipe_ids": [
-            "R01485"
-          ]
-        },
-        {
-          "ingredient_id": "ING0506",
-          "ingredient_name": "butter lettuce",
+          "ingredient_id": "ING2367",
+          "ingredient_name": "onion",
           "quantity": 0.5,
-          "unit": "head",
+          "unit": "count",
           "recipe_ids": [
-            "R01485"
+            "R21444"
           ]
         },
         {
-          "ingredient_id": "ING0565",
-          "ingredient_name": "canola oil",
-          "quantity": 0.5,
-          "unit": "tablespoon",
+          "ingredient_id": "ING3399",
+          "ingredient_name": "sugar",
+          "quantity": 1.0,
+          "unit": "teaspoon",
           "recipe_ids": [
-            "R01485"
+            "R21444"
           ]
         },
         {
-          "ingredient_id": "ING1611",
-          "ingredient_name": "green onion",
+          "ingredient_id": "ING2268",
+          "ingredient_name": "mustard seed",
+          "quantity": 1.0,
+          "unit": "pinch",
+          "recipe_ids": [
+            "R21444"
+          ]
+        },
+        {
+          "ingredient_id": "ING2900",
+          "ingredient_name": "red wine vinegar",
           "quantity": 2.0,
           "unit": "tablespoon",
           "recipe_ids": [
-            "R01485"
+            "R21444"
+          ]
+        },
+        {
+          "ingredient_id": "ING1129",
+          "ingredient_name": "cucumber",
+          "quantity": 1.0,
+          "unit": "count",
+          "recipe_ids": [
+            "R21444"
           ]
         },
         {
           "ingredient_id": "ING0596",
           "ingredient_name": "carrot",
-          "quantity": 2.0,
-          "unit": "tablespoon",
-          "recipe_ids": [
-            "R01485"
-          ]
-        },
-        {
-          "ingredient_id": "ING3969",
-          "ingredient_name": "yellow onion",
-          "quantity": 2.0,
-          "unit": "tablespoon",
-          "recipe_ids": [
-            "R01485"
-          ]
-        },
-        {
-          "ingredient_id": "ING3817",
-          "ingredient_name": "water chestnut",
-          "quantity": 56.5,
-          "unit": "g",
-          "recipe_ids": [
-            "R01485"
-          ]
-        },
-        {
-          "ingredient_id": "ING3996",
-          "ingredient_name": "zucchini",
-          "quantity": 2.0,
-          "unit": "tablespoon",
-          "recipe_ids": [
-            "R01485"
-          ]
-        },
-        {
-          "ingredient_id": "ING2006",
-          "ingredient_name": "lime",
-          "quantity": 0.5,
-          "unit": "wedge",
-          "recipe_ids": [
-            "R01485"
-          ]
-        },
-        {
-          "ingredient_id": "ING1724",
-          "ingredient_name": "hoisin sauce",
           "quantity": 1.0,
-          "unit": "tablespoon",
+          "unit": "count",
           "recipe_ids": [
-            "R01485"
+            "R21444"
           ]
         },
         {
-          "ingredient_id": "ING2197",
-          "ingredient_name": "mint",
+          "ingredient_id": "ING2333",
+          "ingredient_name": "of chickpea",
+          "quantity": 0.5,
+          "unit": "count",
+          "recipe_ids": [
+            "R21444"
+          ]
+        },
+        {
+          "ingredient_id": "ING3101",
+          "ingredient_name": "seasoned rice vinegar",
+          "quantity": 0.5,
+          "unit": "tablespoon",
+          "recipe_ids": [
+            "R21444"
+          ]
+        },
+        {
+          "ingredient_id": "ING1962",
+          "ingredient_name": "lemon juice",
           "quantity": 1.0,
           "unit": "teaspoon",
           "recipe_ids": [
-            "R01485"
+            "R21444"
+          ]
+        },
+        {
+          "ingredient_id": "ING3126",
+          "ingredient_name": "sesame oil",
+          "quantity": 1.0,
+          "unit": "pinch",
+          "recipe_ids": [
+            "R21444"
           ]
         }
       ],
       "purchase_requirements": [
         {
-          "ingredient_id": "ING3559",
-          "ingredient_name": "tofu",
-          "quantity": 56.5,
-          "unit": "g",
-          "recipe_ids": [
-            "R01485"
-          ],
-          "required_quantity": 56.5,
-          "inventory_available": 0.0,
-          "inventory_used": 0.0,
-          "purchase_required": 56.5
-        },
-        {
-          "ingredient_id": "ING0506",
-          "ingredient_name": "butter lettuce",
+          "ingredient_id": "ING2367",
+          "ingredient_name": "onion",
           "quantity": 0.5,
-          "unit": "head",
+          "unit": "count",
           "recipe_ids": [
-            "R01485"
+            "R21444"
           ],
           "required_quantity": 0.5,
           "inventory_available": 0.0,
@@ -1198,103 +1195,12 @@
           "purchase_required": 0.5
         },
         {
-          "ingredient_id": "ING0565",
-          "ingredient_name": "canola oil",
-          "quantity": 0.5,
-          "unit": "tablespoon",
-          "recipe_ids": [
-            "R01485"
-          ],
-          "required_quantity": 0.5,
-          "inventory_available": 0.0,
-          "inventory_used": 0.0,
-          "purchase_required": 0.5
-        },
-        {
-          "ingredient_id": "ING1611",
-          "ingredient_name": "green onion",
-          "quantity": 2.0,
-          "unit": "tablespoon",
-          "recipe_ids": [
-            "R01485"
-          ],
-          "required_quantity": 2.0,
-          "inventory_available": 0.0,
-          "inventory_used": 0.0,
-          "purchase_required": 2.0
-        },
-        {
-          "ingredient_id": "ING0596",
-          "ingredient_name": "carrot",
-          "quantity": 2.0,
-          "unit": "tablespoon",
-          "recipe_ids": [
-            "R01485"
-          ],
-          "required_quantity": 2.0,
-          "inventory_available": 0.0,
-          "inventory_used": 0.0,
-          "purchase_required": 2.0
-        },
-        {
-          "ingredient_id": "ING3969",
-          "ingredient_name": "yellow onion",
-          "quantity": 2.0,
-          "unit": "tablespoon",
-          "recipe_ids": [
-            "R01485"
-          ],
-          "required_quantity": 2.0,
-          "inventory_available": 0.0,
-          "inventory_used": 0.0,
-          "purchase_required": 2.0
-        },
-        {
-          "ingredient_id": "ING3817",
-          "ingredient_name": "water chestnut",
-          "quantity": 56.5,
-          "unit": "g",
-          "recipe_ids": [
-            "R01485"
-          ],
-          "required_quantity": 56.5,
-          "inventory_available": 0.0,
-          "inventory_used": 0.0,
-          "purchase_required": 56.5
-        },
-        {
-          "ingredient_id": "ING3996",
-          "ingredient_name": "zucchini",
-          "quantity": 2.0,
-          "unit": "tablespoon",
-          "recipe_ids": [
-            "R01485"
-          ],
-          "required_quantity": 2.0,
-          "inventory_available": 0.0,
-          "inventory_used": 0.0,
-          "purchase_required": 2.0
-        },
-        {
-          "ingredient_id": "ING2006",
-          "ingredient_name": "lime",
-          "quantity": 0.5,
-          "unit": "wedge",
-          "recipe_ids": [
-            "R01485"
-          ],
-          "required_quantity": 0.5,
-          "inventory_available": 0.0,
-          "inventory_used": 0.0,
-          "purchase_required": 0.5
-        },
-        {
-          "ingredient_id": "ING1724",
-          "ingredient_name": "hoisin sauce",
+          "ingredient_id": "ING3399",
+          "ingredient_name": "sugar",
           "quantity": 1.0,
-          "unit": "tablespoon",
+          "unit": "teaspoon",
           "recipe_ids": [
-            "R01485"
+            "R21444"
           ],
           "required_quantity": 1.0,
           "inventory_available": 0.0,
@@ -1302,12 +1208,103 @@
           "purchase_required": 1.0
         },
         {
-          "ingredient_id": "ING2197",
-          "ingredient_name": "mint",
+          "ingredient_id": "ING2268",
+          "ingredient_name": "mustard seed",
+          "quantity": 1.0,
+          "unit": "pinch",
+          "recipe_ids": [
+            "R21444"
+          ],
+          "required_quantity": 1.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 1.0
+        },
+        {
+          "ingredient_id": "ING2900",
+          "ingredient_name": "red wine vinegar",
+          "quantity": 2.0,
+          "unit": "tablespoon",
+          "recipe_ids": [
+            "R21444"
+          ],
+          "required_quantity": 2.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 2.0
+        },
+        {
+          "ingredient_id": "ING1129",
+          "ingredient_name": "cucumber",
+          "quantity": 1.0,
+          "unit": "count",
+          "recipe_ids": [
+            "R21444"
+          ],
+          "required_quantity": 1.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 1.0
+        },
+        {
+          "ingredient_id": "ING0596",
+          "ingredient_name": "carrot",
+          "quantity": 1.0,
+          "unit": "count",
+          "recipe_ids": [
+            "R21444"
+          ],
+          "required_quantity": 1.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 1.0
+        },
+        {
+          "ingredient_id": "ING2333",
+          "ingredient_name": "of chickpea",
+          "quantity": 0.5,
+          "unit": "count",
+          "recipe_ids": [
+            "R21444"
+          ],
+          "required_quantity": 0.5,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 0.5
+        },
+        {
+          "ingredient_id": "ING3101",
+          "ingredient_name": "seasoned rice vinegar",
+          "quantity": 0.5,
+          "unit": "tablespoon",
+          "recipe_ids": [
+            "R21444"
+          ],
+          "required_quantity": 0.5,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 0.5
+        },
+        {
+          "ingredient_id": "ING1962",
+          "ingredient_name": "lemon juice",
           "quantity": 1.0,
           "unit": "teaspoon",
           "recipe_ids": [
-            "R01485"
+            "R21444"
+          ],
+          "required_quantity": 1.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 1.0
+        },
+        {
+          "ingredient_id": "ING3126",
+          "ingredient_name": "sesame oil",
+          "quantity": 1.0,
+          "unit": "pinch",
+          "recipe_ids": [
+            "R21444"
           ],
           "required_quantity": 1.0,
           "inventory_available": 0.0,
@@ -1315,43 +1312,65 @@
           "purchase_required": 1.0
         }
       ],
-      "projected_cost": 24.11,
+      "projected_cost": 34.76,
       "projected_cost_complete": true,
       "projection_missing": [],
       "warnings": [
-        "green onion: incompatible recipe/package units; assuming one retail package.",
+        "onion: incompatible recipe/package units; assuming one retail package.",
+        "sugar: incompatible recipe/package units; assuming one retail package.",
+        "mustard seed: incompatible recipe/package units; assuming one retail package.",
+        "cucumber: incompatible recipe/package units; assuming one retail package.",
         "carrot: incompatible recipe/package units; assuming one retail package.",
-        "yellow onion: incompatible recipe/package units; assuming one retail package.",
-        "zucchini: incompatible recipe/package units; assuming one retail package.",
-        "lime: incompatible recipe/package units; assuming one retail package.",
-        "hoisin sauce: incompatible recipe/package units; assuming one retail package.",
-        "mint: incompatible recipe/package units; assuming one retail package."
+        "of chickpea: incompatible recipe/package units; assuming one retail package.",
+        "sesame oil: incompatible recipe/package units; assuming one retail package."
       ]
     },
     "rejected_candidates": [
       {
         "slot_id": "2026-10-07_dinner",
-        "recipe_id": "R21444",
+        "recipe_id": "R01732",
         "reason": [
+          {
+            "constraint": "cooking_time",
+            "source": "feasibility",
+            "status": "fail",
+            "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          },
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.49,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 17.08,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
         "slot_id": "2026-10-07_dinner",
-        "recipe_id": "R01732",
+        "recipe_id": "R13652",
         "reason": [
           {
-            "constraint": "cooking_time",
-            "source": "feasibility",
+            "constraint": "budget",
+            "source": "budget_service",
             "status": "fail",
-            "reason": "Recipe time 45 min exceeds user's 30 min limit"
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.66,
+            "remaining_budget": 10.66
+          }
+        ]
+      },
+      {
+        "slot_id": "2026-10-07_dinner",
+        "recipe_id": "R16511",
+        "reason": [
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.73,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1364,22 +1383,8 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.89,
-            "remaining_budget": 25.89
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-08_lunch",
-        "recipe_id": "R21444",
-        "reason": [
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "fail",
-            "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.49,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 25.43,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1392,6 +1397,42 @@
             "source": "feasibility",
             "status": "fail",
             "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          },
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 17.08,
+            "remaining_budget": 10.66
+          }
+        ]
+      },
+      {
+        "slot_id": "2026-10-08_lunch",
+        "recipe_id": "R13652",
+        "reason": [
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.66,
+            "remaining_budget": 10.66
+          }
+        ]
+      },
+      {
+        "slot_id": "2026-10-08_lunch",
+        "recipe_id": "R16511",
+        "reason": [
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.73,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1404,22 +1445,8 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.89,
-            "remaining_budget": 25.89
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-08_dinner",
-        "recipe_id": "R21444",
-        "reason": [
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "fail",
-            "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.49,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 25.43,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1432,6 +1459,42 @@
             "source": "feasibility",
             "status": "fail",
             "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          },
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 17.08,
+            "remaining_budget": 10.66
+          }
+        ]
+      },
+      {
+        "slot_id": "2026-10-08_dinner",
+        "recipe_id": "R13652",
+        "reason": [
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.66,
+            "remaining_budget": 10.66
+          }
+        ]
+      },
+      {
+        "slot_id": "2026-10-08_dinner",
+        "recipe_id": "R16511",
+        "reason": [
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.73,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1444,22 +1507,8 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.89,
-            "remaining_budget": 25.89
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-09_lunch",
-        "recipe_id": "R21444",
-        "reason": [
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "fail",
-            "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.49,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 25.43,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1472,6 +1521,42 @@
             "source": "feasibility",
             "status": "fail",
             "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          },
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 17.08,
+            "remaining_budget": 10.66
+          }
+        ]
+      },
+      {
+        "slot_id": "2026-10-09_lunch",
+        "recipe_id": "R13652",
+        "reason": [
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.66,
+            "remaining_budget": 10.66
+          }
+        ]
+      },
+      {
+        "slot_id": "2026-10-09_lunch",
+        "recipe_id": "R16511",
+        "reason": [
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.73,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1484,22 +1569,8 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.89,
-            "remaining_budget": 25.89
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-09_dinner",
-        "recipe_id": "R21444",
-        "reason": [
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "fail",
-            "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.49,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 25.43,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1512,6 +1583,42 @@
             "source": "feasibility",
             "status": "fail",
             "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          },
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 17.08,
+            "remaining_budget": 10.66
+          }
+        ]
+      },
+      {
+        "slot_id": "2026-10-09_dinner",
+        "recipe_id": "R13652",
+        "reason": [
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.66,
+            "remaining_budget": 10.66
+          }
+        ]
+      },
+      {
+        "slot_id": "2026-10-09_dinner",
+        "recipe_id": "R16511",
+        "reason": [
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.73,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1524,211 +1631,112 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.89,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 25.43,
+            "remaining_budget": 10.66
           }
         ]
       }
     ],
     "uncertain_candidates": [
       {
-        "slot_id": "2026-10-07_lunch",
-        "recipe_id": "R21444",
-        "reason": [
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 34.49,
-            "remaining_budget": 50.0
-          }
-        ]
-      },
-      {
         "slot_id": "2026-10-07_dinner",
-        "recipe_id": "R13652",
+        "recipe_id": "R01485",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 13.11,
-            "remaining_budget": 25.89
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-07_dinner",
-        "recipe_id": "R16511",
-        "reason": [
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 12.69,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 5.8,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
         "slot_id": "2026-10-08_lunch",
-        "recipe_id": "R13652",
+        "recipe_id": "R01485",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 13.11,
-            "remaining_budget": 25.89
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-08_lunch",
-        "recipe_id": "R16511",
-        "reason": [
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 12.69,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 5.8,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
         "slot_id": "2026-10-08_dinner",
-        "recipe_id": "R13652",
+        "recipe_id": "R01485",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 13.11,
-            "remaining_budget": 25.89
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-08_dinner",
-        "recipe_id": "R16511",
-        "reason": [
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 12.69,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 5.8,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
         "slot_id": "2026-10-09_lunch",
-        "recipe_id": "R13652",
+        "recipe_id": "R01485",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 13.11,
-            "remaining_budget": 25.89
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-09_lunch",
-        "recipe_id": "R16511",
-        "reason": [
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 12.69,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 5.8,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
         "slot_id": "2026-10-09_dinner",
-        "recipe_id": "R13652",
+        "recipe_id": "R01485",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 13.11,
-            "remaining_budget": 25.89
-          }
-        ]
-      },
-      {
-        "slot_id": "2026-10-09_dinner",
-        "recipe_id": "R16511",
-        "reason": [
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 12.69,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 5.8,
+            "remaining_budget": 10.66
           }
         ]
       }
     ],
     "execution_trace": [
       {
-        "event": "candidate_uncertain",
+        "event": "meal_selected",
         "slot_id": "2026-10-07_lunch",
+        "recipe_id": "R21444"
+      },
+      {
+        "event": "nutrition_updated",
+        "slot_id": "2026-10-07_lunch",
+        "recipe_id": "R21444"
+      },
+      {
+        "event": "inventory_consumption_warning",
         "recipe_id": "R21444",
+        "reason": "Incompatible inventory units: g vs count"
+      },
+      {
+        "event": "candidate_uncertain",
+        "slot_id": "2026-10-07_dinner",
+        "recipe_id": "R01485",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
             "status": "unknown",
             "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 34.49,
-            "remaining_budget": 50.0
-          }
-        ]
-      },
-      {
-        "event": "meal_selected",
-        "slot_id": "2026-10-07_lunch",
-        "recipe_id": "R01485"
-      },
-      {
-        "event": "nutrition_updated",
-        "slot_id": "2026-10-07_lunch",
-        "recipe_id": "R01485"
-      },
-      {
-        "event": "inventory_consumption_warning",
-        "recipe_id": "R01485",
-        "reason": "Incompatible inventory units: g vs tablespoon"
-      },
-      {
-        "event": "candidate_rejected",
-        "slot_id": "2026-10-07_dinner",
-        "recipe_id": "R21444",
-        "reason": [
-          {
-            "constraint": "budget",
-            "source": "budget_service",
-            "status": "fail",
-            "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.49,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 5.8,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1742,36 +1750,44 @@
             "source": "feasibility",
             "status": "fail",
             "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          },
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 17.08,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R13652",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 13.11,
-            "remaining_budget": 25.89
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.66,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R16511",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 12.69,
-            "remaining_budget": 25.89
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.73,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1785,8 +1801,8 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.89,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 25.43,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1795,17 +1811,17 @@
         "slot_id": "2026-10-07_dinner"
       },
       {
-        "event": "candidate_rejected",
+        "event": "candidate_uncertain",
         "slot_id": "2026-10-08_lunch",
-        "recipe_id": "R21444",
+        "recipe_id": "R01485",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
-            "status": "fail",
-            "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.49,
-            "remaining_budget": 25.89
+            "status": "unknown",
+            "reason": "One or more required grocery costs are unknown.",
+            "known_purchase_cost": 5.8,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1819,36 +1835,44 @@
             "source": "feasibility",
             "status": "fail",
             "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          },
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 17.08,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R13652",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 13.11,
-            "remaining_budget": 25.89
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.66,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R16511",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 12.69,
-            "remaining_budget": 25.89
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.73,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1862,8 +1886,8 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.89,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 25.43,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1872,17 +1896,17 @@
         "slot_id": "2026-10-08_lunch"
       },
       {
-        "event": "candidate_rejected",
+        "event": "candidate_uncertain",
         "slot_id": "2026-10-08_dinner",
-        "recipe_id": "R21444",
+        "recipe_id": "R01485",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
-            "status": "fail",
-            "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.49,
-            "remaining_budget": 25.89
+            "status": "unknown",
+            "reason": "One or more required grocery costs are unknown.",
+            "known_purchase_cost": 5.8,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1896,36 +1920,44 @@
             "source": "feasibility",
             "status": "fail",
             "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          },
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 17.08,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R13652",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 13.11,
-            "remaining_budget": 25.89
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.66,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R16511",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 12.69,
-            "remaining_budget": 25.89
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.73,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1939,8 +1971,8 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.89,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 25.43,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1949,17 +1981,17 @@
         "slot_id": "2026-10-08_dinner"
       },
       {
-        "event": "candidate_rejected",
+        "event": "candidate_uncertain",
         "slot_id": "2026-10-09_lunch",
-        "recipe_id": "R21444",
+        "recipe_id": "R01485",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
-            "status": "fail",
-            "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.49,
-            "remaining_budget": 25.89
+            "status": "unknown",
+            "reason": "One or more required grocery costs are unknown.",
+            "known_purchase_cost": 5.8,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -1973,36 +2005,44 @@
             "source": "feasibility",
             "status": "fail",
             "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          },
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 17.08,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R13652",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 13.11,
-            "remaining_budget": 25.89
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.66,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R16511",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 12.69,
-            "remaining_budget": 25.89
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.73,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -2016,8 +2056,8 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.89,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 25.43,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -2026,17 +2066,17 @@
         "slot_id": "2026-10-09_lunch"
       },
       {
-        "event": "candidate_rejected",
+        "event": "candidate_uncertain",
         "slot_id": "2026-10-09_dinner",
-        "recipe_id": "R21444",
+        "recipe_id": "R01485",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
-            "status": "fail",
-            "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.49,
-            "remaining_budget": 25.89
+            "status": "unknown",
+            "reason": "One or more required grocery costs are unknown.",
+            "known_purchase_cost": 5.8,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -2050,36 +2090,44 @@
             "source": "feasibility",
             "status": "fail",
             "reason": "Recipe time 45 min exceeds user's 30 min limit"
+          },
+          {
+            "constraint": "budget",
+            "source": "budget_service",
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 17.08,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R13652",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 13.11,
-            "remaining_budget": 25.89
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.66,
+            "remaining_budget": 10.66
           }
         ]
       },
       {
-        "event": "candidate_uncertain",
+        "event": "candidate_rejected",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R16511",
         "reason": [
           {
             "constraint": "budget",
             "source": "budget_service",
-            "status": "unknown",
-            "reason": "One or more required grocery costs are unknown.",
-            "known_purchase_cost": 12.69,
-            "remaining_budget": 25.89
+            "status": "fail",
+            "reason": "Known purchase cost exceeds remaining budget.",
+            "known_purchase_cost": 12.73,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -2093,8 +2141,8 @@
             "source": "budget_service",
             "status": "fail",
             "reason": "Known purchase cost exceeds remaining budget.",
-            "known_purchase_cost": 34.89,
-            "remaining_budget": 25.89
+            "known_purchase_cost": 25.43,
+            "remaining_budget": 10.66
           }
         ]
       },
@@ -2114,98 +2162,120 @@
   "grocery_basket": {
     "items": [
       {
-        "ingredient_id": "ING3559",
-        "name": "tofu",
-        "required_quantity": 56.5,
-        "required_unit": "g",
-        "package_quantity": 300.0,
+        "ingredient_id": "ING2367",
+        "name": "onion",
+        "required_quantity": 0.5,
+        "required_unit": "pcs",
+        "package_quantity": 700.0,
         "package_unit": "g",
         "packages": 1,
-        "purchased_quantity": 300.0,
-        "price_per_package": 0.86,
+        "purchased_quantity": 700.0,
+        "price_per_package": 1.7,
         "purchase_cost": null,
-        "estimated_purchase_cost": 0.86,
-        "leftover_quantity": 243.5,
-        "inventory_used": 0.0,
-        "recipe_ids": [
-          "R01485"
-        ],
-        "pricing_status": "estimated",
-        "purchase_basis": "calculated_quantity",
-        "quantity_coverage_verified": true,
-        "price_source": "retail_estimated_quantity"
-      },
-      {
-        "ingredient_id": "ING0506",
-        "name": "butter lettuce",
-        "required_quantity": 0.5,
-        "required_unit": "head",
-        "package_quantity": 1.0,
-        "package_unit": "head",
-        "packages": 1,
-        "purchased_quantity": 1.0,
-        "price_per_package": 3.5,
-        "purchase_cost": null,
-        "estimated_purchase_cost": 3.5,
-        "leftover_quantity": 0.5,
-        "inventory_used": 0.0,
-        "recipe_ids": [
-          "R01485"
-        ],
-        "pricing_status": "estimated",
-        "purchase_basis": "calculated_quantity",
-        "quantity_coverage_verified": true,
-        "price_source": "ollama_estimate"
-      },
-      {
-        "ingredient_id": "ING0565",
-        "name": "canola oil",
-        "required_quantity": 0.5,
-        "required_unit": "tablespoon",
-        "package_quantity": 500.0,
-        "package_unit": "ml",
-        "packages": 1,
-        "purchased_quantity": 500.0,
-        "price_per_package": 2.9,
-        "purchase_cost": null,
-        "estimated_purchase_cost": 2.9,
-        "leftover_quantity": 492.5,
-        "inventory_used": 0.0,
-        "recipe_ids": [
-          "R01485"
-        ],
-        "pricing_status": "estimated",
-        "purchase_basis": "calculated_quantity",
-        "quantity_coverage_verified": true,
-        "price_source": "retail_estimated_quantity"
-      },
-      {
-        "ingredient_id": "ING1611",
-        "name": "green onion",
-        "required_quantity": 2.0,
-        "required_unit": "tablespoon",
-        "package_quantity": 100.0,
-        "package_unit": "g",
-        "packages": 1,
-        "purchased_quantity": 100.0,
-        "price_per_package": 1.2,
-        "purchase_cost": null,
-        "estimated_purchase_cost": 1.2,
+        "estimated_purchase_cost": 1.7,
         "leftover_quantity": null,
         "inventory_used": 0.0,
         "recipe_ids": [
-          "R01485"
+          "R21444"
         ],
         "pricing_status": "estimated",
         "purchase_basis": "minimum_retail_package",
         "quantity_coverage_verified": false,
-        "price_source": "ollama_estimate"
+        "price_source": "unverified"
+      },
+      {
+        "ingredient_id": "ING3399",
+        "name": "sugar",
+        "required_quantity": 1.0,
+        "required_unit": "teaspoon",
+        "package_quantity": 1.0,
+        "package_unit": "kg",
+        "packages": 1,
+        "purchased_quantity": 1.0,
+        "price_per_package": 2.35,
+        "purchase_cost": null,
+        "estimated_purchase_cost": 2.35,
+        "leftover_quantity": null,
+        "inventory_used": 0.0,
+        "recipe_ids": [
+          "R21444"
+        ],
+        "pricing_status": "estimated",
+        "purchase_basis": "minimum_retail_package",
+        "quantity_coverage_verified": false,
+        "price_source": "unverified"
+      },
+      {
+        "ingredient_id": "ING2268",
+        "name": "mustard seed",
+        "required_quantity": 1.0,
+        "required_unit": "pinch",
+        "package_quantity": 50.0,
+        "package_unit": "g",
+        "packages": 1,
+        "purchased_quantity": 50.0,
+        "price_per_package": 0.71,
+        "purchase_cost": null,
+        "estimated_purchase_cost": 0.71,
+        "leftover_quantity": null,
+        "inventory_used": 0.0,
+        "recipe_ids": [
+          "R21444"
+        ],
+        "pricing_status": "estimated",
+        "purchase_basis": "minimum_retail_package",
+        "quantity_coverage_verified": false,
+        "price_source": "unverified"
+      },
+      {
+        "ingredient_id": "ING2900",
+        "name": "red wine vinegar",
+        "required_quantity": 2.0,
+        "required_unit": "tablespoon",
+        "package_quantity": 250.0,
+        "package_unit": "ml",
+        "packages": 1,
+        "purchased_quantity": 250.0,
+        "price_per_package": 7.28,
+        "purchase_cost": 7.28,
+        "estimated_purchase_cost": null,
+        "leftover_quantity": 220.0,
+        "inventory_used": 0.0,
+        "recipe_ids": [
+          "R21444"
+        ],
+        "pricing_status": "priced",
+        "purchase_basis": "calculated_quantity",
+        "quantity_coverage_verified": true,
+        "price_source": "retail"
+      },
+      {
+        "ingredient_id": "ING1129",
+        "name": "cucumber",
+        "required_quantity": 1.0,
+        "required_unit": "pcs",
+        "package_quantity": 660.0,
+        "package_unit": "g",
+        "packages": 1,
+        "purchased_quantity": 660.0,
+        "price_per_package": 1.26,
+        "purchase_cost": null,
+        "estimated_purchase_cost": 1.26,
+        "leftover_quantity": null,
+        "inventory_used": 0.0,
+        "recipe_ids": [
+          "R21444"
+        ],
+        "pricing_status": "estimated",
+        "purchase_basis": "minimum_retail_package",
+        "quantity_coverage_verified": false,
+        "price_source": "unverified"
       },
       {
         "ingredient_id": "ING0596",
         "name": "carrot",
-        "required_quantity": 2.0,
-        "required_unit": "tablespoon",
+        "required_quantity": 1.0,
+        "required_unit": "pcs",
         "package_quantity": 500.0,
         "package_unit": "g",
         "packages": 1,
@@ -2216,51 +2286,51 @@
         "leftover_quantity": null,
         "inventory_used": 0.0,
         "recipe_ids": [
-          "R01485"
+          "R21444"
         ],
         "pricing_status": "estimated",
         "purchase_basis": "minimum_retail_package",
         "quantity_coverage_verified": false,
-        "price_source": "retail_estimated_quantity"
+        "price_source": "unverified"
       },
       {
-        "ingredient_id": "ING3969",
-        "name": "yellow onion",
-        "required_quantity": 2.0,
-        "required_unit": "tablespoon",
-        "package_quantity": 700.0,
-        "package_unit": "g",
-        "packages": 1,
-        "purchased_quantity": 700.0,
-        "price_per_package": 1.85,
-        "purchase_cost": null,
-        "estimated_purchase_cost": 1.85,
-        "leftover_quantity": null,
-        "inventory_used": 0.0,
-        "recipe_ids": [
-          "R01485"
-        ],
-        "pricing_status": "estimated",
-        "purchase_basis": "minimum_retail_package",
-        "quantity_coverage_verified": false,
-        "price_source": "retail_estimated_quantity"
-      },
-      {
-        "ingredient_id": "ING3817",
-        "name": "water chestnut",
-        "required_quantity": 56.5,
-        "required_unit": "g",
+        "ingredient_id": "ING2333",
+        "name": "of chickpea",
+        "required_quantity": 0.5,
+        "required_unit": "pcs",
         "package_quantity": 500.0,
         "package_unit": "g",
         "packages": 1,
         "purchased_quantity": 500.0,
-        "price_per_package": 2.0,
-        "purchase_cost": 2.0,
-        "estimated_purchase_cost": null,
-        "leftover_quantity": 443.5,
+        "price_per_package": 3.36,
+        "purchase_cost": null,
+        "estimated_purchase_cost": 3.36,
+        "leftover_quantity": null,
         "inventory_used": 0.0,
         "recipe_ids": [
-          "R01485"
+          "R21444"
+        ],
+        "pricing_status": "estimated",
+        "purchase_basis": "minimum_retail_package",
+        "quantity_coverage_verified": false,
+        "price_source": "unverified"
+      },
+      {
+        "ingredient_id": "ING3101",
+        "name": "seasoned rice vinegar",
+        "required_quantity": 0.5,
+        "required_unit": "tablespoon",
+        "package_quantity": 500.0,
+        "package_unit": "ml",
+        "packages": 1,
+        "purchased_quantity": 500.0,
+        "price_per_package": 3.5,
+        "purchase_cost": 3.5,
+        "estimated_purchase_cost": null,
+        "leftover_quantity": 492.5,
+        "inventory_used": 0.0,
+        "recipe_ids": [
+          "R21444"
         ],
         "pricing_status": "priced",
         "purchase_basis": "calculated_quantity",
@@ -2268,230 +2338,161 @@
         "price_source": "retail"
       },
       {
-        "ingredient_id": "ING3996",
-        "name": "zucchini",
-        "required_quantity": 2.0,
-        "required_unit": "tablespoon",
-        "package_quantity": 600.0,
-        "package_unit": "g",
-        "packages": 1,
-        "purchased_quantity": 600.0,
-        "price_per_package": 4.5,
-        "purchase_cost": null,
-        "estimated_purchase_cost": 4.5,
-        "leftover_quantity": null,
-        "inventory_used": 0.0,
-        "recipe_ids": [
-          "R01485"
-        ],
-        "pricing_status": "estimated",
-        "purchase_basis": "minimum_retail_package",
-        "quantity_coverage_verified": false,
-        "price_source": "retail_estimated_quantity"
-      },
-      {
-        "ingredient_id": "ING2006",
-        "name": "lime",
-        "required_quantity": 0.5,
-        "required_unit": "wedge",
-        "package_quantity": 300.0,
-        "package_unit": "g",
-        "packages": 1,
-        "purchased_quantity": 300.0,
-        "price_per_package": 1.25,
-        "purchase_cost": null,
-        "estimated_purchase_cost": 1.25,
-        "leftover_quantity": null,
-        "inventory_used": 0.0,
-        "recipe_ids": [
-          "R01485"
-        ],
-        "pricing_status": "estimated",
-        "purchase_basis": "minimum_retail_package",
-        "quantity_coverage_verified": false,
-        "price_source": "retail_estimated_quantity"
-      },
-      {
-        "ingredient_id": "ING1724",
-        "name": "hoisin sauce",
-        "required_quantity": 1.0,
-        "required_unit": "tablespoon",
-        "package_quantity": 265.0,
-        "package_unit": "g",
-        "packages": 1,
-        "purchased_quantity": 265.0,
-        "price_per_package": 3.5,
-        "purchase_cost": null,
-        "estimated_purchase_cost": 3.5,
-        "leftover_quantity": null,
-        "inventory_used": 0.0,
-        "recipe_ids": [
-          "R01485"
-        ],
-        "pricing_status": "estimated",
-        "purchase_basis": "minimum_retail_package",
-        "quantity_coverage_verified": false,
-        "price_source": "ollama_estimate"
-      },
-      {
-        "ingredient_id": "ING2197",
-        "name": "mint",
+        "ingredient_id": "ING1962",
+        "name": "lemon juice",
         "required_quantity": 1.0,
         "required_unit": "teaspoon",
-        "package_quantity": 50.0,
-        "package_unit": "g",
+        "package_quantity": 473.0,
+        "package_unit": "ml",
         "packages": 1,
-        "purchased_quantity": 50.0,
-        "price_per_package": 1.6,
+        "purchased_quantity": 473.0,
+        "price_per_package": 10.65,
+        "purchase_cost": 10.65,
+        "estimated_purchase_cost": null,
+        "leftover_quantity": 468.0,
+        "inventory_used": 0.0,
+        "recipe_ids": [
+          "R21444"
+        ],
+        "pricing_status": "priced",
+        "purchase_basis": "calculated_quantity",
+        "quantity_coverage_verified": true,
+        "price_source": "retail"
+      },
+      {
+        "ingredient_id": "ING3126",
+        "name": "sesame oil",
+        "required_quantity": 1.0,
+        "required_unit": "pinch",
+        "package_quantity": 207.0,
+        "package_unit": "ml",
+        "packages": 1,
+        "purchased_quantity": 207.0,
+        "price_per_package": 3.0,
         "purchase_cost": null,
-        "estimated_purchase_cost": 1.6,
+        "estimated_purchase_cost": 3.0,
         "leftover_quantity": null,
         "inventory_used": 0.0,
         "recipe_ids": [
-          "R01485"
+          "R21444"
         ],
         "pricing_status": "estimated",
         "purchase_basis": "minimum_retail_package",
         "quantity_coverage_verified": false,
-        "price_source": "retail_estimated_quantity"
+        "price_source": "unverified"
       }
     ],
-    "known_cost": 2.0,
+    "known_cost": 21.43,
     "all_items_priced": false,
     "unpriced_items": [
-      "tofu",
-      "butter lettuce",
-      "canola oil",
-      "green onion",
+      "onion",
+      "sugar",
+      "mustard seed",
+      "cucumber",
       "carrot",
-      "yellow onion",
-      "zucchini",
-      "lime",
-      "hoisin sauce",
-      "mint"
+      "of chickpea",
+      "sesame oil"
     ],
     "aggregated_requirements": [
       {
-        "ingredient_id": "ING3559",
-        "ingredient_name": "tofu",
-        "quantity": 56.5,
-        "unit": "g",
-        "recipe_ids": [
-          "R01485"
-        ]
-      },
-      {
-        "ingredient_id": "ING0506",
-        "ingredient_name": "butter lettuce",
+        "ingredient_id": "ING2367",
+        "ingredient_name": "onion",
         "quantity": 0.5,
-        "unit": "head",
+        "unit": "count",
         "recipe_ids": [
-          "R01485"
+          "R21444"
         ]
       },
       {
-        "ingredient_id": "ING0565",
-        "ingredient_name": "canola oil",
-        "quantity": 0.5,
-        "unit": "tablespoon",
+        "ingredient_id": "ING3399",
+        "ingredient_name": "sugar",
+        "quantity": 1.0,
+        "unit": "teaspoon",
         "recipe_ids": [
-          "R01485"
+          "R21444"
         ]
       },
       {
-        "ingredient_id": "ING1611",
-        "ingredient_name": "green onion",
+        "ingredient_id": "ING2268",
+        "ingredient_name": "mustard seed",
+        "quantity": 1.0,
+        "unit": "pinch",
+        "recipe_ids": [
+          "R21444"
+        ]
+      },
+      {
+        "ingredient_id": "ING2900",
+        "ingredient_name": "red wine vinegar",
         "quantity": 2.0,
         "unit": "tablespoon",
         "recipe_ids": [
-          "R01485"
+          "R21444"
+        ]
+      },
+      {
+        "ingredient_id": "ING1129",
+        "ingredient_name": "cucumber",
+        "quantity": 1.0,
+        "unit": "count",
+        "recipe_ids": [
+          "R21444"
         ]
       },
       {
         "ingredient_id": "ING0596",
         "ingredient_name": "carrot",
-        "quantity": 2.0,
-        "unit": "tablespoon",
-        "recipe_ids": [
-          "R01485"
-        ]
-      },
-      {
-        "ingredient_id": "ING3969",
-        "ingredient_name": "yellow onion",
-        "quantity": 2.0,
-        "unit": "tablespoon",
-        "recipe_ids": [
-          "R01485"
-        ]
-      },
-      {
-        "ingredient_id": "ING3817",
-        "ingredient_name": "water chestnut",
-        "quantity": 56.5,
-        "unit": "g",
-        "recipe_ids": [
-          "R01485"
-        ]
-      },
-      {
-        "ingredient_id": "ING3996",
-        "ingredient_name": "zucchini",
-        "quantity": 2.0,
-        "unit": "tablespoon",
-        "recipe_ids": [
-          "R01485"
-        ]
-      },
-      {
-        "ingredient_id": "ING2006",
-        "ingredient_name": "lime",
-        "quantity": 0.5,
-        "unit": "wedge",
-        "recipe_ids": [
-          "R01485"
-        ]
-      },
-      {
-        "ingredient_id": "ING1724",
-        "ingredient_name": "hoisin sauce",
         "quantity": 1.0,
-        "unit": "tablespoon",
+        "unit": "count",
         "recipe_ids": [
-          "R01485"
+          "R21444"
         ]
       },
       {
-        "ingredient_id": "ING2197",
-        "ingredient_name": "mint",
+        "ingredient_id": "ING2333",
+        "ingredient_name": "of chickpea",
+        "quantity": 0.5,
+        "unit": "count",
+        "recipe_ids": [
+          "R21444"
+        ]
+      },
+      {
+        "ingredient_id": "ING3101",
+        "ingredient_name": "seasoned rice vinegar",
+        "quantity": 0.5,
+        "unit": "tablespoon",
+        "recipe_ids": [
+          "R21444"
+        ]
+      },
+      {
+        "ingredient_id": "ING1962",
+        "ingredient_name": "lemon juice",
         "quantity": 1.0,
         "unit": "teaspoon",
         "recipe_ids": [
-          "R01485"
+          "R21444"
+        ]
+      },
+      {
+        "ingredient_id": "ING3126",
+        "ingredient_name": "sesame oil",
+        "quantity": 1.0,
+        "unit": "pinch",
+        "recipe_ids": [
+          "R21444"
         ]
       }
     ],
     "purchase_requirements": [
       {
-        "ingredient_id": "ING3559",
-        "ingredient_name": "tofu",
-        "quantity": 56.5,
-        "unit": "g",
-        "recipe_ids": [
-          "R01485"
-        ],
-        "required_quantity": 56.5,
-        "inventory_available": 0.0,
-        "inventory_used": 0.0,
-        "purchase_required": 56.5
-      },
-      {
-        "ingredient_id": "ING0506",
-        "ingredient_name": "butter lettuce",
+        "ingredient_id": "ING2367",
+        "ingredient_name": "onion",
         "quantity": 0.5,
-        "unit": "head",
+        "unit": "count",
         "recipe_ids": [
-          "R01485"
+          "R21444"
         ],
         "required_quantity": 0.5,
         "inventory_available": 0.0,
@@ -2499,103 +2500,12 @@
         "purchase_required": 0.5
       },
       {
-        "ingredient_id": "ING0565",
-        "ingredient_name": "canola oil",
-        "quantity": 0.5,
-        "unit": "tablespoon",
-        "recipe_ids": [
-          "R01485"
-        ],
-        "required_quantity": 0.5,
-        "inventory_available": 0.0,
-        "inventory_used": 0.0,
-        "purchase_required": 0.5
-      },
-      {
-        "ingredient_id": "ING1611",
-        "ingredient_name": "green onion",
-        "quantity": 2.0,
-        "unit": "tablespoon",
-        "recipe_ids": [
-          "R01485"
-        ],
-        "required_quantity": 2.0,
-        "inventory_available": 0.0,
-        "inventory_used": 0.0,
-        "purchase_required": 2.0
-      },
-      {
-        "ingredient_id": "ING0596",
-        "ingredient_name": "carrot",
-        "quantity": 2.0,
-        "unit": "tablespoon",
-        "recipe_ids": [
-          "R01485"
-        ],
-        "required_quantity": 2.0,
-        "inventory_available": 0.0,
-        "inventory_used": 0.0,
-        "purchase_required": 2.0
-      },
-      {
-        "ingredient_id": "ING3969",
-        "ingredient_name": "yellow onion",
-        "quantity": 2.0,
-        "unit": "tablespoon",
-        "recipe_ids": [
-          "R01485"
-        ],
-        "required_quantity": 2.0,
-        "inventory_available": 0.0,
-        "inventory_used": 0.0,
-        "purchase_required": 2.0
-      },
-      {
-        "ingredient_id": "ING3817",
-        "ingredient_name": "water chestnut",
-        "quantity": 56.5,
-        "unit": "g",
-        "recipe_ids": [
-          "R01485"
-        ],
-        "required_quantity": 56.5,
-        "inventory_available": 0.0,
-        "inventory_used": 0.0,
-        "purchase_required": 56.5
-      },
-      {
-        "ingredient_id": "ING3996",
-        "ingredient_name": "zucchini",
-        "quantity": 2.0,
-        "unit": "tablespoon",
-        "recipe_ids": [
-          "R01485"
-        ],
-        "required_quantity": 2.0,
-        "inventory_available": 0.0,
-        "inventory_used": 0.0,
-        "purchase_required": 2.0
-      },
-      {
-        "ingredient_id": "ING2006",
-        "ingredient_name": "lime",
-        "quantity": 0.5,
-        "unit": "wedge",
-        "recipe_ids": [
-          "R01485"
-        ],
-        "required_quantity": 0.5,
-        "inventory_available": 0.0,
-        "inventory_used": 0.0,
-        "purchase_required": 0.5
-      },
-      {
-        "ingredient_id": "ING1724",
-        "ingredient_name": "hoisin sauce",
+        "ingredient_id": "ING3399",
+        "ingredient_name": "sugar",
         "quantity": 1.0,
-        "unit": "tablespoon",
+        "unit": "teaspoon",
         "recipe_ids": [
-          "R01485"
+          "R21444"
         ],
         "required_quantity": 1.0,
         "inventory_available": 0.0,
@@ -2603,12 +2513,103 @@
         "purchase_required": 1.0
       },
       {
-        "ingredient_id": "ING2197",
-        "ingredient_name": "mint",
+        "ingredient_id": "ING2268",
+        "ingredient_name": "mustard seed",
+        "quantity": 1.0,
+        "unit": "pinch",
+        "recipe_ids": [
+          "R21444"
+        ],
+        "required_quantity": 1.0,
+        "inventory_available": 0.0,
+        "inventory_used": 0.0,
+        "purchase_required": 1.0
+      },
+      {
+        "ingredient_id": "ING2900",
+        "ingredient_name": "red wine vinegar",
+        "quantity": 2.0,
+        "unit": "tablespoon",
+        "recipe_ids": [
+          "R21444"
+        ],
+        "required_quantity": 2.0,
+        "inventory_available": 0.0,
+        "inventory_used": 0.0,
+        "purchase_required": 2.0
+      },
+      {
+        "ingredient_id": "ING1129",
+        "ingredient_name": "cucumber",
+        "quantity": 1.0,
+        "unit": "count",
+        "recipe_ids": [
+          "R21444"
+        ],
+        "required_quantity": 1.0,
+        "inventory_available": 0.0,
+        "inventory_used": 0.0,
+        "purchase_required": 1.0
+      },
+      {
+        "ingredient_id": "ING0596",
+        "ingredient_name": "carrot",
+        "quantity": 1.0,
+        "unit": "count",
+        "recipe_ids": [
+          "R21444"
+        ],
+        "required_quantity": 1.0,
+        "inventory_available": 0.0,
+        "inventory_used": 0.0,
+        "purchase_required": 1.0
+      },
+      {
+        "ingredient_id": "ING2333",
+        "ingredient_name": "of chickpea",
+        "quantity": 0.5,
+        "unit": "count",
+        "recipe_ids": [
+          "R21444"
+        ],
+        "required_quantity": 0.5,
+        "inventory_available": 0.0,
+        "inventory_used": 0.0,
+        "purchase_required": 0.5
+      },
+      {
+        "ingredient_id": "ING3101",
+        "ingredient_name": "seasoned rice vinegar",
+        "quantity": 0.5,
+        "unit": "tablespoon",
+        "recipe_ids": [
+          "R21444"
+        ],
+        "required_quantity": 0.5,
+        "inventory_available": 0.0,
+        "inventory_used": 0.0,
+        "purchase_required": 0.5
+      },
+      {
+        "ingredient_id": "ING1962",
+        "ingredient_name": "lemon juice",
         "quantity": 1.0,
         "unit": "teaspoon",
         "recipe_ids": [
-          "R01485"
+          "R21444"
+        ],
+        "required_quantity": 1.0,
+        "inventory_available": 0.0,
+        "inventory_used": 0.0,
+        "purchase_required": 1.0
+      },
+      {
+        "ingredient_id": "ING3126",
+        "ingredient_name": "sesame oil",
+        "quantity": 1.0,
+        "unit": "pinch",
+        "recipe_ids": [
+          "R21444"
         ],
         "required_quantity": 1.0,
         "inventory_available": 0.0,
@@ -2616,42 +2617,42 @@
         "purchase_required": 1.0
       }
     ],
-    "projected_cost": 24.11,
+    "projected_cost": 34.76,
     "projected_cost_complete": true,
     "projection_missing": [],
     "warnings": [
-      "green onion: incompatible recipe/package units; assuming one retail package.",
+      "onion: incompatible recipe/package units; assuming one retail package.",
+      "sugar: incompatible recipe/package units; assuming one retail package.",
+      "mustard seed: incompatible recipe/package units; assuming one retail package.",
+      "cucumber: incompatible recipe/package units; assuming one retail package.",
       "carrot: incompatible recipe/package units; assuming one retail package.",
-      "yellow onion: incompatible recipe/package units; assuming one retail package.",
-      "zucchini: incompatible recipe/package units; assuming one retail package.",
-      "lime: incompatible recipe/package units; assuming one retail package.",
-      "hoisin sauce: incompatible recipe/package units; assuming one retail package.",
-      "mint: incompatible recipe/package units; assuming one retail package."
+      "of chickpea: incompatible recipe/package units; assuming one retail package.",
+      "sesame oil: incompatible recipe/package units; assuming one retail package."
     ]
   },
   "nutrition_summary": {
     "2026-10-07": {
-      "calories": 181.9324,
-      "protein_g": 7.5509,
-      "carbs_g": 21.6947,
-      "fat_g": 8.4268,
-      "fiber_g": 4.2475,
-      "sugar_g": 0.0,
-      "sodium_mg": 288.1267,
-      "calcium_mg": 160.5022,
-      "iron_mg": 2.5875
+      "calories": 172.6148,
+      "protein_g": 6.3862,
+      "carbs_g": 30.686,
+      "fat_g": 3.1992,
+      "fiber_g": 6.6158,
+      "sugar_g": 11.3697,
+      "sodium_mg": 763.0601,
+      "calcium_mg": 79.1228,
+      "iron_mg": 1.5188
     }
   },
   "nutrition_deviation": {
     "daily": {
       "2026-10-07": {
-        "calories": 1618.0676,
-        "protein_g": 62.4491
+        "calories": 1627.3852,
+        "protein_g": 63.6138
       }
     },
     "mean_absolute_deviation": {
-      "calories": 1618.0676,
-      "protein_g": 62.4491
+      "calories": 1627.3852,
+      "protein_g": 63.6138
     },
     "targets": {
       "calories": 1800.0,
