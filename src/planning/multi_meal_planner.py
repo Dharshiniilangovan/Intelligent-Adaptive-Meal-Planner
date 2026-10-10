@@ -334,10 +334,43 @@ class MultiMealPlanner:
                 )
                 continue
 
-            incremental_cost = max(
-                0.0,
-                projected_total - plan_state.estimated_spent,
+            # Rebuild the current partial plan's basket.
+            # Use the same original pantry for both baskets.
+            current_basket = self._build_final_grocery_basket(plan_state)
+
+            if plan_state.selected_meals:
+                if (
+                    current_basket.get("projected_cost_complete") is not True
+                    or current_basket.get("projected_cost") is None
+                ):
+                    plan_state.add_uncertain(
+                        slot=slot,
+                        recipe_id=recipe_id,
+                        reason="Existing combined basket cost incomplete",
+                    )
+                    continue
+
+                previous_total = float(current_basket["projected_cost"])
+            else:
+                previous_total = 0.0
+
+            incremental_cost = round(
+                projected_total - previous_total,
+                2,
             )
+
+            if incremental_cost < -0.01:
+                plan_state.add_uncertain(
+                    slot=slot,
+                    recipe_id=recipe_id,
+                    reason=(
+                        "Combined basket cost decreased after "
+                        "adding a recipe. Check product consistency."
+                    ),
+                )
+                continue
+
+            incremental_cost = max(0.0, incremental_cost)
 
             feasible_candidates.append(
                 {
@@ -365,6 +398,17 @@ class MultiMealPlanner:
         initial_state: PlanState,
         beam_width: int = 5,
     ) -> PlanState:
+        """
+        Find the best affordable meal combination using beam search.
+
+        Each beam represents an independent partial meal plan.
+
+        Ranking:
+        1. More meal slots filled.
+        2. Lower combined projected grocery cost.
+
+        Inventory and nutrition are committed after optimization.
+        """
         from copy import deepcopy
 
         beams = [deepcopy(initial_state)]
@@ -379,30 +423,31 @@ class MultiMealPlanner:
                     plan_state=state,
                 )
 
-                # Preserve a branch that skips this slot.
-                # Useful when a partial plan is unavoidable.
+                # Keep a skip-slot branch for partial plans.
                 next_beams.append(deepcopy(state))
 
                 for candidate in candidates:
                     trial = deepcopy(state)
 
-                    previous_total = trial.estimated_spent
+                    # Incremental cost is calculated from
+                    # the before/after consolidated baskets.
+                    incremental_cost = candidate["incremental_cost"]
                     new_total = candidate["total_cost"]
 
                     trial.add_selected_meal(
                         slot=slot,
                         recipe_id=candidate["recipe_id"],
                         decision=candidate["decision"],
-                        estimated_cost=max(
-                            0.0,
-                            new_total - previous_total,
-                        ),
+                        estimated_cost=incremental_cost,
                     )
 
+                    # Combined basket total is authoritative.
+                    # Avoid accumulating individual recipe costs.
                     trial.estimated_spent = new_total
+
                     next_beams.append(trial)
 
-            # Prefer filling more slots, then lower cost.
+            # Prefer plans with more meals, then lower cost.
             next_beams.sort(
                 key=lambda state: (
                     -len(state.selected_meals),
@@ -843,16 +888,23 @@ class MultiMealPlanner:
                 )
                 if not ingredient_name:
                     continue
-                price = item.get("price_per_package")
+
+                # Preserve original Grocery Agent evidence.
+                # Do not turn estimated prices into verified prices.
                 product_catalog.append(
                     {
+                        **item,
                         "ingredient_id": item.get("ingredient_id"),
                         "ingredient_name": ingredient_name,
                         "package_quantity": item.get("package_quantity"),
                         "package_unit": item.get("package_unit"),
-                        "price": price,
+                        "price": item.get(
+                            "price",
+                            item.get("price_per_package"),
+                        ),
                     }
                 )
+
         # ========================================================
         # INITIAL PANTRY
         #
