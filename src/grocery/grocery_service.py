@@ -348,6 +348,9 @@ class GroceryOption:
 
 
 
+from src.cache.cache_service import PersistentCache, cache_key
+
+
 class GroceryService:
 
 
@@ -387,6 +390,8 @@ class GroceryService:
         )
 
 
+
+        self.persistent_cache = PersistentCache()
 
         self._search_cache: dict[
 
@@ -458,23 +463,22 @@ class GroceryService:
             return []
 
         hit = self._search_cache.get(key)
-
-        if (
-            hit is not None
-            and time.time() - hit[0] < self.cache_ttl
-        ):
-            print(f"[GROCERY CACHE HIT] {query}")
+        if hit is not None and time.time() - hit[0] < self.cache_ttl:
+            print(f"[MEMORY TAVILY CACHE HIT] {query}")
             return hit[1]
 
+        persistent_key = cache_key("tavily_search_v1", {"query": key, "client": type(self.client).__name__})
+        cached = self.persistent_cache.get("tavily_search_v1", persistent_key)
+        if isinstance(cached, list):
+            print(f"[SQLITE TAVILY CACHE HIT] {query}")
+            self._search_cache[key] = (time.time(), cached)
+            return cached
+
         print(f"[LIVE TAVILY SEARCH] {query}")
-
         products = self.client.search(query)
-
-        self._search_cache[key] = (
-            time.time(),
-            products,
-        )
-
+        if isinstance(products, list) and products:
+            self._search_cache[key] = (time.time(), products)
+            self.persistent_cache.set("tavily_search_v1", persistent_key, products, self.cache_ttl)
         return products
 
 
