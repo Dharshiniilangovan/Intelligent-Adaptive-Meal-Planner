@@ -648,7 +648,37 @@ def _ingredient_name(item):
         or ""
     ).strip()
 
+
 def normalize_requirement_quantity(name, quantity, unit):
+    original_quantity = quantity
+    original_unit = str(unit or "").strip().lower()
+    ingredient_name = " ".join(str(name or "").lower().split())
+
+    # Provisional defaults for explicitly unspecified seasonings.
+    # Never classify these as exact recipe quantities.
+    if (
+        original_unit == "to taste"
+        and str(quantity).strip().lower() == "required"
+    ):
+        seasoning_defaults = {
+            "salt": 1.0,
+            "pepper": 0.25,
+            "black pepper": 0.25,
+        }
+
+        default_grams = seasoning_defaults.get(ingredient_name)
+
+        if default_grams is None:
+            return None
+
+        return {
+            "quantity": default_grams,
+            "unit": "g",
+            "conversion_status": "estimated",
+            "original_quantity": original_quantity,
+            "original_unit": original_unit,
+        }
+
     try:
         quantity = float(quantity)
     except (TypeError, ValueError, OverflowError):
@@ -657,9 +687,23 @@ def normalize_requirement_quantity(name, quantity, unit):
     if not math.isfinite(quantity) or quantity <= 0:
         return None
 
-    unit = str(unit or "").strip().lower()
+    unit = original_unit
 
-    # FIRST: Ingredient-specific conversion
+    # A pinch is not a standard liquid measurement.
+    # This is an explicitly provisional MVP assumption.
+    if ingredient_name == "sesame oil" and unit in {
+        "pinch",
+        "pinches",
+    }:
+        return {
+            "quantity": round(quantity * 0.25, 4),
+            "unit": "ml",
+            "conversion_status": "estimated",
+            "original_quantity": original_quantity,
+            "original_unit": original_unit,
+        }
+
+    # Ingredient-specific mass conversions first.
     estimated = estimate_ingredient_mass(
         name,
         quantity,
@@ -671,11 +715,11 @@ def normalize_requirement_quantity(name, quantity, unit):
             "quantity": estimated[0],
             "unit": estimated[1],
             "conversion_status": "estimated",
-            "original_quantity": quantity,
-            "original_unit": unit,
+            "original_quantity": original_quantity,
+            "original_unit": original_unit,
         }
 
-    # SECOND: General physical-unit conversion
+    # General physical-unit conversion.
     exact = to_base(quantity, unit)
 
     if exact is not None:
@@ -683,17 +727,20 @@ def normalize_requirement_quantity(name, quantity, unit):
             "quantity": exact[0],
             "unit": exact[1],
             "conversion_status": "exact",
-            "original_quantity": quantity,
-            "original_unit": unit,
+            "original_quantity": original_quantity,
+            "original_unit": original_unit,
         }
 
     return {
         "quantity": quantity,
         "unit": unit,
         "conversion_status": "unresolved",
-        "original_quantity": quantity,
-        "original_unit": unit,
+        "original_quantity": original_quantity,
+        "original_unit": original_unit,
     }
+
+
+
 
 def aggregate_requirements(recipe_requirements):
     """
@@ -1575,8 +1622,6 @@ def build_plan_grocery_basket(
             base_item["price_source"] = "retail"
 
         else:
-            unpriced_items.append(ingredient_name)
-
             base_item["estimated_purchase_cost"] = (
                 estimated_purchase_cost
             )
@@ -1615,10 +1660,49 @@ def build_plan_grocery_basket(
             ),
         })
 
+        
+        # Usable purchase cost for shopping and planning.
+        # This includes verified retailer costs and
+        # provisional Tavily/Ollama estimates.
+        #
+        # Keep purchase_cost as verified-only.
+
+        effective_cost = (
+            base_item.get("purchase_cost")
+        )
+
+        if effective_cost is None:
+            effective_cost = base_item.get(
+                "estimated_purchase_cost"
+            )
+
+        base_item["effective_purchase_cost"] = (
+            round(float(effective_cost), 2)
+            if effective_cost is not None
+            else None
+        )
+
+        base_item["display_cost"] = base_item.get(
+        "effective_purchase_cost"
+        )
+
+        base_item["has_usable_price"] = (
+            base_item["display_cost"] is not None
+        )
+
+        base_item["cost_is_estimated"] = (
+            base_item.get("pricing_status") != "priced"
+        )
+
+
         basket_items.append(base_item)
 
     unpriced_items = list(
-        dict.fromkeys(unpriced_items)
+        dict.fromkeys(
+            item.get("name")
+            for item in basket_items
+            if item.get("effective_purchase_cost") is None
+        )
     )
 
     projection_missing = list(
@@ -1629,12 +1713,27 @@ def build_plan_grocery_basket(
         len(projection_missing) == 0
     )
 
+    
+    all_items_have_usable_cost = (
+        len(projection_missing) == 0
+        and all(
+            item.get("effective_purchase_cost") is not None
+            for item in basket_items
+        )
+    )
+
+
     return {
         "items": basket_items,
         "known_cost": round(known_cost, 2),
         "unresolved_requirements": unresolved_requirements,
-        "all_items_priced": (
-            len(unpriced_items) == 0
+        "all_items_priced": all(
+            item.get("pricing_status") == "priced"
+            for item in basket_items
+        ),
+        "all_items_have_usable_cost": all(
+            item.get("effective_purchase_cost") is not None
+            for item in basket_items
         ),
         "qualitative_requirements": qualitative_requirements,
         "unpriced_items": unpriced_items,
@@ -1650,6 +1749,9 @@ def build_plan_grocery_basket(
         ),
         "projection_missing": projection_missing,
         "warnings": warnings,
+                "all_items_have_usable_cost": (
+            all_items_have_usable_cost
+        ),
     }
 
 def calculate_incremental_basket_cost(
@@ -1868,24 +1970,33 @@ def build_cost_summary(
     Summarize verified and projected grocery spending.
 
     Known cost:
-        Cost supported by the basket's retail pricing rules.
+        Cost supported by verified retail pricing rules.
 
     Projected cost:
-        Complete basket estimate, including unverified
-        ingredient quantities and Ollama prices.
+        Complete grocery estimate, including Tavily
+        and Ollama prices and provisional quantities.
 
-    A projected balance is not a verified cash balance.
-    This function does not decide plan feasibility.
+    Both Tavily and Ollama prices count equally toward
+    projected grocery spending.
+
+    A complete projection is not necessarily verified.
     """
+
     import math
 
     def valid_money(value, field_name):
         if isinstance(value, bool):
-            raise ValueError(f"{field_name} must be numeric")
+            raise ValueError(
+                f"{field_name} must be numeric"
+            )
 
         try:
             number = float(value)
-        except (TypeError, ValueError, OverflowError):
+        except (
+            TypeError,
+            ValueError,
+            OverflowError,
+        ):
             raise ValueError(
                 f"{field_name} must be numeric"
             ) from None
@@ -1897,8 +2008,14 @@ def build_cost_summary(
 
         return round(number, 2)
 
+    if not isinstance(grocery_basket, dict):
+        raise TypeError(
+            "grocery_basket must be a dictionary"
+        )
+
     initial_budget = valid_money(
-        initial_budget, "initial_budget"
+        initial_budget,
+        "initial_budget",
     )
 
     known_cost = valid_money(
@@ -1907,16 +2024,24 @@ def build_cost_summary(
     )
 
     projection_complete = (
-        grocery_basket.get("projected_cost_complete")
-        is True
+        grocery_basket.get(
+            "projected_cost_complete"
+        ) is True
     )
 
-    raw_projected = grocery_basket.get("projected_cost")
+    raw_projected = grocery_basket.get(
+        "projected_cost"
+    )
+
     projected_cost = None
 
-    if projection_complete and raw_projected is not None:
+    if (
+        projection_complete
+        and raw_projected is not None
+    ):
         projected_cost = valid_money(
-            raw_projected, "projected_cost"
+            raw_projected,
+            "projected_cost",
         )
 
         if projected_cost + 0.01 < known_cost:
@@ -1927,68 +2052,125 @@ def build_cost_summary(
         projection_complete = False
 
     known_remaining = round(
-        initial_budget - known_cost, 2
+        initial_budget - known_cost,
+        2,
     )
 
     projected_remaining = (
-        round(initial_budget - projected_cost, 2)
+        round(
+            initial_budget - projected_cost,
+            2,
+        )
         if projected_cost is not None
         else None
     )
 
     unpriced_items = list(
-        grocery_basket.get("unpriced_items", []) or []
+        grocery_basket.get(
+            "unpriced_items", []
+        ) or []
     )
 
     projection_missing = list(
-        grocery_basket.get("projection_missing", []) or []
+        grocery_basket.get(
+            "projection_missing", []
+        ) or []
     )
 
     estimated_component = (
-        round(projected_cost - known_cost, 2)
+        round(
+            projected_cost - known_cost,
+            2,
+        )
         if projected_cost is not None
         else None
     )
 
+    # Preserve the existing verified-price contract.
+    # Do not infer verification merely because every
+    # ingredient has a usable projected price.
+
+    all_items_priced = (
+        grocery_basket.get(
+            "all_items_priced"
+        ) is True
+    )
+
+    # Tavily and Ollama estimates are both accepted
+    # as usable planning costs when the complete
+    # projected grocery basket is available.
+
+    all_items_have_usable_cost = (
+        grocery_basket.get(
+            "all_items_have_usable_cost"
+        ) is True
+        or projection_complete
+    )
+
+    # Verified means all items have verified pricing.
+    # Provisional means a complete projected cost exists,
+    # but one or more prices or quantities are estimated.
+    # Incomplete means no complete cost is available.
+
+    if (
+        all_items_priced
+        and projection_complete
+        and projected_cost is not None
+    ):
+        budget_verification = "verified"
+
+    elif (
+        projection_complete
+        and projected_cost is not None
+    ):
+        budget_verification = "provisional"
+
+    else:
+        budget_verification = "incomplete"
+
     return {
-        # Existing fields: preserve compatibility.
         "initial_budget": initial_budget,
         "known_grocery_cost": known_cost,
         "remaining": known_remaining,
-        "all_items_priced": grocery_basket.get(
-            "all_items_priced", False
+
+        "all_items_priced": all_items_priced,
+        "all_items_have_usable_cost": (
+            all_items_have_usable_cost
         ),
         "unpriced_items": unpriced_items,
 
-        # New reconciliation fields.
         "projected_grocery_cost": projected_cost,
-        "projected_cost_complete": projection_complete,
-        "estimated_cost_component": estimated_component,
-        "known_remaining_budget": known_remaining,
-        "projected_remaining_budget": projected_remaining,
-        "projection_missing": projection_missing,
+        "projected_cost_complete": (
+            projection_complete
+        ),
+        "estimated_cost_component": (
+            estimated_component
+        ),
 
-        # Explicit affordability reporting.
+        "known_remaining_budget": (
+            known_remaining
+        ),
+        "projected_remaining_budget": (
+            projected_remaining
+        ),
+
+        "projection_missing": (
+            projection_missing
+        ),
+
         "known_cost_within_budget": (
             known_cost <= initial_budget
         ),
+
         "projected_cost_within_budget": (
             projected_cost <= initial_budget
             if projected_cost is not None
             else None
         ),
+
         "budget_verification": (
-            "verified"
-            if (
-                grocery_basket.get("all_items_priced") is True
-                and projection_complete
-                and projected_cost is not None
-            )
-            else (
-                "provisional"
-                if projection_complete
-                else "incomplete"
-            )
+            budget_verification
         ),
     }
+
 

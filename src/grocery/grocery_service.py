@@ -1205,17 +1205,11 @@ class GroceryService:
 
         return score
 
-
-
     # -----------------------------------------------------------------
 
     # Candidate ranking
 
     # -----------------------------------------------------------------
-
-
-
-
 
     
     def _rank(
@@ -1228,14 +1222,14 @@ class GroceryService:
         """
         Rank validated grocery products.
 
-        Purchase calculation priority:
-        1. Exact compatible quantity
-        2. Recipe-specific estimated quantity
-        3. One-package shopping assumption
-        4. Unverified when fallback is not allowed
+        Priority:
+        1. Relevant ingredient matches.
+        2. Products with a usable total purchase cost.
+        3. Lowest total cost for required packages.
+        4. Better match quality and quantity confidence.
 
-        Minimum-package purchases are assumptions,
-        not verified quantity coverage.
+        Exact, estimated, and minimum-package purchases
+        remain separately classified.
         """
 
         MATCH_RANK = {
@@ -1261,15 +1255,21 @@ class GroceryService:
 
             try:
                 price = float(price)
-            except (TypeError, ValueError):
+            except (TypeError, ValueError, OverflowError):
                 continue
 
             if not math.isfinite(price) or price <= 0:
                 continue
 
-            product["minimum_package_cost"] = round(price, 2)
+            product["minimum_package_cost"] = round(
+                price,
+                2,
+            )
 
-            # Exact quantity calculation.
+            # ------------------------------------------
+            # Exact compatible quantity
+            # ------------------------------------------
+
             if (
                 need is not None
                 and package is not None
@@ -1278,18 +1278,30 @@ class GroceryService:
             ):
                 packages = max(
                     1,
-                    math.ceil(need[0] / package[0] - 1e-9),
+                    math.ceil(
+                        need[0] / package[0] - 1e-9
+                    ),
                 )
 
                 product["packages"] = packages
-                product["total"] = round(packages * price, 2)
+                product["total"] = round(
+                    packages * price,
+                    2,
+                )
+
                 product["excess"] = max(
                     0.0,
                     packages * package[0] - need[0],
                 )
-                product["purchase_basis"] = "exact_quantity"
 
-            # Ingredient-specific estimated quantity.
+                product["purchase_basis"] = (
+                    "exact_quantity"
+                )
+
+            # ------------------------------------------
+            # Ingredient-specific estimated quantity
+            # ------------------------------------------
+
             elif (
                 estimated_need is not None
                 and package is not None
@@ -1299,26 +1311,50 @@ class GroceryService:
                 packages = max(
                     1,
                     math.ceil(
-                        estimated_need[0] / package[0] - 1e-9
+                        estimated_need[0] / package[0]
+                        - 1e-9
                     ),
                 )
 
                 product["packages"] = packages
-                product["total"] = round(packages * price, 2)
+                product["total"] = round(
+                    packages * price,
+                    2,
+                )
+
                 product["excess"] = max(
                     0.0,
-                    packages * package[0] - estimated_need[0],
+                    packages * package[0]
+                    - estimated_need[0],
                 )
-                product["purchase_basis"] = "estimated_quantity"
 
-            # Minimum retail package fallback.
+                product["purchase_basis"] = (
+                    "estimated_quantity"
+                )
+
+            # ------------------------------------------
+            # Minimum retail package assumption
+            # ------------------------------------------
+
             elif allow_minimum_package:
                 product["packages"] = 1
-                product["total"] = round(price, 2)
-                product["purchase_basis"] = "minimum_retail_package"
+                product["total"] = round(
+                    price,
+                    2,
+                )
+
+                product["purchase_basis"] = (
+                    "minimum_retail_package"
+                )
 
             else:
-                product["purchase_basis"] = "unverified_quantity"
+                product["purchase_basis"] = (
+                    "unverified_quantity"
+                )
+
+        # ----------------------------------------------
+        # Rank candidates
+        # ----------------------------------------------
 
         def rank_key(product: dict):
             match_rank = MATCH_RANK.get(
@@ -1336,43 +1372,47 @@ class GroceryService:
             }.get(basis, 4)
 
             total = product.get("total")
+
             total_rank = (
                 float(total)
                 if total is not None
                 else float("inf")
             )
 
-            package = product.get("package")
-
-            # For unresolved quantities, prefer a smaller
-            # retail package when comparable package units
-            # are available. Otherwise prefer lower cost.
-            package_rank = (
-                float(package[0])
-                if (
-                    basis == "minimum_retail_package"
-                    and package is not None
-                    and package[0] > 0
-                )
-                else float("inf")
-            )
-
             excess = product.get("excess")
+
             excess_rank = (
                 float(excess)
                 if excess is not None
                 else float("inf")
             )
 
+            # Strong/exact matches are preferred.
+            # Within each match group, select the
+            # cheapest complete package purchase.
+
+            acceptable_match = match_rank <= 1
+
             return (
+                0 if acceptable_match else 1,
+                0 if total is not None else 1,
+                total_rank,
                 match_rank,
                 quantity_rank,
-                total_rank,
                 excess_rank,
                 -self._quality(product),
             )
 
-        return sorted(valid, key=rank_key)
+        # CRITICAL:
+        # This return must be inside _rank(),
+        # but outside the nested rank_key() function.
+
+        return sorted(
+            valid,
+            key=rank_key,
+        )
+
+
 
 
 
@@ -2041,10 +2081,20 @@ class GroceryService:
         # Exact and estimated conversions are still
         # evaluated first inside _rank().
 
-        allow_minimum_package = (
-            need is None
-            or estimated_need is None
-        )
+        
+        # Allow the cheapest suitable retail package to be
+        # considered even when recipe quantity conversions
+        # are available.
+        #
+        # Exact and estimated package calculations are
+        # still attempted first inside _rank().
+        #
+        # Incompatible package units may use one retail
+        # package as a provisional shopping assumption.
+        # This is NOT verified quantity coverage.
+
+        allow_minimum_package = True
+
 
         # A known positive requirement with a usable
         # base unit may still be incompatible with the

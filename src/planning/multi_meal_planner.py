@@ -891,19 +891,29 @@ class MultiMealPlanner:
 
                 # Preserve original Grocery Agent evidence.
                 # Do not turn estimated prices into verified prices.
+                
+                price = item.get("price")
+
+                if price is None:
+                    price = item.get("price_per_package")
+
                 product_catalog.append(
                     {
                         **item,
-                        "ingredient_id": item.get("ingredient_id"),
-                        "ingredient_name": ingredient_name,
-                        "package_quantity": item.get("package_quantity"),
-                        "package_unit": item.get("package_unit"),
-                        "price": item.get(
-                            "price",
-                            item.get("price_per_package"),
+                        "ingredient_id": item.get(
+                            "ingredient_id"
                         ),
+                        "ingredient_name": ingredient_name,
+                        "package_quantity": item.get(
+                            "package_quantity"
+                        ),
+                        "package_unit": item.get(
+                            "package_unit"
+                        ),
+                        "price": price,
                     }
                 )
+
 
         # ========================================================
         # INITIAL PANTRY

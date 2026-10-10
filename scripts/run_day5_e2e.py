@@ -62,8 +62,8 @@ USER_STATE = {
     # -----------------------------------------
     # Budget
     # -----------------------------------------
-    "budget": 50.0,
-    "remaining_budget": 50.0,
+    "budget": 100.0,
+    "remaining_budget": 100.0,
     # -----------------------------------------
     # Dietary requirements
     # -----------------------------------------
@@ -485,10 +485,21 @@ def print_grocery_basket(
             (item.get("packages_needed") or item.get("packages")),
         )
 
+        
+        cost = item.get("effective_purchase_cost")
+
+        if cost is None:
+            cost = item.get("purchase_cost")
+
+        if cost is None:
+            cost = item.get("estimated_purchase_cost")
+
         print(
-            "  Cost:",
-            (item.get("purchase_cost") or item.get("total_cost")),
+            f"  Cost: S${cost:.2f}"
+            if cost is not None
+            else "  Cost: Unavailable"
         )
+
 
 
 def print_execution_trace(
