@@ -225,13 +225,23 @@ def test_non_budget_rejections_are_not_overridden():
     planner._get_candidates = lambda **kwargs: ["R004"]
     planner._evaluate_candidate = lambda **kwargs: candidate
 
-    result = planner._plan_single_slot(
+    # Current planner uses candidate evaluation and optimization
+    # instead of the removed _plan_single_slot() method.
+    planner._evaluate_candidates_for_slot(
         user_state={"budget": 50.0},
         slot=state.slots[0],
         plan_state=state,
     )
 
-    assert result["selected"] is False
+    # Cooking-time rejection must not select the recipe.
     assert len(state.selected_meals) == 0
+
+    # No budget should be deducted.
     assert state.estimated_spent == 0.0
+
+    # Rejection should be recorded.
     assert len(state.rejected_candidates) == 1
+
+    rejection = state.rejected_candidates[0]
+
+    assert rejection["recipe_id"] == "R004"
