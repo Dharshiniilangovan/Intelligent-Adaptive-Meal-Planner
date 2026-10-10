@@ -160,3 +160,36 @@ def test_unresolved_units_not_counted_as_verified():
         item["pricing_status"] == "unresolved_conversion"
         for item in basket["items"]
     )
+
+
+def test_to_taste_requirement_is_preserved_separately():
+    recipes = [
+        {
+            "recipe_id": "R1",
+            "ingredients": [
+                {
+                    "ingredient_id": "ING3046",
+                    "ingredient_name": "table salt",
+                    "quantity": "required",
+                    "unit": "to taste",
+                }
+            ],
+        }
+    ]
+
+    basket = build_plan_grocery_basket(
+        recipe_requirements=recipes,
+        inventory=[],
+        product_catalog=[],
+    )
+
+    assert len(basket["qualitative_requirements"]) == 1
+
+    instruction = basket["qualitative_requirements"][0]
+    assert instruction["ingredient_name"] == "table salt"
+    assert instruction["quantity"] == "required"
+    assert instruction["unit"] == "to taste"
+    assert instruction["recipe_ids"] == ["R1"]
+
+    # Qualitative instructions must not become numeric purchases.
+    assert basket["items"] == []

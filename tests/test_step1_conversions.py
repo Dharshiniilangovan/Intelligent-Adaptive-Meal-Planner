@@ -16,3 +16,17 @@ def test_exact_units_remain_exact():
     assert to_base(.5, 'head') is None
     assert to_base(1, 'clove') is None
     assert parse_package('https://www.fairprice.com.sg/product/fresh-cucumber-0-66kg-10422143') == (660.0, 'g')
+
+
+def test_additional_exact_volume_units():
+    assert to_base(1, "pint") == (473.176, "ml")
+    assert to_base(1, "quart") == (946.353, "ml")
+    assert to_base(1, "gallon") == (3785.41, "ml")
+    assert to_base(1, "deciliter") == (100.0, "ml")
+    assert to_base(1, "dessert spoon") == (10.0, "ml")
+
+def test_exact_unit_conversion_rejects_invalid_quantities():
+    assert to_base(float("nan"), "g") is None
+    assert to_base(float("inf"), "g") is None
+    assert to_base(float("-inf"), "g") is None
+    assert to_base(-1, "g") is None
