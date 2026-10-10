@@ -4,24 +4,94 @@ Grocery Service with optional local Ollama price fallback.
 
 Tavily remains the primary source.
 
-Ollama is only used when no usable purchase cost
+Ollama is used only when no usable retail purchase cost
 or quantity-based retail estimate exists.
 
-LLM estimates remain separate from verified costs.
+Only validated Ollama estimates are cached.
+LLM estimates never become verified retailer prices.
 """
 
 from __future__ import annotations
 
-import os
 import math
+import os
 from dataclasses import asdict
-from src.cache.cache_service import cache_key as cache_key_fn
-from src.grocery.ollama_price_estimator import GroceryPriceEstimate, OLLAMA_MODEL
 
+from src.cache.cache_service import cache_key as cache_key_fn
 from src.grocery.grocery_service import GroceryService
 from src.grocery.ollama_price_estimator import (
+    GroceryPriceEstimate,
+    OLLAMA_MODEL,
     estimate_grocery_price,
 )
+
+
+OLLAMA_CACHE_CATEGORY = "ollama_grocery_v2"
+OLLAMA_CACHE_TTL_SECONDS = 7 * 86400
+OLLAMA_ESTIMATE_VERSION = "v2"
+
+
+def _valid_ollama_estimate(estimate) -> bool:
+    """Validate an Ollama estimate before caching or using it."""
+
+    if not isinstance(estimate, GroceryPriceEstimate):
+        return False
+
+    try:
+        price = float(estimate.estimated_price_sgd)
+        total = float(estimate.estimated_total_cost)
+        quantity = float(estimate.estimated_package_quantity)
+
+        raw_count = estimate.estimated_packages_needed
+        count = int(raw_count)
+
+        if isinstance(raw_count, bool):
+            return False
+
+        if float(raw_count) != count:
+            return False
+
+        if not all(
+            math.isfinite(value)
+            for value in (price, total, quantity)
+        ):
+            return False
+
+        if not (
+            0 < price <= 1000
+            and 0 < total <= 10000
+            and quantity > 0
+            and 1 <= count <= 1000
+        ):
+            return False
+
+        if not isinstance(
+            estimate.estimated_product, str
+        ) or not estimate.estimated_product.strip():
+            return False
+
+        if not isinstance(
+            estimate.estimated_package_unit, str
+        ) or not estimate.estimated_package_unit.strip():
+            return False
+
+        expected_total = price * count
+
+        if abs(total - expected_total) > max(
+            0.03,
+            expected_total * 0.01,
+        ):
+            return False
+
+        return True
+
+    except (
+        TypeError,
+        ValueError,
+        AttributeError,
+        OverflowError,
+    ):
+        return False
 
 
 class OllamaFallbackGroceryService(GroceryService):
@@ -46,7 +116,10 @@ class OllamaFallbackGroceryService(GroceryService):
         *args,
         **kwargs,
     ):
-        # First run the original Tavily pipeline.
+        # --------------------------------------------------
+        # 1. Tavily remains the primary source
+        # --------------------------------------------------
+
         option = super().get_grocery_option(
             ingredient_name,
             required_quantity,
@@ -58,127 +131,150 @@ class OllamaFallbackGroceryService(GroceryService):
         if not self.enable_ollama_fallback:
             return option
 
-        # Preserve existing valid retail costs.
         if option.total_cost is not None:
             return option
 
-        # Preserve existing quantity-based estimates
-        # that use real retailer prices.
         if option.estimated_total_cost is not None:
             return option
 
-        # Last resort: local LLM estimation.
-        cache_key = (
-            str(ingredient_name).strip().lower(),
+        # --------------------------------------------------
+        # 2. Build deterministic cache keys
+        # --------------------------------------------------
+
+        request_key = (
+            " ".join(str(ingredient_name or "").lower().split()),
             str(required_quantity),
-            str(unit).strip().lower(),
+            str(unit or "").strip().lower(),
+            OLLAMA_MODEL,
+            OLLAMA_ESTIMATE_VERSION,
         )
 
-        persistent_key = cache_key_fn("ollama_grocery_v1", {
-            "ingredient": cache_key[0], "quantity": cache_key[1],
-            "unit": cache_key[2], "model": OLLAMA_MODEL,
-        })
-        if cache_key in self._ollama_estimate_cache:
-            estimate = self._ollama_estimate_cache[cache_key]
-        else:
-            saved = self.persistent_cache.get("ollama_grocery_v1", persistent_key)
-            try:
-                estimate = GroceryPriceEstimate(**saved) if isinstance(saved, dict) else None
-            except (TypeError, ValueError):
-                estimate = None
-            if estimate is not None:
-                print(f"[SQLITE OLLAMA CACHE HIT] {ingredient_name}")
-            else:
-                print("[OLLAMA GROCERY FALLBACK]", ingredient_name)
-                estimate = estimate_grocery_price(
-                    ingredient_name=ingredient_name,
-                    required_quantity=required_quantity,
-                    required_unit=unit,
-                )
-            if estimate is not None:
-                self._ollama_estimate_cache[cache_key] = estimate
+        persistent_key = cache_key_fn(
+            OLLAMA_CACHE_CATEGORY,
+            {
+                "ingredient": request_key[0],
+                "quantity": request_key[1],
+                "unit": request_key[2],
+                "model": request_key[3],
+                "version": request_key[4],
+            },
+        )
+
+        estimate = None
+
+        # --------------------------------------------------
+        # 3. In-memory cache
+        # --------------------------------------------------
+
+        cached_memory = self._ollama_estimate_cache.get(
+            request_key
+        )
+
+        if _valid_ollama_estimate(cached_memory):
+            print(
+                f"[MEMORY OLLAMA CACHE HIT] {ingredient_name}"
+            )
+            estimate = cached_memory
+
+        elif cached_memory is not None:
+            self._ollama_estimate_cache.pop(
+                request_key,
+                None,
+            )
+
+        # --------------------------------------------------
+        # 4. Persistent SQLite cache
+        # --------------------------------------------------
+
+        if (
+            estimate is None
+            and self.persistent_cache is not None
+        ):
+            saved = self.persistent_cache.get(
+                OLLAMA_CACHE_CATEGORY,
+                persistent_key,
+            )
+
+            if saved is not None:
+                try:
+                    restored = (
+                        GroceryPriceEstimate(**saved)
+                        if isinstance(saved, dict)
+                        else None
+                    )
+                except (TypeError, ValueError):
+                    restored = None
+
+                if _valid_ollama_estimate(restored):
+                    print(
+                        f"[SQLITE OLLAMA CACHE HIT] "
+                        f"{ingredient_name}"
+                    )
+
+                    estimate = restored
+                    self._ollama_estimate_cache[
+                        request_key
+                    ] = restored
+
+                else:
+                    self.persistent_cache.delete(
+                        OLLAMA_CACHE_CATEGORY,
+                        persistent_key,
+                    )
+
+        # --------------------------------------------------
+        # 5. Live Ollama fallback
+        # --------------------------------------------------
 
         if estimate is None:
-            option.note = (
-                (option.note or "")
-                + " Ollama could not provide a usable estimate."
-            ).strip()
-
-            return option
-
-        # Reject malformed or implausible estimates before propagation.
-                # Validate the Ollama estimate once.
-        try:
-            price = float(estimate.estimated_price_sgd)
-            total = float(estimate.estimated_total_cost)
-            count = int(estimate.estimated_packages_needed)
-            qty = float(estimate.estimated_package_quantity)
-
-            valid_numbers = all(
-                math.isfinite(x)
-                for x in (price, total, qty)
+            print(
+                f"[LIVE OLLAMA GROCERY FALLBACK] "
+                f"{ingredient_name}"
             )
 
-            valid_ranges = (
-                0 < price <= 1000
-                and 0 < total <= 10000
-                and qty > 0
-                and 1 <= count <= 1000
+            estimate = estimate_grocery_price(
+                ingredient_name=ingredient_name,
+                required_quantity=required_quantity,
+                required_unit=unit,
             )
 
-            valid_total = (
-                abs(total - price * count)
-                <= max(0.03, total * 0.01)
-            )
-
-            if not (
-                valid_numbers
-                and valid_ranges
-                and valid_total
-            ):
-                if os.getenv("OLLAMA_GROCERY_DEBUG") == "1":
-                    print(
-                        "[OLLAMA FALLBACK REJECTED]",
-                        ingredient_name,
-                        {
-                            "valid_numbers": valid_numbers,
-                            "valid_ranges": valid_ranges,
-                            "valid_total": valid_total,
-                        },
-                    )
+            if not _valid_ollama_estimate(estimate):
+                option.note = (
+                    (option.note or "")
+                    + " Ollama could not provide a usable estimate."
+                ).strip()
 
                 return option
 
-        except (
-            TypeError,
-            ValueError,
-            AttributeError,
-            OverflowError,
-        ) as exc:
-            if os.getenv("OLLAMA_GROCERY_DEBUG") == "1":
-                print(
-                    "[OLLAMA FALLBACK ERROR]",
-                    ingredient_name,
-                    str(exc),
+            # Save only valid estimates in memory.
+            self._ollama_estimate_cache[
+                request_key
+            ] = estimate
+
+            # Save only valid estimates in SQLite.
+            if self.persistent_cache is not None:
+                self.persistent_cache.set(
+                    OLLAMA_CACHE_CATEGORY,
+                    persistent_key,
+                    asdict(estimate),
+                    OLLAMA_CACHE_TTL_SECONDS,
                 )
 
-            return option
+                print(
+                    f"[OLLAMA CACHE SAVED] {ingredient_name}"
+                )
 
-        # Save only validated, successfully parsed estimates.
-        if self.persistent_cache.get("ollama_grocery_v1", persistent_key) is None:
-            self.persistent_cache.set(
-                "ollama_grocery_v1", persistent_key, asdict(estimate), 7 * 86400
-            )
+        # --------------------------------------------------
+        # 6. Populate GroceryOption
+        # --------------------------------------------------
 
-        # Populate existing GroceryOption fields.
-        # Do not claim a real retailer or verified price.
         option.product_name = estimate.estimated_product
 
-        option.price_per_package = (
+        option.price_per_package = float(
             estimate.estimated_price_sgd
         )
 
-        option.package_quantity = (
+        option.package_quantity = float(
             estimate.estimated_package_quantity
         )
 
@@ -186,15 +282,14 @@ class OllamaFallbackGroceryService(GroceryService):
             estimate.estimated_package_unit
         )
 
-        option.packages_needed = (
+        option.packages_needed = int(
             estimate.estimated_packages_needed
         )
 
         option.minimum_package_cost = None
-
         option.total_cost = None
 
-        option.estimated_total_cost = (
+        option.estimated_total_cost = float(
             estimate.estimated_total_cost
         )
 
@@ -207,13 +302,11 @@ class OllamaFallbackGroceryService(GroceryService):
         )
 
         option.match_quality = None
-
         option.currency = "SGD"
 
+        # Never present an Ollama estimate as a retailer listing.
         option.store = None
-
         option.source_url = None
-
         option.source_updated_at = None
 
         option.purchase_channel = (

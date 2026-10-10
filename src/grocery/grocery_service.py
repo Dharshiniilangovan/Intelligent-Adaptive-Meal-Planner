@@ -355,81 +355,54 @@ class GroceryService:
 
 
 
+    
     def __init__(
-
         self,
-
         client: TavilyGroceryClient | None = None,
-
         verify_links: bool = False,
-
         cache_ttl_hours: float = 6.0,
-
+        persistent_cache_enabled: bool | None = None,
     ):
+        # Explicitly supplied clients (including FakeClient)
+        # do not use persistent caching by default.
+        if persistent_cache_enabled is None:
+            persistent_cache_enabled = client is None
 
-
+        self.persistent_cache_enabled = bool(
+            persistent_cache_enabled
+        )
 
         self.client = (
-
-            client
-
-            or TavilyGroceryClient()
-
+            client if client is not None
+            else TavilyGroceryClient()
         )
-
-
 
         self.verify_links = verify_links
+        self.cache_ttl = cache_ttl_hours * 3600
 
-
-
-        self.cache_ttl = (
-
-            cache_ttl_hours * 3600
-
+        self.persistent_cache = (
+            PersistentCache()
+            if self.persistent_cache_enabled
+            else None
         )
 
-
-
-        self.persistent_cache = PersistentCache()
-
         self._search_cache: dict[
-
             str,
-
             tuple[float, list[dict]],
-
         ] = {}
 
-
-
-        self._link_cache: dict[
-
-            str,
-
-            bool,
-
-        ] = {}
-
-
+        self._link_cache: dict[str, bool] = {}
 
         self._http = requests.Session()
 
-
-
         self._http.headers["User-Agent"] = (
-
             "Mozilla/5.0 "
-
             "(Windows NT 10.0; Win64; x64) "
-
             "AppleWebKit/537.36 "
-
             "(KHTML, like Gecko) "
-
             "Chrome/124.0 Safari/537.36"
-
         )
+
 
 
 
@@ -438,23 +411,116 @@ class GroceryService:
     # Search + cache
 
     # -----------------------------------------------------------------
+    @staticmethod
+    def _cacheable_products(products):
+        """Keep only products with usable price and package data."""
+        import math
+
+        if not isinstance(products, list):
+            return []
+
+        valid = []
+
+        for product in products:
+            if not isinstance(product, dict):
+                continue
+
+            try:
+                price = float(product.get("price"))
+            except (TypeError, ValueError, OverflowError):
+                continue
+
+            if not math.isfinite(price) or price <= 0:
+                continue
+
+            # Do not require package_quantity here:
+            # Tavily results may still need package parsing.
+            if not (
+                product.get("title")
+                or product.get("product_name")
+            ):
+                continue
+
+            if not (
+                product.get("url")
+                or product.get("product_url")
+            ):
+                continue
+
+            valid.append(product)
+
+        return valid
 
 
 
-    
-    def _search(
-        self,
-        query: str,
-    ) -> list[dict]:
+    @staticmethod
+    def _cacheable_products(products: list[dict]) -> list[dict]:
         """
-        Search grocery products with an in-memory cache.
+        Return only usable, price-bearing Tavily products.
 
-        Repeated equivalent queries reuse cached results
-        until the cache TTL expires.
+        Does not perform ingredient-specific matching.
+        That remains the responsibility of _filter().
+
+        Does not require package parsing to have already
+        happened, since _filter() handles that later.
         """
 
-        # Normalize whitespace and capitalization.
-        # Do not remove ingredient identity words.
+        if not isinstance(products, list):
+            return []
+
+        valid = []
+
+        for product in products:
+            if not isinstance(product, dict):
+                continue
+
+            price = product.get("price")
+
+            if isinstance(price, bool):
+                continue
+
+            try:
+                price = float(price)
+            except (TypeError, ValueError, OverflowError):
+                continue
+
+            if not math.isfinite(price):
+                continue
+
+            if not (0 < price <= MAX_ITEM_PRICE):
+                continue
+
+            title = product.get("title")
+            url = product.get("url")
+
+            if not isinstance(title, str) or not title.strip():
+                continue
+
+            if not isinstance(url, str) or not url.strip():
+                continue
+
+            # Do not cache known out-of-stock items.
+            if product.get("in_stock") is False:
+                continue
+
+            # Preserve all original Tavily metadata.
+            valid.append(dict(product))
+
+        return valid
+
+        
+        
+    def _search(self, query: str) -> list[dict]:
+        """
+        Search order:
+        1. In-memory cache
+        2. Persistent SQLite cache
+        3. Live Tavily
+
+        Only price-bearing Tavily products are cached.
+        Empty and invalid results are never cached.
+        """
+
         key = " ".join(
             str(query or "").lower().split()
         )
@@ -462,25 +528,111 @@ class GroceryService:
         if not key:
             return []
 
-        hit = self._search_cache.get(key)
-        if hit is not None and time.time() - hit[0] < self.cache_ttl:
-            print(f"[MEMORY TAVILY CACHE HIT] {query}")
-            return hit[1]
+        now = time.time()
 
-        persistent_key = cache_key("tavily_search_v1", {"query": key, "client": type(self.client).__name__})
-        cached = self.persistent_cache.get("tavily_search_v1", persistent_key)
-        if isinstance(cached, list):
-            print(f"[SQLITE TAVILY CACHE HIT] {query}")
-            self._search_cache[key] = (time.time(), cached)
-            return cached
+        # --------------------------------------------------
+        # 1. Check memory cache
+        # --------------------------------------------------
+
+        hit = self._search_cache.get(key)
+
+        if hit is not None:
+            cached_at, cached_products = hit
+
+            if now - cached_at < self.cache_ttl:
+                valid_products = self._cacheable_products(
+                    cached_products
+                )
+
+                if valid_products:
+                    print(f"[MEMORY TAVILY CACHE HIT] {query}")
+                    return valid_products
+
+            self._search_cache.pop(key, None)
+
+        # --------------------------------------------------
+        # 2. Check persistent SQLite cache
+        # --------------------------------------------------
+
+        persistent_key = cache_key(
+            "tavily_search_v1",
+            {
+                "query": key,
+                "client": type(self.client).__name__,
+            },
+        )
+
+        if self.persistent_cache is not None:
+
+            cached = self.persistent_cache.get(
+                "tavily_search_v1",
+                persistent_key,
+            )
+
+            if cached is not None:
+                valid_products = self._cacheable_products(
+                    cached
+                )
+
+                if valid_products:
+                    print(f"[SQLITE TAVILY CACHE HIT] {query}")
+
+                    self._search_cache[key] = (
+                        time.time(),
+                        valid_products,
+                    )
+
+                    return valid_products
+
+                # Delete an entirely unusable cache entry.
+                self.persistent_cache.delete(
+                    "tavily_search_v1",
+                    persistent_key,
+                )
+
+        # --------------------------------------------------
+        # 3. Live Tavily search
+        # --------------------------------------------------
 
         print(f"[LIVE TAVILY SEARCH] {query}")
-        products = self.client.search(query)
-        if isinstance(products, list) and products:
-            self._search_cache[key] = (time.time(), products)
-            self.persistent_cache.set("tavily_search_v1", persistent_key, products, self.cache_ttl)
-        return products
 
+        products = self.client.search(query)
+
+        # Preserve the live response for the existing
+        # product filtering and matching pipeline.
+        valid_products = self._cacheable_products(products)
+
+        # --------------------------------------------------
+        # 4. Save only usable products
+        # --------------------------------------------------
+
+        if valid_products:
+
+            self._search_cache[key] = (
+                time.time(),
+                valid_products,
+            )
+
+            if self.persistent_cache is not None:
+                self.persistent_cache.set(
+                    "tavily_search_v1",
+                    persistent_key,
+                    valid_products,
+                    self.cache_ttl,
+                )
+
+            print(
+                f"[TAVILY CACHE SAVED] {query}: "
+                f"{len(valid_products)} priced products"
+            )
+
+        else:
+            print(
+                f"[TAVILY CACHE SKIPPED] {query}: "
+                "no usable priced products"
+            )
+
+        return products
 
 
     # -----------------------------------------------------------------
