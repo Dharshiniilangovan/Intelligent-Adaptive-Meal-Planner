@@ -1623,10 +1623,17 @@ class MultiMealPlanner:
         inventory = deepcopy(plan_state.initial_inventory)
 
         # 1. Add purchases from the final basket only.
+        # 1. Add purchases from the final basket only.
 
         for item in final_grocery_basket.get("items", []):
 
+            # Unknown quantity ingredients remain in the grocery list,
+            # but cannot be numerically added to inventory.
+            if item.get("purchase_basis") == "qualitative_requirement":
+               continue
+
             packages = item.get("packages")
+
 
             if packages is None:
 
