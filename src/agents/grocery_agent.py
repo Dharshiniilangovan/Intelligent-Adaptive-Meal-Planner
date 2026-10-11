@@ -535,19 +535,23 @@ def _ingredient_name(item):
         or item.get("name")
         or ""
     ).strip()
+
 def normalize_requirement_quantity(name, quantity, unit):
     original_quantity = quantity
     original_unit = str(unit or "").strip().lower()
     ingredient_name = " ".join(str(name or "").lower().split())
+
     try:
         quantity = float(quantity)
     except (TypeError, ValueError, OverflowError):
         return None
+
     if not math.isfinite(quantity) or quantity <= 0:
         return None
+
     unit = original_unit
-    # A pinch is not a standard liquid measurement.
-    # This is an explicitly provisional MVP assumption.
+
+    # Preserve existing sesame oil special case.
     if ingredient_name == "sesame oil" and unit in {
         "pinch",
         "pinches",
@@ -559,12 +563,41 @@ def normalize_requirement_quantity(name, quantity, unit):
             "original_quantity": original_quantity,
             "original_unit": original_unit,
         }
-    # Ingredient-specific mass conversions first.
+
+    # Preserve exact physical volume and mass conversions.
+    # These do not require ingredient-specific estimates.
+    exact = to_base(quantity, unit)
+
+    # if exact is not None and exact[1] in {"g", "ml"}:
+    if (
+    exact is not None
+    and exact[1] in {"g", "ml"}
+    and not (
+        exact[1] == "ml"
+        and ingredient_name not in {
+            "oil",
+            "vegetable oil",
+            "cooking oil",
+        }
+        and estimate_ingredient_mass(name, quantity, unit) is not None
+    )
+):
+        return {
+            "quantity": exact[0],
+            "unit": exact[1],
+            "conversion_status": "exact",
+            "original_quantity": original_quantity,
+            "original_unit": original_unit,
+        }
+
+    # Prefer ingredient-specific estimates for count, bunch,
+    # clove, and other non-standard recipe units.
     estimated = estimate_ingredient_mass(
         name,
         quantity,
         unit,
     )
+
     if estimated is not None:
         return {
             "quantity": estimated[0],
@@ -573,8 +606,9 @@ def normalize_requirement_quantity(name, quantity, unit):
             "original_quantity": original_quantity,
             "original_unit": original_unit,
         }
-    # General physical-unit conversion.
-    exact = to_base(quantity, unit)
+
+    # Generic count conversions remain exact when no
+    # ingredient-specific mass estimate is available.
     if exact is not None:
         return {
             "quantity": exact[0],
@@ -583,6 +617,7 @@ def normalize_requirement_quantity(name, quantity, unit):
             "original_quantity": original_quantity,
             "original_unit": original_unit,
         }
+
     return {
         "quantity": quantity,
         "unit": unit,
@@ -590,6 +625,61 @@ def normalize_requirement_quantity(name, quantity, unit):
         "original_quantity": original_quantity,
         "original_unit": original_unit,
     }
+# def normalize_requirement_quantity(name, quantity, unit):
+#     original_quantity = quantity
+#     original_unit = str(unit or "").strip().lower()
+#     ingredient_name = " ".join(str(name or "").lower().split())
+#     try:
+#         quantity = float(quantity)
+#     except (TypeError, ValueError, OverflowError):
+#         return None
+#     if not math.isfinite(quantity) or quantity <= 0:
+#         return None
+#     unit = original_unit
+#     # A pinch is not a standard liquid measurement.
+#     # This is an explicitly provisional MVP assumption.
+#     if ingredient_name == "sesame oil" and unit in {
+#         "pinch",
+#         "pinches",
+#     }:
+#         return {
+#             "quantity": round(quantity * 0.25, 4),
+#             "unit": "ml",
+#             "conversion_status": "estimated",
+#             "original_quantity": original_quantity,
+#             "original_unit": original_unit,
+#         }
+#     # Ingredient-specific mass conversions first.
+#     estimated = estimate_ingredient_mass(
+#         name,
+#         quantity,
+#         unit,
+#     )
+#     if estimated is not None:
+#         return {
+#             "quantity": estimated[0],
+#             "unit": estimated[1],
+#             "conversion_status": "estimated",
+#             "original_quantity": original_quantity,
+#             "original_unit": original_unit,
+#         }
+#     # General physical-unit conversion.
+#     exact = to_base(quantity, unit)
+#     if exact is not None:
+#         return {
+#             "quantity": exact[0],
+#             "unit": exact[1],
+#             "conversion_status": "exact",
+#             "original_quantity": original_quantity,
+#             "original_unit": original_unit,
+#         }
+#     return {
+#         "quantity": quantity,
+#         "unit": unit,
+#         "conversion_status": "unresolved",
+#         "original_quantity": original_quantity,
+#         "original_unit": original_unit,
+#     }
 def aggregate_requirements(recipe_requirements):
     """
     Aggregate ingredient requirements across selected recipes.
@@ -668,52 +758,139 @@ def aggregate_requirements(recipe_requirements):
                 record["normalization_status"] = "unresolved"
                 record["unresolved_units"] = units
     return list(aggregated.values())
+# def subtract_inventory(requirements, inventory):
+#     """
+#     Deduct pantry stock from aggregated requirements.
+#     Does not mutate the original inventory.
+#     Does not consume the same pantry stock twice.
+#     """
+#     stock_map = {}
+#     for item in inventory or []:
+        
+#         key = _ingredient_key(item)
+#         if not key:
+#             continue
+#         name = _ingredient_name(item)
+#         normalized = normalize_requirement_quantity(
+#             name,
+#             item.get("quantity"),
+#             item.get("unit"),
+#         )
+#         if normalized is None:
+#             continue
+#         stock_map.setdefault(key, []).append({
+#             "quantity": normalized["quantity"],
+#             "unit": normalized["unit"],
+#             "conversion_status": normalized["conversion_status"],
+#         })
+#     results = []
+#     for requirement in requirements or []:
+#         key = _ingredient_key(requirement)
+#         required = float(requirement.get("quantity", 0))
+#         required_unit = requirement.get("unit")
+#         remaining = required
+#         inventory_used = 0.0
+#         inventory_unresolved = False
+#         for stock in stock_map.get(key, []):
+#             if remaining <= 0:
+#                 break
+#             # Requirements and inventory must share a
+#             # comparable normalized unit.
+#             if stock["unit"] != required_unit:
+#                 inventory_unresolved = True
+#                 continue
+#             available = max(0.0, stock["quantity"])
+#             consumed = min(remaining, available)
+#             remaining -= consumed
+#             inventory_used += consumed
+#             stock["quantity"] -= consumed
+#         result = dict(requirement)
+#         result.update({
+#             "required_quantity": required,
+#             "inventory_available": inventory_used,
+#             "inventory_used": inventory_used,
+#             "purchase_required": max(0.0, remaining),
+#             "inventory_conversion_unresolved": inventory_unresolved,
+#         })
+#         results.append(result)
+#     return results
 def subtract_inventory(requirements, inventory):
     """
     Deduct pantry stock from aggregated requirements.
     Does not mutate the original inventory.
     Does not consume the same pantry stock twice.
     """
+
+    # NEW: Match ingredients by normalized name.
+    # This handles recipe IDs such as ING2337 when
+    # pantry records contain only ingredient names.
+    def pantry_match_key(item):
+        name = _ingredient_name(item)
+        return " ".join(name.lower().split())
+
     stock_map = {}
+
     for item in inventory or []:
-        key = _ingredient_key(item)
+
+        # CHANGED: Use normalized ingredient name.
+        key = pantry_match_key(item)
+
         if not key:
             continue
+
         name = _ingredient_name(item)
+
         normalized = normalize_requirement_quantity(
             name,
             item.get("quantity"),
             item.get("unit"),
         )
+
         if normalized is None:
             continue
+
         stock_map.setdefault(key, []).append({
             "quantity": normalized["quantity"],
             "unit": normalized["unit"],
             "conversion_status": normalized["conversion_status"],
         })
+
     results = []
+
     for requirement in requirements or []:
-        key = _ingredient_key(requirement)
+
+        # CHANGED: Use the same key as pantry inventory.
+        key = pantry_match_key(requirement)
+
         required = float(requirement.get("quantity", 0))
         required_unit = requirement.get("unit")
+
         remaining = required
         inventory_used = 0.0
         inventory_unresolved = False
+
         for stock in stock_map.get(key, []):
+
             if remaining <= 0:
                 break
-            # Requirements and inventory must share a
-            # comparable normalized unit.
+
+            # Requirements and inventory must share
+            # a comparable normalized unit.
             if stock["unit"] != required_unit:
                 inventory_unresolved = True
                 continue
+
             available = max(0.0, stock["quantity"])
             consumed = min(remaining, available)
+
             remaining -= consumed
             inventory_used += consumed
+
+            # Prevent the same pantry stock being used twice.
             stock["quantity"] -= consumed
+
         result = dict(requirement)
+
         result.update({
             "required_quantity": required,
             "inventory_available": inventory_used,
@@ -721,7 +898,9 @@ def subtract_inventory(requirements, inventory):
             "purchase_required": max(0.0, remaining),
             "inventory_conversion_unresolved": inventory_unresolved,
         })
+
         results.append(result)
+
     return results
 def calculate_packages(
     required_quantity,
