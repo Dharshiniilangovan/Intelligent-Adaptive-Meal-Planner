@@ -386,7 +386,7 @@ class MultiMealPlanner:
         max_repeats = int(
             user_state.get(
                 "max_recipe_repetitions",
-                len(plan_state.slots),
+                2,
             )
         )
         for recipe_id in candidate_ids:
@@ -526,58 +526,89 @@ class MultiMealPlanner:
         beam_width: int = 5,
     ) -> PlanState:
         """
-        Find the best affordable meal combination using beam search.
-        Each beam represents an independent partial meal plan.
+        Find an affordable meal plan while preferring recipe diversity.
+
         Ranking:
         1. More meal slots filled.
-        2. Lower combined projected grocery cost.
-        Inventory and nutrition are committed after optimization.
+        2. More unique recipes.
+        3. Lower combined projected grocery cost.
+
+        If the default repetition limit leaves slots empty, retry with
+        a relaxed limit. Explicit user limits are never overridden.
         """
         from copy import deepcopy
-        beams = [deepcopy(initial_state)]
-        for slot in initial_state.slots:
-            next_beams = []
-            for state in beams:
-                candidates = self._evaluate_candidates_for_slot(
-                    user_state=user_state,
-                    slot=slot,
-                    plan_state=state,
-                )
-                # Keep a skip-slot branch for partial plans.
-                next_beams.append(deepcopy(state))
-                for candidate in candidates:
-                    trial = deepcopy(state)
-                    # Incremental cost is calculated from
-                    # the before/after consolidated baskets.
-                    incremental_cost = candidate["incremental_cost"]
-                    new_total = candidate["total_cost"]
-                    trial.add_selected_meal(
-                        slot=slot,
-                        recipe_id=candidate["recipe_id"],
-                        decision=candidate["decision"],
-                        estimated_cost=incremental_cost,
-                    )
-                    # Combined basket total is authoritative.
-                    # Avoid accumulating individual recipe costs.
-                    trial.estimated_spent = new_total
-                    next_beams.append(trial)
-            # Prefer plans with more meals, then lower cost.
-            next_beams.sort(
-                key=lambda state: (
-                    -len(state.selected_meals),
-                    round(state.estimated_spent, 2),
-                    len(state.used_recipe_ids),
-                )
-            )
-            beams = next_beams[:beam_width]
-        return min(
-            beams,
-            key=lambda state: (
-                -len(state.selected_meals),
-                round(state.estimated_spent, 2),
-                len(state.used_recipe_ids),
-            ),
+
+        total_possible_meals = len(initial_state.slots)
+        configured_limit = user_state.get("max_recipe_repetitions")
+        strict_limit = (
+            max(1, int(configured_limit))
+            if configured_limit is not None
+            else 2
         )
+
+        def ranking_key(state):
+            return (
+                -len(state.selected_meals),
+                -len(state.used_recipe_ids),
+                round(state.estimated_spent, 2),
+            )
+
+        def search(search_user_state):
+            beams = [deepcopy(initial_state)]
+
+            for slot in initial_state.slots:
+                next_beams = []
+
+                for state in beams:
+                    candidates = self._evaluate_candidates_for_slot(
+                        user_state=search_user_state,
+                        slot=slot,
+                        plan_state=state,
+                    )
+
+                    # Keep a skip-slot branch for partial plans.
+                    next_beams.append(deepcopy(state))
+
+                    for candidate in candidates:
+                        trial = deepcopy(state)
+                        trial.add_selected_meal(
+                            slot=slot,
+                            recipe_id=candidate["recipe_id"],
+                            decision=candidate["decision"],
+                            estimated_cost=candidate["incremental_cost"],
+                        )
+                        # The consolidated basket total is authoritative.
+                        trial.estimated_spent = candidate["total_cost"]
+                        next_beams.append(trial)
+
+                next_beams.sort(key=ranking_key)
+                beams = next_beams[:beam_width]
+
+            return min(beams, key=ranking_key)
+
+        strict_user_state = dict(user_state)
+        strict_user_state["max_recipe_repetitions"] = strict_limit
+        best_state = search(strict_user_state)
+
+        # Relax only the default limit, and only when doing so fills
+        # more meal slots. Never override an explicit user limit.
+        if (
+            configured_limit is None
+            and len(best_state.selected_meals) < total_possible_meals
+        ):
+            relaxed_user_state = dict(user_state)
+            relaxed_user_state["max_recipe_repetitions"] = max(
+                strict_limit, total_possible_meals
+            )
+            relaxed_state = search(relaxed_user_state)
+
+            if len(relaxed_state.selected_meals) > len(
+                best_state.selected_meals
+            ):
+                best_state = relaxed_state
+
+        return best_state
+
     # ============================================================
     # GET RECIPE CANDIDATES
     # ============================================================
@@ -601,7 +632,7 @@ class MultiMealPlanner:
         max_repeats = int(
             user_state.get(
                 "max_recipe_repetitions",
-                len(plan_state.slots),
+                2,
             )
         )
         usage_counts = {}
