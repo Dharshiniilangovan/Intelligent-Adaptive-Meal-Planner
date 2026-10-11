@@ -1,1 +1,4 @@
 # Add Python dependencies as the project grows.
+# Pantry Image Recognition
+google-genai
+

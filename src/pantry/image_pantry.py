@@ -49,15 +49,19 @@ def _validated_quantity(quantity, unit, source):
 
 
 def _quantity_scope(source, supplied=None):
+    """Use explicit model scope, but never treat package capacity as visible stock.
+
+    Unknown/missing scope is resolved conservatively from quantity_source.
+    """
     if source in {'package_label', 'package_capacity', 'package_estimate'}:
         return 'full_package'
-    if source == 'unknown':
-        return 'unknown'
-    return 'visible_amount'
+    if source in {'visual_count', 'visual_estimate'}:
+        return 'visible_amount'
+    return 'unknown'
 
 
 def _package_metadata(item, quantity, unit, source):
-    scope = _quantity_scope(source)
+    scope = _quantity_scope(source, item.get('quantity_scope'))
     return {
         'quantity_scope': scope,
         'package_capacity': quantity if scope == 'full_package' else None,
@@ -65,6 +69,31 @@ def _package_metadata(item, quantity, unit, source):
         'package_capacity_source': source if scope == 'full_package' else None,
         'remaining_quantity_verified': False if scope == 'full_package' else None,
     }
+
+
+QUANTITY_SCOPE_INSTRUCTIONS = """
+For EACH ingredient return ingredient_name, quantity, unit, quantity_source,
+and quantity_scope. Distinguish what the quantity MEASURES, not merely whether
+food happens to be in a container:
+- visible_amount: count or estimated weight of VISIBLE food, including loose
+  strawberries, blueberries, chopped fruit or vegetables inside clear trays.
+  Use visual_count or visual_estimate. Transparent containers do NOT imply
+  full-package capacity.
+- full_package: labelled or estimated TOTAL capacity of a bottle, jar, carton,
+  sealed packet, or other package, when remaining contents cannot be measured.
+  Use package_label or package_estimate. It is NOT verified remaining stock.
+- unknown: no defensible quantity; quantity and unit must be null.
+If a package's remaining food is directly visible and you estimate that visible
+portion, use visible_amount and visual_estimate, not full_package.
+If counting is difficult, estimate visible mass in g or kg only with a visual
+basis; otherwise return null. Do not invent weights or counts.
+Example JSON: {"ingredients": [
+ {"ingredient_name":"strawberries","quantity":200,"unit":"g",
+  "quantity_source":"visual_estimate","quantity_scope":"visible_amount"},
+ {"ingredient_name":"milk","quantity":1000,"unit":"ml",
+  "quantity_source":"package_estimate","quantity_scope":"full_package"}
+]}
+"""
 
 
 def _generate_with_fallback(client, prompt, image_bytes, mime_type, model):
@@ -116,13 +145,14 @@ def refine_missing_quantities(detections, image_bytes, mime_type='image/jpeg',
     prompt = (
         'Reinspect this exact image ONLY for these already detected ingredients: '
         + json.dumps(pending) + '. Return JSON object with ingredients array. '
-        'For each ingredient give ingredient_name, quantity, unit, quantity_source. '
-        'Count clearly visible items, or give a cautious approximate weight/amount '
-        'in g, count, head, or bunch when visually defensible. Use visual_estimate '
+        'For each ingredient give ingredient_name, quantity, unit, quantity_source, quantity_scope. '
+        'Count clearly visible items; if counting is unreliable, estimate visible weight '
+        'in g or kg from visible portion size when defensible. Prefer head for whole cabbage, broccoli and lettuce; use visual_estimate '
         'for estimates, visual_count for counts, package_label for exact printed full package sizes, package_estimate for visually estimated full package sizes of bottles, jars, cartons or packs, '
         'unknown otherwise. Full package size is NOT remaining inventory, even for opened containers. '
         'If amount cannot reasonably be estimated use null for quantity and unit. '
         'Do not add any new ingredient. Return JSON only.'
+        + QUANTITY_SCOPE_INSTRUCTIONS
     )
     try:
         response = _generate_with_fallback(client, prompt, image_bytes, mime_type, model)
@@ -143,13 +173,13 @@ def refine_missing_quantities(detections, image_bytes, mime_type='image/jpeg',
         quantity, unit, source = _validated_quantity(
             item.get('quantity'), item.get('unit'), item.get('quantity_source'))
         if quantity is not None:
-            proposed[name] = (quantity, unit, source)
+            proposed[name] = (quantity, unit, source, _quantity_scope(source, item.get('quantity_scope')))
     updated = []
     for item in detections:
         row = dict(item)
         name = norm(row.get('ingredient_name'))
         if row.get('quantity') is None and name in proposed:
-            row['quantity'], row['unit'], row['quantity_source'] = proposed[name]
+            row['quantity'], row['unit'], row['quantity_source'], row['quantity_scope'] = proposed[name]
             row.update(_package_metadata(row, row['quantity'], row['unit'], row['quantity_source']))
             row['quantity_refined'] = True
         updated.append(row)
@@ -187,14 +217,14 @@ For each entry include ingredient_name, quantity (positive number or null), unit
 QUANTITY PRIORITY:
 1. For visibly measurable remaining contents, report the actual visible quantity
    with visual_count or visual_estimate. Do not pretend estimates are exact.
-2. For bottles, jars, cartons, packets, trays and other packaged foods whose
+2. For bottles, jars, cartons, sealed packets and other packaged foods whose
    remaining contents cannot be measured, report the FULL PACKAGE quantity.
    Read exact printed package quantity when legible: source package_label.
    Otherwise cautiously estimate full package capacity from the container size
    only if defensible: source package_estimate.
 3. Full package quantity is NEVER verified remaining inventory. Do not assume
    containers are full. Do not invent exact package sizes or invisible foods.
-4. For unpackaged foods count distinct items or estimate visible mass if feasible.
+4. For unpackaged foods count distinct items. If counting is not reliable, estimate visible weight in g or kg from the portion size. Use visual_estimate and rounded values, never a generic default. For whole cabbage, broccoli, lettuce and cauliflower prefer unit head. Do not guess a mass without visual support.
 5. If neither quantity nor full package size can be estimated reasonably, use
    quantity null, unit null, quantity_source unknown.
 6. Allowed sources: visual_count, visual_estimate, package_label,
@@ -207,6 +237,7 @@ Example: {"ingredients":[
 ]}
 """
 
+    prompt += '\n' + QUANTITY_SCOPE_INSTRUCTIONS
     response = _generate_with_fallback(client, prompt, image_bytes, mime_type, model)
     content = response.text
     if not content or not content.strip():
@@ -352,6 +383,7 @@ def match_to_kb(detections, kb=None):
             'quantity_source': data.get('quantity_source', 'unknown'),
             'matched': bool(match),
             'match_method': method,
+            'quantity_scope': _quantity_scope(data.get('quantity_source', 'unknown'), data.get('quantity_scope')),
             **_package_metadata(data, data.get('quantity'), data.get('unit'), data.get('quantity_source', 'unknown')),
         })
     return results
@@ -402,6 +434,7 @@ def consolidate_ingredients(matched):
                 'quantity': q,
                 'unit': unit,
                 'quantity_source': observation.get('quantity_source', 'unknown') if q is not None else 'unknown',
+                'quantity_scope': _quantity_scope(observation.get('quantity_source', 'unknown') if q is not None else 'unknown', observation.get('quantity_scope')),
                 **_package_metadata(observation, q, unit, observation.get('quantity_source', 'unknown') if q is not None else 'unknown'),
             })
 
@@ -433,6 +466,7 @@ def consolidate_ingredients(matched):
             'quantity': quantity,
             'unit': unit,
             'quantity_source': source,
+            'quantity_scope': scope,
             **_package_metadata(first, quantity, unit, source),
             'detected_quantities': [
                 {'quantity': x['quantity'], 'unit': x['unit'], 'quantity_source': x['quantity_source']}
@@ -562,3 +596,30 @@ def estimate_ingredient_mass(ingredient_name, quantity, unit):
     if factor is None:
         return None
     return round(q * factor * scale, 4), 'g'
+
+
+def format_pantry_record(item):
+    """Convert a consolidated detection to the requested seven-field JSON schema.
+
+    'actual' means visually counted or label-read, not independently verified.
+    'whole' denotes package capacity, never verified remaining contents.
+    """
+    source = item.get('quantity_source', 'unknown')
+    quantity = item.get('quantity')
+    unit = item.get('unit')
+    if quantity is None:
+        unit = None
+        information = 'unknown'
+        detected_scope = 'unknown'
+    else:
+        information = 'actual' if source in {'visual_count', 'package_label', 'package_capacity'} else 'estimated'
+        detected_scope = 'whole' if item.get('quantity_scope') == 'full_package' else 'remaining'
+    return {
+        'ingredient_name': ', '.join(item.get('detected_names') or [item.get('ingredient_name', '')]),
+        'kb_ingredient_name': item.get('ingredient_name') if item.get('kb_present') else None,
+        'ingredient_id': item.get('ingredient_id') if item.get('kb_present') else None,
+        'quantity': quantity,
+        'unit': unit,
+        'information': information,
+        'quantity_detected': detected_scope,
+    }
