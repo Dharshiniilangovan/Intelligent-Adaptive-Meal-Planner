@@ -858,10 +858,17 @@ class RecipeRAG:
         embeddings = self.embed_texts(self.documents["recipe_text"].tolist())
         if embeddings.ndim != 2 or embeddings.shape[0] != len(self.documents) or embeddings.shape[1] == 0:
             raise ValueError("Embedding matrix shape does not match recipe documents.")
-        norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
-        if not np.all(np.isfinite(embeddings)) or np.any(norms <= 0):
-            raise ValueError("Embeddings must be finite and nonzero.")
-        self.index = np.ascontiguousarray(embeddings / norms, dtype=np.float32)
+        if not np.all(np.isfinite(embeddings)):
+            raise ValueError("Embeddings must be finite.")
+        # Accumulate norms in float64 to avoid float32 overflow/underflow.
+        embeddings64 = embeddings.astype(np.float64)
+        norms = np.linalg.norm(embeddings64, axis=1, keepdims=True)
+        if not np.all(np.isfinite(norms)) or np.any(norms <= 0):
+            raise ValueError("Embeddings must have finite, nonzero norms.")
+        normalized = embeddings64 / norms
+        if not np.all(np.isfinite(normalized)):
+            raise ValueError("Normalized embeddings contain invalid values.")
+        self.index = np.ascontiguousarray(normalized, dtype=np.float32)
         self._dimension = int(self.index.shape[1])
 
     def _document_hash(self) -> str:
@@ -1004,10 +1011,40 @@ class RecipeRAG:
         if query_embedding.shape[1] != self._dimension:
             raise ValueError("Query embedding dimension differs from saved index.")
         query_vector = query_embedding[0]
-        query_norm = np.linalg.norm(query_vector)
+        if not np.all(np.isfinite(query_vector)):
+            raise ValueError("Query embedding contains NaN or infinity.")
+        query64 = query_vector.astype(np.float64)
+        query_norm = np.linalg.norm(query64)
         if not np.isfinite(query_norm) or query_norm <= 0:
-            raise ValueError("Invalid query embedding.")
-        similarities = self.index @ (query_vector / query_norm)
+            raise ValueError("Invalid query embedding norm.")
+        normalized_query = query64 / query_norm
+        if not np.all(np.isfinite(normalized_query)):
+            raise ValueError("Normalized query contains invalid values.")
+        if self.index is None or not np.all(np.isfinite(self.index)):
+            raise ValueError("Recipe index contains invalid values.")
+        # Compute dot products without BLAS-backed matrix multiplication.
+        # Process in batches to avoid allocating a full index-sized temporary.
+        # This isolates the macOS matmul warnings while retaining cosine ranking.
+        similarities = np.empty(self.index.shape[0], dtype=np.float64)
+        batch_size = 1024
+        for start in range(0, self.index.shape[0], batch_size):
+            end = min(start + batch_size, self.index.shape[0])
+            batch = self.index[start:end].astype(np.float64)
+            with np.errstate(divide="raise", over="raise", invalid="raise"):
+                try:
+                    similarities[start:end] = np.sum(
+                        batch * normalized_query[None, :],
+                        axis=1,
+                        dtype=np.float64,
+                    )
+                except FloatingPointError as error:
+                    raise ValueError(
+                        "Numerical failure during recipe similarity calculation."
+                    ) from error
+        if not np.all(np.isfinite(similarities)):
+            raise ValueError("Similarity scores contain NaN or infinity.")
+        if np.any(similarities < -1.001) or np.any(similarities > 1.001):
+            raise ValueError("Cosine similarity scores are outside the valid range.")
         positions = np.argsort(-similarities, kind="stable")[:k]
         scores = similarities[positions]
 
