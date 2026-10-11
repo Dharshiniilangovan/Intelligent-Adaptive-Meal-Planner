@@ -72,6 +72,7 @@ class PlanState:
     execution_trace: list[dict] = field(
         default_factory=list
     )
+    skipped_slots: list[dict] = field(default_factory=list)
 
     # ============================================================
     # BUDGET
@@ -235,6 +236,24 @@ class PlanState:
     # SERIALIZATION
     # ============================================================
 
+    def mark_slot_skipped(
+        self,
+        slot: MealSlot,
+        reason: str = "user_skipped",
+    ) -> None:
+        """Record a meal slot intentionally skipped by the user."""
+        if any(item.get("slot_id") == slot.slot_id for item in self.skipped_slots):
+            return
+
+        self.skipped_slots.append(
+            {"slot_id": slot.slot_id, "reason": reason}
+        )
+        self.execution_trace.append({
+            "event": "slot_skipped",
+            "slot_id": slot.slot_id,
+            "reason": reason,
+        })
+
     def to_dict(self) -> dict:
 
         return {
@@ -286,6 +305,9 @@ class PlanState:
 
             "uncertain_candidates":
                 self.uncertain_candidates,
+
+            "skipped_slots":
+                self.skipped_slots,
 
             "execution_trace":
                 self.execution_trace,

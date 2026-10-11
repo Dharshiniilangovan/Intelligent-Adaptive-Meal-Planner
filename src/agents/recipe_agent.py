@@ -1,8 +1,11 @@
 import json
+import contextlib
+import io
 from datetime import date
 from pathlib import Path
 
 import pandas as pd
+from src.agents.recipe_check import DayEvaluator
 
 # ============================================================
 # REUSE EXISTING CANDIDATE RECIPE FUNCTIONS
@@ -87,6 +90,19 @@ def _clean_list(value):
     ]
 
 
+def build_semantic_query(user_state, meal_type=None):
+    """Create a semantic query solely from the existing User State fields."""
+    terms = []
+    for field in ("preferred_cuisines", "dietary_restrictions"):
+        terms.extend(str(v).strip() for v in _clean_list(_get_field(user_state, field, [])))
+    if meal_type:
+        terms.append(str(meal_type).strip())
+    else:
+        terms.extend(str(v).strip() for v in _clean_list(_get_field(user_state, "preferred_meal_types", [])))
+    terms.extend(str(v).strip() for v in _clean_list(_get_field(user_state, "preferred_ingredients", [])))
+    return " ".join(t for t in terms if t) or "meal recipe"
+
+
 # ============================================================
 # RECIPE AGENT
 # ============================================================
@@ -127,6 +143,7 @@ class RecipeAgent:
         self,
         max_candidates=DEFAULT_MAX_CANDIDATES,
         repository=None,
+        rag=None,
     ):
 
         if (
@@ -138,6 +155,8 @@ class RecipeAgent:
                 "max_candidates must be a positive integer."
             )
 
+        self.recipe_check = DayEvaluator()
+        self.rag = rag
         self.max_candidates = max_candidates
 
         self.repository = (
@@ -163,6 +182,51 @@ class RecipeAgent:
             errors=[str(error)],
         ).to_dict()
 
+    @staticmethod
+    def _save_rejection_report(
+        slot_context,
+        rejected_candidates,
+        ranked_candidates,
+        notes=None
+    ):
+        """
+        Save rejection reports in a single JSON file.
+        Each execution overwrites the previous report.
+        """
+
+        report_dir = (
+            Path(__file__).resolve().parents[2]
+            / "data"
+            / "processed"
+            / "recipe_rejection_reports"
+        )
+
+        report_dir.mkdir(parents=True, exist_ok=True)
+
+        # Use one fixed filename
+        path = report_dir / "rejected_recipes.json"
+
+        meal_type = str(
+            slot_context.get("meal_type") or "unknown"
+        )
+
+        report = {
+            "slot": {
+                "date": slot_context.get("date"),
+                "meal_type": meal_type
+            },
+            "rejected_candidates": rejected_candidates,
+            "ranked_candidates": ranked_candidates,
+        }
+
+        if notes:
+            report["notes"] = notes
+
+        # Overwrite the previous JSON report
+        path.write_text(
+            json.dumps(report, indent=4, default=str),
+            encoding="utf-8"
+        )
     # ========================================================
     # USER REQUIREMENTS
     # ========================================================
@@ -428,41 +492,12 @@ class RecipeAgent:
         # SIMPLE CASE
         # ----------------------------------------------------
 
-        if (
-            len(diets) <= 1
-            and len(cuisines) <= 1
-        ):
-
-            diet = (
-                diets[0]
-                if diets
-                else None
-            )
-
-            cuisine = (
-                cuisines[0]
-                if cuisines
-                else None
-            )
-
-            candidates = retrieve_candidates(
-                diet=diet,
+        if len(diets) <= 1:
+            # Cuisine is a soft preference; variety ranking handles it later.
+            return retrieve_candidates(
+                diet=diets[0] if diets else None,
                 meal_type=meal_type,
-                cuisine=cuisine,
             )
-
-            # Cuisine is a soft preference
-            if (
-                candidates.empty
-                and cuisine is not None
-            ):
-
-                candidates = retrieve_candidates(
-                    diet=diet,
-                    meal_type=meal_type,
-                )
-
-            return candidates
 
         # ----------------------------------------------------
         # MULTIPLE REQUIREMENTS
@@ -585,106 +620,125 @@ class RecipeAgent:
     # COOKING TIME FILTER
     # ========================================================
 
+    
     def _apply_cooking_time(
         self,
         candidates,
         max_cooking_time,
     ):
         """
-        Apply cooking-time filtering using the
-        existing RecipeRepository.
+        Apply cooking-time filtering using the existing Recipe KB.
 
-        Unknown cooking times are excluded when
-        a valid time limit is supplied.
+        If cooking_time_min is missing from the candidate DataFrame,
+        retrieve it from the Recipe KB using recipe_id.
+
+        Rules:
+        - No time limit: keep all candidates.
+        - Known cooking time <= limit: keep recipe.
+        - Missing, invalid or excessive cooking time: exclude recipe.
+        - No matching recipes: return an empty DataFrame.
         """
 
         warnings = []
 
         if candidates.empty:
-            return candidates, warnings
-
-        if "cooking_time_min" not in candidates.columns:
-
-            warnings.append(
-                "Cooking-time column unavailable; "
-                "filtering skipped."
-            )
-
-            return candidates, warnings
-
-        cooking_times = pd.to_numeric(
-            candidates["cooking_time_min"],
-            errors="coerce",
-        )
-
-        if not cooking_times.notna().any():
-
-            warnings.append(
-                "No usable cooking-time values; "
-                "filtering skipped."
-            )
-
-            return candidates, warnings
+            return candidates.copy(), warnings
 
         if max_cooking_time is None:
-            return candidates, warnings
+            return candidates.copy(), warnings
 
         try:
-
-            max_cooking_time = float(
-                max_cooking_time
-            )
-
+            limit = float(max_cooking_time)
         except (TypeError, ValueError):
+            raise ValueError("Invalid cooking-time limit.")
 
-            warnings.append(
-                "Invalid cooking-time limit; "
-                "filtering skipped."
-            )
+        if not 0 <= limit < float("inf"):
+            raise ValueError("Invalid cooking-time limit.")
 
-            return candidates, warnings
+        candidates = candidates.copy()
 
-        if not 0 <= max_cooking_time < float("inf"):
+        if "recipe_id" not in candidates.columns:
+            raise KeyError("recipe_id missing from candidates.")
 
-            warnings.append(
-                "Invalid cooking-time limit; "
-                "filtering skipped."
-            )
-
-            return candidates, warnings
-
-        # ----------------------------------------------------
-        # REUSE REPOSITORY FILTER
-        # ----------------------------------------------------
-
-        valid_time_ids = set(
-            self.repository
-            .filter_by_max_time(
-                max_cooking_time,
-                include_unknown=False,
-            )
-            .ids()
-        )
-
-        valid_time_ids = {
-            str(recipe_id).strip().upper()
-            for recipe_id in valid_time_ids
-        }
-
-        normalized_candidate_ids = (
+        candidates["recipe_id"] = (
             candidates["recipe_id"]
             .astype(str)
             .str.strip()
             .str.upper()
         )
 
-        candidates = candidates[
-            normalized_candidate_ids.isin(
-                valid_time_ids
-            )
-        ].copy()
+        # ========================================================
+        # LOAD COOKING TIMES FROM RECIPE KB
+        # ========================================================
 
-        return candidates, warnings
+        if "cooking_time_min" not in candidates.columns:
+
+            print(
+                "[TIME] Cooking-time column missing "
+                "from candidates. Loading from Recipe KB."
+            )
+
+            recipe_kb = load_recipe_kb()
+
+            if "cooking_time_min" not in recipe_kb.columns:
+                warnings.append(
+                    "cooking_time_min is missing from Recipe KB."
+                )
+                return candidates.iloc[0:0].copy(), warnings
+
+            time_lookup = recipe_kb[
+                ["recipe_id", "cooking_time_min"]
+            ].copy()
+
+            time_lookup["recipe_id"] = (
+                time_lookup["recipe_id"]
+                .astype(str)
+                .str.strip()
+                .str.upper()
+            )
+
+            time_lookup = time_lookup.drop_duplicates(
+                subset=["recipe_id"],
+                keep="first"
+            )
+
+            candidates = candidates.merge(
+                time_lookup,
+                on="recipe_id",
+                how="left",
+                validate="many_to_one"
+            )
+
+        # ========================================================
+        # FILTER USING COOKING TIME
+        # ========================================================
+
+        cooking_times = pd.to_numeric(
+            candidates["cooking_time_min"],
+            errors="coerce"
+        )
+
+        valid_mask = (
+            cooking_times.notna()
+            & cooking_times.ge(0)
+            & cooking_times.le(limit)
+        )
+
+        filtered = candidates.loc[valid_mask].copy()
+
+        print("\n========== COOKING TIME FILTER ==========")
+        print("Maximum cooking time:", limit, "minutes")
+        print("Candidates before:", len(candidates))
+        print("Candidates with known times:", cooking_times.notna().sum())
+        print("Candidates after:", len(filtered))
+
+        if filtered.empty:
+            warnings.append(
+                "No recipes satisfy the cooking-time limit."
+            )
+
+        return filtered, warnings
+
 
     # ========================================================
     # CUISINE IDS
@@ -963,27 +1017,101 @@ class RecipeAgent:
                 slot_context["meal_type"],
             )
 
+            # A valid request with no matching recipes is NOT an agent failure.
+            # Keep the Manager output contract and save a diagnostic report.
+            if candidates.empty:
+                self._save_rejection_report(
+                    slot_context,
+                    rejected_candidates=[],
+                    ranked_candidates=[],
+                    notes=["No recipes match the dietary and meal-type constraints."],
+                )
+                return {
+                    "slot": {
+                        "date": slot_context["date"],
+                        "meal_type": slot_context["meal_type"],
+                    },
+                    "candidate_recipe_ids": [],
+                }
+
+            # Semantic retrieval narrows eligible candidates only when requested.
+            # All existing structured filters, time limits and ranking remain active.
+            if self.rag is not None and not candidates.empty:
+                semantic_query = build_semantic_query(user_state, slot_context["meal_type"])
+                print("[RAG] Generated query:", semantic_query)
+                # Rank all indexed recipes to avoid losing feasible recipes in a small top-k.
+                semantic = self.rag.retrieve(query=semantic_query, top_k=len(self.rag.documents))
+                ranked_ids = [str(x).strip().upper() for x in semantic.candidate_recipe_ids]
+                order = {rid: i for i, rid in enumerate(ranked_ids)}
+                candidates = candidates.copy()
+                normalized = candidates["recipe_id"].astype(str).str.strip().str.upper()
+                candidates["_semantic_order"] = normalized.map(order)
+                candidates = candidates[candidates["_semantic_order"].notna()]
+                candidates = candidates.sort_values("_semantic_order", kind="stable").drop(columns=["_semantic_order"])
+                print("[RAG] Eligible ranked candidates:", len(candidates))
+
             candidates = self._exclude_selected_recipes(
                 candidates,
                 selected_recipe_ids,
             )
 
+            print("[TIME] Candidates before filtering:", len(candidates))
+            print("[TIME] Effective limit (minutes):", slot_context["max_cooking_time"])
+            if "cooking_time_min" in candidates.columns:
+                observed_times = pd.to_numeric(
+                    candidates["cooking_time_min"], errors="coerce"
+                )
+                print("[TIME] Known times:", int(observed_times.notna().sum()))
+                print("[TIME] Missing/invalid times:", int(observed_times.isna().sum()))
+                if slot_context["max_cooking_time"] is not None:
+                    within_limit = (
+                        observed_times.ge(0)
+                        & observed_times.le(float(slot_context["max_cooking_time"]))
+                    )
+                    print("[TIME] Within limit:", int(within_limit.sum()))
+            else:
+                print("[TIME] cooking_time_min column is missing")
+
+            before_time = candidates.copy()
             candidates, time_warnings = (
                 self._apply_cooking_time(
                     candidates,
                     slot_context["max_cooking_time"],
                 )
             )
+            print("[TIME] Candidates after filtering:", len(candidates))
+            kept_ids = set(candidates["recipe_id"].astype(str).str.upper())
+            time_rejected = []
+            for _, record in before_time.iterrows():
+                rid = str(record["recipe_id"]).strip().upper()
+                if rid not in kept_ids:
+                    time_rejected.append({"recipe_id": rid, "reasons": ["Cooking time missing or exceeds limit"]})
+            for warning in time_warnings:
+                print("[TIME] Warning:", warning)
 
             candidates = self._remove_duplicate_recipes(
                 candidates
             )
 
-            candidates = self._rank_for_variety(
-                candidates,
-                requirements["preferred_cuisines"],
-                recent_cuisines,
+            # Recipe suitability and scoring; price and allergy checks are excluded.
+            eligible, check_rejected = self.recipe_check.evaluate(
+                candidates, user_state, slot_context["meal_type"],
+                recent_cuisines, slot_context["max_cooking_time"],
             )
+            check_rejected = time_rejected + check_rejected
+            check_scores = {item["recipe_id"]: item for item in eligible}
+            candidates = candidates[
+                candidates["recipe_id"].astype(str).str.upper().isin(check_scores)
+            ].copy()
+            candidates["_recipe_score"] = candidates["recipe_id"].astype(str).str.upper().map(
+                lambda rid: check_scores[rid]["score"]
+            )
+            candidates = candidates.sort_values("_recipe_score", ascending=False, kind="stable")
+            candidates = candidates.drop(columns=["_recipe_score"])
+
+            # Keep the existing variety method available, but combined scoring uses the
+            # combined score to avoid overriding nutrition and reuse ranking.
+            # Cuisine variety is already part of combined scoring.
 
         except (
             ValueError,
@@ -1021,7 +1149,12 @@ class RecipeAgent:
 
         candidate_ids = candidate_ids[:limit]
 
-        # Preserve the Manager's existing output contract.
+        self._save_rejection_report(
+            slot_context,
+            rejected_candidates=check_rejected,
+            ranked_candidates=[check_scores[rid] for rid in candidate_ids],
+        )
+
         return {
             "slot": {
                 "date": slot_context["date"],
@@ -1216,58 +1349,30 @@ def print_recipe_result(result):
 # ============================================================
 
 def main():
-
-    user_state = load_latest_user_state()
-
-    recipe_agent = RecipeAgent(
-        max_candidates=5
-    )
-
-    (
-        meal_slot,
-        selected_recipe_ids,
-        recent_cuisines,
-    ) = get_standalone_input()
-
-    # Display the effective time limit.
-    requirements = (
-        recipe_agent._extract_user_requirements(
-            user_state
+    # Suppress internal diagnostic prints in standalone mode.
+    with contextlib.redirect_stdout(io.StringIO()):
+        user_state = load_latest_user_state()
+        from src.knowledge.recipe_rag import RecipeRAG
+        rag = RecipeRAG()
+        index_path = Path(__file__).resolve().parents[2] / "data" / "processed" / "recipe_numpy.npz"
+        if index_path.exists():
+            try:
+                rag.load_index(index_path)
+            except (ValueError, RuntimeError, FileNotFoundError):
+                rag.build_index()
+                rag.save_index(index_path)
+        else:
+            rag.build_index()
+            rag.save_index(index_path)
+        recipe_agent = RecipeAgent(max_candidates=5, rag=rag)
+        meal_slot, selected_recipe_ids, recent_cuisines = get_standalone_input()
+        result = recipe_agent.run(
+            user_state=user_state,
+            meal_slot=meal_slot,
+            selected_recipe_ids=selected_recipe_ids,
+            recent_cuisines=recent_cuisines,
+            max_candidates=5,
         )
-    )
-
-    slot_context = (
-        recipe_agent._extract_slot_context(
-            requirements,
-            meal_slot,
-        )
-    )
-
-    print("\n" + "=" * 70)
-    print("COOKING TIME PREFERENCE")
-    print("=" * 70)
-
-    print(
-        "User State preference (hours):",
-        _get_field(
-            user_state,
-            "cook_time_preference_hrs",
-        ),
-    )
-
-    print(
-        "Effective cooking-time limit (minutes):",
-        slot_context["max_cooking_time"],
-    )
-
-    result = recipe_agent.run(
-        user_state=user_state,
-        meal_slot=meal_slot,
-        selected_recipe_ids=selected_recipe_ids,
-        recent_cuisines=recent_cuisines,
-        max_candidates=5,
-    )
-
     print_recipe_result(result)
 
 

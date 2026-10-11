@@ -357,11 +357,9 @@ def print_budget(plan: dict, result: dict) -> None:
     )
 
     print(
-        "Pricing Verification:",
-        "Verified"
-        if basket.get("all_items_priced") is True
-        else "Provisional"
-        if complete
+        "Grocery Pricing:",
+        "Complete"
+        if complete and all_usable
         else "Incomplete",
     )
 
