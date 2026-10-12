@@ -1,4 +1,4 @@
-"""UI adapter to the existing GC1 end-to-end planner; no agent logic duplicated."""
+"""Adapter to existing GC1 E2E planner; no changes to backend agents."""
 from datetime import date
 
 
@@ -7,19 +7,19 @@ def build_user_state(confirmed: dict) -> dict:
     budget = float(state['budget'])
     state['budget_remaining'] = budget
     state['remaining_budget'] = budget
-    state['dietary_restrictions'] = [x.lower() for x in state.get('dietary_restrictions', [])]
-    state['allergies'] = [x.lower() for x in state.get('allergies', [])]
-    state['preferred_meal_types'] = [x.lower() for x in state['preferred_meal_types']]
+    state['budget_cap'] = budget + 5.0 if state.get('budget_flexible') else None
+    for field in ('dietary_restrictions', 'allergies', 'preferred_meal_types',
+                  'preferred_cuisines', 'preferred_ingredients', 'disliked_ingredients'):
+        state[field] = [str(x).strip().lower() for x in (state.get(field) or []) if str(x).strip()]
     pantry = state.get('ingredient_availability') or {}
     state['pantry'] = [
-        {'ingredient_name': name, 'quantity': item['quantity'], 'unit': item['unit']}
+        {'ingredient_name': name, 'quantity': float(item['quantity']), 'unit': item['unit']}
         for name, item in pantry.items()
     ]
     return state
 
 
 def get_planner():
-    # Reuse exactly the component wiring tested by the existing Day 5 E2E.
     from scripts.run_day5_e2e import build_system
     return build_system()
 
@@ -39,11 +39,9 @@ def generate(confirmed: dict):
     return result, planner.last_plan_state, state, planner
 
 
-def skip_meal(planner, state: dict, plan_state, slot_id: str, completed_slot_ids: set[str]):
+def skip_meal(planner, state, plan_state, slot_id, completed_slot_ids):
     result = planner.skip_and_replan(
-        user_state=state,
-        plan_state=plan_state,
-        slot_id=slot_id,
+        user_state=state, plan_state=plan_state, slot_id=slot_id,
         completed_slot_ids=completed_slot_ids,
         nutrition_targets=state.get('nutrition_targets'),
     )
