@@ -1274,6 +1274,7 @@ def build_plan_grocery_basket(
                 "Purchase quantity cannot be verified."
             )
             basket_items.append(base_item)
+            
             continue
         if product is None:
             unpriced_items.append(ingredient_name)
@@ -1551,6 +1552,60 @@ def build_plan_grocery_basket(
             base_item.get("pricing_status") != "priced"
         )
         basket_items.append(base_item)
+    # Add qualitative requirements as shopping-list entries without inventing quantities.
+    existing_ids = {
+        str(item["ingredient_id"]).strip()
+        for item in basket_items if item.get("ingredient_id")
+    }
+    existing_names = {
+        str(item.get("name") or "").strip().lower()
+        for item in basket_items
+    }
+
+    for requirement in qualitative_requirements:
+        ingredient_id = requirement.get("ingredient_id")
+        ingredient_name = str(requirement.get("ingredient_name") or "").strip()
+        if not ingredient_name:
+            continue
+        if (ingredient_id and str(ingredient_id).strip() in existing_ids) or (
+            ingredient_name.lower() in existing_names
+        ):
+            continue
+
+        basket_items.append({
+            "ingredient_id": ingredient_id,
+            "name": ingredient_name,
+            "required_quantity": None,
+            "required_unit": requirement.get("unit") or "unknown",
+            "instruction": requirement.get("instruction"),
+            "package_quantity": None,
+            "package_unit": None,
+            "packages": None,
+            "purchased_quantity": None,
+            "price_per_package": None,
+            "purchase_cost": None,
+            "estimated_purchase_cost": None,
+            "effective_purchase_cost": None,
+            "display_cost": None,
+            "has_usable_price": False,
+            "cost_is_estimated": False,
+            "leftover_quantity": None,
+            "inventory_used": 0.0,
+            "recipe_ids": requirement.get("recipe_ids", []),
+            "pricing_status": "unpriced",
+            "price_source": "unknown",
+            "purchase_basis": "qualitative_requirement",
+            "quantity_coverage_verified": False,
+            "status": "quantity_unknown",
+        })
+        if ingredient_id:
+            existing_ids.add(str(ingredient_id).strip())
+        existing_names.add(ingredient_name.lower())
+        projection_missing.append(ingredient_name)
+        warnings.append(
+            f"{ingredient_name}: quantity unknown; included in shopping list without a cost estimate."
+        )
+
     unpriced_items = list(
         dict.fromkeys(
             item.get("name")
@@ -1607,6 +1662,7 @@ def build_plan_grocery_basket(
         ),
         "planning_cost_complete": projection_complete,
     }
+
 def calculate_incremental_basket_cost(
     selected_recipe_requirements,
     candidate_recipe_requirement,
