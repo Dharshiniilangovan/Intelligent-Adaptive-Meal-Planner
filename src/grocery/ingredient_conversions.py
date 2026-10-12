@@ -3,6 +3,10 @@
 All results are estimates, not exact retail package conversions.
 """
 from dataclasses import dataclass
+import ast
+import csv
+from functools import lru_cache
+from pathlib import Path
 import math
 
 
@@ -19,6 +23,9 @@ class IngredientConversion:
     grams_per_wedge: float | None = None
     grams_per_pinch: float | None = None
     grams_per_bunch: float | None = None
+    grams_per_cup: float | None = None
+    grams_per_bulb: float | None = None
+    grams_per_pack: float | None = None
 
 _SOURCE = "provisional culinary estimate; verify for production"
 
@@ -29,7 +36,11 @@ INGREDIENT_CONVERSIONS = {
     "white granulated sugar": IngredientConversion(_SOURCE, grams_per_tablespoon=12.5),
     "butter lettuce": IngredientConversion(_SOURCE, grams_per_head=150),
     "butterhead lettuce": IngredientConversion(_SOURCE, grams_per_head=150),
-    "lettuce": IngredientConversion(_SOURCE, grams_per_head=300),
+    "lettuce": IngredientConversion(
+        _SOURCE,
+        grams_per_head=300,
+        grams_per_cup=36,
+    ),
     "garlic": IngredientConversion(_SOURCE, grams_per_clove=3),
     "lime": IngredientConversion(_SOURCE, grams_per_piece=65, grams_per_wedge=8),
     "fresh lime": IngredientConversion(_SOURCE, grams_per_piece=65, grams_per_wedge=8),
@@ -60,6 +71,59 @@ INGREDIENT_CONVERSIONS = {
         grams_per_tablespoon=9.0,
         grams_per_pinch=0.3,
     ),
+    "cucumber": IngredientConversion(
+        _SOURCE,
+        grams_per_piece=250,
+    ),
+    "masa harina": IngredientConversion(
+    _SOURCE,
+    grams_per_cup=120,
+    ),
+    "black beans": IngredientConversion(
+       _SOURCE,
+        grams_per_cup=172,
+    ),
+        # Additional ingredient-specific estimates
+    "plum tomato": IngredientConversion(
+        _SOURCE,
+        grams_per_piece=65,
+    ),
+    "jack cheese": IngredientConversion(
+        _SOURCE,
+        grams_per_tablespoon=7,
+    ),
+    "sour cream": IngredientConversion(
+        _SOURCE,
+        grams_per_tablespoon=15,
+    ),
+    "cilantro": IngredientConversion(
+        _SOURCE,
+        grams_per_tablespoon=1,
+        grams_per_bunch=30,
+    ),
+    "jalapeno": IngredientConversion(
+        _SOURCE,
+        grams_per_piece=15,
+    ),
+    "kidney bean": IngredientConversion(
+        _SOURCE,
+        grams_per_cup=175,
+    ),
+    "urad dal": IngredientConversion(
+        _SOURCE,
+        grams_per_tablespoon=12,
+    ),
+    "curry leaf": IngredientConversion(
+        _SOURCE,
+        grams_per_piece=0.2,
+        grams_per_bunch=20,
+    ),
+    "garlic": IngredientConversion(
+    _SOURCE,
+    grams_per_clove=3,
+    grams_per_bulb=30,
+    grams_per_pack=90,
+    ),
 }
 
 
@@ -79,6 +143,10 @@ def estimate_ingredient_mass(
     name = " ".join(ingredient_name.strip().lower().split())
     measure = unit.strip().lower()
     conversion = INGREDIENT_CONVERSIONS.get(name)
+    if conversion is None:
+        canonical = _mapping_aliases().get(name)
+        if canonical:
+            conversion = INGREDIENT_CONVERSIONS.get(canonical)
     if conversion is None:
         return None
 
@@ -106,11 +174,51 @@ def estimate_ingredient_mass(
         "pinches": (conversion.grams_per_pinch, 1),
         "sprig": (conversion.grams_per_sprig, 1),
         "sprigs": (conversion.grams_per_sprig, 1),
-        "count": (conversion.grams_per_piece, 1),
         "bunch": (conversion.grams_per_bunch, 1),
         "bunches": (conversion.grams_per_bunch, 1),
+        "cup": (conversion.grams_per_cup, 1),
+        "cups": (conversion.grams_per_cup, 1),
+        "bulb": (conversion.grams_per_bulb, 1),
+        "bulbs": (conversion.grams_per_bulb, 1),
+        "pack": (conversion.grams_per_pack, 1),
+        "packs": (conversion.grams_per_pack, 1),
+        
     }
     factor, multiplier = mapping.get(measure, (None, 1))
     if factor is None:
         return None
     return round(quantity * factor * multiplier, 4), "g"
+
+
+@lru_cache(maxsize=1)
+def _mapping_aliases() -> dict[str, str]:
+    """Read existing recipe mapping aliases, without inferring missing weights.
+
+    Ambiguous aliases are discarded to avoid cross-ingredient deductions.
+    """
+    mapping_path = (Path(__file__).resolve().parents[2] / "data" / "processed"
+                    / "recipe_ingredient_mapping.csv")
+    aliases: dict[str, str] = {}
+    ambiguous: set[str] = set()
+    try:
+        with mapping_path.open(newline="", encoding="utf-8-sig") as handle:
+            for row in csv.DictReader(handle):
+                canonical = " ".join((row.get("ingredient_name") or "").lower().split())
+                if not canonical:
+                    continue
+                names = [canonical]
+                try:
+                    listed = ast.literal_eval(row.get("alias_name") or "[]")
+                    if isinstance(listed, list):
+                        names.extend(x for x in listed if isinstance(x, str))
+                except (ValueError, SyntaxError):
+                    pass
+                for raw in names:
+                    alias = " ".join(raw.lower().split())
+                    if alias in aliases and aliases[alias] != canonical:
+                        ambiguous.add(alias)
+                    else:
+                        aliases[alias] = canonical
+    except (OSError, csv.Error):
+        return {}
+    return {key: value for key, value in aliases.items() if key not in ambiguous}
