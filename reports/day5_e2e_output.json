@@ -998,7 +998,16 @@
                 "ingredient_id": "ING1902",
                 "ingredient_name": "kosher salt",
                 "quantity": "1.0",
-                "unit": "pinch",
+                "unit": "pinch"
+              }
+            ],
+            "pantry_used": [],
+            "missing_ingredients": [
+              {
+                "ingredient_id": "ING0347",
+                "ingredient_name": "black beans",
+                "quantity": "0.25",
+                "unit": "cup",
                 "status": "missing"
               },
               {
@@ -1039,6 +1048,83 @@
               {
                 "ingredient_id": "ING0347",
                 "ingredient_name": "black beans",
+                "quantity": "0.25",
+                "unit": "cup",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING1807",
+                "ingredient_name": "jack cheese",
+                "quantity": "1.0",
+                "unit": "tablespoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING1817",
+                "ingredient_name": "jalapeno",
+                "quantity": "0.5",
+                "unit": "count",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING1463",
+                "ingredient_name": "garlic",
+                "quantity": "0.5",
+                "unit": "clove",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING0159",
+                "ingredient_name": "avocado",
+                "quantity": "0.5",
+                "unit": "count",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING1902",
+                "ingredient_name": "kosher salt",
+                "quantity": "1.0",
+                "unit": "pinch",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING0870",
+                "ingredient_name": "cilantro",
+                "quantity": "0.5",
+                "unit": "tablespoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING1983",
+                "ingredient_name": "lettuce",
+                "quantity": "0.25",
+                "unit": "cup",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING3564",
+                "ingredient_name": "tomatillo",
+                "quantity": "28.5",
+                "unit": "gram",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING2006",
+                "ingredient_name": "lime",
+                "quantity": "0.5",
+                "unit": "count",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING3248",
+                "ingredient_name": "sour cream",
+                "quantity": "1.0",
+                "unit": "tablespoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING2130",
+                "ingredient_name": "masa harina",
                 "quantity": "0.25",
                 "unit": "cup",
                 "status": "missing"
@@ -2436,6 +2522,13 @@
                 "status": "missing"
               },
               {
+                "ingredient_id": "ING2268",
+                "ingredient_name": "mustard seed",
+                "quantity": "1.0",
+                "unit": "pinch",
+                "status": "missing"
+              },
+              {
                 "ingredient_id": "ING1872",
                 "ingredient_name": "kidney bean",
                 "quantity": "0.25",
@@ -3602,6 +3695,13 @@
                 "status": "missing"
               },
               {
+                "ingredient_id": "ING2268",
+                "ingredient_name": "mustard seed",
+                "quantity": "1.0",
+                "unit": "pinch",
+                "status": "missing"
+              },
+              {
                 "ingredient_id": "ING1872",
                 "ingredient_name": "kidney bean",
                 "quantity": "0.25",
@@ -4067,6 +4167,7 @@
           "conversion_status": "estimated",
           "normalization_status": "resolved",
           "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 5.5,
           "package_conversion_status": "exact",
           "effective_purchase_cost": 5.5,
           "display_cost": 5.5,
@@ -4127,6 +4228,7 @@
           "conversion_status": "estimated",
           "normalization_status": "resolved",
           "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 2.1,
           "package_conversion_status": "exact",
           "effective_purchase_cost": 2.2,
           "display_cost": 2.2,
@@ -4187,6 +4289,7 @@
           "conversion_status": "estimated",
           "normalization_status": "resolved",
           "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 3.2,
           "package_conversion_status": "exact",
           "effective_purchase_cost": 3.2,
           "display_cost": 3.2,
@@ -4217,6 +4320,7 @@
           "conversion_status": "estimated",
           "normalization_status": "resolved",
           "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 7.5,
           "package_conversion_status": "exact",
           "effective_purchase_cost": 6.5,
           "display_cost": 6.5,
@@ -4247,6 +4351,7 @@
           "conversion_status": "exact",
           "normalization_status": "resolved",
           "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 3.5,
           "package_conversion_status": "exact",
           "effective_purchase_cost": 7.0,
           "display_cost": 7.0,
@@ -4277,6 +4382,7 @@
           "conversion_status": "estimated",
           "normalization_status": "resolved",
           "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 4.5,
           "package_conversion_status": "exact",
           "effective_purchase_cost": 4.5,
           "display_cost": 4.5,
@@ -4337,6 +4443,7 @@
           "conversion_status": "exact",
           "normalization_status": "resolved",
           "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 8.5,
           "package_conversion_status": "exact",
           "effective_purchase_cost": 7.5,
           "display_cost": 7.5,
@@ -4427,6 +4534,7 @@
           "conversion_status": "estimated",
           "normalization_status": "resolved",
           "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 3.5,
           "package_conversion_status": "exact",
           "effective_purchase_cost": 3.5,
           "display_cost": 3.5,
@@ -4487,6 +4595,7 @@
           "conversion_status": "exact",
           "normalization_status": "resolved",
           "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 6.5,
           "package_conversion_status": "exact",
           "effective_purchase_cost": 6.5,
           "display_cost": 6.5,
@@ -4517,6 +4626,7 @@
           "conversion_status": "estimated",
           "normalization_status": "resolved",
           "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 2.5,
           "package_conversion_status": "exact",
           "effective_purchase_cost": 2.5,
           "display_cost": 2.5,
@@ -6243,27 +6353,71 @@
       {
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "allspice"
+          ],
+          "unpriced_items": [
+            "allspice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_lunch",
@@ -6273,32 +6427,86 @@
       {
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_dinner",
@@ -6308,37 +6516,101 @@
       {
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R12387",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "cauliflower"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "cauliflower"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
@@ -6358,17 +6630,43 @@
       {
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_dinner",
@@ -6398,27 +6696,73 @@
       {
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_lunch",
@@ -6438,27 +6782,73 @@
       {
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_dinner",
@@ -6482,7 +6872,17 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6519,25 +6919,59 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "allspice"
+          ],
+          "unpriced_items": [
+            "allspice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6580,7 +7014,15 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "event": "meal_selected",
@@ -6591,7 +7033,17 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6628,25 +7080,61 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6689,13 +7177,31 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R12387",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "cauliflower"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "cauliflower"
+          ]
+        }
       },
       {
         "event": "meal_selected",
@@ -6706,7 +7212,17 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6743,25 +7259,61 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6821,19 +7373,45 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6905,7 +7483,17 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6942,25 +7530,61 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -7020,7 +7644,17 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -7057,25 +7691,61 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -7199,6 +7869,7 @@
         "conversion_status": "estimated",
         "normalization_status": "resolved",
         "inventory_conversion_unresolved": false,
+        "planning_purchase_cost": 5.5,
         "package_conversion_status": "exact",
         "effective_purchase_cost": 5.5,
         "display_cost": 5.5,
@@ -7259,6 +7930,7 @@
         "conversion_status": "estimated",
         "normalization_status": "resolved",
         "inventory_conversion_unresolved": false,
+        "planning_purchase_cost": 2.1,
         "package_conversion_status": "exact",
         "effective_purchase_cost": 2.2,
         "display_cost": 2.2,
@@ -7319,6 +7991,7 @@
         "conversion_status": "estimated",
         "normalization_status": "resolved",
         "inventory_conversion_unresolved": false,
+        "planning_purchase_cost": 3.2,
         "package_conversion_status": "exact",
         "effective_purchase_cost": 3.2,
         "display_cost": 3.2,
@@ -7349,6 +8022,7 @@
         "conversion_status": "estimated",
         "normalization_status": "resolved",
         "inventory_conversion_unresolved": false,
+        "planning_purchase_cost": 7.5,
         "package_conversion_status": "exact",
         "effective_purchase_cost": 6.5,
         "display_cost": 6.5,
@@ -7379,6 +8053,7 @@
         "conversion_status": "exact",
         "normalization_status": "resolved",
         "inventory_conversion_unresolved": false,
+        "planning_purchase_cost": 3.5,
         "package_conversion_status": "exact",
         "effective_purchase_cost": 7.0,
         "display_cost": 7.0,
@@ -7409,6 +8084,7 @@
         "conversion_status": "estimated",
         "normalization_status": "resolved",
         "inventory_conversion_unresolved": false,
+        "planning_purchase_cost": 4.5,
         "package_conversion_status": "exact",
         "effective_purchase_cost": 4.5,
         "display_cost": 4.5,
@@ -7469,6 +8145,7 @@
         "conversion_status": "exact",
         "normalization_status": "resolved",
         "inventory_conversion_unresolved": false,
+        "planning_purchase_cost": 8.5,
         "package_conversion_status": "exact",
         "effective_purchase_cost": 7.5,
         "display_cost": 7.5,
@@ -7619,6 +8296,7 @@
         "conversion_status": "exact",
         "normalization_status": "resolved",
         "inventory_conversion_unresolved": false,
+        "planning_purchase_cost": 6.5,
         "package_conversion_status": "exact",
         "effective_purchase_cost": 6.5,
         "display_cost": 6.5,
@@ -7679,6 +8357,7 @@
         "conversion_status": "estimated",
         "normalization_status": "resolved",
         "inventory_conversion_unresolved": false,
+        "planning_purchase_cost": 3.5,
         "package_conversion_status": "exact",
         "effective_purchase_cost": 3.5,
         "display_cost": 3.5,
