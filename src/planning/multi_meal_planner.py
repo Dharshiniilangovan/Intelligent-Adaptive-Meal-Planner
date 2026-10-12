@@ -892,9 +892,27 @@ class MultiMealPlanner:
             max(1, int(configured_limit)) if configured_limit is not None else 2
         )
 
+        cooking_frequency = user_state.get("cooking_sessions_per_week")
+
+        if cooking_frequency is not None:
+            cooking_frequency = int(cooking_frequency)
+            if cooking_frequency < 1:
+                raise ValueError("cooking_sessions_per_week must be at least 1")
+
+        def cooking_schedule_for(state):
+            if cooking_frequency is None:
+                return None
+
+            return build_cooking_schedule(
+                selected_meals=state.selected_meals,
+                max_sessions=cooking_frequency,
+            )
+
         def ranking_key(state):
+            schedule = cooking_schedule_for(state)
 
             return (
+                0 if schedule is None or schedule["valid"] else 1,
                 -len(state.selected_meals),
                 -len(state.used_recipe_ids),
                 round(state.estimated_spent, 2),
@@ -934,6 +952,14 @@ class MultiMealPlanner:
                         # The consolidated basket total is authoritative.
 
                         trial.estimated_spent = candidate["total_cost"]
+
+                        cooking_schedule = cooking_schedule_for(trial)
+
+                        if (
+                            cooking_schedule is not None
+                            and not cooking_schedule["valid"]
+                        ):
+                            continue
 
                         next_beams.append(trial)
 
