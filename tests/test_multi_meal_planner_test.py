@@ -18,6 +18,8 @@ from src.planning.multi_meal_planner import (
     MultiMealPlanner,
 )
 
+from src.input_parser.natural_language_parser import UserInputParser
+
 # ======================================================
 # FAKES
 # ======================================================
@@ -612,7 +614,7 @@ def test_beam_search_respects_cooking_frequency():
     result = planner.plan_meals(
         user_state={
             "budget_remaining": 100,
-            "cooking_sessions_per_week": 2,
+            "cook_frequency": 2,
             "max_recipe_repetitions": 4,
         },
         start_date=date(2026, 10, 12),
@@ -644,7 +646,7 @@ def test_beam_search_does_not_exceed_cooking_limit():
     result = planner.plan_meals(
         user_state={
             "budget_remaining": 100,
-            "cooking_sessions_per_week": 1,
+            "cook_frequency": 1,
             "max_recipe_repetitions": 1,
         },
         start_date=date(2026, 10, 12),
@@ -664,3 +666,34 @@ def test_beam_search_does_not_exceed_cooking_limit():
         "partial",
         "infeasible",
     }
+
+
+def test_parser_cooking_frequency_reaches_planner():
+    parser = UserInputParser()
+
+    parsed = parser.parse("I have a budget of 100 dollars. " "I can cook twice a week.")
+
+    assert parsed.valid, parsed.errors
+    assert parsed.data["cook_frequency"] == 2
+
+    planner = MultiMealPlanner(
+        manager=FakeManager(),
+        max_candidates_per_slot=7,
+    )
+
+    result = planner.plan_meals(
+        user_state={
+            **parsed.data,
+            "budget_remaining": 100,
+            "max_recipe_repetitions": 4,
+        },
+        start_date=date(2026, 10, 12),
+        days=2,
+        meal_types=["lunch", "dinner"],
+    )
+
+    cooking = result["plan"]["cooking_schedule"]
+
+    assert cooking["max_sessions_per_week"] == 2
+    assert cooking["valid"] is True
+    assert len(result["plan"]["selected_meals"]) == 4

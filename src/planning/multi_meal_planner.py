@@ -307,7 +307,7 @@ class MultiMealPlanner:
         # Cooking-frequency scheduling
         # --------------------------------------------------------
 
-        cooking_frequency = user_state.get("cooking_sessions_per_week")
+        cooking_frequency = user_state.get("cook_frequency")
 
         if cooking_frequency is not None:
             cooking_schedule = build_cooking_schedule(
@@ -571,7 +571,7 @@ class MultiMealPlanner:
                 validation["status"] = "uncertain"
 
         # Recalculate cooking sessions after adaptive replanning.
-        cooking_frequency = user_state.get("cooking_sessions_per_week")
+        cooking_frequency = user_state.get("cook_frequency")
 
         if cooking_frequency is not None:
             cooking_schedule = build_cooking_schedule(
@@ -892,12 +892,12 @@ class MultiMealPlanner:
             max(1, int(configured_limit)) if configured_limit is not None else 2
         )
 
-        cooking_frequency = user_state.get("cooking_sessions_per_week")
+        cooking_frequency = user_state.get("cook_frequency")
 
         if cooking_frequency is not None:
             cooking_frequency = int(cooking_frequency)
             if cooking_frequency < 1:
-                raise ValueError("cooking_sessions_per_week must be at least 1")
+                raise ValueError("cook_frequency must be at least 1")
 
         def cooking_schedule_for(state):
             if cooking_frequency is None:

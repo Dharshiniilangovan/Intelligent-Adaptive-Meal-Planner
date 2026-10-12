@@ -14,7 +14,8 @@ def main():
     request = (
         "I have a budget of 100 dollars. "
         "I am vegetarian and allergic to peanuts. "
-        "I prefer Asian food and can cook for 30 minutes."
+        "I prefer Asian food and can cook for 30 minutes. "
+        "I can cook twice a week."
     )
 
     parsed = UserInputParser().parse(request)
@@ -30,7 +31,15 @@ def main():
             if value is not None and value != [] and value != {}
         }
     )
-    user_state["cooking_sessions_per_week"] = 2
+
+    assert parsed.data["cook_frequency"] == 2
+
+    assert user_state["cook_frequency"] == 2
+    assert (
+        user_state.get("cooking_sessions_per_week") is None
+        or user_state["cooking_sessions_per_week"] == 2
+    )
+    print("Cooking frequency:", user_state["cook_frequency"])
 
     print("PASS: Input parsed and validated")
 
