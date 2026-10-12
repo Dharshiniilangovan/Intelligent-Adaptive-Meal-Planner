@@ -12,6 +12,7 @@ class PlanState:
     slots: list[MealSlot]
 
     initial_budget: float
+    cooking_schedule: dict = field(default_factory=dict)
 
     # -----------------------------------------
     # Meal-planning state
@@ -220,6 +221,7 @@ class PlanState:
             "uncertain_candidates": self.uncertain_candidates,
             "skipped_slots": self.skipped_slots,
             "execution_trace": self.execution_trace,
+            "cooking_schedule": self.cooking_schedule,
         }
 
     @classmethod
@@ -258,4 +260,5 @@ class PlanState:
             status=data.get("status", "building"),
             skipped_slots=deepcopy(data.get("skipped_slots", [])),
             execution_trace=deepcopy(data.get("execution_trace", [])),
+            cooking_schedule=deepcopy(data.get("cooking_schedule", {})),
         )
