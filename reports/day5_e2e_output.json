@@ -157,6 +157,13 @@
             ],
             "missing_ingredients": [
               {
+                "ingredient_id": "ING2307",
+                "ingredient_name": "noodles",
+                "quantity": "90.0",
+                "unit": "gram",
+                "status": "missing"
+              },
+              {
                 "ingredient_id": "ING3046",
                 "ingredient_name": "salt",
                 "quantity": "required",
@@ -171,13 +178,6 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING3756",
-                "ingredient_name": "vegan sausage",
-                "quantity": "83.5",
-                "unit": "gram",
-                "status": "missing"
-              },
-              {
                 "ingredient_id": "ING2367",
                 "ingredient_name": "onion",
                 "quantity": "1.0",
@@ -185,9 +185,9 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING2307",
-                "ingredient_name": "noodles",
-                "quantity": "90.0",
+                "ingredient_id": "ING3756",
+                "ingredient_name": "vegan sausage",
+                "quantity": "83.5",
                 "unit": "gram",
                 "status": "missing"
               },
@@ -213,6 +213,34 @@
             "recipe_id": "R15279",
             "items": [
               {
+                "ingredient_id": "ING2307",
+                "ingredient": "noodles",
+                "required_quantity": "90.0",
+                "required_unit": "gram",
+                "product_name": "Dried Egg Noodles",
+                "package_quantity": 400.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 1.8,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 1.8,
+                "estimated_required_quantity": 90.0,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T15:53:49+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
                 "ingredient_id": "ING3046",
                 "ingredient": "salt",
                 "required_quantity": "required",
@@ -233,7 +261,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:02:54+00:00",
+                "date_collected": "2026-10-11T15:53:50+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -261,35 +289,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:02:54+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING3756",
-                "ingredient": "vegan sausage",
-                "required_quantity": "83.5",
-                "required_unit": "gram",
-                "product_name": "Plant-based Vegan Sausage",
-                "package_quantity": 250.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 6.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 6.5,
-                "estimated_required_quantity": null,
-                "estimated_required_unit": null,
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:02:55+00:00",
+                "date_collected": "2026-10-11T15:53:50+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -317,7 +317,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:02:55+00:00",
+                "date_collected": "2026-10-11T15:53:50+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -325,27 +325,27 @@
                 "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
               },
               {
-                "ingredient_id": "ING2307",
-                "ingredient": "noodles",
-                "required_quantity": "90.0",
+                "ingredient_id": "ING3756",
+                "ingredient": "vegan sausage",
+                "required_quantity": "83.5",
                 "required_unit": "gram",
-                "product_name": "Dried Egg Noodles",
-                "package_quantity": 400.0,
+                "product_name": "Plant-based Vegan Sausage",
+                "package_quantity": 250.0,
                 "package_unit": "g",
                 "packages_needed": 1,
-                "price_per_package": 1.8,
+                "price_per_package": 6.5,
                 "minimum_package_cost": null,
                 "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 1.8,
-                "estimated_required_quantity": 90.0,
-                "estimated_required_unit": "g",
+                "estimated_total_cost": 6.5,
+                "estimated_required_quantity": null,
+                "estimated_required_unit": null,
                 "quantity_estimated": true,
                 "total_cost": null,
                 "currency": "SGD",
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:02:56+00:00",
+                "date_collected": "2026-10-11T15:53:50+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -373,7 +373,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:02:56+00:00",
+                "date_collected": "2026-10-11T15:53:51+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -388,11 +388,11 @@
             "projection_missing": [],
             "all_items_priced": false,
             "unpriced_items": [
+              "noodles",
               "salt",
               "tomato",
-              "vegan sausage",
               "onion",
-              "noodles",
+              "vegan sausage",
               "oil"
             ],
             "budget": null,
@@ -475,11 +475,11 @@
             "reason": "Final budget feasibility will be checked against the consolidated multi-meal basket."
           },
           "warnings": [
+            "No complete purchase price found for noodles",
             "No complete purchase price found for salt",
             "No complete purchase price found for tomato",
-            "No complete purchase price found for vegan sausage",
             "No complete purchase price found for onion",
-            "No complete purchase price found for noodles",
+            "No complete purchase price found for vegan sausage",
             "No complete purchase price found for oil"
           ],
           "execution_trace": [
@@ -662,41 +662,6 @@
             "pantry_used": [],
             "missing_ingredients": [
               {
-                "ingredient_id": "ING0347",
-                "ingredient_name": "black beans",
-                "quantity": "0.25",
-                "unit": "cup",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING2639",
-                "ingredient_name": "plum tomato",
-                "quantity": "0.5",
-                "unit": "count",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING0159",
-                "ingredient_name": "avocado",
-                "quantity": "0.5",
-                "unit": "count",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING3248",
-                "ingredient_name": "sour cream",
-                "quantity": "1.0",
-                "unit": "tablespoon",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING1463",
-                "ingredient_name": "garlic",
-                "quantity": "0.5",
-                "unit": "clove",
-                "status": "missing"
-              },
-              {
                 "ingredient_id": "ING3564",
                 "ingredient_name": "tomatillo",
                 "quantity": "28.5",
@@ -704,24 +669,10 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING0870",
-                "ingredient_name": "cilantro",
-                "quantity": "0.5",
-                "unit": "tablespoon",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING2006",
-                "ingredient_name": "lime",
-                "quantity": "0.5",
-                "unit": "count",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING1902",
-                "ingredient_name": "kosher salt",
-                "quantity": "1.0",
-                "unit": "pinch",
+                "ingredient_id": "ING2130",
+                "ingredient_name": "masa harina",
+                "quantity": "0.25",
+                "unit": "cup",
                 "status": "missing"
               },
               {
@@ -732,8 +683,22 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING1817",
-                "ingredient_name": "jalapeno",
+                "ingredient_id": "ING3248",
+                "ingredient_name": "sour cream",
+                "quantity": "1.0",
+                "unit": "tablespoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING1902",
+                "ingredient_name": "kosher salt",
+                "quantity": "1.0",
+                "unit": "pinch",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING2639",
+                "ingredient_name": "plum tomato",
                 "quantity": "0.5",
                 "unit": "count",
                 "status": "missing"
@@ -746,10 +711,45 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING2130",
-                "ingredient_name": "masa harina",
+                "ingredient_id": "ING0870",
+                "ingredient_name": "cilantro",
+                "quantity": "0.5",
+                "unit": "tablespoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING1817",
+                "ingredient_name": "jalapeno",
+                "quantity": "0.5",
+                "unit": "count",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING1463",
+                "ingredient_name": "garlic",
+                "quantity": "0.5",
+                "unit": "clove",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING0159",
+                "ingredient_name": "avocado",
+                "quantity": "0.5",
+                "unit": "count",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING0347",
+                "ingredient_name": "black beans",
                 "quantity": "0.25",
                 "unit": "cup",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING2006",
+                "ingredient_name": "lime",
+                "quantity": "0.5",
+                "unit": "count",
                 "status": "missing"
               }
             ],
@@ -758,146 +758,6 @@
           "grocery": {
             "recipe_id": "R32630",
             "items": [
-              {
-                "ingredient_id": "ING0347",
-                "ingredient": "black beans",
-                "required_quantity": "0.25",
-                "required_unit": "cup",
-                "product_name": "Canned Black Beans",
-                "package_quantity": 400.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 2.1,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 2.1,
-                "estimated_required_quantity": 48.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:03:34+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING2639",
-                "ingredient": "plum tomato",
-                "required_quantity": "0.5",
-                "required_unit": "count",
-                "product_name": "Plum Tomatoes",
-                "package_quantity": 450.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 3.2,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 3.2,
-                "estimated_required_quantity": 32.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:03:34+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING0159",
-                "ingredient": "avocado",
-                "required_quantity": "0.5",
-                "required_unit": "count",
-                "product_name": "Avocado",
-                "package_quantity": 1.0,
-                "package_unit": "pcs",
-                "packages_needed": 1,
-                "price_per_package": 3.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 3.5,
-                "estimated_required_quantity": 100.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:03:35+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING3248",
-                "ingredient": "sour cream",
-                "required_quantity": "1.0",
-                "required_unit": "tablespoon",
-                "product_name": "generic sour cream",
-                "package_quantity": 250.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 4.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 4.5,
-                "estimated_required_quantity": 14.38,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:03:35+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING1463",
-                "ingredient": "garlic",
-                "required_quantity": "0.5",
-                "required_unit": "clove",
-                "product_name": "Garlic bulbs",
-                "package_quantity": 100.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 1.2,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 1.2,
-                "estimated_required_quantity": 1.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:03:35+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
               {
                 "ingredient_id": "ING3564",
                 "ingredient": "tomatillo",
@@ -919,175 +779,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:03:35+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING0870",
-                "ingredient": "cilantro",
-                "required_quantity": "0.5",
-                "required_unit": "tablespoon",
-                "product_name": "Fresh Coriander",
-                "package_quantity": 1.0,
-                "package_unit": "bunch",
-                "packages_needed": 1,
-                "price_per_package": 1.2,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 1.2,
-                "estimated_required_quantity": 0.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:03:36+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING2006",
-                "ingredient": "lime",
-                "required_quantity": "0.5",
-                "required_unit": "count",
-                "product_name": "Fresh Lime",
-                "package_quantity": 3.0,
-                "package_unit": "pcs",
-                "packages_needed": 1,
-                "price_per_package": 2.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 2.5,
-                "estimated_required_quantity": 33.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:03:36+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING1902",
-                "ingredient": "kosher salt",
-                "required_quantity": "1.0",
-                "required_unit": "pinch",
-                "product_name": "Kosher Salt",
-                "package_quantity": 454.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 3.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 3.5,
-                "estimated_required_quantity": 0.3,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:03:36+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING1807",
-                "ingredient": "jack cheese",
-                "required_quantity": "1.0",
-                "required_unit": "tablespoon",
-                "product_name": "Monterey Jack Cheese Block",
-                "package_quantity": 226.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 7.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 7.5,
-                "estimated_required_quantity": 8.25,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:03:37+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING1817",
-                "ingredient": "jalapeno",
-                "required_quantity": "0.5",
-                "required_unit": "count",
-                "product_name": "Fresh Jalapeno Pepper",
-                "package_quantity": 2.0,
-                "package_unit": "pcs",
-                "packages_needed": 1,
-                "price_per_package": 2.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 2.5,
-                "estimated_required_quantity": 7.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:03:37+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING1983",
-                "ingredient": "lettuce",
-                "required_quantity": "0.25",
-                "required_unit": "cup",
-                "product_name": "Iceberg Lettuce",
-                "package_quantity": 1.0,
-                "package_unit": "head",
-                "packages_needed": 1,
-                "price_per_package": 2.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 2.5,
-                "estimated_required_quantity": 13.75,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:03:37+00:00",
+                "date_collected": "2026-10-11T15:54:31+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -1115,7 +807,315 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:03:37+00:00",
+                "date_collected": "2026-10-11T15:54:31+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING1807",
+                "ingredient": "jack cheese",
+                "required_quantity": "1.0",
+                "required_unit": "tablespoon",
+                "product_name": "Monterey Jack Cheese Block",
+                "package_quantity": 226.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 7.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 7.5,
+                "estimated_required_quantity": 8.25,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T15:54:32+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING3248",
+                "ingredient": "sour cream",
+                "required_quantity": "1.0",
+                "required_unit": "tablespoon",
+                "product_name": "generic sour cream",
+                "package_quantity": 250.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 4.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 4.5,
+                "estimated_required_quantity": 14.38,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T15:54:32+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING1902",
+                "ingredient": "kosher salt",
+                "required_quantity": "1.0",
+                "required_unit": "pinch",
+                "product_name": "Kosher Salt",
+                "package_quantity": 454.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 3.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 3.5,
+                "estimated_required_quantity": 0.3,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T15:54:32+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING2639",
+                "ingredient": "plum tomato",
+                "required_quantity": "0.5",
+                "required_unit": "count",
+                "product_name": "Plum Tomatoes",
+                "package_quantity": 450.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 3.2,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 3.2,
+                "estimated_required_quantity": 32.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T15:54:33+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING1983",
+                "ingredient": "lettuce",
+                "required_quantity": "0.25",
+                "required_unit": "cup",
+                "product_name": "Iceberg Lettuce",
+                "package_quantity": 1.0,
+                "package_unit": "head",
+                "packages_needed": 1,
+                "price_per_package": 2.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 2.5,
+                "estimated_required_quantity": 13.75,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T15:54:33+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING0870",
+                "ingredient": "cilantro",
+                "required_quantity": "0.5",
+                "required_unit": "tablespoon",
+                "product_name": "Fresh Coriander",
+                "package_quantity": 1.0,
+                "package_unit": "bunch",
+                "packages_needed": 1,
+                "price_per_package": 1.2,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 1.2,
+                "estimated_required_quantity": 0.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T15:54:33+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING1817",
+                "ingredient": "jalapeno",
+                "required_quantity": "0.5",
+                "required_unit": "count",
+                "product_name": "Fresh Jalapeno Pepper",
+                "package_quantity": 2.0,
+                "package_unit": "pcs",
+                "packages_needed": 1,
+                "price_per_package": 2.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 2.5,
+                "estimated_required_quantity": 7.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T15:54:33+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING1463",
+                "ingredient": "garlic",
+                "required_quantity": "0.5",
+                "required_unit": "clove",
+                "product_name": "Garlic bulbs",
+                "package_quantity": 100.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 1.2,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 1.2,
+                "estimated_required_quantity": 1.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T15:54:34+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING0159",
+                "ingredient": "avocado",
+                "required_quantity": "0.5",
+                "required_unit": "count",
+                "product_name": "Avocado",
+                "package_quantity": 1.0,
+                "package_unit": "pcs",
+                "packages_needed": 1,
+                "price_per_package": 3.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 3.5,
+                "estimated_required_quantity": 100.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T15:54:34+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING0347",
+                "ingredient": "black beans",
+                "required_quantity": "0.25",
+                "required_unit": "cup",
+                "product_name": "Canned Black Beans",
+                "package_quantity": 400.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 2.1,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 2.1,
+                "estimated_required_quantity": 48.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T15:54:34+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING2006",
+                "ingredient": "lime",
+                "required_quantity": "0.5",
+                "required_unit": "count",
+                "product_name": "Fresh Lime",
+                "package_quantity": 3.0,
+                "package_unit": "pcs",
+                "packages_needed": 1,
+                "price_per_package": 2.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 2.5,
+                "estimated_required_quantity": 33.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T15:54:34+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -1130,19 +1130,19 @@
             "projection_missing": [],
             "all_items_priced": false,
             "unpriced_items": [
-              "black beans",
-              "plum tomato",
-              "avocado",
-              "sour cream",
-              "garlic",
               "tomatillo",
-              "cilantro",
-              "lime",
-              "kosher salt",
+              "masa harina",
               "jack cheese",
-              "jalapeno",
+              "sour cream",
+              "kosher salt",
+              "plum tomato",
               "lettuce",
-              "masa harina"
+              "cilantro",
+              "jalapeno",
+              "garlic",
+              "avocado",
+              "black beans",
+              "lime"
             ],
             "budget": null,
             "budget_status": "not_checked",
@@ -1224,19 +1224,19 @@
             "reason": "Final budget feasibility will be checked against the consolidated multi-meal basket."
           },
           "warnings": [
-            "No complete purchase price found for black beans",
-            "No complete purchase price found for plum tomato",
-            "No complete purchase price found for avocado",
-            "No complete purchase price found for sour cream",
-            "No complete purchase price found for garlic",
             "No complete purchase price found for tomatillo",
-            "No complete purchase price found for cilantro",
-            "No complete purchase price found for lime",
-            "No complete purchase price found for kosher salt",
+            "No complete purchase price found for masa harina",
             "No complete purchase price found for jack cheese",
-            "No complete purchase price found for jalapeno",
+            "No complete purchase price found for sour cream",
+            "No complete purchase price found for kosher salt",
+            "No complete purchase price found for plum tomato",
             "No complete purchase price found for lettuce",
-            "No complete purchase price found for masa harina"
+            "No complete purchase price found for cilantro",
+            "No complete purchase price found for jalapeno",
+            "No complete purchase price found for garlic",
+            "No complete purchase price found for avocado",
+            "No complete purchase price found for black beans",
+            "No complete purchase price found for lime"
           ],
           "execution_trace": [
             {
@@ -1378,6 +1378,13 @@
             ],
             "missing_ingredients": [
               {
+                "ingredient_id": "ING2307",
+                "ingredient_name": "noodles",
+                "quantity": "90.0",
+                "unit": "gram",
+                "status": "missing"
+              },
+              {
                 "ingredient_id": "ING3046",
                 "ingredient_name": "salt",
                 "quantity": "required",
@@ -1392,13 +1399,6 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING3756",
-                "ingredient_name": "vegan sausage",
-                "quantity": "83.5",
-                "unit": "gram",
-                "status": "missing"
-              },
-              {
                 "ingredient_id": "ING2367",
                 "ingredient_name": "onion",
                 "quantity": "1.0",
@@ -1406,9 +1406,9 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING2307",
-                "ingredient_name": "noodles",
-                "quantity": "90.0",
+                "ingredient_id": "ING3756",
+                "ingredient_name": "vegan sausage",
+                "quantity": "83.5",
                 "unit": "gram",
                 "status": "missing"
               },
@@ -1434,6 +1434,34 @@
             "recipe_id": "R15279",
             "items": [
               {
+                "ingredient_id": "ING2307",
+                "ingredient": "noodles",
+                "required_quantity": "90.0",
+                "required_unit": "gram",
+                "product_name": "Dried Egg Noodles",
+                "package_quantity": 400.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 1.8,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 1.8,
+                "estimated_required_quantity": 90.0,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T15:56:06+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
                 "ingredient_id": "ING3046",
                 "ingredient": "salt",
                 "required_quantity": "required",
@@ -1454,7 +1482,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:04:59+00:00",
+                "date_collected": "2026-10-11T15:56:06+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -1482,35 +1510,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:05:00+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING3756",
-                "ingredient": "vegan sausage",
-                "required_quantity": "83.5",
-                "required_unit": "gram",
-                "product_name": "Plant-based Vegan Sausage",
-                "package_quantity": 250.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 6.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 6.5,
-                "estimated_required_quantity": null,
-                "estimated_required_unit": null,
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:05:00+00:00",
+                "date_collected": "2026-10-11T15:56:07+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -1538,7 +1538,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:05:00+00:00",
+                "date_collected": "2026-10-11T15:56:07+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -1546,27 +1546,27 @@
                 "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
               },
               {
-                "ingredient_id": "ING2307",
-                "ingredient": "noodles",
-                "required_quantity": "90.0",
+                "ingredient_id": "ING3756",
+                "ingredient": "vegan sausage",
+                "required_quantity": "83.5",
                 "required_unit": "gram",
-                "product_name": "Dried Egg Noodles",
-                "package_quantity": 400.0,
+                "product_name": "Plant-based Vegan Sausage",
+                "package_quantity": 250.0,
                 "package_unit": "g",
                 "packages_needed": 1,
-                "price_per_package": 1.8,
+                "price_per_package": 6.5,
                 "minimum_package_cost": null,
                 "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 1.8,
-                "estimated_required_quantity": 90.0,
-                "estimated_required_unit": "g",
+                "estimated_total_cost": 6.5,
+                "estimated_required_quantity": null,
+                "estimated_required_unit": null,
                 "quantity_estimated": true,
                 "total_cost": null,
                 "currency": "SGD",
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:05:00+00:00",
+                "date_collected": "2026-10-11T15:56:07+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -1594,7 +1594,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:05:01+00:00",
+                "date_collected": "2026-10-11T15:56:07+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -1609,11 +1609,11 @@
             "projection_missing": [],
             "all_items_priced": false,
             "unpriced_items": [
+              "noodles",
               "salt",
               "tomato",
-              "vegan sausage",
               "onion",
-              "noodles",
+              "vegan sausage",
               "oil"
             ],
             "budget": null,
@@ -1696,11 +1696,11 @@
             "reason": "Final budget feasibility will be checked against the consolidated multi-meal basket."
           },
           "warnings": [
+            "No complete purchase price found for noodles",
             "No complete purchase price found for salt",
             "No complete purchase price found for tomato",
-            "No complete purchase price found for vegan sausage",
             "No complete purchase price found for onion",
-            "No complete purchase price found for noodles",
+            "No complete purchase price found for vegan sausage",
             "No complete purchase price found for oil"
           ],
           "execution_trace": [
@@ -1833,13 +1833,6 @@
             "pantry_used": [],
             "missing_ingredients": [
               {
-                "ingredient_id": "ING2268",
-                "ingredient_name": "mustard seed",
-                "quantity": "1.0",
-                "unit": "pinch",
-                "status": "missing"
-              },
-              {
                 "ingredient_id": "ING3684",
                 "ingredient_name": "urad dal",
                 "quantity": "0.5",
@@ -1847,10 +1840,10 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING0934",
-                "ingredient_name": "coconut oil",
-                "quantity": "0.5",
-                "unit": "teaspoon",
+                "ingredient_id": "ING2268",
+                "ingredient_name": "mustard seed",
+                "quantity": "1.0",
+                "unit": "pinch",
                 "status": "missing"
               },
               {
@@ -1866,6 +1859,13 @@
                 "quantity": "0.25",
                 "unit": "cup",
                 "status": "missing"
+              },
+              {
+                "ingredient_id": "ING0934",
+                "ingredient_name": "coconut oil",
+                "quantity": "0.5",
+                "unit": "teaspoon",
+                "status": "missing"
               }
             ],
             "unsupported_items": []
@@ -1873,34 +1873,6 @@
           "grocery": {
             "recipe_id": "R35174",
             "items": [
-              {
-                "ingredient_id": "ING2268",
-                "ingredient": "mustard seed",
-                "required_quantity": "1.0",
-                "required_unit": "pinch",
-                "product_name": "Yellow Mustard Seeds",
-                "package_quantity": 100.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 2.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 2.5,
-                "estimated_required_quantity": 0.3,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:08:56+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
               {
                 "ingredient_id": "ING3684",
                 "ingredient": "urad dal",
@@ -1922,7 +1894,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:08:56+00:00",
+                "date_collected": "2026-10-11T15:59:49+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -1930,19 +1902,19 @@
                 "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
               },
               {
-                "ingredient_id": "ING0934",
-                "ingredient": "coconut oil",
-                "required_quantity": "0.5",
-                "required_unit": "teaspoon",
-                "product_name": "Refined Coconut Oil",
-                "package_quantity": 500.0,
-                "package_unit": "ml",
+                "ingredient_id": "ING2268",
+                "ingredient": "mustard seed",
+                "required_quantity": "1.0",
+                "required_unit": "pinch",
+                "product_name": "Yellow Mustard Seeds",
+                "package_quantity": 100.0,
+                "package_unit": "g",
                 "packages_needed": 1,
-                "price_per_package": 6.5,
+                "price_per_package": 2.5,
                 "minimum_package_cost": null,
                 "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 6.5,
-                "estimated_required_quantity": 2.27,
+                "estimated_total_cost": 2.5,
+                "estimated_required_quantity": 0.3,
                 "estimated_required_unit": "g",
                 "quantity_estimated": true,
                 "total_cost": null,
@@ -1950,7 +1922,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:08:57+00:00",
+                "date_collected": "2026-10-11T15:59:49+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -1978,7 +1950,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:08:57+00:00",
+                "date_collected": "2026-10-11T15:59:49+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -2006,7 +1978,35 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:08:57+00:00",
+                "date_collected": "2026-10-11T15:59:50+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING0934",
+                "ingredient": "coconut oil",
+                "required_quantity": "0.5",
+                "required_unit": "teaspoon",
+                "product_name": "Refined Coconut Oil",
+                "package_quantity": 500.0,
+                "package_unit": "ml",
+                "packages_needed": 1,
+                "price_per_package": 6.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 6.5,
+                "estimated_required_quantity": 2.27,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T15:59:50+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -2021,11 +2021,11 @@
             "projection_missing": [],
             "all_items_priced": false,
             "unpriced_items": [
-              "mustard seed",
               "urad dal",
-              "coconut oil",
+              "mustard seed",
               "curry leaf",
-              "kidney bean"
+              "kidney bean",
+              "coconut oil"
             ],
             "budget": null,
             "budget_status": "not_checked",
@@ -2107,11 +2107,11 @@
             "reason": "Final budget feasibility will be checked against the consolidated multi-meal basket."
           },
           "warnings": [
-            "No complete purchase price found for mustard seed",
             "No complete purchase price found for urad dal",
-            "No complete purchase price found for coconut oil",
+            "No complete purchase price found for mustard seed",
             "No complete purchase price found for curry leaf",
-            "No complete purchase price found for kidney bean"
+            "No complete purchase price found for kidney bean",
+            "No complete purchase price found for coconut oil"
           ],
           "execution_trace": [
             {
@@ -2293,41 +2293,6 @@
             "pantry_used": [],
             "missing_ingredients": [
               {
-                "ingredient_id": "ING0347",
-                "ingredient_name": "black beans",
-                "quantity": "0.25",
-                "unit": "cup",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING2639",
-                "ingredient_name": "plum tomato",
-                "quantity": "0.5",
-                "unit": "count",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING0159",
-                "ingredient_name": "avocado",
-                "quantity": "0.5",
-                "unit": "count",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING3248",
-                "ingredient_name": "sour cream",
-                "quantity": "1.0",
-                "unit": "tablespoon",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING1463",
-                "ingredient_name": "garlic",
-                "quantity": "0.5",
-                "unit": "clove",
-                "status": "missing"
-              },
-              {
                 "ingredient_id": "ING3564",
                 "ingredient_name": "tomatillo",
                 "quantity": "28.5",
@@ -2335,24 +2300,10 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING0870",
-                "ingredient_name": "cilantro",
-                "quantity": "0.5",
-                "unit": "tablespoon",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING2006",
-                "ingredient_name": "lime",
-                "quantity": "0.5",
-                "unit": "count",
-                "status": "missing"
-              },
-              {
-                "ingredient_id": "ING1902",
-                "ingredient_name": "kosher salt",
-                "quantity": "1.0",
-                "unit": "pinch",
+                "ingredient_id": "ING2130",
+                "ingredient_name": "masa harina",
+                "quantity": "0.25",
+                "unit": "cup",
                 "status": "missing"
               },
               {
@@ -2363,8 +2314,22 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING1817",
-                "ingredient_name": "jalapeno",
+                "ingredient_id": "ING3248",
+                "ingredient_name": "sour cream",
+                "quantity": "1.0",
+                "unit": "tablespoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING1902",
+                "ingredient_name": "kosher salt",
+                "quantity": "1.0",
+                "unit": "pinch",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING2639",
+                "ingredient_name": "plum tomato",
                 "quantity": "0.5",
                 "unit": "count",
                 "status": "missing"
@@ -2377,10 +2342,45 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING2130",
-                "ingredient_name": "masa harina",
+                "ingredient_id": "ING0870",
+                "ingredient_name": "cilantro",
+                "quantity": "0.5",
+                "unit": "tablespoon",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING1817",
+                "ingredient_name": "jalapeno",
+                "quantity": "0.5",
+                "unit": "count",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING1463",
+                "ingredient_name": "garlic",
+                "quantity": "0.5",
+                "unit": "clove",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING0159",
+                "ingredient_name": "avocado",
+                "quantity": "0.5",
+                "unit": "count",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING0347",
+                "ingredient_name": "black beans",
                 "quantity": "0.25",
                 "unit": "cup",
+                "status": "missing"
+              },
+              {
+                "ingredient_id": "ING2006",
+                "ingredient_name": "lime",
+                "quantity": "0.5",
+                "unit": "count",
                 "status": "missing"
               }
             ],
@@ -2389,146 +2389,6 @@
           "grocery": {
             "recipe_id": "R32630",
             "items": [
-              {
-                "ingredient_id": "ING0347",
-                "ingredient": "black beans",
-                "required_quantity": "0.25",
-                "required_unit": "cup",
-                "product_name": "Canned Black Beans",
-                "package_quantity": 400.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 2.1,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 2.1,
-                "estimated_required_quantity": 48.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:11:27+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING2639",
-                "ingredient": "plum tomato",
-                "required_quantity": "0.5",
-                "required_unit": "count",
-                "product_name": "Plum Tomatoes",
-                "package_quantity": 450.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 3.2,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 3.2,
-                "estimated_required_quantity": 32.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:11:27+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING0159",
-                "ingredient": "avocado",
-                "required_quantity": "0.5",
-                "required_unit": "count",
-                "product_name": "Avocado",
-                "package_quantity": 1.0,
-                "package_unit": "pcs",
-                "packages_needed": 1,
-                "price_per_package": 3.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 3.5,
-                "estimated_required_quantity": 100.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:11:27+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING3248",
-                "ingredient": "sour cream",
-                "required_quantity": "1.0",
-                "required_unit": "tablespoon",
-                "product_name": "generic sour cream",
-                "package_quantity": 250.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 4.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 4.5,
-                "estimated_required_quantity": 14.38,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:11:28+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING1463",
-                "ingredient": "garlic",
-                "required_quantity": "0.5",
-                "required_unit": "clove",
-                "product_name": "Garlic bulbs",
-                "package_quantity": 100.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 1.2,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 1.2,
-                "estimated_required_quantity": 1.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:11:28+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
               {
                 "ingredient_id": "ING3564",
                 "ingredient": "tomatillo",
@@ -2550,175 +2410,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:11:28+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING0870",
-                "ingredient": "cilantro",
-                "required_quantity": "0.5",
-                "required_unit": "tablespoon",
-                "product_name": "Fresh Coriander",
-                "package_quantity": 1.0,
-                "package_unit": "bunch",
-                "packages_needed": 1,
-                "price_per_package": 1.2,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 1.2,
-                "estimated_required_quantity": 0.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:11:29+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING2006",
-                "ingredient": "lime",
-                "required_quantity": "0.5",
-                "required_unit": "count",
-                "product_name": "Fresh Lime",
-                "package_quantity": 3.0,
-                "package_unit": "pcs",
-                "packages_needed": 1,
-                "price_per_package": 2.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 2.5,
-                "estimated_required_quantity": 33.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:11:29+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING1902",
-                "ingredient": "kosher salt",
-                "required_quantity": "1.0",
-                "required_unit": "pinch",
-                "product_name": "Kosher Salt",
-                "package_quantity": 454.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 3.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 3.5,
-                "estimated_required_quantity": 0.3,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:11:29+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING1807",
-                "ingredient": "jack cheese",
-                "required_quantity": "1.0",
-                "required_unit": "tablespoon",
-                "product_name": "Monterey Jack Cheese Block",
-                "package_quantity": 226.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 7.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 7.5,
-                "estimated_required_quantity": 8.25,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:11:30+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING1817",
-                "ingredient": "jalapeno",
-                "required_quantity": "0.5",
-                "required_unit": "count",
-                "product_name": "Fresh Jalapeno Pepper",
-                "package_quantity": 2.0,
-                "package_unit": "pcs",
-                "packages_needed": 1,
-                "price_per_package": 2.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 2.5,
-                "estimated_required_quantity": 7.5,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:11:30+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
-              {
-                "ingredient_id": "ING1983",
-                "ingredient": "lettuce",
-                "required_quantity": "0.25",
-                "required_unit": "cup",
-                "product_name": "Iceberg Lettuce",
-                "package_quantity": 1.0,
-                "package_unit": "head",
-                "packages_needed": 1,
-                "price_per_package": 2.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 2.5,
-                "estimated_required_quantity": 13.75,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:11:30+00:00",
+                "date_collected": "2026-10-11T16:02:13+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -2746,7 +2438,315 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:11:30+00:00",
+                "date_collected": "2026-10-11T16:02:13+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING1807",
+                "ingredient": "jack cheese",
+                "required_quantity": "1.0",
+                "required_unit": "tablespoon",
+                "product_name": "Monterey Jack Cheese Block",
+                "package_quantity": 226.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 7.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 7.5,
+                "estimated_required_quantity": 8.25,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T16:02:13+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING3248",
+                "ingredient": "sour cream",
+                "required_quantity": "1.0",
+                "required_unit": "tablespoon",
+                "product_name": "generic sour cream",
+                "package_quantity": 250.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 4.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 4.5,
+                "estimated_required_quantity": 14.38,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T16:02:13+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING1902",
+                "ingredient": "kosher salt",
+                "required_quantity": "1.0",
+                "required_unit": "pinch",
+                "product_name": "Kosher Salt",
+                "package_quantity": 454.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 3.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 3.5,
+                "estimated_required_quantity": 0.3,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T16:02:14+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING2639",
+                "ingredient": "plum tomato",
+                "required_quantity": "0.5",
+                "required_unit": "count",
+                "product_name": "Plum Tomatoes",
+                "package_quantity": 450.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 3.2,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 3.2,
+                "estimated_required_quantity": 32.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T16:02:14+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING1983",
+                "ingredient": "lettuce",
+                "required_quantity": "0.25",
+                "required_unit": "cup",
+                "product_name": "Iceberg Lettuce",
+                "package_quantity": 1.0,
+                "package_unit": "head",
+                "packages_needed": 1,
+                "price_per_package": 2.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 2.5,
+                "estimated_required_quantity": 13.75,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T16:02:14+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING0870",
+                "ingredient": "cilantro",
+                "required_quantity": "0.5",
+                "required_unit": "tablespoon",
+                "product_name": "Fresh Coriander",
+                "package_quantity": 1.0,
+                "package_unit": "bunch",
+                "packages_needed": 1,
+                "price_per_package": 1.2,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 1.2,
+                "estimated_required_quantity": 0.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T16:02:14+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING1817",
+                "ingredient": "jalapeno",
+                "required_quantity": "0.5",
+                "required_unit": "count",
+                "product_name": "Fresh Jalapeno Pepper",
+                "package_quantity": 2.0,
+                "package_unit": "pcs",
+                "packages_needed": 1,
+                "price_per_package": 2.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 2.5,
+                "estimated_required_quantity": 7.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T16:02:15+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING1463",
+                "ingredient": "garlic",
+                "required_quantity": "0.5",
+                "required_unit": "clove",
+                "product_name": "Garlic bulbs",
+                "package_quantity": 100.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 1.2,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 1.2,
+                "estimated_required_quantity": 1.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T16:02:15+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING0159",
+                "ingredient": "avocado",
+                "required_quantity": "0.5",
+                "required_unit": "count",
+                "product_name": "Avocado",
+                "package_quantity": 1.0,
+                "package_unit": "pcs",
+                "packages_needed": 1,
+                "price_per_package": 3.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 3.5,
+                "estimated_required_quantity": 100.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T16:02:15+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING0347",
+                "ingredient": "black beans",
+                "required_quantity": "0.25",
+                "required_unit": "cup",
+                "product_name": "Canned Black Beans",
+                "package_quantity": 400.0,
+                "package_unit": "g",
+                "packages_needed": 1,
+                "price_per_package": 2.1,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 2.1,
+                "estimated_required_quantity": 48.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T16:02:16+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING2006",
+                "ingredient": "lime",
+                "required_quantity": "0.5",
+                "required_unit": "count",
+                "product_name": "Fresh Lime",
+                "package_quantity": 3.0,
+                "package_unit": "pcs",
+                "packages_needed": 1,
+                "price_per_package": 2.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 2.5,
+                "estimated_required_quantity": 33.5,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T16:02:16+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -2761,19 +2761,19 @@
             "projection_missing": [],
             "all_items_priced": false,
             "unpriced_items": [
-              "black beans",
-              "plum tomato",
-              "avocado",
-              "sour cream",
-              "garlic",
               "tomatillo",
-              "cilantro",
-              "lime",
-              "kosher salt",
+              "masa harina",
               "jack cheese",
-              "jalapeno",
+              "sour cream",
+              "kosher salt",
+              "plum tomato",
               "lettuce",
-              "masa harina"
+              "cilantro",
+              "jalapeno",
+              "garlic",
+              "avocado",
+              "black beans",
+              "lime"
             ],
             "budget": null,
             "budget_status": "not_checked",
@@ -2855,19 +2855,19 @@
             "reason": "Final budget feasibility will be checked against the consolidated multi-meal basket."
           },
           "warnings": [
-            "No complete purchase price found for black beans",
-            "No complete purchase price found for plum tomato",
-            "No complete purchase price found for avocado",
-            "No complete purchase price found for sour cream",
-            "No complete purchase price found for garlic",
             "No complete purchase price found for tomatillo",
-            "No complete purchase price found for cilantro",
-            "No complete purchase price found for lime",
-            "No complete purchase price found for kosher salt",
+            "No complete purchase price found for masa harina",
             "No complete purchase price found for jack cheese",
-            "No complete purchase price found for jalapeno",
+            "No complete purchase price found for sour cream",
+            "No complete purchase price found for kosher salt",
+            "No complete purchase price found for plum tomato",
             "No complete purchase price found for lettuce",
-            "No complete purchase price found for masa harina"
+            "No complete purchase price found for cilantro",
+            "No complete purchase price found for jalapeno",
+            "No complete purchase price found for garlic",
+            "No complete purchase price found for avocado",
+            "No complete purchase price found for black beans",
+            "No complete purchase price found for lime"
           ],
           "execution_trace": [
             {
@@ -2999,13 +2999,6 @@
             "pantry_used": [],
             "missing_ingredients": [
               {
-                "ingredient_id": "ING2268",
-                "ingredient_name": "mustard seed",
-                "quantity": "1.0",
-                "unit": "pinch",
-                "status": "missing"
-              },
-              {
                 "ingredient_id": "ING3684",
                 "ingredient_name": "urad dal",
                 "quantity": "0.5",
@@ -3013,10 +3006,10 @@
                 "status": "missing"
               },
               {
-                "ingredient_id": "ING0934",
-                "ingredient_name": "coconut oil",
-                "quantity": "0.5",
-                "unit": "teaspoon",
+                "ingredient_id": "ING2268",
+                "ingredient_name": "mustard seed",
+                "quantity": "1.0",
+                "unit": "pinch",
                 "status": "missing"
               },
               {
@@ -3032,6 +3025,13 @@
                 "quantity": "0.25",
                 "unit": "cup",
                 "status": "missing"
+              },
+              {
+                "ingredient_id": "ING0934",
+                "ingredient_name": "coconut oil",
+                "quantity": "0.5",
+                "unit": "teaspoon",
+                "status": "missing"
               }
             ],
             "unsupported_items": []
@@ -3039,34 +3039,6 @@
           "grocery": {
             "recipe_id": "R35174",
             "items": [
-              {
-                "ingredient_id": "ING2268",
-                "ingredient": "mustard seed",
-                "required_quantity": "1.0",
-                "required_unit": "pinch",
-                "product_name": "Yellow Mustard Seeds",
-                "package_quantity": 100.0,
-                "package_unit": "g",
-                "packages_needed": 1,
-                "price_per_package": 2.5,
-                "minimum_package_cost": null,
-                "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 2.5,
-                "estimated_required_quantity": 0.3,
-                "estimated_required_unit": "g",
-                "quantity_estimated": true,
-                "total_cost": null,
-                "currency": "SGD",
-                "store": null,
-                "source_url": null,
-                "source_updated_at": null,
-                "date_collected": "2026-10-11T13:14:53+00:00",
-                "match_status": "estimated_no_retail_match",
-                "match_quality": null,
-                "purchase_channel": "availability_unverified",
-                "search_query": null,
-                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
-              },
               {
                 "ingredient_id": "ING3684",
                 "ingredient": "urad dal",
@@ -3088,7 +3060,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:14:53+00:00",
+                "date_collected": "2026-10-11T16:05:33+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -3096,19 +3068,19 @@
                 "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
               },
               {
-                "ingredient_id": "ING0934",
-                "ingredient": "coconut oil",
-                "required_quantity": "0.5",
-                "required_unit": "teaspoon",
-                "product_name": "Refined Coconut Oil",
-                "package_quantity": 500.0,
-                "package_unit": "ml",
+                "ingredient_id": "ING2268",
+                "ingredient": "mustard seed",
+                "required_quantity": "1.0",
+                "required_unit": "pinch",
+                "product_name": "Yellow Mustard Seeds",
+                "package_quantity": 100.0,
+                "package_unit": "g",
                 "packages_needed": 1,
-                "price_per_package": 6.5,
+                "price_per_package": 2.5,
                 "minimum_package_cost": null,
                 "purchase_basis": "llm_estimated_package",
-                "estimated_total_cost": 6.5,
-                "estimated_required_quantity": 2.27,
+                "estimated_total_cost": 2.5,
+                "estimated_required_quantity": 0.3,
                 "estimated_required_unit": "g",
                 "quantity_estimated": true,
                 "total_cost": null,
@@ -3116,7 +3088,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:14:53+00:00",
+                "date_collected": "2026-10-11T16:05:34+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -3144,7 +3116,7 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:14:53+00:00",
+                "date_collected": "2026-10-11T16:05:34+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -3172,7 +3144,35 @@
                 "store": null,
                 "source_url": null,
                 "source_updated_at": null,
-                "date_collected": "2026-10-11T13:14:54+00:00",
+                "date_collected": "2026-10-11T16:05:34+00:00",
+                "match_status": "estimated_no_retail_match",
+                "match_quality": null,
+                "purchase_channel": "availability_unverified",
+                "search_query": null,
+                "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+              },
+              {
+                "ingredient_id": "ING0934",
+                "ingredient": "coconut oil",
+                "required_quantity": "0.5",
+                "required_unit": "teaspoon",
+                "product_name": "Refined Coconut Oil",
+                "package_quantity": 500.0,
+                "package_unit": "ml",
+                "packages_needed": 1,
+                "price_per_package": 6.5,
+                "minimum_package_cost": null,
+                "purchase_basis": "llm_estimated_package",
+                "estimated_total_cost": 6.5,
+                "estimated_required_quantity": 2.27,
+                "estimated_required_unit": "g",
+                "quantity_estimated": true,
+                "total_cost": null,
+                "currency": "SGD",
+                "store": null,
+                "source_url": null,
+                "source_updated_at": null,
+                "date_collected": "2026-10-11T16:05:35+00:00",
                 "match_status": "estimated_no_retail_match",
                 "match_quality": null,
                 "purchase_channel": "availability_unverified",
@@ -3187,11 +3187,11 @@
             "projection_missing": [],
             "all_items_priced": false,
             "unpriced_items": [
-              "mustard seed",
               "urad dal",
-              "coconut oil",
+              "mustard seed",
               "curry leaf",
-              "kidney bean"
+              "kidney bean",
+              "coconut oil"
             ],
             "budget": null,
             "budget_status": "not_checked",
@@ -3273,11 +3273,11 @@
             "reason": "Final budget feasibility will be checked against the consolidated multi-meal basket."
           },
           "warnings": [
-            "No complete purchase price found for mustard seed",
             "No complete purchase price found for urad dal",
-            "No complete purchase price found for coconut oil",
+            "No complete purchase price found for mustard seed",
             "No complete purchase price found for curry leaf",
-            "No complete purchase price found for kidney bean"
+            "No complete purchase price found for kidney bean",
+            "No complete purchase price found for coconut oil"
           ],
           "execution_trace": [
             {
@@ -5802,227 +5802,629 @@
       {
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "allspice"
+          ],
+          "unpriced_items": [
+            "allspice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R12387",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "cauliflower"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "cauliflower"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R12387",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "cauliflower"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "cauliflower"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R39173",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "cayenne pepper"
+          ],
+          "unpriced_items": [
+            "cayenne pepper"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R12387",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "cauliflower"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "cauliflower"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R39173",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "cayenne pepper"
+          ],
+          "unpriced_items": [
+            "cayenne pepper"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R00609",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "curry powder",
+            "coriander"
+          ],
+          "unpriced_items": [
+            "curry powder",
+            "coriander"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R22036",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "basil"
+          ],
+          "unpriced_items": [
+            "basil"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R12387",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "cauliflower"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "cauliflower"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R39173",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "cayenne pepper"
+          ],
+          "unpriced_items": [
+            "cayenne pepper"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R12387",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "cauliflower"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "cauliflower"
+          ]
+        }
       },
       {
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R39173",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "cayenne pepper"
+          ],
+          "unpriced_items": [
+            "cayenne pepper"
+          ]
+        }
       }
     ],
     "skipped_slots": [],
@@ -6031,7 +6433,17 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6068,25 +6480,59 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "allspice"
+          ],
+          "unpriced_items": [
+            "allspice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6123,7 +6569,15 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_lunch",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "event": "meal_selected",
@@ -6134,7 +6588,17 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6171,25 +6635,61 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6226,13 +6726,31 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-07_dinner",
         "recipe_id": "R12387",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "cauliflower"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "cauliflower"
+          ]
+        }
       },
       {
         "event": "meal_selected",
@@ -6243,7 +6761,17 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6280,25 +6808,61 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6335,19 +6899,45 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R12387",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "cauliflower"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "cauliflower"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_lunch",
         "recipe_id": "R39173",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "cayenne pepper"
+          ],
+          "unpriced_items": [
+            "cayenne pepper"
+          ]
+        }
       },
       {
         "event": "meal_selected",
@@ -6358,19 +6948,45 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6407,31 +7023,75 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R12387",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "cauliflower"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "cauliflower"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R39173",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "cayenne pepper"
+          ],
+          "unpriced_items": [
+            "cayenne pepper"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R00609",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "curry powder",
+            "coriander"
+          ],
+          "unpriced_items": [
+            "curry powder",
+            "coriander"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-08_dinner",
         "recipe_id": "R22036",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "basil"
+          ],
+          "unpriced_items": [
+            "basil"
+          ]
+        }
       },
       {
         "event": "meal_selected",
@@ -6442,7 +7102,17 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6479,25 +7149,61 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6534,19 +7240,45 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R12387",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "cauliflower"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "cauliflower"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_lunch",
         "recipe_id": "R39173",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "cayenne pepper"
+          ],
+          "unpriced_items": [
+            "cayenne pepper"
+          ]
+        }
       },
       {
         "event": "meal_selected",
@@ -6557,7 +7289,17 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R01296",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "plain yogurt",
+            "paprika"
+          ],
+          "unpriced_items": [
+            "plain yogurt",
+            "paprika"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6594,25 +7336,61 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R10629",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "allspice"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "allspice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R28835",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli"
+          ],
+          "unpriced_items": [
+            "broccoli"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R37824",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "broccoli",
+            "brown rice"
+          ],
+          "unpriced_items": [
+            "broccoli",
+            "brown rice"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R30871",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "sesame seed"
+          ],
+          "unpriced_items": [
+            "sesame seed"
+          ]
+        }
       },
       {
         "event": "candidate_rejected",
@@ -6649,19 +7427,45 @@
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R22063",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "red pepper flakes"
+          ],
+          "unpriced_items": [
+            "red pepper flakes"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R12387",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "tomato",
+            "cauliflower"
+          ],
+          "unpriced_items": [
+            "tomato",
+            "cauliflower"
+          ]
+        }
       },
       {
         "event": "candidate_uncertain",
         "slot_id": "2026-10-09_dinner",
         "recipe_id": "R39173",
-        "reason": "Combined basket cost incomplete"
+        "reason": {
+          "type": "combined_basket_incomplete",
+          "projection_missing": [
+            "cayenne pepper"
+          ],
+          "unpriced_items": [
+            "cayenne pepper"
+          ]
+        }
       },
       {
         "event": "meal_selected",

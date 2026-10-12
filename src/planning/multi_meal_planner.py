@@ -896,17 +896,41 @@ class MultiMealPlanner:
                 False,
 
             )
-
+            
             if not projected_complete or projected_total is None:
 
+                missing = trial_basket.get(
+                    "projection_missing",
+                    [],
+                )
+
+                unpriced = trial_basket.get(
+                    "unpriced_items",
+                    [],
+                )
+
+                print(
+                    "[INCOMPLETE COMBINED BASKET]",
+                    {
+                        "slot": slot.slot_id,
+                        "recipe_id": recipe_id,
+                        "projection_missing": missing,
+                        "unpriced_items": unpriced,
+                        "known_cost": trial_basket.get(
+                            "known_cost"
+                        ),
+                        "projected_cost": projected_total,
+                    },
+                )
+
                 plan_state.add_uncertain(
-
                     slot=slot,
-
                     recipe_id=recipe_id,
-
-                    reason="Combined basket cost incomplete",
-
+                    reason={
+                        "type": "combined_basket_incomplete",
+                        "projection_missing": missing,
+                        "unpriced_items": unpriced,
+                    },
                 )
 
                 continue
