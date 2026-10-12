@@ -41,7 +41,6 @@ INGREDIENT_CONVERSIONS = {
         grams_per_head=300,
         grams_per_cup=36,
     ),
-    "garlic": IngredientConversion(_SOURCE, grams_per_clove=3),
     "lime": IngredientConversion(_SOURCE, grams_per_piece=65, grams_per_wedge=8),
     "fresh lime": IngredientConversion(_SOURCE, grams_per_piece=65, grams_per_wedge=8),
     "lemon": IngredientConversion(_SOURCE, grams_per_piece=100, grams_per_wedge=12),
@@ -114,15 +113,17 @@ INGREDIENT_CONVERSIONS = {
         grams_per_tablespoon=12,
     ),
     "curry leaf": IngredientConversion(
-        _SOURCE,
-        grams_per_piece=0.2,
-        grams_per_bunch=20,
+       _SOURCE,
+       grams_per_piece=0.2,
+       grams_per_bunch=20,
+       grams_per_pack=20,
     ),
     "garlic": IngredientConversion(
-    _SOURCE,
-    grams_per_clove=3,
-    grams_per_bulb=30,
-    grams_per_pack=90,
+      _SOURCE,
+      grams_per_piece=3,
+      grams_per_clove=3,
+      grams_per_bulb=30,
+      grams_per_pack=90,
     ),
 }
 

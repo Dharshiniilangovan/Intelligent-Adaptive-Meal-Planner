@@ -605,6 +605,52 @@ def _subtract(
 
 
     required_base = _convertible_quantity(required_quantity, required_unit)
+    available_base = _convertible_quantity(
+    available_quantity, available_unit
+    )
+
+    required_base = _convertible_quantity(
+    required_quantity, required_unit
+    )
+
+    pack_units = {"pack", "packs", "package", "packages"}
+
+    if (
+        (available_unit in pack_units)!= (required_unit in pack_units)
+    ):
+        available_base = None
+        required_base = None
+    # pack_units = {"pack", "packs", "package", "packages"}
+
+    # if (
+    #     available_unit in pack_units
+    #     and required_unit not in pack_units
+    # ):
+    #     available_base = None
+    #     required_base = None
+    
+    if ingredient_name == "curry leaf":
+        print("\nCURRY LEAF DEBUG")
+        print("Available:", available_quantity, available_unit)
+        print("Required:", required_quantity, required_unit)
+        print("Available base:", available_base)
+        print("Required base:", required_base)
+        print(
+            "Available mass:",
+            _mass_in_grams(
+                  available_quantity,
+                  available_unit,
+                  ingredient_name,
+            ),
+        )
+        print(
+        "Required mass:",
+        _mass_in_grams(
+            required_quantity,
+            required_unit,
+            ingredient_name,
+        ),
+    )
 
 
 

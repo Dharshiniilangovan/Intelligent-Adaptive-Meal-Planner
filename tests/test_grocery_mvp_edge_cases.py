@@ -1,9 +1,9 @@
 
 import pytest
-
 from src.agents.grocery_agent import (
     aggregate_requirements,
     build_plan_grocery_basket,
+    subtract_inventory,
 )
 
 
@@ -210,3 +210,25 @@ def test_to_taste_requirement_is_preserved_separately():
     # Grocery cost remains incomplete.
     assert basket["projected_cost_complete"] is False
     assert "table salt" in basket["unpriced_items"]
+
+def test_insufficient_inventory_creates_grocery_shortage():
+    requirements = [
+        {
+            "ingredient_name": "tomato",
+            "quantity": 5,
+            "unit": "pcs",
+        }
+    ]
+
+    inventory = [
+        {
+            "ingredient_name": "tomato",
+            "quantity": 2,
+            "unit": "pcs",
+        }
+    ]
+
+    result = subtract_inventory(requirements, inventory)
+
+    assert result[0]["purchase_required"] == 3
+    assert result[0]["inventory_used"] == 2
