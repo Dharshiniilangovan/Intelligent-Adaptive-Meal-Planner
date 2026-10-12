@@ -281,3 +281,16 @@ def test_failed_estimated_consumption_does_not_mutate_inventory():
         )
 
     assert inventory == original
+
+
+@pytest.mark.parametrize("name,grams_per_cup", [
+    ("masa harina", 120), ("black beans", 172), ("lettuce", 36),
+])
+def test_r32630_cup_requirements_from_gram_inventory(name, grams_per_cup):
+    inventory = normalize_inventory({name: "500 g"})
+    result = consume_inventory(inventory, [
+        {"ingredient_name": name, "quantity": 0.25, "unit": "cup"}
+    ])
+    assert result[name]["quantity"] == pytest.approx(500 - grams_per_cup * 0.25)
+    assert result[name]["conversion_status"] == "estimated"
+    assert inventory[name]["quantity"] == 500

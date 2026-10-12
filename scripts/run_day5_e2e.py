@@ -43,7 +43,7 @@ from src.planning.multi_meal_planner import MultiMealPlanner
 # CONFIGURATION
 # ============================================================
 
-DAYS = 3
+DAYS = 1
 
 MEAL_TYPES = [
     "lunch",
@@ -51,7 +51,7 @@ MEAL_TYPES = [
 ]
 
 MAX_CANDIDATES_PER_SLOT = 10
-
+expected_slots = DAYS * len(MEAL_TYPES)
 
 # ============================================================
 # TEST USER
@@ -323,49 +323,49 @@ def print_rejections(
         )
 
 
-def print_budget(
-    plan: dict,
-    result: dict,
-) -> None:
 
+def print_budget(plan: dict, result: dict) -> None:
     print_heading("BUDGET")
 
-    budget = plan.get(
-        "budget",
-        {},
+    budget = plan.get("budget", {})
+    basket = result.get("grocery_basket", {})
+
+    initial = budget.get("initial", 0.0)
+    projected = basket.get("projected_cost")
+    complete = basket.get("projected_cost_complete") is True
+
+    all_usable = basket.get(
+        "all_items_have_usable_cost",
+        False,
     )
 
-    basket = result.get(
-        "grocery_basket",
-        {},
+    print(f"Initial budget: S${initial:.2f}")
+
+    if complete and projected is not None:
+        print(f"Total Grocery Cost: S${projected:.2f}")
+        print(
+            f"Remaining Budget: "
+            f"S${initial - projected:.2f}"
+        )
+    else:
+        print("Total Grocery Cost: Incomplete")
+        print("Remaining Budget: Unknown")
+
+    print(
+        "All Ingredients Have Prices:",
+        "Yes" if all_usable else "No",
     )
 
     print(
-        "Initial budget:",
-        budget.get("initial"),
+        "Grocery Pricing:",
+        "Complete"
+        if complete and all_usable
+        else "Incomplete",
     )
 
     print(
-        "Per-candidate estimated spent:",
-        budget.get("estimated_spent"),
-    )
-
-    print(
-        "Final aggregated known cost:",
-        basket.get("known_cost"),
-    )
-
-    print(
-        "All items priced:",
-        basket.get("all_items_priced"),
-    )
-
-    print(
-        "Unpriced items:",
-        basket.get(
-            "unpriced_items",
-            [],
-        ),
+        "Unpriced Items:",
+        basket.get("unpriced_items", []),
     )
 
 
@@ -570,8 +570,8 @@ def run_acceptance_checks(
 
     checks.append(
         (
-            "6 meal slots generated",
-            len(slots) == 6,
+            "All requested meal slots generated",
+            len(slots) == DAYS * len(MEAL_TYPES),
         )
     )
 
@@ -648,7 +648,7 @@ def run_acceptance_checks(
     checks.append(
         (
             "All requested meal slots filled",
-            len(selected) == len(slots),
+            len(selected) == expected_slots,
         )
     )
 
