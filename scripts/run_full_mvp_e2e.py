@@ -14,7 +14,8 @@ def main():
     request = (
         "I have a budget of 100 dollars. "
         "I am vegetarian and allergic to peanuts. "
-        "I prefer Asian food and can cook for 30 minutes."
+        "I prefer Asian food and can cook for 30 minutes. "
+        "I can cook twice a week."
     )
 
     parsed = UserInputParser().parse(request)
@@ -31,6 +32,15 @@ def main():
         }
     )
 
+    assert parsed.data["cook_frequency"] == 2
+
+    assert user_state["cook_frequency"] == 2
+    assert (
+        user_state.get("cooking_sessions_per_week") is None
+        or user_state["cooking_sessions_per_week"] == 2
+    )
+    print("Cooking frequency:", user_state["cook_frequency"])
+
     print("PASS: Input parsed and validated")
 
     print("\n=== 2. GENERATE INITIAL PLAN ===")
@@ -46,6 +56,26 @@ def main():
     )
 
     initial_plan = initial["plan"]
+    cooking = initial_plan["cooking_schedule"]
+
+    print("Cooking sessions:", cooking["session_count"])
+    print("Weekly counts:", cooking["weekly_session_counts"])
+    print("Cooking schedule valid:", cooking["valid"])
+
+    assert cooking["max_sessions_per_week"] == 2
+
+    assert (
+        all(count <= 2 for count in cooking["weekly_session_counts"].values())
+        == cooking["valid"]
+    )
+
+    if not cooking["valid"]:
+        assert initial["validation"]["status"] == "infeasible"
+
+    assert sum(session["portions_prepared"] for session in cooking["sessions"]) == len(
+        initial_plan["selected_meals"]
+    )
+
     selected = initial_plan["selected_meals"]
 
     assert len(initial_plan["slots"]) == 4
@@ -78,6 +108,25 @@ def main():
 
     updated_plan = updated["plan"]
     updated_meals = updated_plan["selected_meals"]
+
+    updated_cooking = updated_plan["cooking_schedule"]
+
+    assert updated_cooking["max_sessions_per_week"] == 2
+
+    assert (
+        all(count <= 2 for count in updated_cooking["weekly_session_counts"].values())
+        == updated_cooking["valid"]
+    )
+
+    assert sum(
+        session["portions_prepared"] for session in updated_cooking["sessions"]
+    ) == len(updated_meals)
+
+    if not updated_cooking["valid"]:
+        assert updated["validation"]["status"] == "infeasible"
+
+    print("Updated cooking sessions:", updated_cooking["session_count"])
+    print("Updated cooking schedule valid:", updated_cooking["valid"])
 
     updated_by_slot = {meal["slot"]["slot_id"]: meal for meal in updated_meals}
 
