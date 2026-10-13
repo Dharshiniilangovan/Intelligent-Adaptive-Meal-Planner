@@ -757,7 +757,7 @@ class UserInputParser:
 
         dietary = [
             ("vegan", "Vegan"),
-            ("vegetarian", "Vegetarian"),
+            ("vegetarian|veg", "Vegetarian"),
             ("halal", "Halal"),
             ("keto", "Keto"),
             (
