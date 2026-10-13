@@ -105,7 +105,7 @@ def save_image_results_to_state(state_path, ingredients):
 def main():
     parser = argparse.ArgumentParser(description="Pantry image to ingredient availability JSON")
     parser.add_argument("--image", type=Path, help="Pantry image")
-    parser.add_argument("--model", default="gemini-3.8-flash")
+    parser.add_argument("--model", default="gemini-3.5-flash-lite")
     parser.add_argument("--skip-quantity-refinement", action="store_true")
     parser.add_argument("--output", type=Path, default=None, help="Optional separate JSON copy")
     parser.add_argument("--confirmed-json", type=Path, help="Reviewed JSON with user_confirmed=true")

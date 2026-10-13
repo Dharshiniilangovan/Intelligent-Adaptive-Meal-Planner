@@ -22,6 +22,7 @@ data/pantry
 data/users
 data/processed
 data/cache/grocery_cache.db
+data/ui_state
 # Generated user pantry state
 data/sample/pantry_*.json
 

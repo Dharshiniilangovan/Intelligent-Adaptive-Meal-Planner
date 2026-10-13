@@ -1,210 +1,181 @@
 
-"""Look up human-readable recipe names from the Recipe KB."""
+"""Look up recipe names and validated URLs from GC1 Recipe KB."""
 
 import csv
-import logging
-import re
-
 from functools import lru_cache
 from pathlib import Path
+from urllib.parse import urlparse
 
 
-logger = logging.getLogger(__name__)
+ROOT = Path(__file__).resolve().parents[2]
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+RECIPE_KB = ROOT / "data" / "processed" / "recipe_kb_clean.csv"
 
-RECIPE_KB = (
-    PROJECT_ROOT
-    / "data"
-    / "processed"
-    / "recipe_kb_clean.csv"
-)
+URL_REPORT = ROOT / "reports" / "recipe_url_validation_with_ids.csv"
 
 
-# ============================================================
-# NORMALIZE RECIPE IDS
-# ============================================================
-
-def normalize_recipe_id(value):
-    """Normalize recipe IDs before matching."""
-
-    if value is None:
-        return ""
-
-    if isinstance(value, dict):
-        value = (
-            value.get("recipe_id")
-            or value.get("id")
-            or ""
-        )
-
-    value = str(value).strip().upper()
-
-    # Remove invisible Unicode formatting characters.
-    value = re.sub(
-        r"[\u200b-\u200d\ufeff]",
-        "",
-        value,
-    )
-
-    # Normalize whitespace.
-    value = re.sub(r"\s+", "", value)
-
-    # Support numeric IDs such as R1296 -> R01296.
-    match = re.fullmatch(r"R(\d+)", value)
-
-    if match:
-        value = f"R{int(match.group(1)):05d}"
-
-    return value
+def normalize_recipe_id(recipe_id):
+    return str(recipe_id or "").strip().upper()
 
 
-# ============================================================
-# LOAD RECIPE KB
-# ============================================================
+def safe_url(url):
+    url = str(url or "").strip()
+    parsed = urlparse(url)
+
+    if (
+        parsed.scheme.lower() in {"http", "https"}
+        and parsed.netloc
+    ):
+        return url
+
+    return None
+
 
 @lru_cache(maxsize=1)
-def load_recipe_names():
-    """Load recipe names indexed by normalized recipe ID."""
-
-    recipe_names = {}
-
-    print("\n[RECIPE LOOKUP] Loading Recipe KB")
-    print("[RECIPE LOOKUP] Path:", RECIPE_KB)
-    print("[RECIPE LOOKUP] Exists:", RECIPE_KB.exists())
+def load_recipes():
+    recipes = {}
 
     if not RECIPE_KB.is_file():
-        logger.error(
-            "Recipe KB not found: %s",
-            RECIPE_KB,
-        )
-        return recipe_names
+        print("[RECIPE LOOKUP] KB not found:", RECIPE_KB)
+        return recipes
 
     with RECIPE_KB.open(
-        "r",
         encoding="utf-8-sig",
         newline="",
     ) as file:
 
-        reader = csv.DictReader(file)
-
-        print(
-            "[RECIPE LOOKUP] CSV columns:",
-            reader.fieldnames,
-        )
-
-        for row in reader:
+        for row in csv.DictReader(file):
 
             recipe_id = normalize_recipe_id(
                 row.get("recipe_id")
             )
 
-            recipe_name = str(
-                row.get("recipe_name")
-                or row.get("name")
-                or row.get("title")
-                or ""
-            ).strip()
-
-            if not recipe_id or not recipe_name:
+            if not recipe_id:
                 continue
 
-            recipe_names[recipe_id] = recipe_name
+            recipes[recipe_id] = {
+                "recipe_id": recipe_id,
+                "recipe_name": str(
+                    row.get("recipe_name") or ""
+                ).strip(),
+                "url": safe_url(row.get("url")),
+            }
 
     print(
-        "[RECIPE LOOKUP] Loaded recipes:",
-        len(recipe_names),
+        "[RECIPE LOOKUP] Loaded",
+        len(recipes),
+        "recipes",
     )
 
-    print("\n[RECIPE LOOKUP] Sample recipes:")
+    return recipes
 
-    for recipe_id, recipe_name in list(
-        recipe_names.items()
-    )[:5]:
+
+@lru_cache(maxsize=1)
+def load_url_validation():
+    statuses = {}
+
+    if not URL_REPORT.is_file():
         print(
-            f"  {recipe_id} -> {recipe_name}"
+            "[RECIPE LOOKUP] URL validation report missing:",
+            URL_REPORT,
         )
+        return statuses
 
-    return recipe_names
+    with URL_REPORT.open(
+        encoding="utf-8-sig",
+        newline="",
+    ) as file:
+
+        for row in csv.DictReader(file):
+
+            recipe_id = normalize_recipe_id(
+                row.get("recipe_id")
+            )
+
+            if not recipe_id:
+                continue
+
+            statuses[recipe_id] = {
+                "status": str(
+                    row.get("status") or ""
+                ).strip().lower(),
+                "url": safe_url(row.get("url")),
+                "final_url": safe_url(
+                    row.get("final_url")
+                ),
+            }
+
+    return statuses
 
 
-# ============================================================
-# GET RECIPE NAME
-# ============================================================
+def get_recipe_details(recipe_id):
+    """Return recipe name and only a validated working URL."""
+
+    recipe_id = normalize_recipe_id(recipe_id)
+
+    recipe = load_recipes().get(recipe_id)
+
+    if not recipe:
+        return {
+            "recipe_id": recipe_id,
+            "recipe_name": "Recipe details unavailable",
+            "url": None,
+            "url_status": "unknown",
+        }
+
+    validation = load_url_validation().get(recipe_id)
+
+    working_url = None
+    status = "not_checked"
+
+    if validation:
+        status = validation["status"]
+
+        # Require the validation record to match
+        # the URL currently stored in the Recipe KB.
+        if (
+            status == "working"
+            and validation["url"] == recipe["url"]
+        ):
+            working_url = (
+                validation["final_url"]
+                or recipe["url"]
+            )
+
+    return {
+        "recipe_id": recipe_id,
+        "recipe_name": (
+            recipe["recipe_name"]
+            or "Recipe details unavailable"
+        ),
+        "url": working_url,
+        "url_status": status,
+    }
+
 
 def get_recipe_name(recipe_id):
-    """Return a human-readable recipe name."""
+    """Backward-compatible recipe name lookup."""
 
-    if isinstance(recipe_id, dict):
-
-        # Use an actual name already supplied by the Planner.
-        direct_name = (
-            recipe_id.get("recipe_name")
-            or recipe_id.get("name")
-            or recipe_id.get("title")
-        )
-
-        if direct_name:
-            return str(direct_name).strip()
-
-    normalized_id = normalize_recipe_id(recipe_id)
-
-    if not normalized_id:
-        return "Recipe details unavailable"
-
-    recipes = load_recipe_names()
-
-    recipe_name = recipes.get(normalized_id)
-
-    if recipe_name:
-        return recipe_name
-
-    print(
-        "[RECIPE LOOKUP] Unknown recipe ID:",
-        repr(recipe_id),
-    )
-
-    print(
-        "[RECIPE LOOKUP] Normalized ID:",
-        repr(normalized_id),
-    )
-
-    print(
-        "[RECIPE LOOKUP] Total available recipes:",
-        len(recipes),
-    )
-
-    return "Recipe details unavailable"
+    return get_recipe_details(recipe_id)["recipe_name"]
 
 
-# ============================================================
-# DEBUG TEST
-# ============================================================
+def get_recipe_url(recipe_id):
+    """Return only a URL that passed validation."""
+
+    return get_recipe_details(recipe_id)["url"]
+
 
 if __name__ == "__main__":
 
-    print("\n" + "=" * 65)
-    print("RECIPE LOOKUP TEST")
-    print("=" * 65)
-
-    recipes = load_recipe_names()
-
-    test_recipe_ids = [
+    for recipe_id in (
         "R15279",
         "R32630",
         "R35174",
         "R01296",
         "R01485",
-    ]
-
-    for recipe_id in test_recipe_ids:
-
-        name = get_recipe_name(recipe_id)
-
+    ):
         print(
-            f"{recipe_id:12} -> {name}"
+            recipe_id,
+            "->",
+            get_recipe_details(recipe_id),
         )
-
-    print("\n" + "=" * 65)
-    print("RECIPE LOOKUP TEST COMPLETE")
-    print("=" * 65)

@@ -157,7 +157,6 @@ else:
 
         rows.append({
             "Ingredient": str(name).title(),
-            "Recipe requires": required_text,
             "Buy": package_text,
             "Cost": money(item_cost),
         })
@@ -174,10 +173,6 @@ else:
             column_config={
                 "Ingredient": st.column_config.TextColumn(
                     "Ingredient",
-                    width="medium",
-                ),
-                "Recipe requires": st.column_config.TextColumn(
-                    "Recipe requires",
                     width="medium",
                 ),
                 "Buy": st.column_config.TextColumn(

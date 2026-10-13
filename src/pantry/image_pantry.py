@@ -100,7 +100,7 @@ def _generate_with_fallback(client, prompt, image_bytes, mime_type, model):
     """Retry temporary server failures; fall back only to configured model."""
     from google.genai import types, errors
     last_error = None
-    for current_model in dict.fromkeys([model, 'gemini-2.5-flash-lite']):
+    for current_model in dict.fromkeys([model, 'gemini-3.5-flash-lite']):
         for attempt in range(2):
             try:
                 print(f'[Gemini] Trying model: {current_model}')
@@ -126,7 +126,7 @@ def _generate_with_fallback(client, prompt, image_bytes, mime_type, model):
 
 
 def refine_missing_quantities(detections, image_bytes, mime_type='image/jpeg',
-                              model='gemini-3.8-flash', client=None):
+                              model='gemini-3.5-flash-lite', client=None):
     """Second image pass for missing quantities, without changing known values."""
     pending = sorted({norm(item.get('ingredient_name')) for item in detections
                       if isinstance(item, dict) and item.get('quantity') is None
@@ -187,7 +187,7 @@ def refine_missing_quantities(detections, image_bytes, mime_type='image/jpeg',
     return updated
 
 
-def detect_image(image_bytes, mime_type='image/jpeg', client=None, model='gemini-3.8-flash'):
+def detect_image(image_bytes, mime_type='image/jpeg', client=None, model='gemini-3.5-flash-lite'):
     """Detect visible ingredients with Gemini; keep existing output contract.
 
     Inject a google.genai.Client-compatible client for tests.
