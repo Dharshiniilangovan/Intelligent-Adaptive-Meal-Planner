@@ -1,3 +1,4 @@
+
 # src/planning/plan_state.py
 
 from dataclasses import dataclass, field
@@ -8,52 +9,40 @@ from src.planning.meal_slot import MealSlot
 
 @dataclass
 class PlanState:
-
     slots: list[MealSlot]
-
     initial_budget: float
     cooking_schedule: dict = field(default_factory=dict)
 
     # -----------------------------------------
     # Meal-planning state
     # -----------------------------------------
-
     selected_meals: list[dict] = field(default_factory=list)
-
     used_recipe_ids: set[str] = field(default_factory=set)
-
     rejected_candidates: list[dict] = field(default_factory=list)
-
     uncertain_candidates: list[dict] = field(default_factory=list)
 
     # -----------------------------------------
     # Budget state
     # -----------------------------------------
-
     estimated_spent: float = 0.0
 
     # -----------------------------------------
     # Member-3 state
     # -----------------------------------------
-
     initial_inventory: dict = field(default_factory=dict)
-
     current_inventory: dict = field(default_factory=dict)
-
     nutrition_state: dict = field(default_factory=dict)
+    prepared_leftovers: list[dict] = field(default_factory=list)
 
     # -----------------------------------------
     # Member-4 final grocery state
     # -----------------------------------------
-
     final_grocery_basket: dict = field(default_factory=dict)
 
     # -----------------------------------------
     # Planner state
     # -----------------------------------------
-
     status: str = "building"
-
     execution_trace: list[dict] = field(default_factory=list)
     skipped_slots: list[dict] = field(default_factory=list)
 
@@ -63,7 +52,6 @@ class PlanState:
 
     @property
     def remaining_budget(self) -> float:
-
         return max(
             self.initial_budget - self.estimated_spent,
             0.0,
@@ -80,7 +68,6 @@ class PlanState:
         decision: dict,
         estimated_cost: float = 0.0,
     ) -> None:
-
         self.selected_meals.append(
             {
                 "slot": slot.to_dict(),
@@ -115,7 +102,6 @@ class PlanState:
         recipe_id: str,
         reason: Any,
     ) -> None:
-
         self.rejected_candidates.append(
             {
                 "slot_id": slot.slot_id,
@@ -143,7 +129,6 @@ class PlanState:
         recipe_id: str,
         reason: Any,
     ) -> None:
-
         self.uncertain_candidates.append(
             {
                 "slot_id": slot.slot_id,
@@ -169,7 +154,6 @@ class PlanState:
         self,
         slot: MealSlot,
     ) -> None:
-
         self.execution_trace.append(
             {
                 "event": "slot_infeasible",
@@ -178,7 +162,7 @@ class PlanState:
         )
 
     # ============================================================
-    # SERIALIZATION
+    # SKIPPED MEAL
     # ============================================================
 
     def mark_slot_skipped(
@@ -187,10 +171,20 @@ class PlanState:
         reason: str = "user_skipped",
     ) -> None:
         """Record a meal slot intentionally skipped by the user."""
-        if any(item.get("slot_id") == slot.slot_id for item in self.skipped_slots):
+
+        if any(
+            item.get("slot_id") == slot.slot_id
+            for item in self.skipped_slots
+        ):
             return
 
-        self.skipped_slots.append({"slot_id": slot.slot_id, "reason": reason})
+        self.skipped_slots.append(
+            {
+                "slot_id": slot.slot_id,
+                "reason": reason,
+            }
+        )
+
         self.execution_trace.append(
             {
                 "event": "slot_skipped",
@@ -199,11 +193,63 @@ class PlanState:
             }
         )
 
-    def to_dict(self) -> dict:
+    # ============================================================
+    # PREPARED LEFTOVERS
+    # ============================================================
 
+    def record_prepared_leftover(
+        self,
+        leftover_id: str,
+        recipe_id: str,
+        servings_remaining: int,
+        prepared_date: str,
+        storage: str,
+        expires_on: str,
+    ) -> None:
+        """Record confirmed cooked servings available for future meals."""
+
+        if servings_remaining <= 0:
+            return
+
+        if any(
+            item.get("leftover_id") == leftover_id
+            for item in self.prepared_leftovers
+        ):
+            raise ValueError(
+                f"Duplicate leftover ID: {leftover_id}"
+            )
+
+        self.prepared_leftovers.append(
+            {
+                "leftover_id": leftover_id,
+                "recipe_id": recipe_id,
+                "servings_remaining": servings_remaining,
+                "prepared_date": prepared_date,
+                "storage": storage,
+                "expires_on": expires_on,
+            }
+        )
+
+        self.execution_trace.append(
+            {
+                "event": "prepared_leftover_recorded",
+                "leftover_id": leftover_id,
+                "recipe_id": recipe_id,
+                "servings_remaining": servings_remaining,
+            }
+        )
+
+    # ============================================================
+    # SERIALIZATION
+    # ============================================================
+
+    def to_dict(self) -> dict:
         return {
             "status": self.status,
-            "slots": [slot.to_dict() for slot in self.slots],
+            "slots": [
+                slot.to_dict()
+                for slot in self.slots
+            ],
             "selected_meals": self.selected_meals,
             "used_recipe_ids": sorted(self.used_recipe_ids),
             "budget": {
@@ -216,6 +262,7 @@ class PlanState:
                 "current": self.current_inventory,
             },
             "nutrition": self.nutrition_state,
+            "prepared_leftovers": self.prepared_leftovers,
             "final_grocery_basket": self.final_grocery_basket,
             "rejected_candidates": self.rejected_candidates,
             "uncertain_candidates": self.uncertain_candidates,
@@ -227,11 +274,14 @@ class PlanState:
     @classmethod
     def from_dict(cls, data: dict) -> "PlanState":
         """Restore a PlanState from its serialized representation."""
+
         from copy import deepcopy
         from datetime import date
 
         if not isinstance(data, dict):
-            raise TypeError("PlanState data must be a dictionary")
+            raise TypeError(
+                "PlanState data must be a dictionary"
+            )
 
         slots = [
             MealSlot(
@@ -248,17 +298,44 @@ class PlanState:
         return cls(
             slots=slots,
             initial_budget=float(budget["initial"]),
-            selected_meals=deepcopy(data.get("selected_meals", [])),
-            used_recipe_ids=set(data.get("used_recipe_ids", [])),
-            rejected_candidates=deepcopy(data.get("rejected_candidates", [])),
-            uncertain_candidates=deepcopy(data.get("uncertain_candidates", [])),
-            estimated_spent=float(budget.get("estimated_spent", 0)),
-            initial_inventory=deepcopy(inventory.get("initial", {})),
-            current_inventory=deepcopy(inventory.get("current", {})),
-            nutrition_state=deepcopy(data.get("nutrition", {})),
-            final_grocery_basket=deepcopy(data.get("final_grocery_basket", {})),
+            selected_meals=deepcopy(
+                data.get("selected_meals", [])
+            ),
+            used_recipe_ids=set(
+                data.get("used_recipe_ids", [])
+            ),
+            rejected_candidates=deepcopy(
+                data.get("rejected_candidates", [])
+            ),
+            uncertain_candidates=deepcopy(
+                data.get("uncertain_candidates", [])
+            ),
+            estimated_spent=float(
+                budget.get("estimated_spent", 0)
+            ),
+            initial_inventory=deepcopy(
+                inventory.get("initial", {})
+            ),
+            current_inventory=deepcopy(
+                inventory.get("current", {})
+            ),
+            nutrition_state=deepcopy(
+                data.get("nutrition", {})
+            ),
+            prepared_leftovers=deepcopy(
+                data.get("prepared_leftovers", [])
+            ),
+            final_grocery_basket=deepcopy(
+                data.get("final_grocery_basket", {})
+            ),
             status=data.get("status", "building"),
-            skipped_slots=deepcopy(data.get("skipped_slots", [])),
-            execution_trace=deepcopy(data.get("execution_trace", [])),
-            cooking_schedule=deepcopy(data.get("cooking_schedule", {})),
+            skipped_slots=deepcopy(
+                data.get("skipped_slots", [])
+            ),
+            execution_trace=deepcopy(
+                data.get("execution_trace", [])
+            ),
+            cooking_schedule=deepcopy(
+                data.get("cooking_schedule", {})
+            ),
         )
