@@ -1,179 +1,321 @@
 
-"""Manual and Gemini-assisted pantry review.
+"""Pantry management with Gemini-assisted image detection.
 
-Only confirmed quantities enter meal planning.
+Only quantities reviewed and confirmed by the user
+are included in meal planning.
 """
+
+import math
 
 import streamlit as st
 
 from app.components.presentation import preview_image
+from app.components.state_persistence import save_ui_state
 
 
-st.title("My pantry")
-st.caption(
-    "Review ingredients and quantities before including "
-    "them in your meal plan."
-)
+# ============================================================
+# INITIALIZE SESSION STATE
+# ============================================================
 
 if "pantry_items" not in st.session_state:
-    st.session_state.pantry_items = []
+    st.session_state["pantry_items"] = []
 
 if "image_candidates" not in st.session_state:
-    st.session_state.image_candidates = []
+    st.session_state["image_candidates"] = []
+
+
+UNITS = [
+    "g", "kg", "ml", "l", "count", "head",
+    "bunch", "pack", "cup", "tbsp", "tsp",
+    "clove", "piece",
+]
+
+HEAD_VEGETABLES = {
+    "cabbage", "green cabbage", "red cabbage",
+    "napa cabbage", "lettuce", "green leaf lettuce",
+    "iceberg lettuce", "romaine lettuce",
+    "butter lettuce", "broccoli", "cauliflower",
+}
+
+
+
+def invalidate_plan():
+    """Preserve existing plan while recording pantry changes.
+
+    Pantry updates should not erase the user's previous
+    meal plan, shopping list, or nutrition summary.
+
+    The existing plan remains a snapshot until the user
+    explicitly regenerates or replans.
+    """
+
+    # Keep planner_result unchanged.
+    # Keep confirmed_user_state unchanged.
+    # Keep preview_mode_active unchanged.
+
+    # Mark that pantry has changed since the plan was generated.
+    st.session_state["pantry_changed_since_plan"] = True
+
+    # Save updated pantry and existing plan together.
+    from app.components.state_persistence import save_ui_state
+
+    save_ui_state()
+
+    print(
+        "[PANTRY UPDATED]",
+        "items=",
+        len(st.session_state.get("pantry_items", [])),
+        "existing_plan_preserved=",
+        bool(st.session_state.get("planner_result")),
+    )
+
+
+def valid_quantity(value):
+    """Return positive finite quantity or None."""
+
+    if value is None or isinstance(value, bool):
+        return None
+
+    try:
+        quantity = float(value)
+    except (TypeError, ValueError):
+        return None
+
+    if not math.isfinite(quantity) or quantity <= 0:
+        return None
+
+    return quantity
 
 
 def candidate_name(candidate):
-    """Get the ingredient name from supported detector fields."""
+    """Return the KB ingredient name where available."""
+
     return str(
         candidate.get("ingredient_name")
-        or candidate.get("canonical_name")
-        or candidate.get("matched_name")
         or candidate.get("name")
         or candidate.get("detected_name")
         or ""
     ).strip()
 
 
-def invalidate_plan():
-    """Require reconfirmation after pantry changes."""
-    st.session_state.confirmed_user_state = None
-    st.session_state.planner_result = None
-    st.session_state.pop("live_plan_state", None)
-    st.session_state.pop("live_planner", None)
-    st.session_state.pop("planner_user_state", None)
+def candidate_suggestion(candidate):
+    """Return a safe quantity suggestion from image detection.
+
+    Full-package capacity is never used as remaining pantry stock.
+    """
+
+    if candidate.get("observations_count", 1) > 1:
+        return None, None
+
+    scope = candidate.get("quantity_scope")
+
+    if scope != "visible_amount":
+        return None, None
+
+    quantity = valid_quantity(candidate.get("quantity"))
+    unit = str(candidate.get("unit") or "").strip().lower()
+
+    if quantity is None or not unit:
+        return None, None
+
+    if candidate_name(candidate).casefold() in HEAD_VEGETABLES:
+        if unit in {"count", "counts", "piece", "pieces"}:
+            unit = "head"
+
+    return quantity, unit
 
 
-# ==========================================================
-# 1. MANUAL PANTRY ENTRY
-# ==========================================================
+def normalize_unit(unit):
+    """Normalize simple unit aliases for pantry storage."""
+
+    unit = str(unit or "").strip().lower()
+
+    aliases = {
+        "grams": "g",
+        "gram": "g",
+        "kilogram": "kg",
+        "kilograms": "kg",
+        "milliliter": "ml",
+        "milliliters": "ml",
+        "millilitre": "ml",
+        "millilitres": "ml",
+        "liter": "l",
+        "litre": "l",
+        "liters": "l",
+        "litres": "l",
+        "counts": "count",
+        "pieces": "piece",
+        "pcs": "piece",
+        "heads": "head",
+        "bunches": "bunch",
+        "packs": "pack",
+    }
+
+    return aliases.get(unit, unit)
+
+
+# ============================================================
+# PAGE HEADER
+# ============================================================
+
+st.title("My pantry")
+
+st.caption(
+    "Add ingredients you already have, or upload a photo "
+    "to identify ingredients and review their quantities."
+)
+
+
+# ============================================================
+# MANUAL PANTRY ENTRY
+# ============================================================
 
 st.subheader("Add an ingredient")
 
 with st.form("add_pantry", clear_on_submit=True):
 
-    name = st.text_input("Ingredient name")
+    ingredient_name = st.text_input("Ingredient name")
 
-    c1, c2 = st.columns(2)
+    left, right = st.columns(2)
 
-    qty = c1.number_input(
-        "Quantity",
-        min_value=0.0,
-        value=None,
-        placeholder="Enter quantity",
+    with left:
+        quantity = st.number_input(
+            "Quantity",
+            min_value=0.0,
+            value=None,
+            placeholder="Enter quantity",
+        )
+
+    with right:
+        unit = st.selectbox("Unit", UNITS)
+
+    submitted = st.form_submit_button(
+        "Add ingredient",
+        width="stretch",
     )
 
-    unit = c2.selectbox(
-        "Unit",
-        [
-            "g", "kg", "ml", "l", "pcs",
-            "cup", "tbsp", "tsp",
-            "bunch", "head", "pack",
-        ],
-    )
+if submitted:
 
-    submitted = st.form_submit_button("Add ingredient")
+    name = ingredient_name.strip().lower()
+    amount = valid_quantity(quantity)
 
-    if submitted:
-        if not name.strip() or qty is None or qty <= 0:
-            st.error(
-                "Enter an ingredient name and positive quantity."
-            )
-        else:
-            key = name.strip().lower()
+    if not name or amount is None:
+        st.error("Enter an ingredient name and positive quantity.")
 
-            st.session_state.pantry_items = [
-                item
-                for item in st.session_state.pantry_items
-                if item["ingredient_name"].lower() != key
-            ]
+    else:
+        existing = [
+            item
+            for item in st.session_state["pantry_items"]
+            if item["ingredient_name"].lower() != name
+        ]
 
-            st.session_state.pantry_items.append({
-                "ingredient_name": key,
-                "quantity": float(qty),
-                "unit": unit,
-            })
+        existing.append({
+            "ingredient_name": name,
+            "quantity": amount,
+            "unit": unit,
+        })
 
-            invalidate_plan()
+        st.session_state["pantry_items"] = existing
 
-            st.success(
-                "Ingredient saved. Reconfirm your preferences "
-                "before planning."
-            )
+        invalidate_plan()
+        save_ui_state()
+
+        st.success("Ingredient added to your pantry.")
 
 
-# ==========================================================
-# 2. CURRENT PANTRY
-# ==========================================================
+# ============================================================
+# CURRENT PANTRY
+# ============================================================
 
-if st.session_state.pantry_items:
+st.divider()
 
-    st.subheader("Current pantry")
+st.subheader("Your ingredients")
+
+pantry_items = st.session_state["pantry_items"]
+
+if pantry_items:
 
     edited = st.data_editor(
-        st.session_state.pantry_items,
+        pantry_items,
         num_rows="dynamic",
         hide_index=True,
-        use_container_width=True,
+        width="stretch",
         key="pantry_editor",
+        column_config={
+            "ingredient_name": st.column_config.TextColumn(
+                "Ingredient",
+                required=True,
+            ),
+            "quantity": st.column_config.NumberColumn(
+                "Quantity",
+                min_value=0.0,
+            ),
+            "unit": st.column_config.SelectboxColumn(
+                "Unit",
+                options=UNITS,
+                required=True,
+            ),
+        },
     )
 
     if st.button("Save pantry changes"):
 
-        clean = []
+        cleaned = []
         seen = set()
 
         try:
             for item in edited:
 
-                ingredient = str(
+                name = str(
                     item.get("ingredient_name") or ""
                 ).strip().lower()
 
-                quantity = float(item.get("quantity"))
+                amount = valid_quantity(
+                    item.get("quantity")
+                )
 
-                item_unit = str(
-                    item.get("unit") or ""
-                ).strip()
+                unit = normalize_unit(
+                    item.get("unit")
+                )
 
-                if (
-                    not ingredient
-                    or ingredient in seen
-                    or quantity <= 0
-                    or not item_unit
-                ):
+                if not name or amount is None or not unit:
                     raise ValueError(
-                        "Use unique ingredient names, "
-                        "positive quantities and valid units."
+                        "Each ingredient needs a name, "
+                        "positive quantity, and unit."
                     )
 
-                seen.add(ingredient)
+                if name in seen:
+                    raise ValueError(
+                        f"Duplicate ingredient: {name}"
+                    )
 
-                clean.append({
-                    "ingredient_name": ingredient,
-                    "quantity": quantity,
-                    "unit": item_unit,
+                seen.add(name)
+
+                cleaned.append({
+                    "ingredient_name": name,
+                    "quantity": amount,
+                    "unit": unit,
                 })
 
-        except (TypeError, ValueError) as exc:
-            st.error(f"Invalid pantry entry: {exc}")
+        except ValueError as exc:
+            st.error(str(exc))
 
         else:
-            st.session_state.pantry_items = clean
+            st.session_state["pantry_items"] = cleaned
 
             invalidate_plan()
+            save_ui_state()
 
-            st.success(
-                "Pantry updated. Reconfirm your preferences "
-                "before planning."
-            )
+            st.success("Pantry changes saved.")
+            st.rerun()
 
 else:
-    st.info("No ingredients added yet.")
+    st.info("Your pantry is empty. Add an ingredient to begin.")
 
 
-# ==========================================================
-# 3. PANTRY IMAGE UPLOAD
-# ==========================================================
+# ============================================================
+# PANTRY IMAGE UPLOAD
+# ============================================================
 
 st.divider()
 
@@ -186,59 +328,78 @@ upload = st.file_uploader(
 
 if upload is not None:
 
-    # Small, consistent preview.
     preview_image(upload, width=260)
 
-    if st.button("Detect ingredients in image"):
+    if st.button(
+        "Detect ingredients in image",
+        type="primary",
+    ):
 
         try:
             from src.pantry.image_pantry import (
                 detect_image,
+                refine_missing_quantities,
                 match_to_kb,
                 consolidate_ingredients,
+                load_kb,
             )
 
-            with st.spinner("Analyzing the image..."):
+            with st.spinner("Analyzing your pantry image..."):
 
-                detected = detect_image(
-                    upload.getvalue(),
+                image_bytes = upload.getvalue()
+
+                detections = detect_image(
+                    image_bytes,
                     mime_type=upload.type,
                 )
 
-                print(
-                    "\n[PANTRY DEBUG] Raw detection:",
-                    repr(detected)[:3000],
-                )
-
-                if isinstance(detected, dict):
-                    detected = (
-                        detected.get("ingredients") or []
+                if isinstance(detections, dict):
+                    detections = (
+                        detections.get("ingredients") or []
                     )
 
-                matched = match_to_kb(detected)
+                # Second Gemini pass for missing quantities.
+                detections = refine_missing_quantities(
+                    detections,
+                    image_bytes,
+                    mime_type=upload.type,
+                )
 
-                print(
-                    "\n[PANTRY DEBUG] KB matched:",
-                    repr(matched)[:3000],
+                matched = match_to_kb(
+                    detections,
+                    kb=load_kb(),
                 )
 
                 candidates = consolidate_ingredients(
                     matched
                 )
 
-                st.session_state.image_candidates = (
-                    candidates
-                )
+                st.session_state["image_candidates"] = candidates
 
-                # Reset previous image-review edits.
-                st.session_state.pop(
-                    "image_review",
-                    None,
-                )
+                # Clear previous review edits.
+                st.session_state.pop("image_review", None)
 
                 print(
-                    "\n[PANTRY DEBUG] Consolidated:",
-                    repr(candidates)[:3000],
+                    "[PANTRY UI] Detected:",
+                    len(detections),
+                    "Matched:",
+                    sum(
+                        bool(x.get("ingredient_id"))
+                        for x in candidates
+                    ),
+                    "Candidates:",
+                    len(candidates),
+                )
+
+            if candidates:
+                st.success(
+                    f"Found {len(candidates)} ingredients. "
+                    "Review them below."
+                )
+            else:
+                st.info(
+                    "No ingredients were identified. "
+                    "You can add them manually."
                 )
 
         except Exception as exc:
@@ -247,9 +408,9 @@ if upload is not None:
             )
 
 
-# ==========================================================
-# 4. REVIEW DETECTED INGREDIENTS
-# ==========================================================
+# ============================================================
+# REVIEW IMAGE DETECTIONS
+# ============================================================
 
 candidates = (
     st.session_state.get("image_candidates") or []
@@ -257,37 +418,33 @@ candidates = (
 
 if candidates:
 
-    print("\n[PANTRY DEBUG] Detected candidates:")
-
-    for candidate in candidates[:5]:
-        print(repr(candidate))
+    st.markdown("#### Review detected ingredients")
 
     st.caption(
-        "Review the detected ingredients and enter the "
-        "amount you actually have. Quantities are not "
-        "automatically assumed from the image."
+        "Suggested quantities are based on visible food only. "
+        "For packaged items, enter how much remains, "
+        "not the quantity printed on the package."
     )
 
     rows = []
 
     for candidate in candidates:
 
+        suggested_quantity, suggested_unit = (
+            candidate_suggestion(candidate)
+        )
+
         rows.append({
-            "Include": False,
+            "Include": bool(candidate.get("ingredient_id")),
             "Ingredient": candidate_name(candidate),
-            "Quantity": None,
-            "Unit": "",
+            "Quantity": suggested_quantity,
+            "Unit": suggested_unit,
         })
-
-    print("\n[PANTRY DEBUG] Rows passed to editor:")
-
-    for row in rows[:5]:
-        print(repr(row))
 
     reviewed = st.data_editor(
         rows,
         hide_index=True,
-        use_container_width=True,
+        width="stretch",
         key="image_review",
         column_config={
             "Include": st.column_config.CheckboxColumn(
@@ -304,129 +461,99 @@ if candidates:
             ),
             "Unit": st.column_config.SelectboxColumn(
                 "Unit",
-                options=[
-                    "g", "kg", "ml", "l", "pcs",
-                    "cup", "tbsp", "tsp",
-                    "bunch", "head", "pack",
-                ],
+                options=UNITS,
             ),
         },
     )
 
-    # ======================================================
-    # 5. ADD CONFIRMED INGREDIENTS TO PANTRY
-    # ======================================================
+    if st.button(
+        "Add reviewed ingredients to pantry",
+        type="primary",
+    ):
 
-    if st.button("Add reviewed quantities to pantry"):
-
-        chosen = [
-            row
-            for row in reviewed
+        selected = [
+            (index, row)
+            for index, row in enumerate(reviewed)
             if row.get("Include")
         ]
 
-        try:
-            if not chosen:
-                raise ValueError(
-                    "Select at least one ingredient."
-                )
-
-            new_items = list(
-                st.session_state.pantry_items
-            )
-
-            for row in chosen:
-
-                ingredient = str(
-                    row.get("Ingredient") or ""
-                ).strip()
-
-                if not ingredient:
-                    raise ValueError(
-                        "A selected ingredient has no name."
-                    )
-
-                # Match the reviewed row back to its
-                # original detected ingredient.
-                candidate = next(
-                    (
-                        item
-                        for item in candidates
-                        if candidate_name(item).lower()
-                        == ingredient.lower()
-                    ),
-                    None,
-                )
-
-                if (
-                    candidate is None
-                    or not candidate.get("ingredient_id")
-                ):
-                    raise ValueError(
-                        f"Ingredient not matched in KB: "
-                        f"{ingredient}"
-                    )
-
-                quantity_value = row.get("Quantity")
-                selected_unit = str(
-                    row.get("Unit") or ""
-                ).strip()
-
-                if (
-                    quantity_value is None
-                    or not selected_unit
-                ):
-                    raise ValueError(
-                        f"Confirm quantity and unit for "
-                        f"{ingredient}"
-                    )
-
-                quantity_value = float(
-                    quantity_value
-                )
-
-                if quantity_value <= 0:
-                    raise ValueError(
-                        "Quantities must be positive."
-                    )
-
-                normalized_name = (
-                    ingredient.lower()
-                )
-
-                new_items = [
-                    item
-                    for item in new_items
-                    if item["ingredient_name"]
-                    != normalized_name
-                ]
-
-                new_items.append({
-                    "ingredient_name": normalized_name,
-                    "quantity": quantity_value,
-                    "unit": selected_unit,
-                })
-
-        except (ValueError, TypeError) as exc:
-            st.error(str(exc))
+        if not selected:
+            st.warning("Select at least one ingredient.")
 
         else:
-            st.session_state.pantry_items = (
-                new_items
-            )
+            try:
+                new_items = list(
+                    st.session_state["pantry_items"]
+                )
 
-            invalidate_plan()
+                # Validate every selected row before saving.
+                additions = []
 
-            st.session_state.image_candidates = []
+                for index, row in selected:
 
-            st.session_state.pop(
-                "image_review",
-                None,
-            )
+                    candidate = candidates[index]
 
-            st.success(
-                "Reviewed ingredients added to your pantry. "
-                "Reconfirm your preferences before planning."
-            )
+                    if not candidate.get("ingredient_id"):
+                        raise ValueError(
+                            f"{candidate_name(candidate)} is not "
+                            "matched to the Ingredient KB."
+                        )
 
-            st.rerun()
+                    # Preserve the canonical KB ingredient name.
+                    name = candidate_name(candidate).lower()
+
+                    amount = valid_quantity(
+                        row.get("Quantity")
+                    )
+
+                    unit = normalize_unit(
+                        row.get("Unit")
+                    )
+
+                    if amount is None or not unit:
+                        raise ValueError(
+                            f"Enter a positive quantity and unit "
+                            f"for {name}."
+                        )
+
+                    if unit not in UNITS:
+                        raise ValueError(
+                            f"Unsupported unit for {name}: {unit}"
+                        )
+
+                    additions.append({
+                        "ingredient_name": name,
+                        "quantity": amount,
+                        "unit": unit,
+                    })
+
+                for item in additions:
+
+                    new_items = [
+                        existing
+                        for existing in new_items
+                        if existing["ingredient_name"].lower()
+                        != item["ingredient_name"]
+                    ]
+
+                    new_items.append(item)
+
+            except (TypeError, ValueError) as exc:
+                st.error(str(exc))
+
+            else:
+                st.session_state["pantry_items"] = new_items
+
+                invalidate_plan()
+                save_ui_state()
+
+                st.session_state["image_candidates"] = []
+                st.session_state.pop("image_review", None)
+
+                st.success(
+                    "Ingredients added to your pantry. "
+                    "Please reconfirm your preferences "
+                    "before generating a meal plan."
+                )
+
+                st.rerun()

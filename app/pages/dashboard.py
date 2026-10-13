@@ -73,6 +73,12 @@ st.caption("Your meals, organized around your preferences and budget.")
 #                     )
 
 result = st.session_state.get("planner_result") or {}
+if st.session_state.get("pantry_changed_since_plan"):
+    st.info(
+        "Your pantry has changed since this meal plan was created. "
+        "The meals and shopping list shown are from your previous plan. "
+        "Generate an updated plan to include your new ingredients."
+    )
 confirmed = st.session_state.get("confirmed_user_state") or {}
 
 
