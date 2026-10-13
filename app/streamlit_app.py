@@ -12,6 +12,12 @@ and generated meal-plan results between sessions.
 import sys
 from pathlib import Path
 
+from app.components.state_persistence import (
+    load_ui_state,
+    get_workspace_id,
+    switch_workspace,
+)
+
 # ============================================================
 # PROJECT ROOT
 # ============================================================
@@ -95,6 +101,35 @@ with st.sidebar:
     )
 
     st.divider()
+
+    
+    with st.expander("My saved workspace"):
+
+        workspace_id = get_workspace_id()
+
+        st.caption(
+            "Save this ID to reopen your workspace "
+            "in a future session."
+        )
+
+        st.code(workspace_id)
+
+        entered_id = st.text_input(
+            "Open a saved workspace",
+            placeholder="Enter workspace ID",
+        )
+
+        if st.button("Open workspace"):
+
+            try:
+                switch_workspace(entered_id)
+
+            except (ValueError, FileNotFoundError) as exc:
+                st.error(str(exc))
+
+            else:
+                st.rerun()
+
 
 
 

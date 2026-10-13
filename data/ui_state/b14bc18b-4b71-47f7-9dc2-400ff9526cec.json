@@ -1,0 +1,27 @@
+{
+  "natural_language_request": "plan a meal for 3 days",
+  "last_request": "plan a meal for 3 days",
+  "parsed_result": {
+    "valid": true,
+    "data": {
+      "budget": null,
+      "cook_frequency": null,
+      "cook_time_preference_hrs": null,
+      "preferred_cuisines": [],
+      "dietary_restrictions": [],
+      "allergies": [],
+      "preferred_meal_types": [],
+      "preferred_ingredients": [],
+      "disliked_ingredients": [],
+      "budget_flexible": false,
+      "ingredient_availability": {}
+    }
+  },
+  "request_revision": 1,
+  "confirmed_user_state": null,
+  "pantry_items": [],
+  "planner_result": null,
+  "preview_mode_active": false,
+  "pantry_changed_since_plan": null,
+  "preferences_changed_since_plan": true
+}

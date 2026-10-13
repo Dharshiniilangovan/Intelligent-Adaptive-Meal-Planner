@@ -292,13 +292,50 @@ if parsed is not None:
 
             with left:
 
-                cuisines = st.text_input(
-                    "Preferred cuisines",
-                    value=comma_text(
+                                
+                cuisine_options = [
+                    "American",
+                    "Asian",
+                    "British",
+                    "Caribbean",
+                    "Central Europe",
+                    "Chinese",
+                    "Eastern Europe",
+                    "French",
+                    "Greek",
+                    "Indian",
+                    "Italian",
+                    "Japanese",
+                    "Korean",
+                    "Mediterranean",
+                    "Mexican",
+                    "Middle Eastern",
+                    "Nordic",
+                    "South American",
+                    "South East Asian",
+                    "World",
+                    "Kosher",
+                ]
+
+                parsed_cuisines = [
+                    str(cuisine).strip().lower()
+                    for cuisine in normalized_list(
                         data.get("preferred_cuisines")
-                    ),
+                    )
+                ]
+
+                cuisines = st.multiselect(
+                    "Preferred cuisines",
+                    options=cuisine_options,
+                    default=[
+                        option
+                        for option in cuisine_options
+                        if option.lower() in parsed_cuisines
+                    ],
+                    placeholder="Choose your preferred cuisines",
                     key=f"cuisines_{revision}",
                 )
+
 
                 likes = st.text_input(
                     "Preferred ingredients",
@@ -367,7 +404,7 @@ if parsed is not None:
         submitted = st.form_submit_button(
             "Confirm preferences",
             type="primary",
-            width="stretch",
+            use_container_width=True,
         )
 
     # ========================================================
@@ -406,7 +443,10 @@ if parsed is not None:
                     )
                 ),
                 "allergies": csv_values(allergy_text),
-                "preferred_cuisines": csv_values(cuisines),
+                "preferred_cuisines": [
+                    cuisine.lower()
+                    for cuisine in cuisines
+                ],
                 "preferred_ingredients": csv_values(likes),
                 "disliked_ingredients": csv_values(dislikes),
                 "cook_time_preference_hrs": (
@@ -458,7 +498,7 @@ if parsed is not None:
         if st.button(
             "Generate meal plan",
             type="primary",
-            width="stretch",
+            use_container_width=True,
         ):
 
             with st.spinner(

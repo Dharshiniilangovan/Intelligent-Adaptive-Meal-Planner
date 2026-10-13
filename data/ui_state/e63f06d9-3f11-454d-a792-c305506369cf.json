@@ -1,0 +1,49 @@
+{
+  "natural_language_request": "plan a 3 day meal",
+  "last_request": "plan a 3 day meal",
+  "parsed_result": {
+    "valid": true,
+    "data": {
+      "budget": null,
+      "cook_frequency": null,
+      "cook_time_preference_hrs": null,
+      "preferred_cuisines": [],
+      "dietary_restrictions": [],
+      "allergies": [],
+      "preferred_meal_types": [],
+      "preferred_ingredients": [],
+      "disliked_ingredients": [],
+      "budget_flexible": false,
+      "ingredient_availability": {}
+    }
+  },
+  "request_revision": 1,
+  "confirmed_user_state": {
+    "budget": 100.0,
+    "cook_frequency": null,
+    "cook_time_preference_hrs": 0.05,
+    "preferred_cuisines": [
+      "american"
+    ],
+    "dietary_restrictions": [],
+    "allergies": [
+      "peanut"
+    ],
+    "preferred_meal_types": [
+      "lunch"
+    ],
+    "preferred_ingredients": [],
+    "disliked_ingredients": [],
+    "budget_flexible": true,
+    "ingredient_availability": {},
+    "budget_remaining": 100.0,
+    "days": 3,
+    "start_date": "2026-10-13",
+    "budget_cap": 105.0
+  },
+  "pantry_items": [],
+  "planner_result": null,
+  "preview_mode_active": false,
+  "pantry_changed_since_plan": null,
+  "preferences_changed_since_plan": true
+}
