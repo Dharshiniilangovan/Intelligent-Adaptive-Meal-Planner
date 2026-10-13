@@ -3,7 +3,6 @@
 from collections import defaultdict
 from datetime import date
 
-
 def build_cooking_schedule(
     selected_meals: list[dict],
     max_sessions: int,
@@ -21,7 +20,14 @@ def build_cooking_schedule(
     grouped = defaultdict(list)
 
     for meal in selected_meals:
+
+        # Prepared leftovers are already cooked.
+        # Do not count them as new cooking sessions.
+        if meal.get("meal_source") == "prepared_leftover":
+            continue
+
         slot = meal["slot"]
+
         grouped[meal["recipe_id"]].append(
             {
                 "slot_id": slot["slot_id"],
@@ -46,7 +52,9 @@ def build_cooking_schedule(
                     "recipe_id": recipe_id,
                     "cook_date": items[0]["date"].isoformat(),
                     "portions_prepared": len(items),
-                    "meal_slot_ids": [item["slot_id"] for item in items],
+                    "meal_slot_ids": [
+                        item["slot_id"] for item in items
+                    ],
                 }
             )
 
@@ -65,7 +73,9 @@ def build_cooking_schedule(
 
         finish_batch(batch)
 
-    sessions.sort(key=lambda s: (s["cook_date"], s["session_id"]))
+    sessions.sort(
+        key=lambda s: (s["cook_date"], s["session_id"])
+    )
 
     # Enforce the limit within each calendar week.
     weekly_counts = defaultdict(int)
@@ -76,7 +86,9 @@ def build_cooking_schedule(
         weekly_counts[f"{iso_year}-W{iso_week:02d}"] += 1
 
     violations = {
-        week: count for week, count in weekly_counts.items() if count > max_sessions
+        week: count
+        for week, count in weekly_counts.items()
+        if count > max_sessions
     }
 
     return {

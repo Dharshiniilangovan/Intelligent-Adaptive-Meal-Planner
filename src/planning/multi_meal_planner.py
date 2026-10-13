@@ -347,6 +347,90 @@ class MultiMealPlanner:
 
     # ============================================================
 
+    @staticmethod
+    def _allocate_prepared_leftovers(
+        plan_state,
+        remaining_slots,
+        approved_leftover_ids,
+    ):
+        from copy import deepcopy
+        from datetime import date
+
+        leftovers = deepcopy(plan_state.prepared_leftovers)
+        allocated_meals = []
+        unfilled_slots = []
+
+        approved = set(approved_leftover_ids or [])
+
+        for slot in remaining_slots:
+            allocated = False
+
+            for leftover in leftovers:
+                leftover_id = leftover.get("leftover_id")
+
+                if leftover_id not in approved:
+                    continue
+
+                if leftover.get("servings_remaining", 0) < 1:
+                    continue
+
+                if not leftover.get("storage"):
+                    continue
+
+                try:
+                    prepared = date.fromisoformat(
+                        leftover["prepared_date"]
+                    )
+                    expiry = date.fromisoformat(
+                        leftover["expires_on"]
+                    )
+                except (KeyError, ValueError, TypeError):
+                    continue
+
+                if not (prepared <= slot.date <= expiry):
+                    continue
+
+                recipe_id = leftover["recipe_id"]
+
+                allocated_meals.append({
+                    "slot": slot.to_dict(),
+                    "recipe_id": recipe_id,
+                    "meal_source": "prepared_leftover",
+                    "leftover_id": leftover_id,
+                    "estimated_cost": 0.0,
+                    "decision": {
+                        "recipe_id": recipe_id,
+                        "recipe": deepcopy(
+                            leftover.get("nutrition") or {}
+                        ),
+                        "ingredient": {
+                            "required_ingredients": []
+                        },
+                        "grocery": {
+                            "items": []
+                        },
+                    },
+                })
+
+                leftover["servings_remaining"] -= 1
+
+                plan_state.execution_trace.append({
+                    "event": "prepared_leftover_allocated",
+                    "slot_id": slot.slot_id,
+                    "leftover_id": leftover_id,
+                    "recipe_id": recipe_id,
+                })
+
+                allocated = True
+                break
+
+            if not allocated:
+                unfilled_slots.append(slot)
+
+        plan_state.prepared_leftovers = leftovers
+
+        return allocated_meals, unfilled_slots
+
     def skip_and_replan(
         self,
         user_state: dict,
@@ -423,9 +507,23 @@ class MultiMealPlanner:
             if slot.slot_id not in completed_ids and slot.slot_id not in skipped_ids
         ]
 
-        rebuilt.selected_meals = completed_meals
 
-        rebuilt.used_recipe_ids = {meal["recipe_id"] for meal in completed_meals}
+        leftover_meals, remaining_slots = (
+            self._allocate_prepared_leftovers(
+                plan_state=rebuilt,
+                remaining_slots=remaining_slots,
+                approved_leftover_ids=user_state.get(
+                    "approved_leftover_ids", []
+                ),
+            )
+        )
+
+        rebuilt.selected_meals = completed_meals + leftover_meals
+
+        rebuilt.used_recipe_ids = {
+            meal["recipe_id"]
+            for meal in rebuilt.selected_meals
+        }
 
         rebuilt.rejected_candidates = []
 
@@ -1377,6 +1475,8 @@ class MultiMealPlanner:
         reconciliation_errors = []
 
         for selected in plan_state.selected_meals:
+            if selected.get("meal_source") == "prepared_leftover":
+                continue
 
             decision = selected.get("decision") or {}
 
@@ -1684,6 +1784,8 @@ class MultiMealPlanner:
         # ========================================================
 
         for selected in plan_state.selected_meals:
+            if selected.get("meal_source") == "prepared_leftover":
+                continue
 
             recipe_id = selected.get("recipe_id")
 
@@ -1783,6 +1885,34 @@ class MultiMealPlanner:
         # ========================================================
 
         initial_inventory_list = self._inventory_to_pantry(plan_state.initial_inventory)
+        only_prepared_leftovers = (
+            bool(plan_state.selected_meals)
+            and all(
+                meal.get("meal_source") == "prepared_leftover"
+                for meal in plan_state.selected_meals
+            )
+        )
+
+        if only_prepared_leftovers:
+            return {
+                "items": [],
+                "known_cost": 0.0,
+                "projected_cost": 0.0,
+                "projected_cost_complete": True,
+                "planning_cost": 0.0,
+                "planning_cost_complete": True,
+                "all_items_priced": True,
+                "all_items_have_usable_cost": True,
+                "unpriced_items": [],
+                "projection_missing": [],
+                "aggregated_requirements": [],
+                "purchase_requirements": [],
+                "qualitative_requirements": [],
+                "unresolved_requirements": [],
+                "warnings": [],
+                "status": "complete",
+            }
+
 
         # ========================================================
 
