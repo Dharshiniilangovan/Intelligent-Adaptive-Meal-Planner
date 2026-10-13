@@ -1,0 +1,246 @@
+{
+  "workspace_id": "6f5c1874-0670-4b17-82a2-a8f2a557a33f",
+  "job_id": "9c257b88-5dcd-42b3-897c-ab82b439d66d",
+  "kind": "replan",
+  "status": "completed",
+  "created_at": "2026-10-13T06:24:26.232501+00:00",
+  "started_at": "2026-10-13T06:24:26.237559+00:00",
+  "finished_at": "2026-10-13T06:24:26.246162+00:00",
+  "result": {
+    "plan": {
+      "status": "infeasible",
+      "slots": [
+        {
+          "slot_id": "2026-10-13_breakfast",
+          "date": "2026-10-13",
+          "meal_type": "breakfast",
+          "max_cooking_time": null
+        }
+      ],
+      "selected_meals": [],
+      "used_recipe_ids": [],
+      "budget": {
+        "initial": 100.0,
+        "estimated_spent": 12.65,
+        "remaining": 87.35
+      },
+      "inventory": {
+        "initial": {},
+        "current": {}
+      },
+      "nutrition": {},
+      "final_grocery_basket": {
+        "items": [],
+        "known_cost": 12.65,
+        "all_items_priced": false,
+        "unpriced_items": [],
+        "aggregated_requirements": [],
+        "status": "empty_plan"
+      },
+      "rejected_candidates": [],
+      "uncertain_candidates": [],
+      "skipped_slots": [
+        {
+          "slot_id": "2026-10-13_breakfast",
+          "reason": "user_skipped"
+        }
+      ],
+      "execution_trace": [
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R11216",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "olive oil"
+            ],
+            "unpriced_items": [
+              "olive oil"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R15484",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "seasoning",
+              "pepper"
+            ],
+            "unpriced_items": [
+              "seasoning",
+              "pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R05874",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "seasoning"
+            ],
+            "unpriced_items": [
+              "seasoning"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R16882",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "lemon juice",
+              "salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "lemon juice",
+              "salt",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R34181",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "sugar substitute"
+            ],
+            "unpriced_items": [
+              "sugar substitute"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R25432",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "salt",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R18534",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "french bread",
+              "butter",
+              "pepper"
+            ],
+            "unpriced_items": [
+              "french bread",
+              "butter",
+              "pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R15696",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "kosher salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "kosher salt",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "event": "meal_selected",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R02590"
+        },
+        {
+          "event": "nutrition_updated",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R02590"
+        },
+        {
+          "event": "inventory_reconciliation_failed",
+          "reason": "One or more ingredient requirements could not be reconciled.",
+          "unresolved_count": 2,
+          "error_count": 2,
+          "details": [
+            {
+              "recipe_id": "R02590",
+              "ingredient_name": "sweet potato",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: kg vs count for ingredient 'sweet potato' (available=1.0, required=1.0)"
+            },
+            {
+              "recipe_id": "R02590",
+              "ingredient_name": "steel cut oats",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs cup for ingredient 'steel cut oats' (available=500.0, required=0.75)"
+            }
+          ]
+        },
+        {
+          "event": "slot_skipped",
+          "slot_id": "2026-10-13_breakfast",
+          "reason": "user_skipped"
+        },
+        {
+          "event": "inventory_reconciled",
+          "selected_meals": 0
+        },
+        {
+          "event": "plan_rebuilt_after_skip",
+          "skipped_slot_id": "2026-10-13_breakfast",
+          "completed_slot_ids": []
+        }
+      ],
+      "cooking_schedule": {
+        "sessions": [],
+        "session_count": 0,
+        "weekly_session_counts": {},
+        "max_sessions_per_week": 2,
+        "valid": true,
+        "violations": {},
+        "storage_assumption_days": 1
+      }
+    },
+    "validation": {
+      "status": "infeasible",
+      "issues": []
+    },
+    "grocery_basket": {
+      "items": [],
+      "known_cost": 12.65,
+      "all_items_priced": false,
+      "unpriced_items": [],
+      "aggregated_requirements": [],
+      "status": "empty_plan"
+    },
+    "nutrition_summary": {},
+    "nutrition_deviation": null
+  },
+  "error": null
+}

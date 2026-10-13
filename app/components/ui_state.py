@@ -37,3 +37,14 @@ def current_pantry():
 def result_basket():
     result = st.session_state.get("planner_result") or {}
     return result.get("grocery_basket") or result.get("final_grocery_basket") or {}
+
+
+def canonical_pantry():
+    """Convert UI pantry rows into the original GC1 User State format."""
+
+    from app.components.user_state_adapter import convert_pantry
+
+    return convert_pantry(
+        st.session_state.get("pantry_items", [])
+    )
+

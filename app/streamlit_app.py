@@ -5,18 +5,20 @@ Run from the repository root:
 
     python -m streamlit run app/streamlit_app.py
 
-Restores saved user preferences, pantry ingredients,
-and generated meal-plan results between sessions.
+Features:
+- Workspace-specific User State persistence
+- Saved preferences and pantry
+- Saved generated meal plans
+- Background meal generation
+- Generation status across all pages
+- Independent user workspaces
+- Existing IAMP theme and navigation
 """
 
 import sys
 from pathlib import Path
+from app.components.background_status import sync_background_jobs
 
-from app.components.state_persistence import (
-    load_ui_state,
-    get_workspace_id,
-    switch_workspace,
-)
 
 # ============================================================
 # PROJECT ROOT
@@ -34,13 +36,23 @@ if str(ROOT) not in sys.path:
 
 import streamlit as st
 
-from app.components.state_persistence import load_ui_state
+from app.components.state_persistence import (
+    load_ui_state,
+    get_workspace_id,
+    switch_workspace,
+)
+
+from app.components.planning_status import (
+    sync_planning_job,
+    show_planning_status,
+)
+
 from app.components.ui_state import initialize_state
 from app.components.theme import apply_theme
 
 
 # ============================================================
-# STREAMLIT PAGE CONFIGURATION
+# STREAMLIT CONFIGURATION
 # ============================================================
 
 st.set_page_config(
@@ -51,29 +63,60 @@ st.set_page_config(
 
 
 # ============================================================
-# RESTORE SAVED USER STATE
+# RESTORE USER WORKSPACE
 # ============================================================
 
-# Restore saved preferences, pantry, and generated plan
-# before initializing any default session-state values.
+# Restore saved preferences, pantry, and meal-plan results
+# before initializing missing session-state values.
+
 load_ui_state()
 
 
 # ============================================================
-# INITIALIZE MISSING SESSION VALUES
+# INITIALIZE SESSION STATE
 # ============================================================
 
-# initialize_state() must use setdefault() rather than
-# unconditional assignments for persistent values.
 initialize_state()
 
-# These defaults should not overwrite restored data.
+# These defaults must not overwrite restored data.
+
 st.session_state.setdefault("planner_result", None)
 st.session_state.setdefault("confirmed_user_state", None)
 st.session_state.setdefault("parsed_result", None)
 st.session_state.setdefault("pantry_items", [])
 st.session_state.setdefault("preview_mode_active", False)
 st.session_state.setdefault("completed_slot_ids", set())
+
+# Background generation state.
+st.session_state.setdefault("planning_job_id", None)
+st.session_state.setdefault("planning_job_error", None)
+
+# Track changes made after a plan was generated.
+st.session_state.setdefault(
+    "pantry_changed_since_plan",
+    False,
+)
+
+st.session_state.setdefault(
+    "preferences_changed_since_plan",
+    False,
+)
+
+
+# ============================================================
+# SYNCHRONIZE BACKGROUND GENERATION
+# ============================================================
+
+# This runs whenever Streamlit reruns the application,
+# including when the user navigates between pages.
+#
+# If a background job has completed, its saved result
+# is restored into st.session_state["planner_result"].
+#
+# The Planner itself is NOT restarted here.
+
+sync_planning_job()
+sync_background_jobs()
 
 
 # ============================================================
@@ -84,11 +127,15 @@ apply_theme()
 
 
 # ============================================================
-# SIDEBAR BRANDING
+# SIDEBAR BRANDING AND WORKSPACE MANAGEMENT
 # ============================================================
 
-
 with st.sidebar:
+
+    # --------------------------------------------------------
+    # IAMP BRANDING
+    # --------------------------------------------------------
+
     st.markdown(
         '<div class="iamp-brand">'
         '<div class="iamp-wordmark">IAMP</div>'
@@ -102,35 +149,65 @@ with st.sidebar:
 
     st.divider()
 
-    
+    # --------------------------------------------------------
+    # SAVED WORKSPACE
+    # --------------------------------------------------------
+
     with st.expander("My saved workspace"):
 
         workspace_id = get_workspace_id()
 
         st.caption(
-            "Save this ID to reopen your workspace "
-            "in a future session."
+            "Your preferences, pantry, and meal plans "
+            "are saved in this workspace. "
+            "Keep this ID to reopen it later."
         )
 
-        st.code(workspace_id)
+        st.code(
+            workspace_id,
+            language=None,
+        )
 
         entered_id = st.text_input(
             "Open a saved workspace",
             placeholder="Enter workspace ID",
+            key="workspace_id_input",
         )
 
-        if st.button("Open workspace"):
+        if st.button(
+            "Open workspace",
+            key="open_saved_workspace",
+        ):
 
-            try:
-                switch_workspace(entered_id)
+            if not entered_id.strip():
 
-            except (ValueError, FileNotFoundError) as exc:
-                st.error(str(exc))
+                st.warning(
+                    "Enter a workspace ID first."
+                )
 
             else:
-                st.rerun()
 
+                try:
 
+                    switch_workspace(
+                        entered_id.strip()
+                    )
+
+                except (
+                    ValueError,
+                    FileNotFoundError,
+                ) as exc:
+
+                    st.error(
+                        str(exc)
+                    )
+
+                else:
+
+                    # Synchronize the newly selected workspace
+                    # on the next full application rerun.
+
+                    st.rerun()
 
 
 # ============================================================
@@ -179,6 +256,19 @@ pages = {
     ],
 
 }
+
+
+# ============================================================
+# BACKGROUND GENERATION STATUS
+# ============================================================
+
+# Display the status of an active generation job.
+#
+# Users can navigate between pages while the job runs.
+# Completed results are collected by sync_planning_job()
+# during the next full application rerun.
+
+show_planning_status()
 
 
 # ============================================================

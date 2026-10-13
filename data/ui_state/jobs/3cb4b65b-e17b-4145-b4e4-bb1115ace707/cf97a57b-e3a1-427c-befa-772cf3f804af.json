@@ -1,0 +1,1577 @@
+{
+  "job_id": "cf97a57b-e3a1-427c-befa-772cf3f804af",
+  "workspace_id": "3cb4b65b-e17b-4145-b4e4-bb1115ace707",
+  "status": "completed",
+  "created_at": "2026-10-13T06:46:53.531459+00:00",
+  "started_at": "2026-10-13T06:46:53.534957+00:00",
+  "finished_at": "2026-10-13T06:47:36.123809+00:00",
+  "error": null,
+  "result": {
+    "plan": {
+      "status": "infeasible",
+      "slots": [
+        {
+          "slot_id": "2026-10-13_lunch",
+          "date": "2026-10-13",
+          "meal_type": "lunch",
+          "max_cooking_time": null
+        }
+      ],
+      "selected_meals": [
+        {
+          "slot": {
+            "slot_id": "2026-10-13_lunch",
+            "date": "2026-10-13",
+            "meal_type": "lunch",
+            "max_cooking_time": null
+          },
+          "recipe_id": "R37500",
+          "decision": {
+            "recipe_id": "R37500",
+            "status": "feasible",
+            "recipe": {
+              "recipe_id": "R37500",
+              "recipe_name": "Spicy Asian Peanut Pasta",
+              "url": "https://www.allrecipes.com/recipe/241851/spicy-asian-peanut-pasta/",
+              "servings": 8.0,
+              "diet_labels": [],
+              "health_labels": [
+                "vegan",
+                "vegetarian",
+                "dairy free",
+                "egg free",
+                "tree nut free",
+                "fish free",
+                "shellfish free"
+              ],
+              "cautions": [
+                "sulfites"
+              ],
+              "cuisine_type": [
+                "south american",
+                "asian"
+              ],
+              "meal_type": [
+                "lunch",
+                "dinner"
+              ],
+              "dish_type": [
+                "main course"
+              ],
+              "calories_per_serving": 505.105211625,
+              "weight_g_per_serving": 122.8323795875,
+              "protein_g_per_serving": 18.60770601249937,
+              "carbs_g_per_serving": 53.561725048747874,
+              "fat_g_per_serving": 25.76176559837455,
+              "fiber_g_per_serving": 4.286519479999637,
+              "sugar_g_per_serving": 6.6797528682068,
+              "sodium_mg_per_serving": 389.0436094384529,
+              "calcium_mg_per_serving": 38.4316330458236,
+              "iron_mg_per_serving": 1.6943692679160824,
+              "is_vegetarian": true,
+              "is_vegan": true,
+              "cooking_time_min": 15.0,
+              "cooking_time_source": "url_json_ld",
+              "cooking_time_confidence": "HIGH"
+            },
+            "ingredient": {
+              "recipe_id": "R37500",
+              "required_ingredients": [
+                {
+                  "ingredient_id": "ING2471",
+                  "ingredient_name": "pasta",
+                  "alias_name": "['pasta', 'cooked pasta', 'fresh pasta', 'gluten free pasta', 'gluten-free pasta']",
+                  "quantity": "56.5",
+                  "unit": "g"
+                },
+                {
+                  "ingredient_id": "ING2501",
+                  "ingredient_name": "peanut butter",
+                  "alias_name": "['peanut butter', 'powdered peanut butter', 'salted peanut butter']",
+                  "quantity": "3.0",
+                  "unit": "tablespoon"
+                },
+                {
+                  "ingredient_id": "ING3101",
+                  "ingredient_name": "seasoned rice vinegar",
+                  "alias_name": "['seasoned rice vinegar']",
+                  "quantity": "0.5",
+                  "unit": "tablespoon"
+                },
+                {
+                  "ingredient_id": "ING3270",
+                  "ingredient_name": "soy sauce",
+                  "alias_name": "['soy sauce', 'gluten free soy sauce', 'gluten-free soy sauce']",
+                  "quantity": "0.5",
+                  "unit": "tablespoon"
+                },
+                {
+                  "ingredient_id": "ING3331",
+                  "ingredient_name": "sriracha sauce",
+                  "alias_name": "['sriracha sauce']",
+                  "quantity": "0.5",
+                  "unit": "teaspoon"
+                }
+              ],
+              "pantry_used": [],
+              "missing_ingredients": [
+                {
+                  "ingredient_id": "ING3270",
+                  "ingredient_name": "soy sauce",
+                  "quantity": "0.5",
+                  "unit": "tablespoon",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING3101",
+                  "ingredient_name": "seasoned rice vinegar",
+                  "quantity": "0.5",
+                  "unit": "tablespoon",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING2471",
+                  "ingredient_name": "pasta",
+                  "quantity": "56.5",
+                  "unit": "gram",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING2501",
+                  "ingredient_name": "peanut butter",
+                  "quantity": "3.0",
+                  "unit": "tablespoon",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING3331",
+                  "ingredient_name": "sriracha sauce",
+                  "quantity": "0.5",
+                  "unit": "teaspoon",
+                  "status": "missing"
+                }
+              ],
+              "unsupported_items": []
+            },
+            "grocery": {
+              "recipe_id": "R37500",
+              "items": [
+                {
+                  "ingredient_id": "ING3270",
+                  "ingredient": "soy sauce",
+                  "required_quantity": "0.5",
+                  "required_unit": "tablespoon",
+                  "product_name": "economical light soy sauce",
+                  "package_quantity": 750.0,
+                  "package_unit": "ml",
+                  "packages_needed": 1,
+                  "price_per_package": 2.5,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 2.5,
+                  "estimated_required_quantity": 8.0,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:47:12+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING3101",
+                  "ingredient": "seasoned rice vinegar",
+                  "required_quantity": "0.5",
+                  "required_unit": "tablespoon",
+                  "product_name": "Seasoned Rice Vinegar",
+                  "package_quantity": 500.0,
+                  "package_unit": "ml",
+                  "packages_needed": 1,
+                  "price_per_package": 3.5,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 3.5,
+                  "estimated_required_quantity": 7.47,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:47:12+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING2471",
+                  "ingredient": "pasta",
+                  "required_quantity": "56.5",
+                  "required_unit": "gram",
+                  "product_name": "Dried Spaghetti",
+                  "package_quantity": 500.0,
+                  "package_unit": "g",
+                  "packages_needed": 1,
+                  "price_per_package": 1.45,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 1.45,
+                  "estimated_required_quantity": 56.5,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:47:13+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING2501",
+                  "ingredient": "peanut butter",
+                  "required_quantity": "3.0",
+                  "required_unit": "tablespoon",
+                  "product_name": "Creamy Peanut Butter",
+                  "package_quantity": 340.0,
+                  "package_unit": "g",
+                  "packages_needed": 1,
+                  "price_per_package": 4.5,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 4.5,
+                  "estimated_required_quantity": 48.38,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:47:13+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING3331",
+                  "ingredient": "sriracha sauce",
+                  "required_quantity": "0.5",
+                  "required_unit": "teaspoon",
+                  "product_name": "Sriracha Chili Sauce",
+                  "package_quantity": 454.0,
+                  "package_unit": "g",
+                  "packages_needed": 1,
+                  "price_per_package": 7.5,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 7.5,
+                  "estimated_required_quantity": 2.4,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:47:13+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                }
+              ],
+              "known_cost": 0,
+              "projected_cost": 19.45,
+              "projected_cost_complete": true,
+              "projected_items": 5,
+              "projection_missing": [],
+              "all_items_priced": false,
+              "unpriced_items": [
+                "soy sauce",
+                "seasoned rice vinegar",
+                "pasta",
+                "peanut butter",
+                "sriracha sauce"
+              ],
+              "budget": null,
+              "budget_status": "not_checked",
+              "estimated_budget_status": "not_checked",
+              "estimated_budget_after_purchase": null,
+              "estimated_budget_reason": "No remaining budget was provided.",
+              "planning_budget_status": "not_checked",
+              "planning_budget_source": "not_checked",
+              "provisional_budget": {
+                "budget_status": "not_checked",
+                "provisional": true,
+                "reason": "No remaining budget provided.",
+                "projected_cost": 19.45,
+                "budget_after_purchase": null
+              },
+              "remaining_budget": null,
+              "budget_after_purchase": null
+            },
+            "reasoning": {
+              "recipe_id": "R37500",
+              "status": "feasible",
+              "feasible": true,
+              "hard_constraints": [
+                {
+                  "constraint": "diet",
+                  "source": "dietary_requirements",
+                  "status": "pass",
+                  "reason": "No dietary restriction specified"
+                },
+                {
+                  "constraint": "allergy",
+                  "source": "dietary_requirements",
+                  "status": "pass",
+                  "reason": "No allergies specified"
+                },
+                {
+                  "constraint": "cooking_time",
+                  "source": "feasibility",
+                  "status": "pass",
+                  "reason": "Recipe time 15 min is within user's 30 min limit"
+                },
+                {
+                  "constraint": "ingredient_feasibility",
+                  "source": "feasibility",
+                  "status": "pass",
+                  "reason": "All ingredients have valid ingredient IDs and names"
+                },
+                {
+                  "constraint": "budget",
+                  "source": "budget_service",
+                  "status": "pass",
+                  "reason": "Final budget feasibility will be checked against the consolidated multi-meal basket.",
+                  "known_purchase_cost": null,
+                  "remaining_budget": null
+                }
+              ],
+              "failed_constraints": [],
+              "unknown_constraints": [],
+              "soft_constraints": [
+                {
+                  "constraint": "preference",
+                  "source": "dietary_requirements",
+                  "score": 1.0,
+                  "reason": "preferred cuisine matched: asian"
+                },
+                {
+                  "constraint": "pantry_utilization",
+                  "source": "feasibility",
+                  "score": 0.0,
+                  "reason": "Pantry utilization score calculated from available ingredients"
+                }
+              ],
+              "overall_score": 0.5
+            },
+            "budget_assessment": {
+              "status": "pass",
+              "budget_status": "pass",
+              "budget_deferred": true,
+              "reason": "Final budget feasibility will be checked against the consolidated multi-meal basket."
+            },
+            "warnings": [
+              "No complete purchase price found for soy sauce",
+              "No complete purchase price found for seasoned rice vinegar",
+              "No complete purchase price found for pasta",
+              "No complete purchase price found for peanut butter",
+              "No complete purchase price found for sriracha sauce"
+            ],
+            "execution_trace": [
+              {
+                "step": "ingredient_agent",
+                "recipe_id": "R37500",
+                "status": "success"
+              },
+              {
+                "step": "grocery_agent",
+                "recipe_id": "R37500",
+                "status": "partial",
+                "known_cost": 0,
+                "all_items_priced": false
+              },
+              {
+                "step": "reasoning",
+                "recipe_id": "R37500",
+                "decision": "feasible",
+                "overall_score": 0.5
+              }
+            ]
+          },
+          "estimated_cost": 19.45
+        }
+      ],
+      "used_recipe_ids": [
+        "R37500"
+      ],
+      "budget": {
+        "initial": 100.0,
+        "estimated_spent": 19.45,
+        "remaining": 80.55
+      },
+      "inventory": {
+        "initial": {
+          "rice": {
+            "quantity": 100.0,
+            "unit": "g"
+          }
+        },
+        "current": {
+          "rice": {
+            "quantity": 100.0,
+            "unit": "g"
+          }
+        }
+      },
+      "nutrition": {
+        "2026-10-13": {
+          "calories": 505.105211625,
+          "protein_g": 18.60770601249937,
+          "carbs_g": 53.561725048747874,
+          "fat_g": 25.76176559837455,
+          "fiber_g": 4.286519479999637,
+          "sugar_g": 6.6797528682068,
+          "sodium_mg": 389.0436094384529,
+          "calcium_mg": 38.4316330458236,
+          "iron_mg": 1.6943692679160824
+        }
+      },
+      "final_grocery_basket": {
+        "items": [
+          {
+            "ingredient_id": "ING2471",
+            "name": "pasta",
+            "required_quantity": 56.5,
+            "required_unit": "g",
+            "package_quantity": 500.0,
+            "package_unit": "g",
+            "packages": 1,
+            "purchased_quantity": 500.0,
+            "price_per_package": 1.45,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 1.45,
+            "leftover_quantity": 443.5,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R37500"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "calculated_quantity",
+            "quantity_coverage_verified": true,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 1.45,
+            "package_conversion_status": "exact",
+            "effective_purchase_cost": 1.45,
+            "display_cost": 1.45,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING2501",
+            "name": "peanut butter",
+            "required_quantity": 45.0,
+            "required_unit": "ml",
+            "package_quantity": 340.0,
+            "package_unit": "g",
+            "packages": 1,
+            "purchased_quantity": 340.0,
+            "price_per_package": 4.5,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 4.5,
+            "leftover_quantity": null,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R37500"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 4.5,
+            "package_conversion_status": "unresolved",
+            "effective_purchase_cost": 4.5,
+            "display_cost": 4.5,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING3101",
+            "name": "seasoned rice vinegar",
+            "required_quantity": 7.5,
+            "required_unit": "ml",
+            "package_quantity": 500.0,
+            "package_unit": "ml",
+            "packages": 1,
+            "purchased_quantity": 500.0,
+            "price_per_package": 3.5,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 3.5,
+            "leftover_quantity": 492.5,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R37500"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "calculated_quantity",
+            "quantity_coverage_verified": true,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 3.5,
+            "package_conversion_status": "exact",
+            "effective_purchase_cost": 3.5,
+            "display_cost": 3.5,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING3270",
+            "name": "soy sauce",
+            "required_quantity": 8.0,
+            "required_unit": "g",
+            "package_quantity": 750.0,
+            "package_unit": "ml",
+            "packages": 1,
+            "purchased_quantity": 750.0,
+            "price_per_package": 2.5,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 2.5,
+            "leftover_quantity": null,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R37500"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "estimated",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 2.5,
+            "package_conversion_status": "unresolved",
+            "effective_purchase_cost": 2.5,
+            "display_cost": 2.5,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING3331",
+            "name": "sriracha sauce",
+            "required_quantity": 2.5,
+            "required_unit": "ml",
+            "package_quantity": 454.0,
+            "package_unit": "g",
+            "packages": 1,
+            "purchased_quantity": 454.0,
+            "price_per_package": 7.5,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 7.5,
+            "leftover_quantity": null,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R37500"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 7.5,
+            "package_conversion_status": "unresolved",
+            "effective_purchase_cost": 7.5,
+            "display_cost": 7.5,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          }
+        ],
+        "known_cost": 0.0,
+        "unresolved_requirements": [],
+        "all_items_priced": false,
+        "all_items_have_usable_cost": true,
+        "qualitative_requirements": [],
+        "unpriced_items": [],
+        "aggregated_requirements": [
+          {
+            "ingredient_id": "ING2471",
+            "ingredient_name": "pasta",
+            "quantity": 56.5,
+            "unit": "g",
+            "recipe_ids": [
+              "R37500"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R37500",
+                "quantity": "56.5",
+                "unit": "g",
+                "conversion_status": "exact"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING2501",
+            "ingredient_name": "peanut butter",
+            "quantity": 45.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R37500"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R37500",
+                "quantity": "3.0",
+                "unit": "tablespoon",
+                "conversion_status": "exact"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING3101",
+            "ingredient_name": "seasoned rice vinegar",
+            "quantity": 7.5,
+            "unit": "ml",
+            "recipe_ids": [
+              "R37500"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R37500",
+                "quantity": "0.5",
+                "unit": "tablespoon",
+                "conversion_status": "exact"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING3270",
+            "ingredient_name": "soy sauce",
+            "quantity": 8.0,
+            "unit": "g",
+            "recipe_ids": [
+              "R37500"
+            ],
+            "conversion_status": "estimated",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R37500",
+                "quantity": "0.5",
+                "unit": "tablespoon",
+                "conversion_status": "estimated"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING3331",
+            "ingredient_name": "sriracha sauce",
+            "quantity": 2.5,
+            "unit": "ml",
+            "recipe_ids": [
+              "R37500"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R37500",
+                "quantity": "0.5",
+                "unit": "teaspoon",
+                "conversion_status": "exact"
+              }
+            ]
+          }
+        ],
+        "purchase_requirements": [
+          {
+            "ingredient_id": "ING2471",
+            "ingredient_name": "pasta",
+            "quantity": 56.5,
+            "unit": "g",
+            "recipe_ids": [
+              "R37500"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R37500",
+                "quantity": "56.5",
+                "unit": "g",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 56.5,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 56.5,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING2501",
+            "ingredient_name": "peanut butter",
+            "quantity": 45.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R37500"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R37500",
+                "quantity": "3.0",
+                "unit": "tablespoon",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 45.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 45.0,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING3101",
+            "ingredient_name": "seasoned rice vinegar",
+            "quantity": 7.5,
+            "unit": "ml",
+            "recipe_ids": [
+              "R37500"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R37500",
+                "quantity": "0.5",
+                "unit": "tablespoon",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 7.5,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 7.5,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING3270",
+            "ingredient_name": "soy sauce",
+            "quantity": 8.0,
+            "unit": "g",
+            "recipe_ids": [
+              "R37500"
+            ],
+            "conversion_status": "estimated",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R37500",
+                "quantity": "0.5",
+                "unit": "tablespoon",
+                "conversion_status": "estimated"
+              }
+            ],
+            "required_quantity": 8.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 8.0,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING3331",
+            "ingredient_name": "sriracha sauce",
+            "quantity": 2.5,
+            "unit": "ml",
+            "recipe_ids": [
+              "R37500"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R37500",
+                "quantity": "0.5",
+                "unit": "teaspoon",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 2.5,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 2.5,
+            "inventory_conversion_unresolved": false
+          }
+        ],
+        "projected_cost": 19.45,
+        "projected_cost_complete": true,
+        "projection_missing": [],
+        "warnings": [
+          "peanut butter: package coverage unresolved (required 45.0 ml, package 340.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+          "soy sauce: package coverage unresolved (required 8.0 g, package 750.0 ml). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+          "sriracha sauce: package coverage unresolved (required 2.5 ml, package 454.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified."
+        ],
+        "planning_cost": 19.45,
+        "planning_cost_complete": true
+      },
+      "rejected_candidates": [],
+      "uncertain_candidates": [
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R17747",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "ginger"
+            ],
+            "unpriced_items": [
+              "ginger"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R24917",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "noodles",
+              "ginger",
+              "kosher salt"
+            ],
+            "unpriced_items": [
+              "noodles",
+              "ginger",
+              "kosher salt"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R30871",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "sesame seed"
+            ],
+            "unpriced_items": [
+              "sesame seed"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R01296",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "plain yogurt",
+              "paprika"
+            ],
+            "unpriced_items": [
+              "plain yogurt",
+              "paprika"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R02993",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "vegetable oil"
+            ],
+            "unpriced_items": [
+              "vegetable oil"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R20037",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "fennel seed",
+              "fenugreek",
+              "cinnamon",
+              "chili flakes",
+              "salt"
+            ],
+            "unpriced_items": [
+              "fennel seed",
+              "fenugreek",
+              "cinnamon",
+              "chili flakes",
+              "salt"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R01949",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "bouquet garni",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "bouquet garni",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R38618",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "broccoli",
+              "coriander"
+            ],
+            "unpriced_items": [
+              "broccoli",
+              "coriander"
+            ]
+          }
+        }
+      ],
+      "skipped_slots": [],
+      "execution_trace": [
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R17747",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "ginger"
+            ],
+            "unpriced_items": [
+              "ginger"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R24917",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "noodles",
+              "ginger",
+              "kosher salt"
+            ],
+            "unpriced_items": [
+              "noodles",
+              "ginger",
+              "kosher salt"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R30871",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "sesame seed"
+            ],
+            "unpriced_items": [
+              "sesame seed"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R01296",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "plain yogurt",
+              "paprika"
+            ],
+            "unpriced_items": [
+              "plain yogurt",
+              "paprika"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R02993",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "vegetable oil"
+            ],
+            "unpriced_items": [
+              "vegetable oil"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R20037",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "fennel seed",
+              "fenugreek",
+              "cinnamon",
+              "chili flakes",
+              "salt"
+            ],
+            "unpriced_items": [
+              "fennel seed",
+              "fenugreek",
+              "cinnamon",
+              "chili flakes",
+              "salt"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R01949",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "bouquet garni",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "bouquet garni",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R38618",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "broccoli",
+              "coriander"
+            ],
+            "unpriced_items": [
+              "broccoli",
+              "coriander"
+            ]
+          }
+        },
+        {
+          "event": "meal_selected",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R37500"
+        },
+        {
+          "event": "nutrition_updated",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R37500"
+        },
+        {
+          "event": "inventory_reconciliation_failed",
+          "reason": "One or more ingredient requirements could not be reconciled.",
+          "unresolved_count": 2,
+          "error_count": 2,
+          "details": [
+            {
+              "recipe_id": "R37500",
+              "ingredient_name": "peanut butter",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs tablespoon for ingredient 'peanut butter' (available=340.0, required=3.0)"
+            },
+            {
+              "recipe_id": "R37500",
+              "ingredient_name": "sriracha sauce",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs teaspoon for ingredient 'sriracha sauce' (available=454.0, required=0.5)"
+            }
+          ]
+        }
+      ],
+      "cooking_schedule": {
+        "sessions": [
+          {
+            "session_id": "B001",
+            "recipe_id": "R37500",
+            "cook_date": "2026-10-13",
+            "portions_prepared": 1,
+            "meal_slot_ids": [
+              "2026-10-13_lunch"
+            ]
+          }
+        ],
+        "session_count": 1,
+        "weekly_session_counts": {
+          "2026-W42": 1
+        },
+        "max_sessions_per_week": 2,
+        "valid": true,
+        "violations": {},
+        "storage_assumption_days": 1
+      }
+    },
+    "validation": {
+      "status": "infeasible",
+      "issues": [
+        "Final inventory reconciliation failed."
+      ]
+    },
+    "grocery_basket": {
+      "items": [
+        {
+          "ingredient_id": "ING2471",
+          "name": "pasta",
+          "required_quantity": 56.5,
+          "required_unit": "g",
+          "package_quantity": 500.0,
+          "package_unit": "g",
+          "packages": 1,
+          "purchased_quantity": 500.0,
+          "price_per_package": 1.45,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 1.45,
+          "leftover_quantity": 443.5,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R37500"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "calculated_quantity",
+          "quantity_coverage_verified": true,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 1.45,
+          "package_conversion_status": "exact",
+          "effective_purchase_cost": 1.45,
+          "display_cost": 1.45,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING2501",
+          "name": "peanut butter",
+          "required_quantity": 45.0,
+          "required_unit": "ml",
+          "package_quantity": 340.0,
+          "package_unit": "g",
+          "packages": 1,
+          "purchased_quantity": 340.0,
+          "price_per_package": 4.5,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 4.5,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R37500"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 4.5,
+          "package_conversion_status": "unresolved",
+          "effective_purchase_cost": 4.5,
+          "display_cost": 4.5,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING3101",
+          "name": "seasoned rice vinegar",
+          "required_quantity": 7.5,
+          "required_unit": "ml",
+          "package_quantity": 500.0,
+          "package_unit": "ml",
+          "packages": 1,
+          "purchased_quantity": 500.0,
+          "price_per_package": 3.5,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 3.5,
+          "leftover_quantity": 492.5,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R37500"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "calculated_quantity",
+          "quantity_coverage_verified": true,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 3.5,
+          "package_conversion_status": "exact",
+          "effective_purchase_cost": 3.5,
+          "display_cost": 3.5,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING3270",
+          "name": "soy sauce",
+          "required_quantity": 8.0,
+          "required_unit": "g",
+          "package_quantity": 750.0,
+          "package_unit": "ml",
+          "packages": 1,
+          "purchased_quantity": 750.0,
+          "price_per_package": 2.5,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 2.5,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R37500"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 2.5,
+          "package_conversion_status": "unresolved",
+          "effective_purchase_cost": 2.5,
+          "display_cost": 2.5,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING3331",
+          "name": "sriracha sauce",
+          "required_quantity": 2.5,
+          "required_unit": "ml",
+          "package_quantity": 454.0,
+          "package_unit": "g",
+          "packages": 1,
+          "purchased_quantity": 454.0,
+          "price_per_package": 7.5,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 7.5,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R37500"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 7.5,
+          "package_conversion_status": "unresolved",
+          "effective_purchase_cost": 7.5,
+          "display_cost": 7.5,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        }
+      ],
+      "known_cost": 0.0,
+      "unresolved_requirements": [],
+      "all_items_priced": false,
+      "all_items_have_usable_cost": true,
+      "qualitative_requirements": [],
+      "unpriced_items": [],
+      "aggregated_requirements": [
+        {
+          "ingredient_id": "ING2471",
+          "ingredient_name": "pasta",
+          "quantity": 56.5,
+          "unit": "g",
+          "recipe_ids": [
+            "R37500"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R37500",
+              "quantity": "56.5",
+              "unit": "g",
+              "conversion_status": "exact"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING2501",
+          "ingredient_name": "peanut butter",
+          "quantity": 45.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R37500"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R37500",
+              "quantity": "3.0",
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING3101",
+          "ingredient_name": "seasoned rice vinegar",
+          "quantity": 7.5,
+          "unit": "ml",
+          "recipe_ids": [
+            "R37500"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R37500",
+              "quantity": "0.5",
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING3270",
+          "ingredient_name": "soy sauce",
+          "quantity": 8.0,
+          "unit": "g",
+          "recipe_ids": [
+            "R37500"
+          ],
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R37500",
+              "quantity": "0.5",
+              "unit": "tablespoon",
+              "conversion_status": "estimated"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING3331",
+          "ingredient_name": "sriracha sauce",
+          "quantity": 2.5,
+          "unit": "ml",
+          "recipe_ids": [
+            "R37500"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R37500",
+              "quantity": "0.5",
+              "unit": "teaspoon",
+              "conversion_status": "exact"
+            }
+          ]
+        }
+      ],
+      "purchase_requirements": [
+        {
+          "ingredient_id": "ING2471",
+          "ingredient_name": "pasta",
+          "quantity": 56.5,
+          "unit": "g",
+          "recipe_ids": [
+            "R37500"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R37500",
+              "quantity": "56.5",
+              "unit": "g",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 56.5,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 56.5,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING2501",
+          "ingredient_name": "peanut butter",
+          "quantity": 45.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R37500"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R37500",
+              "quantity": "3.0",
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 45.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 45.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING3101",
+          "ingredient_name": "seasoned rice vinegar",
+          "quantity": 7.5,
+          "unit": "ml",
+          "recipe_ids": [
+            "R37500"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R37500",
+              "quantity": "0.5",
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 7.5,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 7.5,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING3270",
+          "ingredient_name": "soy sauce",
+          "quantity": 8.0,
+          "unit": "g",
+          "recipe_ids": [
+            "R37500"
+          ],
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R37500",
+              "quantity": "0.5",
+              "unit": "tablespoon",
+              "conversion_status": "estimated"
+            }
+          ],
+          "required_quantity": 8.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 8.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING3331",
+          "ingredient_name": "sriracha sauce",
+          "quantity": 2.5,
+          "unit": "ml",
+          "recipe_ids": [
+            "R37500"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R37500",
+              "quantity": "0.5",
+              "unit": "teaspoon",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 2.5,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 2.5,
+          "inventory_conversion_unresolved": false
+        }
+      ],
+      "projected_cost": 19.45,
+      "projected_cost_complete": true,
+      "projection_missing": [],
+      "warnings": [
+        "peanut butter: package coverage unresolved (required 45.0 ml, package 340.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+        "soy sauce: package coverage unresolved (required 8.0 g, package 750.0 ml). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+        "sriracha sauce: package coverage unresolved (required 2.5 ml, package 454.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified."
+      ],
+      "planning_cost": 19.45,
+      "planning_cost_complete": true
+    },
+    "nutrition_summary": {
+      "2026-10-13": {
+        "calories": 505.1052,
+        "protein_g": 18.6077,
+        "carbs_g": 53.5617,
+        "fat_g": 25.7618,
+        "fiber_g": 4.2865,
+        "sugar_g": 6.6798,
+        "sodium_mg": 389.0436,
+        "calcium_mg": 38.4316,
+        "iron_mg": 1.6944
+      }
+    },
+    "nutrition_deviation": null
+  }
+}

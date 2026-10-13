@@ -1,0 +1,1980 @@
+{
+  "job_id": "2fc55e70-b162-4663-9bc9-6692a587bc55",
+  "workspace_id": "ae114603-d418-4e45-856a-416ab8b9b41c",
+  "status": "completed",
+  "created_at": "2026-10-13T06:27:51.569187+00:00",
+  "started_at": "2026-10-13T06:27:51.576100+00:00",
+  "finished_at": "2026-10-13T06:29:20.379798+00:00",
+  "error": null,
+  "result": {
+    "plan": {
+      "status": "infeasible",
+      "slots": [
+        {
+          "slot_id": "2026-10-13_dinner",
+          "date": "2026-10-13",
+          "meal_type": "dinner",
+          "max_cooking_time": null
+        }
+      ],
+      "selected_meals": [
+        {
+          "slot": {
+            "slot_id": "2026-10-13_dinner",
+            "date": "2026-10-13",
+            "meal_type": "dinner",
+            "max_cooking_time": null
+          },
+          "recipe_id": "R28728",
+          "decision": {
+            "recipe_id": "R28728",
+            "status": "feasible",
+            "recipe": {
+              "recipe_id": "R28728",
+              "recipe_name": "Lamb Chops with Curry Potatoes and Green Beans",
+              "url": "https://eatsmarter.com/recipes/lamb-chops-with-curry-potatoes-and-green-beans",
+              "servings": 2.0,
+              "diet_labels": [
+                "high fiber",
+                "low carb"
+              ],
+              "health_labels": [
+                "gluten free",
+                "egg free",
+                "peanut free",
+                "tree nut free",
+                "soy free",
+                "fish free",
+                "shellfish free"
+              ],
+              "cautions": [
+                "sulfites"
+              ],
+              "cuisine_type": [
+                "south east asian"
+              ],
+              "meal_type": [
+                "lunch",
+                "dinner"
+              ],
+              "dish_type": [
+                "main course"
+              ],
+              "calories_per_serving": 1366.0715,
+              "weight_g_per_serving": 757.85,
+              "protein_g_per_serving": 55.35815,
+              "carbs_g_per_serving": 59.88562,
+              "fat_g_per_serving": 101.9482,
+              "fiber_g_per_serving": 12.1518,
+              "sugar_g_per_serving": 0.0,
+              "sodium_mg_per_serving": 187.91000000000005,
+              "calcium_mg_per_serving": 159.2505,
+              "iron_mg_per_serving": 9.09059,
+              "is_vegetarian": false,
+              "is_vegan": false,
+              "cooking_time_min": 45.0,
+              "cooking_time_source": "ollama_estimate",
+              "cooking_time_confidence": "LOW"
+            },
+            "ingredient": {
+              "recipe_id": "R28728",
+              "required_ingredients": [
+                {
+                  "ingredient_id": "ING1919",
+                  "ingredient_name": "lamb cutlet",
+                  "alias_name": "['lamb cutlet', 'lamb cutlets']",
+                  "quantity": "3.0",
+                  "unit": "count"
+                },
+                {
+                  "ingredient_id": "ING2361",
+                  "ingredient_name": "olive oil",
+                  "alias_name": "['olive oil', 'olive-oil']",
+                  "quantity": "1.0",
+                  "unit": "tablespoon"
+                },
+                {
+                  "ingredient_id": "ING1955",
+                  "ingredient_name": "lemon",
+                  "alias_name": "['lemon', 'lemons']",
+                  "quantity": "1.0",
+                  "unit": "count"
+                },
+                {
+                  "ingredient_id": "ING2719",
+                  "ingredient_name": "potato",
+                  "alias_name": "['potato', 'baby potato', 'baby potatoes', 'mashed potato', 'mashed potatoes', 'potatoes', 'potatos']",
+                  "quantity": "250.0",
+                  "unit": "g"
+                },
+                {
+                  "ingredient_id": "ING1596",
+                  "ingredient_name": "green beans",
+                  "alias_name": "['green beans', 'frozen green beans', 'greens beans']",
+                  "quantity": "150.0",
+                  "unit": "g"
+                },
+                {
+                  "ingredient_id": "ING1146",
+                  "ingredient_name": "curry",
+                  "alias_name": "['curry']",
+                  "quantity": "0.5",
+                  "unit": "tablespoon"
+                },
+                {
+                  "ingredient_id": "ING0502",
+                  "ingredient_name": "butter",
+                  "alias_name": "['butter', 'butter, salted', 'salted butter', 'unsalted butter']",
+                  "quantity": "1.0",
+                  "unit": "tablespoon"
+                }
+              ],
+              "pantry_used": [],
+              "missing_ingredients": [
+                {
+                  "ingredient_id": "ING2719",
+                  "ingredient_name": "potato",
+                  "quantity": "250.0",
+                  "unit": "gram",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING1146",
+                  "ingredient_name": "curry",
+                  "quantity": "0.5",
+                  "unit": "tablespoon",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING2361",
+                  "ingredient_name": "olive oil",
+                  "quantity": "1.0",
+                  "unit": "tablespoon",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING1955",
+                  "ingredient_name": "lemon",
+                  "quantity": "1.0",
+                  "unit": "count",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING1919",
+                  "ingredient_name": "lamb cutlet",
+                  "quantity": "3.0",
+                  "unit": "count",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING1596",
+                  "ingredient_name": "green beans",
+                  "quantity": "150.0",
+                  "unit": "gram",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING0502",
+                  "ingredient_name": "butter",
+                  "quantity": "1.0",
+                  "unit": "tablespoon",
+                  "status": "missing"
+                }
+              ],
+              "unsupported_items": []
+            },
+            "grocery": {
+              "recipe_id": "R28728",
+              "items": [
+                {
+                  "ingredient_id": "ING2719",
+                  "ingredient": "potato",
+                  "required_quantity": "250.0",
+                  "required_unit": "gram",
+                  "product_name": "Potato (Holland)",
+                  "package_quantity": 1.0,
+                  "package_unit": "kg",
+                  "packages_needed": 1,
+                  "price_per_package": 3.2,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 3.2,
+                  "estimated_required_quantity": 250.0,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:29:18+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING1146",
+                  "ingredient": "curry",
+                  "required_quantity": "0.5",
+                  "required_unit": "tablespoon",
+                  "product_name": "Curry Powder",
+                  "package_quantity": 100.0,
+                  "package_unit": "g",
+                  "packages_needed": 1,
+                  "price_per_package": 1.5,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 1.5,
+                  "estimated_required_quantity": 3.15,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:29:18+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING2361",
+                  "ingredient": "olive oil",
+                  "required_quantity": "1.0",
+                  "required_unit": "tablespoon",
+                  "product_name": "Extra Virgin Olive Oil",
+                  "package_quantity": 500.0,
+                  "package_unit": "ml",
+                  "packages_needed": 1,
+                  "price_per_package": 8.9,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 8.9,
+                  "estimated_required_quantity": 13.5,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:29:18+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING1955",
+                  "ingredient": "lemon",
+                  "required_quantity": "1.0",
+                  "required_unit": "count",
+                  "product_name": "Fresh Lemon",
+                  "package_quantity": 1.0,
+                  "package_unit": "pcs",
+                  "packages_needed": 1,
+                  "price_per_package": 1.2,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 1.2,
+                  "estimated_required_quantity": 84.0,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:29:19+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING1919",
+                  "ingredient": "lamb cutlet",
+                  "required_quantity": "3.0",
+                  "required_unit": "count",
+                  "product_name": "Frozen Lamb Loin Chops",
+                  "package_quantity": 500.0,
+                  "package_unit": "g",
+                  "packages_needed": 1,
+                  "price_per_package": 18.5,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 18.5,
+                  "estimated_required_quantity": null,
+                  "estimated_required_unit": null,
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:29:19+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING1596",
+                  "ingredient": "green beans",
+                  "required_quantity": "150.0",
+                  "required_unit": "gram",
+                  "product_name": "Fresh Green Beans",
+                  "package_quantity": 200.0,
+                  "package_unit": "g",
+                  "packages_needed": 1,
+                  "price_per_package": 1.8,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 1.8,
+                  "estimated_required_quantity": 150.0,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:29:19+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING0502",
+                  "ingredient": "butter",
+                  "required_quantity": "1.0",
+                  "required_unit": "tablespoon",
+                  "product_name": "salted butter",
+                  "package_quantity": 250.0,
+                  "package_unit": "g",
+                  "packages_needed": 1,
+                  "price_per_package": 4.5,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 4.5,
+                  "estimated_required_quantity": 14.2,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:29:20+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                }
+              ],
+              "known_cost": 0,
+              "projected_cost": 39.6,
+              "projected_cost_complete": true,
+              "projected_items": 7,
+              "projection_missing": [],
+              "all_items_priced": false,
+              "unpriced_items": [
+                "potato",
+                "curry",
+                "olive oil",
+                "lemon",
+                "lamb cutlet",
+                "green beans",
+                "butter"
+              ],
+              "budget": null,
+              "budget_status": "not_checked",
+              "estimated_budget_status": "not_checked",
+              "estimated_budget_after_purchase": null,
+              "estimated_budget_reason": "No remaining budget was provided.",
+              "planning_budget_status": "not_checked",
+              "planning_budget_source": "not_checked",
+              "provisional_budget": {
+                "budget_status": "not_checked",
+                "provisional": true,
+                "reason": "No remaining budget provided.",
+                "projected_cost": 39.6,
+                "budget_after_purchase": null
+              },
+              "remaining_budget": null,
+              "budget_after_purchase": null
+            },
+            "reasoning": {
+              "recipe_id": "R28728",
+              "status": "feasible",
+              "feasible": true,
+              "hard_constraints": [
+                {
+                  "constraint": "diet",
+                  "source": "dietary_requirements",
+                  "status": "pass",
+                  "reason": "No dietary restriction specified"
+                },
+                {
+                  "constraint": "allergy",
+                  "source": "dietary_requirements",
+                  "status": "pass",
+                  "reason": "No allergies specified"
+                },
+                {
+                  "constraint": "cooking_time",
+                  "source": "feasibility",
+                  "status": "pass",
+                  "reason": "Recipe time 45 min is within user's 45 min limit"
+                },
+                {
+                  "constraint": "ingredient_feasibility",
+                  "source": "feasibility",
+                  "status": "pass",
+                  "reason": "All ingredients have valid ingredient IDs and names"
+                },
+                {
+                  "constraint": "budget",
+                  "source": "budget_service",
+                  "status": "pass",
+                  "reason": "Final budget feasibility will be checked against the consolidated multi-meal basket.",
+                  "known_purchase_cost": null,
+                  "remaining_budget": null
+                }
+              ],
+              "failed_constraints": [],
+              "unknown_constraints": [],
+              "soft_constraints": [
+                {
+                  "constraint": "preference",
+                  "source": "dietary_requirements",
+                  "score": 0.5,
+                  "reason": "no preferred cuisine matched"
+                },
+                {
+                  "constraint": "pantry_utilization",
+                  "source": "feasibility",
+                  "score": 0.0,
+                  "reason": "Pantry utilization score calculated from available ingredients"
+                }
+              ],
+              "overall_score": 0.25
+            },
+            "budget_assessment": {
+              "status": "pass",
+              "budget_status": "pass",
+              "budget_deferred": true,
+              "reason": "Final budget feasibility will be checked against the consolidated multi-meal basket."
+            },
+            "warnings": [
+              "No complete purchase price found for potato",
+              "No complete purchase price found for curry",
+              "No complete purchase price found for olive oil",
+              "No complete purchase price found for lemon",
+              "No complete purchase price found for lamb cutlet",
+              "No complete purchase price found for green beans",
+              "No complete purchase price found for butter"
+            ],
+            "execution_trace": [
+              {
+                "step": "ingredient_agent",
+                "recipe_id": "R28728",
+                "status": "success"
+              },
+              {
+                "step": "grocery_agent",
+                "recipe_id": "R28728",
+                "status": "partial",
+                "known_cost": 0,
+                "all_items_priced": false
+              },
+              {
+                "step": "reasoning",
+                "recipe_id": "R28728",
+                "decision": "feasible",
+                "overall_score": 0.25
+              }
+            ]
+          },
+          "estimated_cost": 39.6
+        }
+      ],
+      "used_recipe_ids": [
+        "R28728"
+      ],
+      "budget": {
+        "initial": 100.0,
+        "estimated_spent": 39.6,
+        "remaining": 60.4
+      },
+      "inventory": {
+        "initial": {},
+        "current": {}
+      },
+      "nutrition": {
+        "2026-10-13": {
+          "calories": 1366.0715,
+          "protein_g": 55.35815,
+          "carbs_g": 59.88562,
+          "fat_g": 101.9482,
+          "fiber_g": 12.1518,
+          "sugar_g": 0.0,
+          "sodium_mg": 187.91000000000005,
+          "calcium_mg": 159.2505,
+          "iron_mg": 9.09059
+        }
+      },
+      "final_grocery_basket": {
+        "items": [
+          {
+            "ingredient_id": "ING1919",
+            "name": "lamb cutlet",
+            "required_quantity": 3.0,
+            "required_unit": "pcs",
+            "package_quantity": 500.0,
+            "package_unit": "g",
+            "packages": 1,
+            "purchased_quantity": 500.0,
+            "price_per_package": 18.5,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 18.5,
+            "leftover_quantity": null,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R28728"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 18.5,
+            "package_conversion_status": "unresolved",
+            "effective_purchase_cost": 18.5,
+            "display_cost": 18.5,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING2361",
+            "name": "olive oil",
+            "required_quantity": 15.0,
+            "required_unit": "ml",
+            "package_quantity": 500.0,
+            "package_unit": "ml",
+            "packages": 1,
+            "purchased_quantity": 500.0,
+            "price_per_package": 8.9,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 8.9,
+            "leftover_quantity": 485.0,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R28728"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "calculated_quantity",
+            "quantity_coverage_verified": true,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 8.9,
+            "package_conversion_status": "exact",
+            "effective_purchase_cost": 8.9,
+            "display_cost": 8.9,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING1955",
+            "name": "lemon",
+            "required_quantity": 100.0,
+            "required_unit": "g",
+            "package_quantity": 1.0,
+            "package_unit": "pcs",
+            "packages": 1,
+            "purchased_quantity": 1.0,
+            "price_per_package": 1.2,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 1.2,
+            "leftover_quantity": 0.0,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R28728"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "estimated",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 1.2,
+            "package_conversion_status": "estimated",
+            "effective_purchase_cost": 1.2,
+            "display_cost": 1.2,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING2719",
+            "name": "potato",
+            "required_quantity": 250.0,
+            "required_unit": "g",
+            "package_quantity": 1.0,
+            "package_unit": "kg",
+            "packages": 1,
+            "purchased_quantity": 1.0,
+            "price_per_package": 3.2,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 3.2,
+            "leftover_quantity": 0.75,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R28728"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "calculated_quantity",
+            "quantity_coverage_verified": true,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 3.2,
+            "package_conversion_status": "exact",
+            "effective_purchase_cost": 3.2,
+            "display_cost": 3.2,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING1596",
+            "name": "green beans",
+            "required_quantity": 150.0,
+            "required_unit": "g",
+            "package_quantity": 200.0,
+            "package_unit": "g",
+            "packages": 1,
+            "purchased_quantity": 200.0,
+            "price_per_package": 1.8,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 1.8,
+            "leftover_quantity": 50.0,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R28728"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "calculated_quantity",
+            "quantity_coverage_verified": true,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 1.8,
+            "package_conversion_status": "exact",
+            "effective_purchase_cost": 1.8,
+            "display_cost": 1.8,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING1146",
+            "name": "curry",
+            "required_quantity": 7.5,
+            "required_unit": "ml",
+            "package_quantity": 100.0,
+            "package_unit": "g",
+            "packages": 1,
+            "purchased_quantity": 100.0,
+            "price_per_package": 1.5,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 1.5,
+            "leftover_quantity": null,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R28728"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 1.5,
+            "package_conversion_status": "unresolved",
+            "effective_purchase_cost": 1.5,
+            "display_cost": 1.5,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING0502",
+            "name": "butter",
+            "required_quantity": 15.0,
+            "required_unit": "ml",
+            "package_quantity": 250.0,
+            "package_unit": "g",
+            "packages": 1,
+            "purchased_quantity": 250.0,
+            "price_per_package": 4.5,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 4.5,
+            "leftover_quantity": null,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R28728"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 4.5,
+            "package_conversion_status": "unresolved",
+            "effective_purchase_cost": 4.5,
+            "display_cost": 4.5,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          }
+        ],
+        "known_cost": 0.0,
+        "unresolved_requirements": [],
+        "all_items_priced": false,
+        "all_items_have_usable_cost": true,
+        "qualitative_requirements": [],
+        "unpriced_items": [],
+        "aggregated_requirements": [
+          {
+            "ingredient_id": "ING1919",
+            "ingredient_name": "lamb cutlet",
+            "quantity": 3.0,
+            "unit": "pcs",
+            "recipe_ids": [
+              "R28728"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R28728",
+                "quantity": "3.0",
+                "unit": "count",
+                "conversion_status": "exact"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING2361",
+            "ingredient_name": "olive oil",
+            "quantity": 15.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R28728"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R28728",
+                "quantity": "1.0",
+                "unit": "tablespoon",
+                "conversion_status": "exact"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING1955",
+            "ingredient_name": "lemon",
+            "quantity": 100.0,
+            "unit": "g",
+            "recipe_ids": [
+              "R28728"
+            ],
+            "conversion_status": "estimated",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R28728",
+                "quantity": "1.0",
+                "unit": "count",
+                "conversion_status": "estimated"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING2719",
+            "ingredient_name": "potato",
+            "quantity": 250.0,
+            "unit": "g",
+            "recipe_ids": [
+              "R28728"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R28728",
+                "quantity": "250.0",
+                "unit": "g",
+                "conversion_status": "exact"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING1596",
+            "ingredient_name": "green beans",
+            "quantity": 150.0,
+            "unit": "g",
+            "recipe_ids": [
+              "R28728"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R28728",
+                "quantity": "150.0",
+                "unit": "g",
+                "conversion_status": "exact"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING1146",
+            "ingredient_name": "curry",
+            "quantity": 7.5,
+            "unit": "ml",
+            "recipe_ids": [
+              "R28728"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R28728",
+                "quantity": "0.5",
+                "unit": "tablespoon",
+                "conversion_status": "exact"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING0502",
+            "ingredient_name": "butter",
+            "quantity": 15.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R28728"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R28728",
+                "quantity": "1.0",
+                "unit": "tablespoon",
+                "conversion_status": "exact"
+              }
+            ]
+          }
+        ],
+        "purchase_requirements": [
+          {
+            "ingredient_id": "ING1919",
+            "ingredient_name": "lamb cutlet",
+            "quantity": 3.0,
+            "unit": "pcs",
+            "recipe_ids": [
+              "R28728"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R28728",
+                "quantity": "3.0",
+                "unit": "count",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 3.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 3.0,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING2361",
+            "ingredient_name": "olive oil",
+            "quantity": 15.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R28728"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R28728",
+                "quantity": "1.0",
+                "unit": "tablespoon",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 15.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 15.0,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING1955",
+            "ingredient_name": "lemon",
+            "quantity": 100.0,
+            "unit": "g",
+            "recipe_ids": [
+              "R28728"
+            ],
+            "conversion_status": "estimated",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R28728",
+                "quantity": "1.0",
+                "unit": "count",
+                "conversion_status": "estimated"
+              }
+            ],
+            "required_quantity": 100.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 100.0,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING2719",
+            "ingredient_name": "potato",
+            "quantity": 250.0,
+            "unit": "g",
+            "recipe_ids": [
+              "R28728"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R28728",
+                "quantity": "250.0",
+                "unit": "g",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 250.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 250.0,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING1596",
+            "ingredient_name": "green beans",
+            "quantity": 150.0,
+            "unit": "g",
+            "recipe_ids": [
+              "R28728"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R28728",
+                "quantity": "150.0",
+                "unit": "g",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 150.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 150.0,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING1146",
+            "ingredient_name": "curry",
+            "quantity": 7.5,
+            "unit": "ml",
+            "recipe_ids": [
+              "R28728"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R28728",
+                "quantity": "0.5",
+                "unit": "tablespoon",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 7.5,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 7.5,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING0502",
+            "ingredient_name": "butter",
+            "quantity": 15.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R28728"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R28728",
+                "quantity": "1.0",
+                "unit": "tablespoon",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 15.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 15.0,
+            "inventory_conversion_unresolved": false
+          }
+        ],
+        "projected_cost": 39.6,
+        "projected_cost_complete": true,
+        "projection_missing": [],
+        "warnings": [
+          "lamb cutlet: package coverage unresolved (required 3.0 pcs, package 500.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+          "lemon: estimated ingredient-specific conversion used for package sizing; quantity coverage is provisional.",
+          "curry: package coverage unresolved (required 7.5 ml, package 100.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+          "butter: package coverage unresolved (required 15.0 ml, package 250.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified."
+        ],
+        "planning_cost": 39.6,
+        "planning_cost_complete": true
+      },
+      "rejected_candidates": [],
+      "uncertain_candidates": [
+        {
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R08407",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "equal"
+            ],
+            "unpriced_items": [
+              "equal"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R00346",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "cinnamon"
+            ],
+            "unpriced_items": [
+              "cinnamon"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R34798",
+          "reason": "Incomplete grocery projection"
+        },
+        {
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R33328",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "nutmeg",
+              "pepper"
+            ],
+            "unpriced_items": [
+              "nutmeg",
+              "pepper"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R16142",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "orange peel",
+              "nutmeg",
+              "worcestershire sauce",
+              "pepper",
+              "brown sugar",
+              "rice vinegar"
+            ],
+            "unpriced_items": [
+              "orange peel",
+              "nutmeg",
+              "worcestershire sauce",
+              "pepper",
+              "brown sugar",
+              "rice vinegar"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R26659",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "pepper",
+              "turmeric",
+              "coconut oil"
+            ],
+            "unpriced_items": [
+              "pepper",
+              "turmeric",
+              "coconut oil"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R35315",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "cumin",
+              "coriander",
+              "oregano"
+            ],
+            "unpriced_items": [
+              "cumin",
+              "coriander",
+              "oregano"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R26166",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "thyme",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "thyme",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R02993",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "vegetable oil"
+            ],
+            "unpriced_items": [
+              "vegetable oil"
+            ]
+          }
+        }
+      ],
+      "skipped_slots": [],
+      "execution_trace": [
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R08407",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "equal"
+            ],
+            "unpriced_items": [
+              "equal"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R00346",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "cinnamon"
+            ],
+            "unpriced_items": [
+              "cinnamon"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R34798",
+          "reason": "Incomplete grocery projection"
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R33328",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "nutmeg",
+              "pepper"
+            ],
+            "unpriced_items": [
+              "nutmeg",
+              "pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R16142",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "orange peel",
+              "nutmeg",
+              "worcestershire sauce",
+              "pepper",
+              "brown sugar",
+              "rice vinegar"
+            ],
+            "unpriced_items": [
+              "orange peel",
+              "nutmeg",
+              "worcestershire sauce",
+              "pepper",
+              "brown sugar",
+              "rice vinegar"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R26659",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "pepper",
+              "turmeric",
+              "coconut oil"
+            ],
+            "unpriced_items": [
+              "pepper",
+              "turmeric",
+              "coconut oil"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R35315",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "cumin",
+              "coriander",
+              "oregano"
+            ],
+            "unpriced_items": [
+              "cumin",
+              "coriander",
+              "oregano"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R26166",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "thyme",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "thyme",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R02993",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "vegetable oil"
+            ],
+            "unpriced_items": [
+              "vegetable oil"
+            ]
+          }
+        },
+        {
+          "event": "meal_selected",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R28728"
+        },
+        {
+          "event": "nutrition_updated",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R28728"
+        },
+        {
+          "event": "inventory_reconciliation_failed",
+          "reason": "One or more ingredient requirements could not be reconciled.",
+          "unresolved_count": 3,
+          "error_count": 3,
+          "details": [
+            {
+              "recipe_id": "R28728",
+              "ingredient_name": "lamb cutlet",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs count for ingredient 'lamb cutlet' (available=500.0, required=3.0)"
+            },
+            {
+              "recipe_id": "R28728",
+              "ingredient_name": "curry",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs tablespoon for ingredient 'curry' (available=100.0, required=0.5)"
+            },
+            {
+              "recipe_id": "R28728",
+              "ingredient_name": "butter",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs tablespoon for ingredient 'butter' (available=250.0, required=1.0)"
+            }
+          ]
+        }
+      ],
+      "cooking_schedule": {
+        "sessions": [
+          {
+            "session_id": "B001",
+            "recipe_id": "R28728",
+            "cook_date": "2026-10-13",
+            "portions_prepared": 1,
+            "meal_slot_ids": [
+              "2026-10-13_dinner"
+            ]
+          }
+        ],
+        "session_count": 1,
+        "weekly_session_counts": {
+          "2026-W42": 1
+        },
+        "max_sessions_per_week": 2,
+        "valid": true,
+        "violations": {},
+        "storage_assumption_days": 1
+      }
+    },
+    "validation": {
+      "status": "infeasible",
+      "issues": [
+        "Final inventory reconciliation failed."
+      ]
+    },
+    "grocery_basket": {
+      "items": [
+        {
+          "ingredient_id": "ING1919",
+          "name": "lamb cutlet",
+          "required_quantity": 3.0,
+          "required_unit": "pcs",
+          "package_quantity": 500.0,
+          "package_unit": "g",
+          "packages": 1,
+          "purchased_quantity": 500.0,
+          "price_per_package": 18.5,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 18.5,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R28728"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 18.5,
+          "package_conversion_status": "unresolved",
+          "effective_purchase_cost": 18.5,
+          "display_cost": 18.5,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING2361",
+          "name": "olive oil",
+          "required_quantity": 15.0,
+          "required_unit": "ml",
+          "package_quantity": 500.0,
+          "package_unit": "ml",
+          "packages": 1,
+          "purchased_quantity": 500.0,
+          "price_per_package": 8.9,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 8.9,
+          "leftover_quantity": 485.0,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R28728"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "calculated_quantity",
+          "quantity_coverage_verified": true,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 8.9,
+          "package_conversion_status": "exact",
+          "effective_purchase_cost": 8.9,
+          "display_cost": 8.9,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING1955",
+          "name": "lemon",
+          "required_quantity": 100.0,
+          "required_unit": "g",
+          "package_quantity": 1.0,
+          "package_unit": "pcs",
+          "packages": 1,
+          "purchased_quantity": 1.0,
+          "price_per_package": 1.2,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 1.2,
+          "leftover_quantity": 0.0,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R28728"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 1.2,
+          "package_conversion_status": "estimated",
+          "effective_purchase_cost": 1.2,
+          "display_cost": 1.2,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING2719",
+          "name": "potato",
+          "required_quantity": 250.0,
+          "required_unit": "g",
+          "package_quantity": 1.0,
+          "package_unit": "kg",
+          "packages": 1,
+          "purchased_quantity": 1.0,
+          "price_per_package": 3.2,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 3.2,
+          "leftover_quantity": 0.75,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R28728"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "calculated_quantity",
+          "quantity_coverage_verified": true,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 3.2,
+          "package_conversion_status": "exact",
+          "effective_purchase_cost": 3.2,
+          "display_cost": 3.2,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING1596",
+          "name": "green beans",
+          "required_quantity": 150.0,
+          "required_unit": "g",
+          "package_quantity": 200.0,
+          "package_unit": "g",
+          "packages": 1,
+          "purchased_quantity": 200.0,
+          "price_per_package": 1.8,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 1.8,
+          "leftover_quantity": 50.0,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R28728"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "calculated_quantity",
+          "quantity_coverage_verified": true,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 1.8,
+          "package_conversion_status": "exact",
+          "effective_purchase_cost": 1.8,
+          "display_cost": 1.8,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING1146",
+          "name": "curry",
+          "required_quantity": 7.5,
+          "required_unit": "ml",
+          "package_quantity": 100.0,
+          "package_unit": "g",
+          "packages": 1,
+          "purchased_quantity": 100.0,
+          "price_per_package": 1.5,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 1.5,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R28728"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 1.5,
+          "package_conversion_status": "unresolved",
+          "effective_purchase_cost": 1.5,
+          "display_cost": 1.5,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING0502",
+          "name": "butter",
+          "required_quantity": 15.0,
+          "required_unit": "ml",
+          "package_quantity": 250.0,
+          "package_unit": "g",
+          "packages": 1,
+          "purchased_quantity": 250.0,
+          "price_per_package": 4.5,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 4.5,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R28728"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 4.5,
+          "package_conversion_status": "unresolved",
+          "effective_purchase_cost": 4.5,
+          "display_cost": 4.5,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        }
+      ],
+      "known_cost": 0.0,
+      "unresolved_requirements": [],
+      "all_items_priced": false,
+      "all_items_have_usable_cost": true,
+      "qualitative_requirements": [],
+      "unpriced_items": [],
+      "aggregated_requirements": [
+        {
+          "ingredient_id": "ING1919",
+          "ingredient_name": "lamb cutlet",
+          "quantity": 3.0,
+          "unit": "pcs",
+          "recipe_ids": [
+            "R28728"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R28728",
+              "quantity": "3.0",
+              "unit": "count",
+              "conversion_status": "exact"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING2361",
+          "ingredient_name": "olive oil",
+          "quantity": 15.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R28728"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R28728",
+              "quantity": "1.0",
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING1955",
+          "ingredient_name": "lemon",
+          "quantity": 100.0,
+          "unit": "g",
+          "recipe_ids": [
+            "R28728"
+          ],
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R28728",
+              "quantity": "1.0",
+              "unit": "count",
+              "conversion_status": "estimated"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING2719",
+          "ingredient_name": "potato",
+          "quantity": 250.0,
+          "unit": "g",
+          "recipe_ids": [
+            "R28728"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R28728",
+              "quantity": "250.0",
+              "unit": "g",
+              "conversion_status": "exact"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING1596",
+          "ingredient_name": "green beans",
+          "quantity": 150.0,
+          "unit": "g",
+          "recipe_ids": [
+            "R28728"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R28728",
+              "quantity": "150.0",
+              "unit": "g",
+              "conversion_status": "exact"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING1146",
+          "ingredient_name": "curry",
+          "quantity": 7.5,
+          "unit": "ml",
+          "recipe_ids": [
+            "R28728"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R28728",
+              "quantity": "0.5",
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING0502",
+          "ingredient_name": "butter",
+          "quantity": 15.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R28728"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R28728",
+              "quantity": "1.0",
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ]
+        }
+      ],
+      "purchase_requirements": [
+        {
+          "ingredient_id": "ING1919",
+          "ingredient_name": "lamb cutlet",
+          "quantity": 3.0,
+          "unit": "pcs",
+          "recipe_ids": [
+            "R28728"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R28728",
+              "quantity": "3.0",
+              "unit": "count",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 3.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 3.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING2361",
+          "ingredient_name": "olive oil",
+          "quantity": 15.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R28728"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R28728",
+              "quantity": "1.0",
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 15.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 15.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING1955",
+          "ingredient_name": "lemon",
+          "quantity": 100.0,
+          "unit": "g",
+          "recipe_ids": [
+            "R28728"
+          ],
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R28728",
+              "quantity": "1.0",
+              "unit": "count",
+              "conversion_status": "estimated"
+            }
+          ],
+          "required_quantity": 100.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 100.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING2719",
+          "ingredient_name": "potato",
+          "quantity": 250.0,
+          "unit": "g",
+          "recipe_ids": [
+            "R28728"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R28728",
+              "quantity": "250.0",
+              "unit": "g",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 250.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 250.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING1596",
+          "ingredient_name": "green beans",
+          "quantity": 150.0,
+          "unit": "g",
+          "recipe_ids": [
+            "R28728"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R28728",
+              "quantity": "150.0",
+              "unit": "g",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 150.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 150.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING1146",
+          "ingredient_name": "curry",
+          "quantity": 7.5,
+          "unit": "ml",
+          "recipe_ids": [
+            "R28728"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R28728",
+              "quantity": "0.5",
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 7.5,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 7.5,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING0502",
+          "ingredient_name": "butter",
+          "quantity": 15.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R28728"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R28728",
+              "quantity": "1.0",
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 15.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 15.0,
+          "inventory_conversion_unresolved": false
+        }
+      ],
+      "projected_cost": 39.6,
+      "projected_cost_complete": true,
+      "projection_missing": [],
+      "warnings": [
+        "lamb cutlet: package coverage unresolved (required 3.0 pcs, package 500.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+        "lemon: estimated ingredient-specific conversion used for package sizing; quantity coverage is provisional.",
+        "curry: package coverage unresolved (required 7.5 ml, package 100.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+        "butter: package coverage unresolved (required 15.0 ml, package 250.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified."
+      ],
+      "planning_cost": 39.6,
+      "planning_cost_complete": true
+    },
+    "nutrition_summary": {
+      "2026-10-13": {
+        "calories": 1366.0715,
+        "protein_g": 55.3582,
+        "carbs_g": 59.8856,
+        "fat_g": 101.9482,
+        "fiber_g": 12.1518,
+        "sugar_g": 0.0,
+        "sodium_mg": 187.91,
+        "calcium_mg": 159.2505,
+        "iron_mg": 9.0906
+      }
+    },
+    "nutrition_deviation": null
+  }
+}

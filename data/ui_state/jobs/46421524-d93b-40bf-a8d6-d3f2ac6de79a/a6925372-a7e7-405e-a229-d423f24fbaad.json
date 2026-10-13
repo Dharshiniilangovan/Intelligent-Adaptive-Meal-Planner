@@ -1,0 +1,1809 @@
+{
+  "job_id": "a6925372-a7e7-405e-a229-d423f24fbaad",
+  "workspace_id": "46421524-d93b-40bf-a8d6-d3f2ac6de79a",
+  "status": "completed",
+  "created_at": "2026-10-13T06:37:19.283646+00:00",
+  "started_at": "2026-10-13T06:37:19.291550+00:00",
+  "finished_at": "2026-10-13T06:38:16.783245+00:00",
+  "error": null,
+  "result": {
+    "plan": {
+      "status": "infeasible",
+      "slots": [
+        {
+          "slot_id": "2026-10-13_lunch",
+          "date": "2026-10-13",
+          "meal_type": "lunch",
+          "max_cooking_time": null
+        }
+      ],
+      "selected_meals": [
+        {
+          "slot": {
+            "slot_id": "2026-10-13_lunch",
+            "date": "2026-10-13",
+            "meal_type": "lunch",
+            "max_cooking_time": null
+          },
+          "recipe_id": "R11946",
+          "decision": {
+            "recipe_id": "R11946",
+            "status": "feasible",
+            "recipe": {
+              "recipe_id": "R11946",
+              "recipe_name": "Roasted Veggie & Tofu Brown Rice Bowl",
+              "url": "https://www.eatingwell.com/recipe/262093/roasted-veggie-tofu-brown-rice-bowl",
+              "servings": 1.0,
+              "diet_labels": [
+                "high fiber",
+                "low sodium"
+              ],
+              "health_labels": [
+                "vegan",
+                "vegetarian",
+                "dairy free",
+                "gluten free",
+                "egg free",
+                "peanut free",
+                "fish free",
+                "shellfish free"
+              ],
+              "cautions": [
+                "gluten",
+                "wheat",
+                "sulfites"
+              ],
+              "cuisine_type": [
+                "asian"
+              ],
+              "meal_type": [
+                "lunch",
+                "dinner"
+              ],
+              "dish_type": [
+                "main course"
+              ],
+              "calories_per_serving": 472.355,
+              "weight_g_per_serving": 472.0,
+              "protein_g_per_serving": 31.52029999994615,
+              "carbs_g_per_serving": 48.61869999991065,
+              "fat_g_per_serving": 19.48904999987041,
+              "fiber_g_per_serving": 8.608499999990237,
+              "sugar_g_per_serving": 0.0,
+              "sodium_mg_per_serving": 78.92499999996451,
+              "calcium_mg_per_serving": 555.4749999998905,
+              "iron_mg_per_serving": 6.820449999980235,
+              "is_vegetarian": true,
+              "is_vegan": true,
+              "cooking_time_min": 45.0,
+              "cooking_time_source": "ollama_estimate",
+              "cooking_time_confidence": "LOW"
+            },
+            "ingredient": {
+              "recipe_id": "R11946",
+              "required_ingredients": [
+                {
+                  "ingredient_id": "ING0463",
+                  "ingredient_name": "brown rice",
+                  "alias_name": "['brown rice', 'brown  rice', 'brown rice, cooked', 'cooked brown rice', 'steamed brown rice']",
+                  "quantity": "0.5",
+                  "unit": "cup"
+                },
+                {
+                  "ingredient_id": "ING3763",
+                  "ingredient_name": "vegetable",
+                  "alias_name": "['vegetable', 'frozen vegetable', 'frozen vegetables', 'vegetables']",
+                  "quantity": "1.0",
+                  "unit": "cup"
+                },
+                {
+                  "ingredient_id": "ING3559",
+                  "ingredient_name": "tofu",
+                  "alias_name": "['tofu']",
+                  "quantity": "1.0",
+                  "unit": "cup"
+                },
+                {
+                  "ingredient_id": "ING3081",
+                  "ingredient_name": "scallion",
+                  "alias_name": "['scallion', 'scallions']",
+                  "quantity": "2.0",
+                  "unit": "tablespoon"
+                },
+                {
+                  "ingredient_id": "ING0870",
+                  "ingredient_name": "cilantro",
+                  "alias_name": "['cilantro']",
+                  "quantity": "2.0",
+                  "unit": "tablespoon"
+                },
+                {
+                  "ingredient_id": "ING0600",
+                  "ingredient_name": "cashew",
+                  "alias_name": "['cashew', 'cashews', 'roasted cashews', 'roasted unsalted cashews', 'salted roasted cashews']",
+                  "quantity": "2.0",
+                  "unit": "tablespoon"
+                }
+              ],
+              "pantry_used": [],
+              "missing_ingredients": [
+                {
+                  "ingredient_id": "ING0870",
+                  "ingredient_name": "cilantro",
+                  "quantity": "2.0",
+                  "unit": "tablespoon",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING0463",
+                  "ingredient_name": "brown rice",
+                  "quantity": "0.5",
+                  "unit": "cup",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING0600",
+                  "ingredient_name": "cashew",
+                  "quantity": "2.0",
+                  "unit": "tablespoon",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING3559",
+                  "ingredient_name": "tofu",
+                  "quantity": "1.0",
+                  "unit": "cup",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING3763",
+                  "ingredient_name": "vegetable",
+                  "quantity": "1.0",
+                  "unit": "cup",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING3081",
+                  "ingredient_name": "scallion",
+                  "quantity": "2.0",
+                  "unit": "tablespoon",
+                  "status": "missing"
+                }
+              ],
+              "unsupported_items": []
+            },
+            "grocery": {
+              "recipe_id": "R11946",
+              "items": [
+                {
+                  "ingredient_id": "ING0870",
+                  "ingredient": "cilantro",
+                  "required_quantity": "2.0",
+                  "required_unit": "tablespoon",
+                  "product_name": "Fresh Coriander",
+                  "package_quantity": 1.0,
+                  "package_unit": "bunch",
+                  "packages_needed": 1,
+                  "price_per_package": 1.2,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 1.2,
+                  "estimated_required_quantity": 2.0,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:37:30+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING0463",
+                  "ingredient": "brown rice",
+                  "required_quantity": "0.5",
+                  "required_unit": "cup",
+                  "product_name": "Brown Rice",
+                  "package_quantity": 1.0,
+                  "package_unit": "kg",
+                  "packages_needed": 1,
+                  "price_per_package": 3.5,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 3.5,
+                  "estimated_required_quantity": null,
+                  "estimated_required_unit": null,
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:37:35+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING0600",
+                  "ingredient": "cashew",
+                  "required_quantity": "2.0",
+                  "required_unit": "tablespoon",
+                  "product_name": "Roasted Cashew Nuts",
+                  "package_quantity": 150.0,
+                  "package_unit": "g",
+                  "packages_needed": 1,
+                  "price_per_package": 4.5,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 4.5,
+                  "estimated_required_quantity": 17.5,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:37:38+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING3559",
+                  "ingredient": "tofu",
+                  "required_quantity": "1.0",
+                  "required_unit": "cup",
+                  "product_name": "Firm Tofu",
+                  "package_quantity": 300.0,
+                  "package_unit": "g",
+                  "packages_needed": 1,
+                  "price_per_package": 1.5,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 1.5,
+                  "estimated_required_quantity": 252.0,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:37:39+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING3763",
+                  "ingredient": "vegetable",
+                  "required_quantity": "1.0",
+                  "required_unit": "cup",
+                  "product_name": "Mixed Frozen Vegetables",
+                  "package_quantity": 1.0,
+                  "package_unit": "kg",
+                  "packages_needed": 1,
+                  "price_per_package": 3.5,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 3.5,
+                  "estimated_required_quantity": null,
+                  "estimated_required_unit": null,
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:37:39+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING3081",
+                  "ingredient": "scallion",
+                  "required_quantity": "2.0",
+                  "required_unit": "tablespoon",
+                  "product_name": "Fresh Spring Onion",
+                  "package_quantity": 100.0,
+                  "package_unit": "g",
+                  "packages_needed": 1,
+                  "price_per_package": 1.2,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 1.2,
+                  "estimated_required_quantity": null,
+                  "estimated_required_unit": null,
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:37:39+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                }
+              ],
+              "known_cost": 0,
+              "projected_cost": 15.4,
+              "projected_cost_complete": true,
+              "projected_items": 6,
+              "projection_missing": [],
+              "all_items_priced": false,
+              "unpriced_items": [
+                "cilantro",
+                "brown rice",
+                "cashew",
+                "tofu",
+                "vegetable",
+                "scallion"
+              ],
+              "budget": null,
+              "budget_status": "not_checked",
+              "estimated_budget_status": "not_checked",
+              "estimated_budget_after_purchase": null,
+              "estimated_budget_reason": "No remaining budget was provided.",
+              "planning_budget_status": "not_checked",
+              "planning_budget_source": "not_checked",
+              "provisional_budget": {
+                "budget_status": "not_checked",
+                "provisional": true,
+                "reason": "No remaining budget provided.",
+                "projected_cost": 15.4,
+                "budget_after_purchase": null
+              },
+              "remaining_budget": null,
+              "budget_after_purchase": null
+            },
+            "reasoning": {
+              "recipe_id": "R11946",
+              "status": "feasible",
+              "feasible": true,
+              "hard_constraints": [
+                {
+                  "constraint": "diet",
+                  "source": "dietary_requirements",
+                  "status": "pass",
+                  "reason": "No dietary restriction specified"
+                },
+                {
+                  "constraint": "allergy",
+                  "source": "dietary_requirements",
+                  "status": "pass",
+                  "reason": "No allergies specified"
+                },
+                {
+                  "constraint": "cooking_time",
+                  "source": "feasibility",
+                  "status": "pass",
+                  "reason": "Recipe time 45 min is within user's 45 min limit"
+                },
+                {
+                  "constraint": "ingredient_feasibility",
+                  "source": "feasibility",
+                  "status": "pass",
+                  "reason": "All ingredients have valid ingredient IDs and names"
+                },
+                {
+                  "constraint": "budget",
+                  "source": "budget_service",
+                  "status": "pass",
+                  "reason": "Final budget feasibility will be checked against the consolidated multi-meal basket.",
+                  "known_purchase_cost": null,
+                  "remaining_budget": null
+                }
+              ],
+              "failed_constraints": [],
+              "unknown_constraints": [],
+              "soft_constraints": [
+                {
+                  "constraint": "preference",
+                  "source": "dietary_requirements",
+                  "score": 1.0,
+                  "reason": "preferred cuisine matched: asian"
+                },
+                {
+                  "constraint": "pantry_utilization",
+                  "source": "feasibility",
+                  "score": 0.0,
+                  "reason": "Pantry utilization score calculated from available ingredients"
+                }
+              ],
+              "overall_score": 0.5
+            },
+            "budget_assessment": {
+              "status": "pass",
+              "budget_status": "pass",
+              "budget_deferred": true,
+              "reason": "Final budget feasibility will be checked against the consolidated multi-meal basket."
+            },
+            "warnings": [
+              "No complete purchase price found for cilantro",
+              "No complete purchase price found for brown rice",
+              "No complete purchase price found for cashew",
+              "No complete purchase price found for tofu",
+              "No complete purchase price found for vegetable",
+              "No complete purchase price found for scallion"
+            ],
+            "execution_trace": [
+              {
+                "step": "ingredient_agent",
+                "recipe_id": "R11946",
+                "status": "success"
+              },
+              {
+                "step": "grocery_agent",
+                "recipe_id": "R11946",
+                "status": "partial",
+                "known_cost": 0,
+                "all_items_priced": false
+              },
+              {
+                "step": "reasoning",
+                "recipe_id": "R11946",
+                "decision": "feasible",
+                "overall_score": 0.5
+              }
+            ]
+          },
+          "estimated_cost": 15.4
+        }
+      ],
+      "used_recipe_ids": [
+        "R11946"
+      ],
+      "budget": {
+        "initial": 100.0,
+        "estimated_spent": 15.4,
+        "remaining": 84.6
+      },
+      "inventory": {
+        "initial": {},
+        "current": {}
+      },
+      "nutrition": {
+        "2026-10-13": {
+          "calories": 472.355,
+          "protein_g": 31.52029999994615,
+          "carbs_g": 48.61869999991065,
+          "fat_g": 19.48904999987041,
+          "fiber_g": 8.608499999990237,
+          "sugar_g": 0.0,
+          "sodium_mg": 78.92499999996451,
+          "calcium_mg": 555.4749999998905,
+          "iron_mg": 6.820449999980235
+        }
+      },
+      "final_grocery_basket": {
+        "items": [
+          {
+            "ingredient_id": "ING0463",
+            "name": "brown rice",
+            "required_quantity": 120.0,
+            "required_unit": "ml",
+            "package_quantity": 1.0,
+            "package_unit": "kg",
+            "packages": 1,
+            "purchased_quantity": 1.0,
+            "price_per_package": 3.5,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 3.5,
+            "leftover_quantity": null,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R11946"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 3.5,
+            "package_conversion_status": "unresolved",
+            "effective_purchase_cost": 3.5,
+            "display_cost": 3.5,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING3763",
+            "name": "vegetable",
+            "required_quantity": 240.0,
+            "required_unit": "ml",
+            "package_quantity": 1.0,
+            "package_unit": "kg",
+            "packages": 1,
+            "purchased_quantity": 1.0,
+            "price_per_package": 3.5,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 3.5,
+            "leftover_quantity": null,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R11946"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 3.5,
+            "package_conversion_status": "unresolved",
+            "effective_purchase_cost": 3.5,
+            "display_cost": 3.5,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING3559",
+            "name": "tofu",
+            "required_quantity": 240.0,
+            "required_unit": "ml",
+            "package_quantity": 300.0,
+            "package_unit": "g",
+            "packages": 1,
+            "purchased_quantity": 300.0,
+            "price_per_package": 1.5,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 1.5,
+            "leftover_quantity": null,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R11946"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 1.5,
+            "package_conversion_status": "unresolved",
+            "effective_purchase_cost": 1.5,
+            "display_cost": 1.5,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING3081",
+            "name": "scallion",
+            "required_quantity": 30.0,
+            "required_unit": "ml",
+            "package_quantity": 100.0,
+            "package_unit": "g",
+            "packages": 1,
+            "purchased_quantity": 100.0,
+            "price_per_package": 1.2,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 1.2,
+            "leftover_quantity": null,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R11946"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 1.2,
+            "package_conversion_status": "unresolved",
+            "effective_purchase_cost": 1.2,
+            "display_cost": 1.2,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING0870",
+            "name": "cilantro",
+            "required_quantity": 2.0,
+            "required_unit": "g",
+            "package_quantity": 1.0,
+            "package_unit": "bunch",
+            "packages": 1,
+            "purchased_quantity": 1.0,
+            "price_per_package": 1.2,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 1.2,
+            "leftover_quantity": 0.9333333333333333,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R11946"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "estimated",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 1.2,
+            "package_conversion_status": "estimated",
+            "effective_purchase_cost": 1.2,
+            "display_cost": 1.2,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING0600",
+            "name": "cashew",
+            "required_quantity": 30.0,
+            "required_unit": "ml",
+            "package_quantity": 150.0,
+            "package_unit": "g",
+            "packages": 1,
+            "purchased_quantity": 150.0,
+            "price_per_package": 4.5,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 4.5,
+            "leftover_quantity": null,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R11946"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 4.5,
+            "package_conversion_status": "unresolved",
+            "effective_purchase_cost": 4.5,
+            "display_cost": 4.5,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          }
+        ],
+        "known_cost": 0.0,
+        "unresolved_requirements": [],
+        "all_items_priced": false,
+        "all_items_have_usable_cost": true,
+        "qualitative_requirements": [],
+        "unpriced_items": [],
+        "aggregated_requirements": [
+          {
+            "ingredient_id": "ING0463",
+            "ingredient_name": "brown rice",
+            "quantity": 120.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R11946"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R11946",
+                "quantity": "0.5",
+                "unit": "cup",
+                "conversion_status": "exact"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING3763",
+            "ingredient_name": "vegetable",
+            "quantity": 240.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R11946"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R11946",
+                "quantity": "1.0",
+                "unit": "cup",
+                "conversion_status": "exact"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING3559",
+            "ingredient_name": "tofu",
+            "quantity": 240.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R11946"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R11946",
+                "quantity": "1.0",
+                "unit": "cup",
+                "conversion_status": "exact"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING3081",
+            "ingredient_name": "scallion",
+            "quantity": 30.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R11946"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R11946",
+                "quantity": "2.0",
+                "unit": "tablespoon",
+                "conversion_status": "exact"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING0870",
+            "ingredient_name": "cilantro",
+            "quantity": 2.0,
+            "unit": "g",
+            "recipe_ids": [
+              "R11946"
+            ],
+            "conversion_status": "estimated",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R11946",
+                "quantity": "2.0",
+                "unit": "tablespoon",
+                "conversion_status": "estimated"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING0600",
+            "ingredient_name": "cashew",
+            "quantity": 30.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R11946"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R11946",
+                "quantity": "2.0",
+                "unit": "tablespoon",
+                "conversion_status": "exact"
+              }
+            ]
+          }
+        ],
+        "purchase_requirements": [
+          {
+            "ingredient_id": "ING0463",
+            "ingredient_name": "brown rice",
+            "quantity": 120.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R11946"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R11946",
+                "quantity": "0.5",
+                "unit": "cup",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 120.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 120.0,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING3763",
+            "ingredient_name": "vegetable",
+            "quantity": 240.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R11946"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R11946",
+                "quantity": "1.0",
+                "unit": "cup",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 240.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 240.0,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING3559",
+            "ingredient_name": "tofu",
+            "quantity": 240.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R11946"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R11946",
+                "quantity": "1.0",
+                "unit": "cup",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 240.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 240.0,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING3081",
+            "ingredient_name": "scallion",
+            "quantity": 30.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R11946"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R11946",
+                "quantity": "2.0",
+                "unit": "tablespoon",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 30.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 30.0,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING0870",
+            "ingredient_name": "cilantro",
+            "quantity": 2.0,
+            "unit": "g",
+            "recipe_ids": [
+              "R11946"
+            ],
+            "conversion_status": "estimated",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R11946",
+                "quantity": "2.0",
+                "unit": "tablespoon",
+                "conversion_status": "estimated"
+              }
+            ],
+            "required_quantity": 2.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 2.0,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING0600",
+            "ingredient_name": "cashew",
+            "quantity": 30.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R11946"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R11946",
+                "quantity": "2.0",
+                "unit": "tablespoon",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 30.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 30.0,
+            "inventory_conversion_unresolved": false
+          }
+        ],
+        "projected_cost": 15.4,
+        "projected_cost_complete": true,
+        "projection_missing": [],
+        "warnings": [
+          "brown rice: package coverage unresolved (required 120.0 ml, package 1.0 kg). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+          "vegetable: package coverage unresolved (required 240.0 ml, package 1.0 kg). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+          "tofu: package coverage unresolved (required 240.0 ml, package 300.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+          "scallion: package coverage unresolved (required 30.0 ml, package 100.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+          "cilantro: estimated ingredient-specific conversion used for package sizing; quantity coverage is provisional.",
+          "cashew: package coverage unresolved (required 30.0 ml, package 150.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified."
+        ],
+        "planning_cost": 15.4,
+        "planning_cost_complete": true
+      },
+      "rejected_candidates": [],
+      "uncertain_candidates": [
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R04696",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "garlic",
+              "red pepper flakes"
+            ],
+            "unpriced_items": [
+              "garlic",
+              "red pepper flakes"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R03989",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "red pepper"
+            ],
+            "unpriced_items": [
+              "red pepper"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R34214",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "sesame seed"
+            ],
+            "unpriced_items": [
+              "sesame seed"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R04437",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "sweet paprika",
+              "turmeric",
+              "marjoram",
+              "oregano",
+              "pepper",
+              "sea salt"
+            ],
+            "unpriced_items": [
+              "sweet paprika",
+              "turmeric",
+              "marjoram",
+              "oregano",
+              "pepper",
+              "sea salt"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R01716",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "ginger",
+              "cumin seed",
+              "fennel seed",
+              "cayenne",
+              "turmeric",
+              "cornstarch",
+              "salt"
+            ],
+            "unpriced_items": [
+              "ginger",
+              "cumin seed",
+              "fennel seed",
+              "cayenne",
+              "turmeric",
+              "cornstarch",
+              "salt"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R12685",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "tarragon",
+              "salt",
+              "pepper"
+            ],
+            "unpriced_items": [
+              "tarragon",
+              "salt",
+              "pepper"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R26600",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "coriander",
+              "cumin",
+              "mustard",
+              "cayenne pepper",
+              "turmeric",
+              "cardamom",
+              "salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "coriander",
+              "cumin",
+              "mustard",
+              "cayenne pepper",
+              "turmeric",
+              "cardamom",
+              "salt",
+              "black pepper"
+            ]
+          }
+        }
+      ],
+      "skipped_slots": [],
+      "execution_trace": [
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R04696",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "garlic",
+              "red pepper flakes"
+            ],
+            "unpriced_items": [
+              "garlic",
+              "red pepper flakes"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R03989",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "red pepper"
+            ],
+            "unpriced_items": [
+              "red pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R34214",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "sesame seed"
+            ],
+            "unpriced_items": [
+              "sesame seed"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R04437",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "sweet paprika",
+              "turmeric",
+              "marjoram",
+              "oregano",
+              "pepper",
+              "sea salt"
+            ],
+            "unpriced_items": [
+              "sweet paprika",
+              "turmeric",
+              "marjoram",
+              "oregano",
+              "pepper",
+              "sea salt"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R01716",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "ginger",
+              "cumin seed",
+              "fennel seed",
+              "cayenne",
+              "turmeric",
+              "cornstarch",
+              "salt"
+            ],
+            "unpriced_items": [
+              "ginger",
+              "cumin seed",
+              "fennel seed",
+              "cayenne",
+              "turmeric",
+              "cornstarch",
+              "salt"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R12685",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "tarragon",
+              "salt",
+              "pepper"
+            ],
+            "unpriced_items": [
+              "tarragon",
+              "salt",
+              "pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R26600",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "coriander",
+              "cumin",
+              "mustard",
+              "cayenne pepper",
+              "turmeric",
+              "cardamom",
+              "salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "coriander",
+              "cumin",
+              "mustard",
+              "cayenne pepper",
+              "turmeric",
+              "cardamom",
+              "salt",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "event": "meal_selected",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R11946"
+        },
+        {
+          "event": "nutrition_updated",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R11946"
+        },
+        {
+          "event": "inventory_reconciliation_failed",
+          "reason": "One or more ingredient requirements could not be reconciled.",
+          "unresolved_count": 5,
+          "error_count": 5,
+          "details": [
+            {
+              "recipe_id": "R11946",
+              "ingredient_name": "brown rice",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: kg vs cup for ingredient 'brown rice' (available=1.0, required=0.5)"
+            },
+            {
+              "recipe_id": "R11946",
+              "ingredient_name": "vegetable",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: kg vs cup for ingredient 'vegetable' (available=1.0, required=1.0)"
+            },
+            {
+              "recipe_id": "R11946",
+              "ingredient_name": "tofu",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs cup for ingredient 'tofu' (available=300.0, required=1.0)"
+            },
+            {
+              "recipe_id": "R11946",
+              "ingredient_name": "scallion",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs tablespoon for ingredient 'scallion' (available=100.0, required=2.0)"
+            },
+            {
+              "recipe_id": "R11946",
+              "ingredient_name": "cashew",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs tablespoon for ingredient 'cashew' (available=150.0, required=2.0)"
+            }
+          ]
+        }
+      ],
+      "cooking_schedule": {
+        "sessions": [
+          {
+            "session_id": "B001",
+            "recipe_id": "R11946",
+            "cook_date": "2026-10-13",
+            "portions_prepared": 1,
+            "meal_slot_ids": [
+              "2026-10-13_lunch"
+            ]
+          }
+        ],
+        "session_count": 1,
+        "weekly_session_counts": {
+          "2026-W42": 1
+        },
+        "max_sessions_per_week": 2,
+        "valid": true,
+        "violations": {},
+        "storage_assumption_days": 1
+      }
+    },
+    "validation": {
+      "status": "infeasible",
+      "issues": [
+        "Final inventory reconciliation failed."
+      ]
+    },
+    "grocery_basket": {
+      "items": [
+        {
+          "ingredient_id": "ING0463",
+          "name": "brown rice",
+          "required_quantity": 120.0,
+          "required_unit": "ml",
+          "package_quantity": 1.0,
+          "package_unit": "kg",
+          "packages": 1,
+          "purchased_quantity": 1.0,
+          "price_per_package": 3.5,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 3.5,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R11946"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 3.5,
+          "package_conversion_status": "unresolved",
+          "effective_purchase_cost": 3.5,
+          "display_cost": 3.5,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING3763",
+          "name": "vegetable",
+          "required_quantity": 240.0,
+          "required_unit": "ml",
+          "package_quantity": 1.0,
+          "package_unit": "kg",
+          "packages": 1,
+          "purchased_quantity": 1.0,
+          "price_per_package": 3.5,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 3.5,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R11946"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 3.5,
+          "package_conversion_status": "unresolved",
+          "effective_purchase_cost": 3.5,
+          "display_cost": 3.5,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING3559",
+          "name": "tofu",
+          "required_quantity": 240.0,
+          "required_unit": "ml",
+          "package_quantity": 300.0,
+          "package_unit": "g",
+          "packages": 1,
+          "purchased_quantity": 300.0,
+          "price_per_package": 1.5,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 1.5,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R11946"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 1.5,
+          "package_conversion_status": "unresolved",
+          "effective_purchase_cost": 1.5,
+          "display_cost": 1.5,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING3081",
+          "name": "scallion",
+          "required_quantity": 30.0,
+          "required_unit": "ml",
+          "package_quantity": 100.0,
+          "package_unit": "g",
+          "packages": 1,
+          "purchased_quantity": 100.0,
+          "price_per_package": 1.2,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 1.2,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R11946"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 1.2,
+          "package_conversion_status": "unresolved",
+          "effective_purchase_cost": 1.2,
+          "display_cost": 1.2,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING0870",
+          "name": "cilantro",
+          "required_quantity": 2.0,
+          "required_unit": "g",
+          "package_quantity": 1.0,
+          "package_unit": "bunch",
+          "packages": 1,
+          "purchased_quantity": 1.0,
+          "price_per_package": 1.2,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 1.2,
+          "leftover_quantity": 0.9333333333333333,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R11946"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 1.2,
+          "package_conversion_status": "estimated",
+          "effective_purchase_cost": 1.2,
+          "display_cost": 1.2,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING0600",
+          "name": "cashew",
+          "required_quantity": 30.0,
+          "required_unit": "ml",
+          "package_quantity": 150.0,
+          "package_unit": "g",
+          "packages": 1,
+          "purchased_quantity": 150.0,
+          "price_per_package": 4.5,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 4.5,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R11946"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 4.5,
+          "package_conversion_status": "unresolved",
+          "effective_purchase_cost": 4.5,
+          "display_cost": 4.5,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        }
+      ],
+      "known_cost": 0.0,
+      "unresolved_requirements": [],
+      "all_items_priced": false,
+      "all_items_have_usable_cost": true,
+      "qualitative_requirements": [],
+      "unpriced_items": [],
+      "aggregated_requirements": [
+        {
+          "ingredient_id": "ING0463",
+          "ingredient_name": "brown rice",
+          "quantity": 120.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R11946"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R11946",
+              "quantity": "0.5",
+              "unit": "cup",
+              "conversion_status": "exact"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING3763",
+          "ingredient_name": "vegetable",
+          "quantity": 240.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R11946"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R11946",
+              "quantity": "1.0",
+              "unit": "cup",
+              "conversion_status": "exact"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING3559",
+          "ingredient_name": "tofu",
+          "quantity": 240.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R11946"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R11946",
+              "quantity": "1.0",
+              "unit": "cup",
+              "conversion_status": "exact"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING3081",
+          "ingredient_name": "scallion",
+          "quantity": 30.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R11946"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R11946",
+              "quantity": "2.0",
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING0870",
+          "ingredient_name": "cilantro",
+          "quantity": 2.0,
+          "unit": "g",
+          "recipe_ids": [
+            "R11946"
+          ],
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R11946",
+              "quantity": "2.0",
+              "unit": "tablespoon",
+              "conversion_status": "estimated"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING0600",
+          "ingredient_name": "cashew",
+          "quantity": 30.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R11946"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R11946",
+              "quantity": "2.0",
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ]
+        }
+      ],
+      "purchase_requirements": [
+        {
+          "ingredient_id": "ING0463",
+          "ingredient_name": "brown rice",
+          "quantity": 120.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R11946"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R11946",
+              "quantity": "0.5",
+              "unit": "cup",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 120.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 120.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING3763",
+          "ingredient_name": "vegetable",
+          "quantity": 240.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R11946"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R11946",
+              "quantity": "1.0",
+              "unit": "cup",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 240.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 240.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING3559",
+          "ingredient_name": "tofu",
+          "quantity": 240.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R11946"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R11946",
+              "quantity": "1.0",
+              "unit": "cup",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 240.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 240.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING3081",
+          "ingredient_name": "scallion",
+          "quantity": 30.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R11946"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R11946",
+              "quantity": "2.0",
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 30.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 30.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING0870",
+          "ingredient_name": "cilantro",
+          "quantity": 2.0,
+          "unit": "g",
+          "recipe_ids": [
+            "R11946"
+          ],
+          "conversion_status": "estimated",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R11946",
+              "quantity": "2.0",
+              "unit": "tablespoon",
+              "conversion_status": "estimated"
+            }
+          ],
+          "required_quantity": 2.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 2.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING0600",
+          "ingredient_name": "cashew",
+          "quantity": 30.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R11946"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R11946",
+              "quantity": "2.0",
+              "unit": "tablespoon",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 30.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 30.0,
+          "inventory_conversion_unresolved": false
+        }
+      ],
+      "projected_cost": 15.4,
+      "projected_cost_complete": true,
+      "projection_missing": [],
+      "warnings": [
+        "brown rice: package coverage unresolved (required 120.0 ml, package 1.0 kg). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+        "vegetable: package coverage unresolved (required 240.0 ml, package 1.0 kg). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+        "tofu: package coverage unresolved (required 240.0 ml, package 300.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+        "scallion: package coverage unresolved (required 30.0 ml, package 100.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+        "cilantro: estimated ingredient-specific conversion used for package sizing; quantity coverage is provisional.",
+        "cashew: package coverage unresolved (required 30.0 ml, package 150.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified."
+      ],
+      "planning_cost": 15.4,
+      "planning_cost_complete": true
+    },
+    "nutrition_summary": {
+      "2026-10-13": {
+        "calories": 472.355,
+        "protein_g": 31.5203,
+        "carbs_g": 48.6187,
+        "fat_g": 19.489,
+        "fiber_g": 8.6085,
+        "sugar_g": 0.0,
+        "sodium_mg": 78.925,
+        "calcium_mg": 555.475,
+        "iron_mg": 6.8204
+      }
+    },
+    "nutrition_deviation": null
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "natural_language_request": null,
+  "last_request": "plan a meal for 5 days for budget of $50\n",
+  "parsed_result": {
+    "valid": true,
+    "data": {
+      "budget": 50.0,
+      "cook_frequency": null,
+      "cook_time_preference_hrs": null,
+      "preferred_cuisines": [],
+      "dietary_restrictions": [],
+      "allergies": [],
+      "preferred_meal_types": [],
+      "preferred_ingredients": [],
+      "disliked_ingredients": [],
+      "budget_flexible": false,
+      "ingredient_availability": {}
+    }
+  },
+  "request_revision": 1,
+  "confirmed_user_state": {
+    "budget": 50.0,
+    "cook_frequency": null,
+    "cook_time_preference_hrs": null,
+    "preferred_cuisines": [],
+    "dietary_restrictions": [
+      "Vegetarian"
+    ],
+    "allergies": [],
+    "preferred_meal_types": [
+      "dinner",
+      "lunch"
+    ],
+    "preferred_ingredients": [],
+    "disliked_ingredients": [],
+    "budget_flexible": false,
+    "ingredient_availability": {},
+    "budget_remaining": 50.0,
+    "days": 5,
+    "start_date": "2026-10-13",
+    "budget_cap": null
+  },
+  "pantry_items": [
+    {
+      "ingredient_name": "tomato",
+      "quantity": 200.0,
+      "unit": "g"
+    }
+  ],
+  "planner_result": null,
+  "preview_mode_active": false,
+  "pantry_changed_since_plan": true,
+  "preferences_changed_since_plan": true,
+  "planning_job_id": "0e69bfa0-7dce-4d19-a431-7761b9714e6a",
+  "planning_job_error": null
+}

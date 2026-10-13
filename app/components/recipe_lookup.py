@@ -2,25 +2,82 @@
 """Look up human-readable recipe names from the Recipe KB."""
 
 import csv
+import logging
+import re
+
 from functools import lru_cache
 from pathlib import Path
 
 
+logger = logging.getLogger(__name__)
+
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 RECIPE_KB = (
-    PROJECT_ROOT / "data" / "processed" / "recipes_kb.csv"
+    PROJECT_ROOT
+    / "data"
+    / "processed"
+    / "recipe_kb_clean.csv"
 )
 
 
+# ============================================================
+# NORMALIZE RECIPE IDS
+# ============================================================
+
+def normalize_recipe_id(value):
+    """Normalize recipe IDs before matching."""
+
+    if value is None:
+        return ""
+
+    if isinstance(value, dict):
+        value = (
+            value.get("recipe_id")
+            or value.get("id")
+            or ""
+        )
+
+    value = str(value).strip().upper()
+
+    # Remove invisible Unicode formatting characters.
+    value = re.sub(
+        r"[\u200b-\u200d\ufeff]",
+        "",
+        value,
+    )
+
+    # Normalize whitespace.
+    value = re.sub(r"\s+", "", value)
+
+    # Support numeric IDs such as R1296 -> R01296.
+    match = re.fullmatch(r"R(\d+)", value)
+
+    if match:
+        value = f"R{int(match.group(1)):05d}"
+
+    return value
+
+
+# ============================================================
+# LOAD RECIPE KB
+# ============================================================
+
 @lru_cache(maxsize=1)
-def load_recipe_names() -> dict[str, str]:
-    """Load recipe IDs and names from the existing Recipe KB."""
+def load_recipe_names():
+    """Load recipe names indexed by normalized recipe ID."""
 
     recipe_names = {}
 
-    if not RECIPE_KB.exists():
-        print(f"[RECIPE LOOKUP] File not found: {RECIPE_KB}")
+    print("\n[RECIPE LOOKUP] Loading Recipe KB")
+    print("[RECIPE LOOKUP] Path:", RECIPE_KB)
+    print("[RECIPE LOOKUP] Exists:", RECIPE_KB.exists())
+
+    if not RECIPE_KB.is_file():
+        logger.error(
+            "Recipe KB not found: %s",
+            RECIPE_KB,
+        )
         return recipe_names
 
     with RECIPE_KB.open(
@@ -28,6 +85,7 @@ def load_recipe_names() -> dict[str, str]:
         encoding="utf-8-sig",
         newline="",
     ) as file:
+
         reader = csv.DictReader(file)
 
         print(
@@ -36,9 +94,10 @@ def load_recipe_names() -> dict[str, str]:
         )
 
         for row in reader:
-            recipe_id = str(
-                row.get("recipe_id") or ""
-            ).strip().upper()
+
+            recipe_id = normalize_recipe_id(
+                row.get("recipe_id")
+            )
 
             recipe_name = str(
                 row.get("recipe_name")
@@ -47,39 +106,88 @@ def load_recipe_names() -> dict[str, str]:
                 or ""
             ).strip()
 
-            if recipe_id and recipe_name:
-                recipe_names[recipe_id] = recipe_name
+            if not recipe_id or not recipe_name:
+                continue
+
+            recipe_names[recipe_id] = recipe_name
 
     print(
-        f"[RECIPE LOOKUP] Loaded {len(recipe_names)} recipes"
+        "[RECIPE LOOKUP] Loaded recipes:",
+        len(recipe_names),
     )
+
+    print("\n[RECIPE LOOKUP] Sample recipes:")
+
+    for recipe_id, recipe_name in list(
+        recipe_names.items()
+    )[:5]:
+        print(
+            f"  {recipe_id} -> {recipe_name}"
+        )
 
     return recipe_names
 
 
-def get_recipe_name(recipe_id: str) -> str:
-    """Return the recipe name without exposing internal IDs."""
+# ============================================================
+# GET RECIPE NAME
+# ============================================================
 
-    if not recipe_id:
+def get_recipe_name(recipe_id):
+    """Return a human-readable recipe name."""
+
+    if isinstance(recipe_id, dict):
+
+        # Use an actual name already supplied by the Planner.
+        direct_name = (
+            recipe_id.get("recipe_name")
+            or recipe_id.get("name")
+            or recipe_id.get("title")
+        )
+
+        if direct_name:
+            return str(direct_name).strip()
+
+    normalized_id = normalize_recipe_id(recipe_id)
+
+    if not normalized_id:
         return "Recipe details unavailable"
 
-    recipe_id = str(recipe_id).strip().upper()
+    recipes = load_recipe_names()
 
-    name = load_recipe_names().get(recipe_id)
+    recipe_name = recipes.get(normalized_id)
 
-    if name:
-        return name
+    if recipe_name:
+        return recipe_name
 
-    print(f"[RECIPE LOOKUP] Unknown recipe ID: {recipe_id}")
+    print(
+        "[RECIPE LOOKUP] Unknown recipe ID:",
+        repr(recipe_id),
+    )
+
+    print(
+        "[RECIPE LOOKUP] Normalized ID:",
+        repr(normalized_id),
+    )
+
+    print(
+        "[RECIPE LOOKUP] Total available recipes:",
+        len(recipes),
+    )
 
     return "Recipe details unavailable"
 
 
-if __name__ == "__main__":
-    print("\nRECIPE LOOKUP TEST")
-    print("=" * 60)
+# ============================================================
+# DEBUG TEST
+# ============================================================
 
-    print("Recipe KB:", RECIPE_KB)
+if __name__ == "__main__":
+
+    print("\n" + "=" * 65)
+    print("RECIPE LOOKUP TEST")
+    print("=" * 65)
+
+    recipes = load_recipe_names()
 
     test_recipe_ids = [
         "R15279",
@@ -90,8 +198,13 @@ if __name__ == "__main__":
     ]
 
     for recipe_id in test_recipe_ids:
+
+        name = get_recipe_name(recipe_id)
+
         print(
-            f"{recipe_id} -> {get_recipe_name(recipe_id)}"
+            f"{recipe_id:12} -> {name}"
         )
 
-    print("=" * 60)
+    print("\n" + "=" * 65)
+    print("RECIPE LOOKUP TEST COMPLETE")
+    print("=" * 65)

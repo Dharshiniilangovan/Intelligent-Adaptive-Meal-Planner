@@ -1,0 +1,313 @@
+{
+  "workspace_id": "6f5c1874-0670-4b17-82a2-a8f2a557a33f",
+  "job_id": "e771e853-bb4e-46ae-aefa-c79f3259f27e",
+  "kind": "pantry",
+  "status": "completed",
+  "created_at": "2026-10-13T06:23:49.202649+00:00",
+  "started_at": "2026-10-13T06:23:49.206791+00:00",
+  "finished_at": "2026-10-13T06:24:31.103159+00:00",
+  "result": [
+    {
+      "ingredient_id": "ING1828",
+      "ingredient_name": "jasmine rice",
+      "kb_present": true,
+      "match_method": "exact",
+      "detected_names": [
+        "jasmine rice"
+      ],
+      "quantity": 5,
+      "unit": "kg",
+      "quantity_source": "package_label",
+      "quantity_scope": "full_package",
+      "package_capacity": 5,
+      "package_capacity_unit": "kg",
+      "package_capacity_source": "package_label",
+      "remaining_quantity_verified": false,
+      "detected_quantities": [
+        {
+          "quantity": 5,
+          "unit": "kg",
+          "quantity_source": "package_label"
+        }
+      ],
+      "matched": true,
+      "observations_count": 1,
+      "observations": [
+        {
+          "detected_name": "jasmine rice",
+          "quantity": 5,
+          "unit": "kg",
+          "quantity_source": "package_label",
+          "quantity_scope": "full_package",
+          "package_capacity": 5,
+          "package_capacity_unit": "kg",
+          "package_capacity_source": "package_label",
+          "remaining_quantity_verified": false
+        }
+      ],
+      "review_required": true,
+      "review_reasons": [
+        "full_package_capacity_not_remaining_stock"
+      ],
+      "user_confirmed": false
+    },
+    {
+      "ingredient_id": null,
+      "ingredient_name": "red lentils",
+      "kb_present": false,
+      "match_method": null,
+      "detected_names": [
+        "red lentils"
+      ],
+      "quantity": 500,
+      "unit": "g",
+      "quantity_source": "visual_estimate",
+      "quantity_scope": "visible_amount",
+      "package_capacity": null,
+      "package_capacity_unit": null,
+      "package_capacity_source": null,
+      "remaining_quantity_verified": null,
+      "detected_quantities": [
+        {
+          "quantity": 500,
+          "unit": "g",
+          "quantity_source": "visual_estimate"
+        }
+      ],
+      "matched": false,
+      "observations_count": 1,
+      "observations": [
+        {
+          "detected_name": "red lentils",
+          "quantity": 500,
+          "unit": "g",
+          "quantity_source": "visual_estimate",
+          "quantity_scope": "visible_amount",
+          "package_capacity": null,
+          "package_capacity_unit": null,
+          "package_capacity_source": null,
+          "remaining_quantity_verified": null
+        }
+      ],
+      "review_required": true,
+      "review_reasons": [
+        "ingredient_not_in_kb"
+      ],
+      "user_confirmed": false
+    },
+    {
+      "ingredient_id": null,
+      "ingredient_name": "dark soy sauce",
+      "kb_present": false,
+      "match_method": null,
+      "detected_names": [
+        "dark soy sauce"
+      ],
+      "quantity": 500,
+      "unit": "ml",
+      "quantity_source": "package_estimate",
+      "quantity_scope": "full_package",
+      "package_capacity": 500,
+      "package_capacity_unit": "ml",
+      "package_capacity_source": "package_estimate",
+      "remaining_quantity_verified": false,
+      "detected_quantities": [
+        {
+          "quantity": 500,
+          "unit": "ml",
+          "quantity_source": "package_estimate"
+        }
+      ],
+      "matched": false,
+      "observations_count": 1,
+      "observations": [
+        {
+          "detected_name": "dark soy sauce",
+          "quantity": 500,
+          "unit": "ml",
+          "quantity_source": "package_estimate",
+          "quantity_scope": "full_package",
+          "package_capacity": 500,
+          "package_capacity_unit": "ml",
+          "package_capacity_source": "package_estimate",
+          "remaining_quantity_verified": false
+        }
+      ],
+      "review_required": true,
+      "review_reasons": [
+        "full_package_capacity_not_remaining_stock",
+        "ingredient_not_in_kb"
+      ],
+      "user_confirmed": false
+    },
+    {
+      "ingredient_id": "ING3126",
+      "ingredient_name": "sesame oil",
+      "kb_present": true,
+      "match_method": "exact",
+      "detected_names": [
+        "sesame oil"
+      ],
+      "quantity": 310,
+      "unit": "ml",
+      "quantity_source": "package_estimate",
+      "quantity_scope": "full_package",
+      "package_capacity": 310,
+      "package_capacity_unit": "ml",
+      "package_capacity_source": "package_estimate",
+      "remaining_quantity_verified": false,
+      "detected_quantities": [
+        {
+          "quantity": 310,
+          "unit": "ml",
+          "quantity_source": "package_estimate"
+        }
+      ],
+      "matched": true,
+      "observations_count": 1,
+      "observations": [
+        {
+          "detected_name": "sesame oil",
+          "quantity": 310,
+          "unit": "ml",
+          "quantity_source": "package_estimate",
+          "quantity_scope": "full_package",
+          "package_capacity": 310,
+          "package_capacity_unit": "ml",
+          "package_capacity_source": "package_estimate",
+          "remaining_quantity_verified": false
+        }
+      ],
+      "review_required": true,
+      "review_reasons": [
+        "full_package_capacity_not_remaining_stock"
+      ],
+      "user_confirmed": false
+    },
+    {
+      "ingredient_id": "ING2952",
+      "ingredient_name": "rice vermicelli",
+      "kb_present": true,
+      "match_method": "exact",
+      "detected_names": [
+        "rice vermicelli"
+      ],
+      "quantity": 400,
+      "unit": "g",
+      "quantity_source": "package_estimate",
+      "quantity_scope": "full_package",
+      "package_capacity": 400,
+      "package_capacity_unit": "g",
+      "package_capacity_source": "package_estimate",
+      "remaining_quantity_verified": false,
+      "detected_quantities": [
+        {
+          "quantity": 400,
+          "unit": "g",
+          "quantity_source": "package_estimate"
+        }
+      ],
+      "matched": true,
+      "observations_count": 1,
+      "observations": [
+        {
+          "detected_name": "rice vermicelli",
+          "quantity": 400,
+          "unit": "g",
+          "quantity_source": "package_estimate",
+          "quantity_scope": "full_package",
+          "package_capacity": 400,
+          "package_capacity_unit": "g",
+          "package_capacity_source": "package_estimate",
+          "remaining_quantity_verified": false
+        }
+      ],
+      "review_required": true,
+      "review_reasons": [
+        "full_package_capacity_not_remaining_stock"
+      ],
+      "user_confirmed": false
+    },
+    {
+      "ingredient_id": "ING1463",
+      "ingredient_name": "garlic",
+      "kb_present": true,
+      "match_method": "exact",
+      "detected_names": [
+        "garlic"
+      ],
+      "quantity": null,
+      "unit": null,
+      "quantity_source": "unknown",
+      "quantity_scope": "unknown",
+      "package_capacity": null,
+      "package_capacity_unit": null,
+      "package_capacity_source": null,
+      "remaining_quantity_verified": null,
+      "detected_quantities": [],
+      "matched": true,
+      "observations_count": 1,
+      "observations": [
+        {
+          "detected_name": "garlic",
+          "quantity": null,
+          "unit": null,
+          "quantity_source": "unknown",
+          "quantity_scope": "unknown",
+          "package_capacity": null,
+          "package_capacity_unit": null,
+          "package_capacity_source": null,
+          "remaining_quantity_verified": null
+        }
+      ],
+      "review_required": true,
+      "review_reasons": [
+        "total_quantity_unknown"
+      ],
+      "user_confirmed": false
+    },
+    {
+      "ingredient_id": "ING1483",
+      "ingredient_name": "ginger",
+      "kb_present": true,
+      "match_method": "exact",
+      "detected_names": [
+        "ginger"
+      ],
+      "quantity": 200,
+      "unit": "g",
+      "quantity_source": "visual_estimate",
+      "quantity_scope": "visible_amount",
+      "package_capacity": null,
+      "package_capacity_unit": null,
+      "package_capacity_source": null,
+      "remaining_quantity_verified": null,
+      "detected_quantities": [
+        {
+          "quantity": 200,
+          "unit": "g",
+          "quantity_source": "visual_estimate"
+        }
+      ],
+      "matched": true,
+      "observations_count": 1,
+      "observations": [
+        {
+          "detected_name": "ginger",
+          "quantity": 200,
+          "unit": "g",
+          "quantity_source": "visual_estimate",
+          "quantity_scope": "visible_amount",
+          "package_capacity": null,
+          "package_capacity_unit": null,
+          "package_capacity_source": null,
+          "remaining_quantity_verified": null
+        }
+      ],
+      "review_required": false,
+      "review_reasons": [],
+      "user_confirmed": false
+    }
+  ],
+  "error": null
+}

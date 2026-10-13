@@ -1,0 +1,1344 @@
+{
+  "natural_language_request": "",
+  "last_request": "plan a vegetarian meal",
+  "parsed_result": {
+    "valid": true,
+    "data": {
+      "budget": null,
+      "cook_frequency": null,
+      "cook_time_preference_hrs": null,
+      "preferred_cuisines": [],
+      "dietary_restrictions": [
+        "Vegetarian"
+      ],
+      "allergies": [],
+      "preferred_meal_types": [],
+      "preferred_ingredients": [],
+      "disliked_ingredients": [],
+      "budget_flexible": false,
+      "ingredient_availability": {}
+    }
+  },
+  "request_revision": 1,
+  "confirmed_user_state": {
+    "budget": 100.0,
+    "cook_frequency": null,
+    "cook_time_preference_hrs": null,
+    "preferred_cuisines": [],
+    "dietary_restrictions": [
+      "Vegetarian"
+    ],
+    "allergies": [],
+    "preferred_meal_types": [
+      "lunch"
+    ],
+    "preferred_ingredients": [],
+    "disliked_ingredients": [],
+    "budget_flexible": false,
+    "ingredient_availability": {},
+    "budget_remaining": 100.0,
+    "days": 2,
+    "start_date": "2026-10-13",
+    "budget_cap": null
+  },
+  "pantry_items": [],
+  "planner_result": {
+    "plan": {
+      "status": "infeasible",
+      "slots": [
+        {
+          "slot_id": "2026-10-13_lunch",
+          "date": "2026-10-13",
+          "meal_type": "lunch",
+          "max_cooking_time": null
+        },
+        {
+          "slot_id": "2026-10-14_lunch",
+          "date": "2026-10-14",
+          "meal_type": "lunch",
+          "max_cooking_time": null
+        }
+      ],
+      "selected_meals": [],
+      "used_recipe_ids": [],
+      "budget": {
+        "initial": 100.0,
+        "estimated_spent": 0.0,
+        "remaining": 100.0
+      },
+      "inventory": {
+        "initial": {},
+        "current": {}
+      },
+      "nutrition": {},
+      "final_grocery_basket": {
+        "items": [],
+        "known_cost": 0.0,
+        "all_items_priced": false,
+        "unpriced_items": [],
+        "aggregated_requirements": [],
+        "status": "empty_plan"
+      },
+      "rejected_candidates": [
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R26659",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R26166",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R17674",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R20037",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R11946",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R18300",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R08407",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R19534",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R10629",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R16469",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R26659",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R26166",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R17674",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R20037",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R11946",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R18300",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R08407",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R19534",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R10629",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R16469",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        }
+      ],
+      "uncertain_candidates": [],
+      "skipped_slots": [],
+      "execution_trace": [
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R26659",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R26166",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R17674",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R20037",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R11946",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R18300",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R08407",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R19534",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R10629",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R16469",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R26659",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R26166",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R17674",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R20037",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R11946",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R18300",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R08407",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R19534",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R10629",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "candidate_rejected",
+          "slot_id": "2026-10-14_lunch",
+          "recipe_id": "R16469",
+          "reason": [
+            {
+              "constraint": "diet",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "Recipe satisfies dietary requirement(s): vegetarian"
+            },
+            {
+              "constraint": "allergy",
+              "source": "dietary_requirements",
+              "status": "pass",
+              "reason": "No allergies specified"
+            },
+            {
+              "constraint": "cooking_time",
+              "source": "feasibility",
+              "status": "unknown",
+              "reason": "Cooking-time preference unavailable"
+            },
+            {
+              "constraint": "ingredient_feasibility",
+              "source": "feasibility",
+              "status": "pass",
+              "reason": "All ingredients have valid ingredient IDs and names"
+            }
+          ]
+        },
+        {
+          "event": "slot_infeasible",
+          "slot_id": "2026-10-13_lunch"
+        },
+        {
+          "event": "slot_infeasible",
+          "slot_id": "2026-10-14_lunch"
+        },
+        {
+          "event": "inventory_reconciled",
+          "selected_meals": 0
+        }
+      ],
+      "cooking_schedule": {}
+    },
+    "validation": {
+      "status": "infeasible",
+      "issues": [
+        "Only 0/2 meal slots were filled."
+      ]
+    },
+    "grocery_basket": {
+      "items": [],
+      "known_cost": 0.0,
+      "all_items_priced": false,
+      "unpriced_items": [],
+      "aggregated_requirements": [],
+      "status": "empty_plan"
+    },
+    "nutrition_summary": {},
+    "nutrition_deviation": null
+  },
+  "preview_mode_active": false,
+  "pantry_changed_since_plan": false,
+  "preferences_changed_since_plan": false,
+  "planning_job_id": "ce6bbb36-523c-49ae-a8ef-2f15eed977be",
+  "planning_job_error": null
+}

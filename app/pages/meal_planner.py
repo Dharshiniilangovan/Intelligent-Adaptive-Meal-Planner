@@ -1,13 +1,8 @@
 
-"""IAMP live meal planning page.
-
-Natural-language request -> User State confirmation ->
-live meal generation -> saved results.
-
-No demo loader or saved-example mode is used.
-"""
+"""IAMP meal planning with canonical User State and background jobs."""
 
 from datetime import date
+import math
 import re
 
 import streamlit as st
@@ -17,12 +12,26 @@ from app.components.ui_state import (
     csv_values,
     normalized_list,
 )
-from app.components.planner_bridge import generate
 from app.components.preference_summary import show_preferences
 from app.components.presentation import show_meals
-from app.components.state_persistence import save_ui_state
-
+from app.components.state_persistence import (
+    save_ui_state,
+    get_workspace_id,
+)
+from app.components.planning_jobs import (
+    start_job,
+    read_job,
+)
+from app.components.user_state_adapter import (
+    build_ui_user_state,
+    save_canonical_user_state,
+)
 from src.input_parser.natural_language_parser import UserInputParser
+
+from app.components.user_state_adapter import (
+    build_ui_user_state,
+    save_canonical_user_state,
+)
 
 
 @st.cache_resource
@@ -52,39 +61,25 @@ def comma_text(value):
     return ", ".join(normalized_list(value))
 
 
-def reset_plan():
-    """Clear an old plan only when explicitly replacing it."""
-
-    st.session_state["planner_result"] = None
-
-    # Retained as False for compatibility with existing pages.
-    st.session_state["preview_mode_active"] = False
-
-    for key in (
-        "live_plan_state",
-        "live_planner",
-        "planner_user_state",
-    ):
-        st.session_state.pop(key, None)
-
-    st.session_state["completed_slot_ids"] = set()
+def positive_float(value):
+    try:
+        number = float(value)
+        if math.isfinite(number) and number > 0:
+            return number
+    except (TypeError, ValueError):
+        pass
+    return None
 
 
-# ============================================================
-# PAGE HEADER
-# ============================================================
+def unique_values(values):
+    return list(dict.fromkeys(values))
+
 
 st.title("Plan meals that fit your life")
-
 st.caption(
     "Describe your needs and review the details "
     "before creating your meal plan."
 )
-
-
-# ============================================================
-# NATURAL LANGUAGE REQUEST
-# ============================================================
 
 request = st.text_area(
     "What would you like to plan?",
@@ -96,42 +91,25 @@ request = st.text_area(
     key="natural_language_request",
 )
 
-
 if st.button("Analyze request", type="primary"):
-
     if not request.strip():
         st.error("Enter a request first.")
-
     else:
         try:
             parsed = get_parser().parse(request).to_dict()
-
         except Exception as exc:
             st.error(f"Could not analyze your request: {exc}")
-
         else:
             st.session_state["parsed_result"] = parsed
             st.session_state["confirmed_user_state"] = None
             st.session_state["last_request"] = request
-
             st.session_state["request_revision"] = (
                 st.session_state.get("request_revision", 0) + 1
             )
-
-            # Keep the existing plan visible until the user
-            # explicitly generates a replacement.
             st.session_state["preferences_changed_since_plan"] = True
-
             save_ui_state()
+            st.success("Request analyzed. Review your preferences below.")
 
-            st.success(
-                "Request analyzed. Review your preferences below."
-            )
-
-
-# ============================================================
-# REVIEW PARSED PREFERENCES
-# ============================================================
 
 parsed = st.session_state.get("parsed_result")
 
@@ -141,9 +119,13 @@ if parsed is not None:
     revision = st.session_state.get("request_revision", 0)
     source_text = st.session_state.get("last_request", "")
 
+    previous_state = (
+        st.session_state.get("confirmed_user_state") or {}
+    )
+
     parsed_meals = [
-        meal.lower()
-        for meal in normalized_list(
+        str(x).strip().lower()
+        for x in normalized_list(
             data.get("preferred_meal_types")
         )
     ]
@@ -155,12 +137,18 @@ if parsed is not None:
     ]
 
     initial_days = duration_hint(source_text)
-    parsed_diet = normalized_list(data.get("dietary_restrictions"))
-    parsed_budget = data.get("budget")
+
+    if initial_days is None:
+        initial_days = st.session_state.get("planning_days")
+
+    parsed_budget = positive_float(data.get("budget"))
+
+    parsed_diet = normalized_list(
+        data.get("dietary_restrictions")
+    )
 
     st.divider()
     st.subheader("Review your preferences")
-
     st.caption(
         "Check the information carefully, especially "
         "allergies and missing fields."
@@ -170,26 +158,22 @@ if parsed is not None:
 
     col1.metric(
         "Budget",
-        (
-            f"S${float(parsed_budget):.2f}"
-            if parsed_budget is not None
-            else "Not detected"
-        ),
+        f"S${parsed_budget:.2f}"
+        if parsed_budget is not None else "Not detected",
     )
-
     col2.metric(
         "Duration",
-        f"{initial_days} days" if initial_days else "Not detected",
+        f"{initial_days} days"
+        if initial_days else "Not detected",
     )
-
     col3.metric(
         "Meals",
-        ", ".join(m.title() for m in initial_meals)
+        ", ".join(x.title() for x in initial_meals)
         or "Not detected",
     )
 
     # ========================================================
-    # PREFERENCE CONFIRMATION FORM
+    # CONFIRMATION FORM
     # ========================================================
 
     with st.form(f"confirm_{revision}"):
@@ -197,16 +181,10 @@ if parsed is not None:
         left, right = st.columns(2)
 
         with left:
-
             budget = st.number_input(
                 "Budget (SGD) *",
                 min_value=0.01,
-                value=(
-                    float(parsed_budget)
-                    if parsed_budget is not None
-                    and float(parsed_budget) > 0
-                    else None
-                ),
+                value=parsed_budget,
                 placeholder="Enter your budget",
                 key=f"budget_{revision}",
             )
@@ -221,10 +199,21 @@ if parsed is not None:
             )
 
         with right:
+            saved_start = st.session_state.get(
+                "planning_start_date"
+            )
+
+            try:
+                initial_start = (
+                    date.fromisoformat(saved_start)
+                    if saved_start else date.today()
+                )
+            except (TypeError, ValueError):
+                initial_start = date.today()
 
             start = st.date_input(
                 "Start date *",
-                value=date.today(),
+                value=initial_start,
                 key=f"start_{revision}",
             )
 
@@ -248,13 +237,18 @@ if parsed is not None:
             "Kosher",
         ]
 
-        with left:
+        known_diet = {
+            str(x).strip().lower()
+            for x in parsed_diet
+        }
 
+        with left:
             diet = st.multiselect(
                 "Dietary restrictions",
                 diet_options,
                 default=[
-                    x for x in parsed_diet if x in diet_options
+                    option for option in diet_options
+                    if option.lower() in known_diet
                 ],
                 key=f"diet_{revision}",
             )
@@ -262,13 +256,14 @@ if parsed is not None:
             other_diet = st.text_input(
                 "Other dietary restrictions",
                 value=", ".join(
-                    x for x in parsed_diet if x not in diet_options
+                    str(x) for x in parsed_diet
+                    if str(x).strip().lower()
+                    not in {d.lower() for d in diet_options}
                 ),
                 key=f"other_diet_{revision}",
             )
 
         with right:
-
             allergy_text = st.text_input(
                 "Allergies (comma-separated)",
                 value=comma_text(data.get("allergies")),
@@ -283,7 +278,109 @@ if parsed is not None:
             )
 
         # ====================================================
-        # OPTIONAL PREFERENCES
+        # CUISINE AND COOKING PREFERENCES
+        # ====================================================
+
+        st.markdown("**Cuisine and cooking preferences**")
+
+        cuisine_options = [
+            "American",
+            "Asian",
+            "British",
+            "Caribbean",
+            "Central Europe",
+            "Chinese",
+            "Eastern Europe",
+            "French",
+            "Greek",
+            "Indian",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Mediterranean",
+            "Mexican",
+            "Middle Eastern",
+            "Nordic",
+            "South American",
+            "South East Asian",
+            "World",
+            "Kosher",
+        ]
+
+        parsed_cuisines = {
+            str(x).strip().lower()
+            for x in normalized_list(
+                data.get("preferred_cuisines")
+            )
+        }
+
+        cuisines = st.multiselect(
+            "Preferred cuisines",
+            options=cuisine_options,
+            default=[
+                option for option in cuisine_options
+                if option.lower() in parsed_cuisines
+            ],
+            placeholder="Choose your preferred cuisines",
+            key=f"cuisines_{revision}",
+        )
+
+        left, right = st.columns(2)
+
+        with left:
+            parsed_hours = positive_float(
+                data.get("cook_time_preference_hrs")
+            )
+
+            initial_minutes = (
+                max(1, min(600, round(parsed_hours * 60)))
+                if parsed_hours is not None else None
+            )
+
+            cook_minutes = st.number_input(
+                "Maximum cooking time per meal (minutes)",
+                min_value=1,
+                max_value=600,
+                value=initial_minutes,
+                placeholder="No limit",
+                key=f"cook_{revision}",
+            )
+
+        with right:
+            raw_frequency = data.get("cook_frequency")
+
+            try:
+                initial_frequency = (
+                    int(raw_frequency)
+                    if raw_frequency is not None else None
+                )
+            except (TypeError, ValueError):
+                initial_frequency = None
+
+            if initial_frequency is not None:
+                initial_frequency = max(
+                    0, min(21, initial_frequency)
+                )
+
+            frequency = st.number_input(
+                "Cooking frequency (times per week)",
+                min_value=0,
+                max_value=21,
+                value=initial_frequency,
+                placeholder="Not specified",
+                key=f"frequency_{revision}",
+            )
+
+        flexible = st.checkbox(
+            "Budget is flexible",
+            value=bool(
+                data.get("budget_flexible", False)
+            ),
+            key=f"flexible_{revision}",
+        )
+
+        # ====================================================
+        # OPTIONAL INGREDIENT PREFERENCES
         # ====================================================
 
         with st.expander("More preferences (optional)"):
@@ -291,115 +388,30 @@ if parsed is not None:
             left, right = st.columns(2)
 
             with left:
-
-                                
-                cuisine_options = [
-                    "American",
-                    "Asian",
-                    "British",
-                    "Caribbean",
-                    "Central Europe",
-                    "Chinese",
-                    "Eastern Europe",
-                    "French",
-                    "Greek",
-                    "Indian",
-                    "Italian",
-                    "Japanese",
-                    "Korean",
-                    "Mediterranean",
-                    "Mexican",
-                    "Middle Eastern",
-                    "Nordic",
-                    "South American",
-                    "South East Asian",
-                    "World",
-                    "Kosher",
-                ]
-
-                parsed_cuisines = [
-                    str(cuisine).strip().lower()
-                    for cuisine in normalized_list(
-                        data.get("preferred_cuisines")
-                    )
-                ]
-
-                cuisines = st.multiselect(
-                    "Preferred cuisines",
-                    options=cuisine_options,
-                    default=[
-                        option
-                        for option in cuisine_options
-                        if option.lower() in parsed_cuisines
-                    ],
-                    placeholder="Choose your preferred cuisines",
-                    key=f"cuisines_{revision}",
-                )
-
-
                 likes = st.text_input(
                     "Preferred ingredients",
                     value=comma_text(
                         data.get("preferred_ingredients")
                     ),
+                    placeholder="e.g. broccoli, tofu, rice",
                     key=f"likes_{revision}",
                 )
 
+            with right:
                 dislikes = st.text_input(
                     "Disliked ingredients",
                     value=comma_text(
                         data.get("disliked_ingredients")
                     ),
+                    placeholder="e.g. mushroom, eggplant",
                     key=f"dislikes_{revision}",
                 )
 
-            with right:
-
-                parsed_hours = data.get(
-                    "cook_time_preference_hrs"
-                )
-
-                cook_minutes = st.number_input(
-                    "Maximum cooking time per meal (minutes)",
-                    min_value=1,
-                    max_value=600,
-                    value=(
-                        round(float(parsed_hours) * 60)
-                        if parsed_hours is not None
-                        else None
-                    ),
-                    placeholder="No limit",
-                    key=f"cook_{revision}",
-                )
-
-                raw_frequency = data.get("cook_frequency")
-
-                frequency = st.number_input(
-                    "Cooking frequency (times per week)",
-                    min_value=0,
-                    max_value=21,
-                    value=(
-                        int(raw_frequency)
-                        if str(raw_frequency or "").isdigit()
-                        else None
-                    ),
-                    placeholder="Not specified",
-                    key=f"frequency_{revision}",
-                )
-
-                flexible = st.checkbox(
-                    "Budget is flexible",
-                    value=bool(
-                        data.get("budget_flexible", False)
-                    ),
-                    key=f"flexible_{revision}",
-                )
-
-            st.caption(
-                "Pantry items saved: "
-                f"{len(st.session_state.get('pantry_items', []))}. "
-                "Edit them on the Pantry page."
-            )
+        st.caption(
+            "Pantry items saved: "
+            f"{len(st.session_state.get('pantry_items', []))}. "
+            "Edit them on the Pantry page."
+        )
 
         submitted = st.form_submit_button(
             "Confirm preferences",
@@ -408,7 +420,7 @@ if parsed is not None:
         )
 
     # ========================================================
-    # SAVE CONFIRMED USER STATE
+    # BUILD AND SAVE CANONICAL USER STATE
     # ========================================================
 
     if submitted:
@@ -428,53 +440,74 @@ if parsed is not None:
             )
 
         else:
+            preferences = dict(data)
 
-            confirmed = dict(data)
-
-            confirmed.update({
+            preferences.update({
                 "budget": float(budget),
-                "budget_remaining": float(budget),
-                "days": int(days),
-                "start_date": start.isoformat(),
-                "preferred_meal_types": meals,
-                "dietary_restrictions": list(
-                    dict.fromkeys(
-                        diet + csv_values(other_diet)
-                    )
-                ),
-                "allergies": csv_values(allergy_text),
-                "preferred_cuisines": [
-                    cuisine.lower()
-                    for cuisine in cuisines
-                ],
-                "preferred_ingredients": csv_values(likes),
-                "disliked_ingredients": csv_values(dislikes),
+                "cook_frequency": frequency,
                 "cook_time_preference_hrs": (
                     cook_minutes / 60
-                    if cook_minutes is not None
-                    else None
+                    if cook_minutes is not None else None
                 ),
-                "cook_frequency": frequency,
+                "preferred_cuisines": cuisines,
+                "dietary_restrictions": unique_values(
+                    diet + csv_values(other_diet)
+                ),
+                "allergies": csv_values(allergy_text),
+                "preferred_meal_types": meals,
+                "preferred_ingredients": csv_values(likes),
+                "disliked_ingredients": csv_values(dislikes),
                 "budget_flexible": flexible,
-                "budget_cap": (
-                    float(budget) + 5.0
-                    if flexible
-                    else None
-                ),
-                "ingredient_availability": current_pantry(),
             })
 
-            st.session_state["confirmed_user_state"] = confirmed
+            # Keep the user ID stable for this workspace.
+            existing_id = (
+                st.session_state.get("user_id")
+                or previous_state.get("user_id")
+            )
 
-            # Do not delete the previous meal plan here.
-            st.session_state["preferences_changed_since_plan"] = True
+            try:
+                confirmed_state = build_ui_user_state(
+                    confirmed=preferences,
+                    pantry_items=st.session_state.get(
+                        "pantry_items", []
+                    ),
+                    user_id=existing_id,
+                )
 
-            save_ui_state()
+                save_canonical_user_state(confirmed_state)
 
-            st.success("Preferences saved.")
+            except (OSError, TypeError, ValueError) as exc:
+                st.error(
+                    f"Could not save your preferences: {exc}"
+                )
 
+            else:
+                st.session_state["user_id"] = (
+                    confirmed_state["user_id"]
+                )
+
+                st.session_state["confirmed_user_state"] = (
+                    confirmed_state
+                )
+
+                # These are planning parameters, not
+                # fields of the canonical User State.
+                st.session_state["planning_days"] = int(days)
+                st.session_state["planning_start_date"] = (
+                    start.isoformat()
+                )
+
+                st.session_state[
+                    "preferences_changed_since_plan"
+                ] = True
+
+                save_ui_state()
+                st.success("Preferences saved.")
+
+    
     # ========================================================
-    # LIVE MEAL PLAN GENERATION
+    # BACKGROUND MEAL GENERATION
     # ========================================================
 
     confirmed = st.session_state.get(
@@ -483,77 +516,218 @@ if parsed is not None:
 
     if confirmed:
 
+        days_to_plan = st.session_state.get(
+            "planning_days"
+        )
+
+        start_to_plan = st.session_state.get(
+            "planning_start_date"
+        )
+
         st.markdown(
             "#### Ready to create your meal plan"
         )
 
-        st.write(
-            f"{confirmed['days']} days · "
-            f"{', '.join(m.title() for m in confirmed['preferred_meal_types'])} "
-            f"· S${confirmed['budget']:.2f} budget"
-        )
+        if days_to_plan:
+            st.write(
+                f"{days_to_plan} days · "
+                f"{', '.join(str(x).title() for x in confirmed['preferred_meal_types'])} "
+                f"· S${confirmed['budget']:.2f} budget"
+            )
 
         show_preferences(confirmed)
 
+        workspace_id = get_workspace_id()
+
+        job_id = st.session_state.get(
+            "planning_job_id"
+        )
+
+        job = (
+            read_job(workspace_id, job_id)
+            if job_id
+            else None
+        )
+
+        is_generating = bool(
+            job
+            and job.get("status") in ("queued", "running")
+        )
+
+        if is_generating:
+            st.info(
+                "Your meal plan is being generated. "
+                "You can visit other pages while it runs."
+            )
+
         if st.button(
-            "Generate meal plan",
+            "Generating meal plan..."
+            if is_generating
+            else "Generate meal plan",
             type="primary",
             use_container_width=True,
+            disabled=is_generating,
         ):
 
-            with st.spinner(
-                "Generating meals and calculating groceries. "
-                "This may take a while..."
-            ):
+            if not days_to_plan or not start_to_plan:
+                st.error(
+                    "Confirm your planning duration and "
+                    "start date before generating meals."
+                )
 
+            else:
                 try:
-                    result, plan_state, planner_state, planner = (
-                        generate(confirmed)
+                    # ========================================
+                    # 1. REBUILD CANONICAL USER STATE
+                    # ========================================
+
+                    latest_pantry = st.session_state.get(
+                        "pantry_items", []
                     )
 
-                except Exception as exc:
-                    st.error(
-                        f"Meal generation failed: {exc}"
+                    canonical_state = build_ui_user_state(
+                        confirmed=confirmed,
+                        pantry_items=latest_pantry,
+                        user_id=(
+                            st.session_state.get("user_id")
+                            or confirmed.get("user_id")
+                        ),
                     )
 
-                else:
+                    # ========================================
+                    # 2. SAVE USER STATE AND PANTRY JSON
+                    # ========================================
 
-                    # Replace the old result only after successful
-                    # generation, preserving it if generation fails.
-                    reset_plan()
+                    save_canonical_user_state(
+                        canonical_state
+                    )
 
-                    st.session_state["planner_result"] = result
-                    st.session_state["live_plan_state"] = plan_state
-                    st.session_state["planner_user_state"] = planner_state
-                    st.session_state["live_planner"] = planner
+                    # Keep the same user ID.
+                    st.session_state["user_id"] = (
+                        canonical_state["user_id"]
+                    )
 
-                    st.session_state["pantry_changed_since_plan"] = False
-                    st.session_state["preferences_changed_since_plan"] = False
+                    # Store the refreshed canonical state.
+                    st.session_state[
+                        "confirmed_user_state"
+                    ] = canonical_state
 
+                    # ========================================
+                    # 3. BUILD TEMPORARY PLANNING PAYLOAD
+                    # ========================================
+
+                    planning_payload = dict(
+                        canonical_state
+                    )
+
+                    # These are Planner-only parameters.
+                    # They do NOT enter canonical User State.
+                    planning_payload["days"] = int(
+                        days_to_plan
+                    )
+
+                    planning_payload["start_date"] = (
+                        start_to_plan
+                    )
+
+                    # ========================================
+                    # 4. DEBUG USER STATE
+                    # ========================================
+
+                    print("\n" + "=" * 60)
+                    print("[MEAL PLANNER] USER STATE CHECK")
+                    print("=" * 60)
+
+                    print(
+                        "User ID:",
+                        canonical_state["user_id"],
+                    )
+
+                    print(
+                        "Budget:",
+                        canonical_state["budget"],
+                    )
+
+                    print(
+                        "Days:",
+                        planning_payload["days"],
+                    )
+
+                    print(
+                        "Start date:",
+                        planning_payload["start_date"],
+                    )
+
+                    print(
+                        "Pantry ingredients:",
+                        canonical_state[
+                            "ingredient_availability"
+                        ],
+                    )
+
+                    print("=" * 60)
+
+                    # ========================================
+                    # 5. START BACKGROUND GENERATION
+                    # ========================================
+
+                    job_id = start_job(
+                        workspace_id,
+                        planning_payload,
+                    )
+
+                    st.session_state[
+                        "planning_job_id"
+                    ] = job_id
+
+                    st.session_state[
+                        "planning_job_error"
+                    ] = None
+
+                    # Preserve existing meal plan until
+                    # the new plan finishes successfully.
                     save_ui_state()
 
-                    st.success(
-                        "Your meal plan is ready. "
-                        "Open Overview, Shopping List or Nutrition."
+                    print(
+                        "[MEAL PLANNER] Background job started:",
+                        job_id,
+                    )
+
+                    st.rerun()
+
+                except Exception as exc:
+
+                    print(
+                        "[MEAL PLANNER ERROR]",
+                        repr(exc),
+                    )
+
+                    st.error(
+                        f"Could not start meal generation: {exc}"
                     )
 
     # ========================================================
-    # DISPLAY THE CURRENT PLAN
+    # DISPLAY CURRENT PLAN
     # ========================================================
 
-    result = st.session_state.get("planner_result")
+    result = st.session_state.get(
+        "planner_result"
+    )
 
     if result:
 
         if (
-            st.session_state.get("pantry_changed_since_plan")
-            or st.session_state.get("preferences_changed_since_plan")
+            st.session_state.get(
+                "pantry_changed_since_plan"
+            )
+            or st.session_state.get(
+                "preferences_changed_since_plan"
+            )
         ):
             st.info(
-                "Your preferences or pantry have changed since "
-                "this meal plan was generated. "
-                "The current plan is still available, but "
-                "generate an updated plan to include your changes."
+                "Your preferences or pantry have changed "
+                "since this plan was created. "
+                "The existing plan remains available."
             )
 
         selected_meals = (

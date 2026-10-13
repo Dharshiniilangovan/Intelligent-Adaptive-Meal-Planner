@@ -1,0 +1,1175 @@
+{
+  "job_id": "322df20f-7690-4b4a-ad32-950dc31e39e7",
+  "workspace_id": "9f54f6e8-3c9e-4311-9cfd-f3742c2a5df3",
+  "status": "completed",
+  "created_at": "2026-10-13T06:11:43.972740+00:00",
+  "started_at": "2026-10-13T06:11:43.976804+00:00",
+  "finished_at": "2026-10-13T06:13:33.804175+00:00",
+  "error": null,
+  "result": {
+    "plan": {
+      "status": "infeasible",
+      "slots": [
+        {
+          "slot_id": "2026-10-13_breakfast",
+          "date": "2026-10-13",
+          "meal_type": "breakfast",
+          "max_cooking_time": null
+        }
+      ],
+      "selected_meals": [
+        {
+          "slot": {
+            "slot_id": "2026-10-13_breakfast",
+            "date": "2026-10-13",
+            "meal_type": "breakfast",
+            "max_cooking_time": null
+          },
+          "recipe_id": "R02590",
+          "decision": {
+            "recipe_id": "R02590",
+            "status": "feasible",
+            "recipe": {
+              "recipe_id": "R02590",
+              "recipe_name": "Sweet Potato Oatmeal",
+              "url": "http://eatmunchlove.com/2016/04/01/sweet-potato-oatmeal/",
+              "servings": 1.0,
+              "diet_labels": [
+                "high fiber"
+              ],
+              "health_labels": [
+                "vegetarian",
+                "egg free",
+                "peanut free",
+                "tree nut free",
+                "soy free",
+                "fish free",
+                "shellfish free"
+              ],
+              "cautions": [
+                "sulfites"
+              ],
+              "cuisine_type": [
+                "american"
+              ],
+              "meal_type": [
+                "breakfast",
+                "lunch",
+                "dinner"
+              ],
+              "dish_type": [
+                "main course"
+              ],
+              "calories_per_serving": 483.24,
+              "weight_g_per_serving": 434.0,
+              "protein_g_per_serving": 17.947,
+              "carbs_g_per_serving": 78.762,
+              "fat_g_per_serving": 12.117,
+              "fiber_g_per_serving": 9.54,
+              "sugar_g_per_serving": 18.608,
+              "sodium_mg_per_serving": 178.22,
+              "calcium_mg_per_serving": 342.92,
+              "iron_mg_per_serving": 3.6502,
+              "is_vegetarian": true,
+              "is_vegan": false,
+              "cooking_time_min": 45.0,
+              "cooking_time_source": "ollama_estimate",
+              "cooking_time_confidence": "LOW"
+            },
+            "ingredient": {
+              "recipe_id": "R02590",
+              "required_ingredients": [
+                {
+                  "ingredient_id": "ING3452",
+                  "ingredient_name": "sweet potato",
+                  "alias_name": "['sweet potato', 'roasted sweet potato', 'sweet potatoes', 'sweet potatos']",
+                  "quantity": "1.0",
+                  "unit": "count"
+                },
+                {
+                  "ingredient_id": "ING2177",
+                  "ingredient_name": "milk",
+                  "alias_name": "['milk', '1 percent milk', '1% lowfat milk', '1% milk', '1%% milk', '1-percent low-fat milk', '1-percent milk', '2 % milk', '2 percent milk', '2% milk', '2%% milk', '2-percent milk', 'canned milk', 'dry milk', 'fat free milk', 'fat-free milk', 'low fat milk', 'low-fat (1 percent) milk', 'low-fat milk', 'milks', 'nonfat milk', 'reduced fat milk', 'reduced-fat milk', 'skim milk', 'skimmed milk', 'whole milk', 'whole) milk', 'whole-milk']",
+                  "quantity": "1.0",
+                  "unit": "cup"
+                },
+                {
+                  "ingredient_id": "ING3347",
+                  "ingredient_name": "steel cut oats",
+                  "alias_name": "['steel cut oats', 'steel-cut oats']",
+                  "quantity": "0.75",
+                  "unit": "cup"
+                }
+              ],
+              "pantry_used": [],
+              "missing_ingredients": [
+                {
+                  "ingredient_id": "ING2177",
+                  "ingredient_name": "milk",
+                  "quantity": "1.0",
+                  "unit": "cup",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING3347",
+                  "ingredient_name": "steel cut oats",
+                  "quantity": "0.75",
+                  "unit": "cup",
+                  "status": "missing"
+                },
+                {
+                  "ingredient_id": "ING3452",
+                  "ingredient_name": "sweet potato",
+                  "quantity": "1.0",
+                  "unit": "count",
+                  "status": "missing"
+                }
+              ],
+              "unsupported_items": []
+            },
+            "grocery": {
+              "recipe_id": "R02590",
+              "items": [
+                {
+                  "ingredient_id": "ING2177",
+                  "ingredient": "milk",
+                  "required_quantity": "1.0",
+                  "required_unit": "cup",
+                  "product_name": "Full Cream Milk",
+                  "package_quantity": 1.0,
+                  "package_unit": "l",
+                  "packages_needed": 1,
+                  "price_per_package": 2.65,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 2.65,
+                  "estimated_required_quantity": 244.0,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:13:30+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING3347",
+                  "ingredient": "steel cut oats",
+                  "required_quantity": "0.75",
+                  "required_unit": "cup",
+                  "product_name": "Steel Cut Oats",
+                  "package_quantity": 500.0,
+                  "package_unit": "g",
+                  "packages_needed": 1,
+                  "price_per_package": 6.5,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 6.5,
+                  "estimated_required_quantity": 60.0,
+                  "estimated_required_unit": "g",
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:13:32+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                },
+                {
+                  "ingredient_id": "ING3452",
+                  "ingredient": "sweet potato",
+                  "required_quantity": "1.0",
+                  "required_unit": "count",
+                  "product_name": "Sweet Potato",
+                  "package_quantity": 1.0,
+                  "package_unit": "kg",
+                  "packages_needed": 1,
+                  "price_per_package": 3.5,
+                  "minimum_package_cost": null,
+                  "purchase_basis": "llm_estimated_package",
+                  "estimated_total_cost": 3.5,
+                  "estimated_required_quantity": null,
+                  "estimated_required_unit": null,
+                  "quantity_estimated": true,
+                  "total_cost": null,
+                  "currency": "SGD",
+                  "store": null,
+                  "source_url": null,
+                  "source_updated_at": null,
+                  "date_collected": "2026-10-13T06:13:32+00:00",
+                  "match_status": "estimated_no_retail_match",
+                  "match_quality": null,
+                  "purchase_channel": "availability_unverified",
+                  "search_query": null,
+                  "note": "Unverified Singapore grocery price estimated by local Ollama. No live retailer price or package coverage was confirmed. Confidence: LOW."
+                }
+              ],
+              "known_cost": 0,
+              "projected_cost": 12.65,
+              "projected_cost_complete": true,
+              "projected_items": 3,
+              "projection_missing": [],
+              "all_items_priced": false,
+              "unpriced_items": [
+                "milk",
+                "steel cut oats",
+                "sweet potato"
+              ],
+              "budget": null,
+              "budget_status": "not_checked",
+              "estimated_budget_status": "not_checked",
+              "estimated_budget_after_purchase": null,
+              "estimated_budget_reason": "No remaining budget was provided.",
+              "planning_budget_status": "not_checked",
+              "planning_budget_source": "not_checked",
+              "provisional_budget": {
+                "budget_status": "not_checked",
+                "provisional": true,
+                "reason": "No remaining budget provided.",
+                "projected_cost": 12.65,
+                "budget_after_purchase": null
+              },
+              "remaining_budget": null,
+              "budget_after_purchase": null
+            },
+            "reasoning": {
+              "recipe_id": "R02590",
+              "status": "feasible",
+              "feasible": true,
+              "hard_constraints": [
+                {
+                  "constraint": "diet",
+                  "source": "dietary_requirements",
+                  "status": "pass",
+                  "reason": "No dietary restriction specified"
+                },
+                {
+                  "constraint": "allergy",
+                  "source": "dietary_requirements",
+                  "status": "pass",
+                  "reason": "No allergies specified"
+                },
+                {
+                  "constraint": "cooking_time",
+                  "source": "feasibility",
+                  "status": "pass",
+                  "reason": "Recipe time 45 min is within user's 45 min limit"
+                },
+                {
+                  "constraint": "ingredient_feasibility",
+                  "source": "feasibility",
+                  "status": "pass",
+                  "reason": "All ingredients have valid ingredient IDs and names"
+                },
+                {
+                  "constraint": "budget",
+                  "source": "budget_service",
+                  "status": "pass",
+                  "reason": "Final budget feasibility will be checked against the consolidated multi-meal basket.",
+                  "known_purchase_cost": null,
+                  "remaining_budget": null
+                }
+              ],
+              "failed_constraints": [],
+              "unknown_constraints": [],
+              "soft_constraints": [
+                {
+                  "constraint": "preference",
+                  "source": "dietary_requirements",
+                  "score": 0.5,
+                  "reason": "no preferred cuisine matched"
+                },
+                {
+                  "constraint": "pantry_utilization",
+                  "source": "feasibility",
+                  "score": 0.0,
+                  "reason": "Pantry utilization score calculated from available ingredients"
+                }
+              ],
+              "overall_score": 0.25
+            },
+            "budget_assessment": {
+              "status": "pass",
+              "budget_status": "pass",
+              "budget_deferred": true,
+              "reason": "Final budget feasibility will be checked against the consolidated multi-meal basket."
+            },
+            "warnings": [
+              "No complete purchase price found for milk",
+              "No complete purchase price found for steel cut oats",
+              "No complete purchase price found for sweet potato"
+            ],
+            "execution_trace": [
+              {
+                "step": "ingredient_agent",
+                "recipe_id": "R02590",
+                "status": "success"
+              },
+              {
+                "step": "grocery_agent",
+                "recipe_id": "R02590",
+                "status": "partial",
+                "known_cost": 0,
+                "all_items_priced": false
+              },
+              {
+                "step": "reasoning",
+                "recipe_id": "R02590",
+                "decision": "feasible",
+                "overall_score": 0.25
+              }
+            ]
+          },
+          "estimated_cost": 12.65
+        }
+      ],
+      "used_recipe_ids": [
+        "R02590"
+      ],
+      "budget": {
+        "initial": 100.0,
+        "estimated_spent": 12.65,
+        "remaining": 87.35
+      },
+      "inventory": {
+        "initial": {},
+        "current": {}
+      },
+      "nutrition": {
+        "2026-10-13": {
+          "calories": 483.24,
+          "protein_g": 17.947,
+          "carbs_g": 78.762,
+          "fat_g": 12.117,
+          "fiber_g": 9.54,
+          "sugar_g": 18.608,
+          "sodium_mg": 178.22,
+          "calcium_mg": 342.92,
+          "iron_mg": 3.6502
+        }
+      },
+      "final_grocery_basket": {
+        "items": [
+          {
+            "ingredient_id": "ING3452",
+            "name": "sweet potato",
+            "required_quantity": 1.0,
+            "required_unit": "pcs",
+            "package_quantity": 1.0,
+            "package_unit": "kg",
+            "packages": 1,
+            "purchased_quantity": 1.0,
+            "price_per_package": 3.5,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 3.5,
+            "leftover_quantity": null,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R02590"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 3.5,
+            "package_conversion_status": "unresolved",
+            "effective_purchase_cost": 3.5,
+            "display_cost": 3.5,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING2177",
+            "name": "milk",
+            "required_quantity": 240.0,
+            "required_unit": "ml",
+            "package_quantity": 1.0,
+            "package_unit": "l",
+            "packages": 1,
+            "purchased_quantity": 1.0,
+            "price_per_package": 2.65,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 2.65,
+            "leftover_quantity": 0.76,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R02590"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "calculated_quantity",
+            "quantity_coverage_verified": true,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 2.65,
+            "package_conversion_status": "exact",
+            "effective_purchase_cost": 2.65,
+            "display_cost": 2.65,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          },
+          {
+            "ingredient_id": "ING3347",
+            "name": "steel cut oats",
+            "required_quantity": 180.0,
+            "required_unit": "ml",
+            "package_quantity": 500.0,
+            "package_unit": "g",
+            "packages": 1,
+            "purchased_quantity": 500.0,
+            "price_per_package": 6.5,
+            "purchase_cost": null,
+            "estimated_purchase_cost": 6.5,
+            "leftover_quantity": null,
+            "inventory_used": 0.0,
+            "recipe_ids": [
+              "R02590"
+            ],
+            "pricing_status": "estimated",
+            "purchase_basis": "minimum_retail_package",
+            "quantity_coverage_verified": false,
+            "price_source": "ollama_estimate",
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "inventory_conversion_unresolved": false,
+            "planning_purchase_cost": 6.5,
+            "package_conversion_status": "unresolved",
+            "effective_purchase_cost": 6.5,
+            "display_cost": 6.5,
+            "has_usable_price": true,
+            "cost_is_estimated": true
+          }
+        ],
+        "known_cost": 0.0,
+        "unresolved_requirements": [],
+        "all_items_priced": false,
+        "all_items_have_usable_cost": true,
+        "qualitative_requirements": [],
+        "unpriced_items": [],
+        "aggregated_requirements": [
+          {
+            "ingredient_id": "ING3452",
+            "ingredient_name": "sweet potato",
+            "quantity": 1.0,
+            "unit": "pcs",
+            "recipe_ids": [
+              "R02590"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R02590",
+                "quantity": "1.0",
+                "unit": "count",
+                "conversion_status": "exact"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING2177",
+            "ingredient_name": "milk",
+            "quantity": 240.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R02590"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R02590",
+                "quantity": "1.0",
+                "unit": "cup",
+                "conversion_status": "exact"
+              }
+            ]
+          },
+          {
+            "ingredient_id": "ING3347",
+            "ingredient_name": "steel cut oats",
+            "quantity": 180.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R02590"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R02590",
+                "quantity": "0.75",
+                "unit": "cup",
+                "conversion_status": "exact"
+              }
+            ]
+          }
+        ],
+        "purchase_requirements": [
+          {
+            "ingredient_id": "ING3452",
+            "ingredient_name": "sweet potato",
+            "quantity": 1.0,
+            "unit": "pcs",
+            "recipe_ids": [
+              "R02590"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R02590",
+                "quantity": "1.0",
+                "unit": "count",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 1.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 1.0,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING2177",
+            "ingredient_name": "milk",
+            "quantity": 240.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R02590"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R02590",
+                "quantity": "1.0",
+                "unit": "cup",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 240.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 240.0,
+            "inventory_conversion_unresolved": false
+          },
+          {
+            "ingredient_id": "ING3347",
+            "ingredient_name": "steel cut oats",
+            "quantity": 180.0,
+            "unit": "ml",
+            "recipe_ids": [
+              "R02590"
+            ],
+            "conversion_status": "exact",
+            "normalization_status": "resolved",
+            "source_requirements": [
+              {
+                "recipe_id": "R02590",
+                "quantity": "0.75",
+                "unit": "cup",
+                "conversion_status": "exact"
+              }
+            ],
+            "required_quantity": 180.0,
+            "inventory_available": 0.0,
+            "inventory_used": 0.0,
+            "purchase_required": 180.0,
+            "inventory_conversion_unresolved": false
+          }
+        ],
+        "projected_cost": 12.65,
+        "projected_cost_complete": true,
+        "projection_missing": [],
+        "warnings": [
+          "sweet potato: package coverage unresolved (required 1.0 pcs, package 1.0 kg). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+          "steel cut oats: package coverage unresolved (required 180.0 ml, package 500.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified."
+        ],
+        "planning_cost": 12.65,
+        "planning_cost_complete": true
+      },
+      "rejected_candidates": [],
+      "uncertain_candidates": [
+        {
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R11216",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "olive oil"
+            ],
+            "unpriced_items": [
+              "olive oil"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R15484",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "seasoning",
+              "pepper"
+            ],
+            "unpriced_items": [
+              "seasoning",
+              "pepper"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R05874",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "seasoning"
+            ],
+            "unpriced_items": [
+              "seasoning"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R16882",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "lemon juice",
+              "salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "lemon juice",
+              "salt",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R34181",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "sugar substitute"
+            ],
+            "unpriced_items": [
+              "sugar substitute"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R25432",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "salt",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R18534",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "french bread",
+              "butter",
+              "pepper"
+            ],
+            "unpriced_items": [
+              "french bread",
+              "butter",
+              "pepper"
+            ]
+          }
+        },
+        {
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R15696",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "kosher salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "kosher salt",
+              "black pepper"
+            ]
+          }
+        }
+      ],
+      "skipped_slots": [],
+      "execution_trace": [
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R11216",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "olive oil"
+            ],
+            "unpriced_items": [
+              "olive oil"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R15484",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "seasoning",
+              "pepper"
+            ],
+            "unpriced_items": [
+              "seasoning",
+              "pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R05874",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "seasoning"
+            ],
+            "unpriced_items": [
+              "seasoning"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R16882",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "lemon juice",
+              "salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "lemon juice",
+              "salt",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R34181",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "sugar substitute"
+            ],
+            "unpriced_items": [
+              "sugar substitute"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R25432",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "salt",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R18534",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "french bread",
+              "butter",
+              "pepper"
+            ],
+            "unpriced_items": [
+              "french bread",
+              "butter",
+              "pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R15696",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "kosher salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "kosher salt",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "event": "meal_selected",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R02590"
+        },
+        {
+          "event": "nutrition_updated",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R02590"
+        },
+        {
+          "event": "inventory_reconciliation_failed",
+          "reason": "One or more ingredient requirements could not be reconciled.",
+          "unresolved_count": 2,
+          "error_count": 2,
+          "details": [
+            {
+              "recipe_id": "R02590",
+              "ingredient_name": "sweet potato",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: kg vs count for ingredient 'sweet potato' (available=1.0, required=1.0)"
+            },
+            {
+              "recipe_id": "R02590",
+              "ingredient_name": "steel cut oats",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs cup for ingredient 'steel cut oats' (available=500.0, required=0.75)"
+            }
+          ]
+        }
+      ],
+      "cooking_schedule": {
+        "sessions": [
+          {
+            "session_id": "B001",
+            "recipe_id": "R02590",
+            "cook_date": "2026-10-13",
+            "portions_prepared": 1,
+            "meal_slot_ids": [
+              "2026-10-13_breakfast"
+            ]
+          }
+        ],
+        "session_count": 1,
+        "weekly_session_counts": {
+          "2026-W42": 1
+        },
+        "max_sessions_per_week": 2,
+        "valid": true,
+        "violations": {},
+        "storage_assumption_days": 1
+      }
+    },
+    "validation": {
+      "status": "infeasible",
+      "issues": [
+        "Final inventory reconciliation failed."
+      ]
+    },
+    "grocery_basket": {
+      "items": [
+        {
+          "ingredient_id": "ING3452",
+          "name": "sweet potato",
+          "required_quantity": 1.0,
+          "required_unit": "pcs",
+          "package_quantity": 1.0,
+          "package_unit": "kg",
+          "packages": 1,
+          "purchased_quantity": 1.0,
+          "price_per_package": 3.5,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 3.5,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R02590"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 3.5,
+          "package_conversion_status": "unresolved",
+          "effective_purchase_cost": 3.5,
+          "display_cost": 3.5,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING2177",
+          "name": "milk",
+          "required_quantity": 240.0,
+          "required_unit": "ml",
+          "package_quantity": 1.0,
+          "package_unit": "l",
+          "packages": 1,
+          "purchased_quantity": 1.0,
+          "price_per_package": 2.65,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 2.65,
+          "leftover_quantity": 0.76,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R02590"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "calculated_quantity",
+          "quantity_coverage_verified": true,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 2.65,
+          "package_conversion_status": "exact",
+          "effective_purchase_cost": 2.65,
+          "display_cost": 2.65,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        },
+        {
+          "ingredient_id": "ING3347",
+          "name": "steel cut oats",
+          "required_quantity": 180.0,
+          "required_unit": "ml",
+          "package_quantity": 500.0,
+          "package_unit": "g",
+          "packages": 1,
+          "purchased_quantity": 500.0,
+          "price_per_package": 6.5,
+          "purchase_cost": null,
+          "estimated_purchase_cost": 6.5,
+          "leftover_quantity": null,
+          "inventory_used": 0.0,
+          "recipe_ids": [
+            "R02590"
+          ],
+          "pricing_status": "estimated",
+          "purchase_basis": "minimum_retail_package",
+          "quantity_coverage_verified": false,
+          "price_source": "ollama_estimate",
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "inventory_conversion_unresolved": false,
+          "planning_purchase_cost": 6.5,
+          "package_conversion_status": "unresolved",
+          "effective_purchase_cost": 6.5,
+          "display_cost": 6.5,
+          "has_usable_price": true,
+          "cost_is_estimated": true
+        }
+      ],
+      "known_cost": 0.0,
+      "unresolved_requirements": [],
+      "all_items_priced": false,
+      "all_items_have_usable_cost": true,
+      "qualitative_requirements": [],
+      "unpriced_items": [],
+      "aggregated_requirements": [
+        {
+          "ingredient_id": "ING3452",
+          "ingredient_name": "sweet potato",
+          "quantity": 1.0,
+          "unit": "pcs",
+          "recipe_ids": [
+            "R02590"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R02590",
+              "quantity": "1.0",
+              "unit": "count",
+              "conversion_status": "exact"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING2177",
+          "ingredient_name": "milk",
+          "quantity": 240.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R02590"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R02590",
+              "quantity": "1.0",
+              "unit": "cup",
+              "conversion_status": "exact"
+            }
+          ]
+        },
+        {
+          "ingredient_id": "ING3347",
+          "ingredient_name": "steel cut oats",
+          "quantity": 180.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R02590"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R02590",
+              "quantity": "0.75",
+              "unit": "cup",
+              "conversion_status": "exact"
+            }
+          ]
+        }
+      ],
+      "purchase_requirements": [
+        {
+          "ingredient_id": "ING3452",
+          "ingredient_name": "sweet potato",
+          "quantity": 1.0,
+          "unit": "pcs",
+          "recipe_ids": [
+            "R02590"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R02590",
+              "quantity": "1.0",
+              "unit": "count",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 1.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 1.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING2177",
+          "ingredient_name": "milk",
+          "quantity": 240.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R02590"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R02590",
+              "quantity": "1.0",
+              "unit": "cup",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 240.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 240.0,
+          "inventory_conversion_unresolved": false
+        },
+        {
+          "ingredient_id": "ING3347",
+          "ingredient_name": "steel cut oats",
+          "quantity": 180.0,
+          "unit": "ml",
+          "recipe_ids": [
+            "R02590"
+          ],
+          "conversion_status": "exact",
+          "normalization_status": "resolved",
+          "source_requirements": [
+            {
+              "recipe_id": "R02590",
+              "quantity": "0.75",
+              "unit": "cup",
+              "conversion_status": "exact"
+            }
+          ],
+          "required_quantity": 180.0,
+          "inventory_available": 0.0,
+          "inventory_used": 0.0,
+          "purchase_required": 180.0,
+          "inventory_conversion_unresolved": false
+        }
+      ],
+      "projected_cost": 12.65,
+      "projected_cost_complete": true,
+      "projection_missing": [],
+      "warnings": [
+        "sweet potato: package coverage unresolved (required 1.0 pcs, package 1.0 kg). One package is a provisional minimum purchase; inventory sufficiency is not verified.",
+        "steel cut oats: package coverage unresolved (required 180.0 ml, package 500.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified."
+      ],
+      "planning_cost": 12.65,
+      "planning_cost_complete": true
+    },
+    "nutrition_summary": {
+      "2026-10-13": {
+        "calories": 483.24,
+        "protein_g": 17.947,
+        "carbs_g": 78.762,
+        "fat_g": 12.117,
+        "fiber_g": 9.54,
+        "sugar_g": 18.608,
+        "sodium_mg": 178.22,
+        "calcium_mg": 342.92,
+        "iron_mg": 3.6502
+      }
+    },
+    "nutrition_deviation": null
+  }
+}

@@ -1,0 +1,278 @@
+{
+  "workspace_id": "46421524-d93b-40bf-a8d6-d3f2ac6de79a",
+  "job_id": "80acde7a-f745-40a3-9f6f-58d9839c45fe",
+  "kind": "replan",
+  "status": "completed",
+  "created_at": "2026-10-13T06:39:18.546038+00:00",
+  "started_at": "2026-10-13T06:39:18.569333+00:00",
+  "finished_at": "2026-10-13T06:39:18.727547+00:00",
+  "result": {
+    "plan": {
+      "status": "infeasible",
+      "slots": [
+        {
+          "slot_id": "2026-10-13_lunch",
+          "date": "2026-10-13",
+          "meal_type": "lunch",
+          "max_cooking_time": null
+        }
+      ],
+      "selected_meals": [],
+      "used_recipe_ids": [],
+      "budget": {
+        "initial": 100.0,
+        "estimated_spent": 15.4,
+        "remaining": 84.6
+      },
+      "inventory": {
+        "initial": {},
+        "current": {}
+      },
+      "nutrition": {},
+      "final_grocery_basket": {
+        "items": [],
+        "known_cost": 15.4,
+        "all_items_priced": false,
+        "unpriced_items": [],
+        "aggregated_requirements": [],
+        "status": "empty_plan"
+      },
+      "rejected_candidates": [],
+      "uncertain_candidates": [],
+      "skipped_slots": [
+        {
+          "slot_id": "2026-10-13_lunch",
+          "reason": "user_skipped"
+        }
+      ],
+      "execution_trace": [
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R04696",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "garlic",
+              "red pepper flakes"
+            ],
+            "unpriced_items": [
+              "garlic",
+              "red pepper flakes"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R03989",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "red pepper"
+            ],
+            "unpriced_items": [
+              "red pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R34214",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "sesame seed"
+            ],
+            "unpriced_items": [
+              "sesame seed"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R04437",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "sweet paprika",
+              "turmeric",
+              "marjoram",
+              "oregano",
+              "pepper",
+              "sea salt"
+            ],
+            "unpriced_items": [
+              "sweet paprika",
+              "turmeric",
+              "marjoram",
+              "oregano",
+              "pepper",
+              "sea salt"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R01716",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "ginger",
+              "cumin seed",
+              "fennel seed",
+              "cayenne",
+              "turmeric",
+              "cornstarch",
+              "salt"
+            ],
+            "unpriced_items": [
+              "ginger",
+              "cumin seed",
+              "fennel seed",
+              "cayenne",
+              "turmeric",
+              "cornstarch",
+              "salt"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R12685",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "tarragon",
+              "salt",
+              "pepper"
+            ],
+            "unpriced_items": [
+              "tarragon",
+              "salt",
+              "pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R26600",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "coriander",
+              "cumin",
+              "mustard",
+              "cayenne pepper",
+              "turmeric",
+              "cardamom",
+              "salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "coriander",
+              "cumin",
+              "mustard",
+              "cayenne pepper",
+              "turmeric",
+              "cardamom",
+              "salt",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "event": "meal_selected",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R11946"
+        },
+        {
+          "event": "nutrition_updated",
+          "slot_id": "2026-10-13_lunch",
+          "recipe_id": "R11946"
+        },
+        {
+          "event": "inventory_reconciliation_failed",
+          "reason": "One or more ingredient requirements could not be reconciled.",
+          "unresolved_count": 5,
+          "error_count": 5,
+          "details": [
+            {
+              "recipe_id": "R11946",
+              "ingredient_name": "brown rice",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: kg vs cup for ingredient 'brown rice' (available=1.0, required=0.5)"
+            },
+            {
+              "recipe_id": "R11946",
+              "ingredient_name": "vegetable",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: kg vs cup for ingredient 'vegetable' (available=1.0, required=1.0)"
+            },
+            {
+              "recipe_id": "R11946",
+              "ingredient_name": "tofu",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs cup for ingredient 'tofu' (available=300.0, required=1.0)"
+            },
+            {
+              "recipe_id": "R11946",
+              "ingredient_name": "scallion",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs tablespoon for ingredient 'scallion' (available=100.0, required=2.0)"
+            },
+            {
+              "recipe_id": "R11946",
+              "ingredient_name": "cashew",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs tablespoon for ingredient 'cashew' (available=150.0, required=2.0)"
+            }
+          ]
+        },
+        {
+          "event": "slot_skipped",
+          "slot_id": "2026-10-13_lunch",
+          "reason": "user_skipped"
+        },
+        {
+          "event": "inventory_reconciled",
+          "selected_meals": 0
+        },
+        {
+          "event": "plan_rebuilt_after_skip",
+          "skipped_slot_id": "2026-10-13_lunch",
+          "completed_slot_ids": []
+        }
+      ],
+      "cooking_schedule": {
+        "sessions": [],
+        "session_count": 0,
+        "weekly_session_counts": {},
+        "max_sessions_per_week": 2,
+        "valid": true,
+        "violations": {},
+        "storage_assumption_days": 1
+      }
+    },
+    "validation": {
+      "status": "infeasible",
+      "issues": []
+    },
+    "grocery_basket": {
+      "items": [],
+      "known_cost": 15.4,
+      "all_items_priced": false,
+      "unpriced_items": [],
+      "aggregated_requirements": [],
+      "status": "empty_plan"
+    },
+    "nutrition_summary": {},
+    "nutrition_deviation": null
+  },
+  "error": null
+}

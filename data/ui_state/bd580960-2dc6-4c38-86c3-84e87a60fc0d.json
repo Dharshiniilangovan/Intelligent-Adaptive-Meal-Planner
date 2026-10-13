@@ -1,0 +1,51 @@
+{
+  "natural_language_request": "plan a meal for 5 days",
+  "last_request": "plan a meal for 5 days",
+  "parsed_result": {
+    "valid": true,
+    "data": {
+      "budget": null,
+      "cook_frequency": null,
+      "cook_time_preference_hrs": null,
+      "preferred_cuisines": [],
+      "dietary_restrictions": [],
+      "allergies": [],
+      "preferred_meal_types": [],
+      "preferred_ingredients": [],
+      "disliked_ingredients": [],
+      "budget_flexible": false,
+      "ingredient_availability": {}
+    }
+  },
+  "request_revision": 1,
+  "confirmed_user_state": {
+    "user_id": "a159971e-52f0-485b-bc97-5f3bcbef9b67",
+    "budget": 100.0,
+    "cook_frequency": 2,
+    "cook_time_preference_hrs": 0.75,
+    "preferred_cuisines": [
+      "Asian"
+    ],
+    "dietary_restrictions": [],
+    "allergies": [],
+    "preferred_meal_types": [
+      "breakfast"
+    ],
+    "preferred_ingredients": [],
+    "disliked_ingredients": [],
+    "budget_flexible": false,
+    "budget_cap": null,
+    "ingredient_availability": {}
+  },
+  "user_id": "a159971e-52f0-485b-bc97-5f3bcbef9b67",
+  "planning_days": 1,
+  "planning_start_date": "2026-10-13",
+  "pantry_items": [],
+  "planner_result": null,
+  "preview_mode_active": false,
+  "pantry_changed_since_plan": false,
+  "preferences_changed_since_plan": true,
+  "planning_job_id": null,
+  "planning_job_error": null,
+  "completed_slot_ids": []
+}

@@ -1,0 +1,593 @@
+{
+  "natural_language_request": null,
+  "last_request": "plan 5 day meal",
+  "parsed_result": {
+    "valid": true,
+    "data": {
+      "budget": null,
+      "cook_frequency": null,
+      "cook_time_preference_hrs": null,
+      "preferred_cuisines": [],
+      "dietary_restrictions": [],
+      "allergies": [],
+      "preferred_meal_types": [],
+      "preferred_ingredients": [],
+      "disliked_ingredients": [],
+      "budget_flexible": false,
+      "ingredient_availability": {}
+    }
+  },
+  "request_revision": 1,
+  "confirmed_user_state": {
+    "user_id": "a0f7cf41-a51e-4b08-98b2-8b23da0ed415",
+    "budget": 100.0,
+    "cook_frequency": 2,
+    "cook_time_preference_hrs": 0.75,
+    "preferred_cuisines": [
+      "Asian"
+    ],
+    "dietary_restrictions": [],
+    "allergies": [],
+    "preferred_meal_types": [
+      "breakfast"
+    ],
+    "preferred_ingredients": [],
+    "disliked_ingredients": [],
+    "budget_flexible": false,
+    "budget_cap": null,
+    "ingredient_availability": {}
+  },
+  "user_id": "a0f7cf41-a51e-4b08-98b2-8b23da0ed415",
+  "planning_days": 1,
+  "planning_start_date": "2026-10-13",
+  "pantry_items": [],
+  "planner_result": {
+    "plan": {
+      "status": "infeasible",
+      "slots": [
+        {
+          "slot_id": "2026-10-13_breakfast",
+          "date": "2026-10-13",
+          "meal_type": "breakfast",
+          "max_cooking_time": null
+        }
+      ],
+      "selected_meals": [],
+      "used_recipe_ids": [],
+      "budget": {
+        "initial": 100.0,
+        "estimated_spent": 12.65,
+        "remaining": 87.35
+      },
+      "inventory": {
+        "initial": {},
+        "current": {}
+      },
+      "nutrition": {},
+      "final_grocery_basket": {
+        "items": [],
+        "known_cost": 12.65,
+        "all_items_priced": false,
+        "unpriced_items": [],
+        "aggregated_requirements": [],
+        "status": "empty_plan"
+      },
+      "rejected_candidates": [],
+      "uncertain_candidates": [],
+      "skipped_slots": [
+        {
+          "slot_id": "2026-10-13_breakfast",
+          "reason": "user_skipped"
+        }
+      ],
+      "execution_trace": [
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R11216",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "olive oil"
+            ],
+            "unpriced_items": [
+              "olive oil"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R15484",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "seasoning",
+              "pepper"
+            ],
+            "unpriced_items": [
+              "seasoning",
+              "pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R05874",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "seasoning"
+            ],
+            "unpriced_items": [
+              "seasoning"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R16882",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "lemon juice",
+              "salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "lemon juice",
+              "salt",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R34181",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "sugar substitute"
+            ],
+            "unpriced_items": [
+              "sugar substitute"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R25432",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "salt",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R18534",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "french bread",
+              "butter",
+              "pepper"
+            ],
+            "unpriced_items": [
+              "french bread",
+              "butter",
+              "pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R15696",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "kosher salt",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "kosher salt",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "event": "meal_selected",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R02590"
+        },
+        {
+          "event": "nutrition_updated",
+          "slot_id": "2026-10-13_breakfast",
+          "recipe_id": "R02590"
+        },
+        {
+          "event": "inventory_reconciliation_failed",
+          "reason": "One or more ingredient requirements could not be reconciled.",
+          "unresolved_count": 2,
+          "error_count": 2,
+          "details": [
+            {
+              "recipe_id": "R02590",
+              "ingredient_name": "sweet potato",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: kg vs count for ingredient 'sweet potato' (available=1.0, required=1.0)"
+            },
+            {
+              "recipe_id": "R02590",
+              "ingredient_name": "steel cut oats",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs cup for ingredient 'steel cut oats' (available=500.0, required=0.75)"
+            }
+          ]
+        },
+        {
+          "event": "slot_skipped",
+          "slot_id": "2026-10-13_breakfast",
+          "reason": "user_skipped"
+        },
+        {
+          "event": "inventory_reconciled",
+          "selected_meals": 0
+        },
+        {
+          "event": "plan_rebuilt_after_skip",
+          "skipped_slot_id": "2026-10-13_breakfast",
+          "completed_slot_ids": []
+        }
+      ],
+      "cooking_schedule": {
+        "sessions": [],
+        "session_count": 0,
+        "weekly_session_counts": {},
+        "max_sessions_per_week": 2,
+        "valid": true,
+        "violations": {},
+        "storage_assumption_days": 1
+      }
+    },
+    "validation": {
+      "status": "infeasible",
+      "issues": []
+    },
+    "grocery_basket": {
+      "items": [],
+      "known_cost": 12.65,
+      "all_items_priced": false,
+      "unpriced_items": [],
+      "aggregated_requirements": [],
+      "status": "empty_plan"
+    },
+    "nutrition_summary": {},
+    "nutrition_deviation": null
+  },
+  "preview_mode_active": false,
+  "pantry_changed_since_plan": false,
+  "preferences_changed_since_plan": false,
+  "planning_job_id": null,
+  "planning_job_error": null,
+  "completed_slot_ids": [],
+  "pantry_detection_job_id": null,
+  "pantry_detection_error": null,
+  "image_candidates": [
+    {
+      "ingredient_id": "ING1828",
+      "ingredient_name": "jasmine rice",
+      "kb_present": true,
+      "match_method": "exact",
+      "detected_names": [
+        "jasmine rice"
+      ],
+      "quantity": 5,
+      "unit": "kg",
+      "quantity_source": "package_label",
+      "quantity_scope": "full_package",
+      "package_capacity": 5,
+      "package_capacity_unit": "kg",
+      "package_capacity_source": "package_label",
+      "remaining_quantity_verified": false,
+      "detected_quantities": [
+        {
+          "quantity": 5,
+          "unit": "kg",
+          "quantity_source": "package_label"
+        }
+      ],
+      "matched": true,
+      "observations_count": 1,
+      "observations": [
+        {
+          "detected_name": "jasmine rice",
+          "quantity": 5,
+          "unit": "kg",
+          "quantity_source": "package_label",
+          "quantity_scope": "full_package",
+          "package_capacity": 5,
+          "package_capacity_unit": "kg",
+          "package_capacity_source": "package_label",
+          "remaining_quantity_verified": false
+        }
+      ],
+      "review_required": true,
+      "review_reasons": [
+        "full_package_capacity_not_remaining_stock"
+      ],
+      "user_confirmed": false
+    },
+    {
+      "ingredient_id": null,
+      "ingredient_name": "red lentils",
+      "kb_present": false,
+      "match_method": null,
+      "detected_names": [
+        "red lentils"
+      ],
+      "quantity": 500,
+      "unit": "g",
+      "quantity_source": "visual_estimate",
+      "quantity_scope": "visible_amount",
+      "package_capacity": null,
+      "package_capacity_unit": null,
+      "package_capacity_source": null,
+      "remaining_quantity_verified": null,
+      "detected_quantities": [
+        {
+          "quantity": 500,
+          "unit": "g",
+          "quantity_source": "visual_estimate"
+        }
+      ],
+      "matched": false,
+      "observations_count": 1,
+      "observations": [
+        {
+          "detected_name": "red lentils",
+          "quantity": 500,
+          "unit": "g",
+          "quantity_source": "visual_estimate",
+          "quantity_scope": "visible_amount",
+          "package_capacity": null,
+          "package_capacity_unit": null,
+          "package_capacity_source": null,
+          "remaining_quantity_verified": null
+        }
+      ],
+      "review_required": true,
+      "review_reasons": [
+        "ingredient_not_in_kb"
+      ],
+      "user_confirmed": false
+    },
+    {
+      "ingredient_id": null,
+      "ingredient_name": "dark soy sauce",
+      "kb_present": false,
+      "match_method": null,
+      "detected_names": [
+        "dark soy sauce"
+      ],
+      "quantity": 500,
+      "unit": "ml",
+      "quantity_source": "package_estimate",
+      "quantity_scope": "full_package",
+      "package_capacity": 500,
+      "package_capacity_unit": "ml",
+      "package_capacity_source": "package_estimate",
+      "remaining_quantity_verified": false,
+      "detected_quantities": [
+        {
+          "quantity": 500,
+          "unit": "ml",
+          "quantity_source": "package_estimate"
+        }
+      ],
+      "matched": false,
+      "observations_count": 1,
+      "observations": [
+        {
+          "detected_name": "dark soy sauce",
+          "quantity": 500,
+          "unit": "ml",
+          "quantity_source": "package_estimate",
+          "quantity_scope": "full_package",
+          "package_capacity": 500,
+          "package_capacity_unit": "ml",
+          "package_capacity_source": "package_estimate",
+          "remaining_quantity_verified": false
+        }
+      ],
+      "review_required": true,
+      "review_reasons": [
+        "full_package_capacity_not_remaining_stock",
+        "ingredient_not_in_kb"
+      ],
+      "user_confirmed": false
+    },
+    {
+      "ingredient_id": "ING3126",
+      "ingredient_name": "sesame oil",
+      "kb_present": true,
+      "match_method": "exact",
+      "detected_names": [
+        "sesame oil"
+      ],
+      "quantity": 310,
+      "unit": "ml",
+      "quantity_source": "package_estimate",
+      "quantity_scope": "full_package",
+      "package_capacity": 310,
+      "package_capacity_unit": "ml",
+      "package_capacity_source": "package_estimate",
+      "remaining_quantity_verified": false,
+      "detected_quantities": [
+        {
+          "quantity": 310,
+          "unit": "ml",
+          "quantity_source": "package_estimate"
+        }
+      ],
+      "matched": true,
+      "observations_count": 1,
+      "observations": [
+        {
+          "detected_name": "sesame oil",
+          "quantity": 310,
+          "unit": "ml",
+          "quantity_source": "package_estimate",
+          "quantity_scope": "full_package",
+          "package_capacity": 310,
+          "package_capacity_unit": "ml",
+          "package_capacity_source": "package_estimate",
+          "remaining_quantity_verified": false
+        }
+      ],
+      "review_required": true,
+      "review_reasons": [
+        "full_package_capacity_not_remaining_stock"
+      ],
+      "user_confirmed": false
+    },
+    {
+      "ingredient_id": "ING2952",
+      "ingredient_name": "rice vermicelli",
+      "kb_present": true,
+      "match_method": "exact",
+      "detected_names": [
+        "rice vermicelli"
+      ],
+      "quantity": 400,
+      "unit": "g",
+      "quantity_source": "package_estimate",
+      "quantity_scope": "full_package",
+      "package_capacity": 400,
+      "package_capacity_unit": "g",
+      "package_capacity_source": "package_estimate",
+      "remaining_quantity_verified": false,
+      "detected_quantities": [
+        {
+          "quantity": 400,
+          "unit": "g",
+          "quantity_source": "package_estimate"
+        }
+      ],
+      "matched": true,
+      "observations_count": 1,
+      "observations": [
+        {
+          "detected_name": "rice vermicelli",
+          "quantity": 400,
+          "unit": "g",
+          "quantity_source": "package_estimate",
+          "quantity_scope": "full_package",
+          "package_capacity": 400,
+          "package_capacity_unit": "g",
+          "package_capacity_source": "package_estimate",
+          "remaining_quantity_verified": false
+        }
+      ],
+      "review_required": true,
+      "review_reasons": [
+        "full_package_capacity_not_remaining_stock"
+      ],
+      "user_confirmed": false
+    },
+    {
+      "ingredient_id": "ING1463",
+      "ingredient_name": "garlic",
+      "kb_present": true,
+      "match_method": "exact",
+      "detected_names": [
+        "garlic"
+      ],
+      "quantity": null,
+      "unit": null,
+      "quantity_source": "unknown",
+      "quantity_scope": "unknown",
+      "package_capacity": null,
+      "package_capacity_unit": null,
+      "package_capacity_source": null,
+      "remaining_quantity_verified": null,
+      "detected_quantities": [],
+      "matched": true,
+      "observations_count": 1,
+      "observations": [
+        {
+          "detected_name": "garlic",
+          "quantity": null,
+          "unit": null,
+          "quantity_source": "unknown",
+          "quantity_scope": "unknown",
+          "package_capacity": null,
+          "package_capacity_unit": null,
+          "package_capacity_source": null,
+          "remaining_quantity_verified": null
+        }
+      ],
+      "review_required": true,
+      "review_reasons": [
+        "total_quantity_unknown"
+      ],
+      "user_confirmed": false
+    },
+    {
+      "ingredient_id": "ING1483",
+      "ingredient_name": "ginger",
+      "kb_present": true,
+      "match_method": "exact",
+      "detected_names": [
+        "ginger"
+      ],
+      "quantity": 200,
+      "unit": "g",
+      "quantity_source": "visual_estimate",
+      "quantity_scope": "visible_amount",
+      "package_capacity": null,
+      "package_capacity_unit": null,
+      "package_capacity_source": null,
+      "remaining_quantity_verified": null,
+      "detected_quantities": [
+        {
+          "quantity": 200,
+          "unit": "g",
+          "quantity_source": "visual_estimate"
+        }
+      ],
+      "matched": true,
+      "observations_count": 1,
+      "observations": [
+        {
+          "detected_name": "ginger",
+          "quantity": 200,
+          "unit": "g",
+          "quantity_source": "visual_estimate",
+          "quantity_scope": "visible_amount",
+          "package_capacity": null,
+          "package_capacity_unit": null,
+          "package_capacity_source": null,
+          "remaining_quantity_verified": null
+        }
+      ],
+      "review_required": false,
+      "review_reasons": [],
+      "user_confirmed": false
+    }
+  ],
+  "replanning_job_id": null,
+  "replanning_error": null
+}

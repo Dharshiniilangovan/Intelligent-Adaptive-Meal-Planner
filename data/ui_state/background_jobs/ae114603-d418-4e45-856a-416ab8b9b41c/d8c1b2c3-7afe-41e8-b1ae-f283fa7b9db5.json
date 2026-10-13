@@ -1,0 +1,266 @@
+{
+  "workspace_id": "ae114603-d418-4e45-856a-416ab8b9b41c",
+  "job_id": "d8c1b2c3-7afe-41e8-b1ae-f283fa7b9db5",
+  "kind": "replan",
+  "status": "completed",
+  "created_at": "2026-10-13T06:30:26.770724+00:00",
+  "started_at": "2026-10-13T06:30:26.773396+00:00",
+  "finished_at": "2026-10-13T06:30:26.778115+00:00",
+  "result": {
+    "plan": {
+      "status": "infeasible",
+      "slots": [
+        {
+          "slot_id": "2026-10-13_dinner",
+          "date": "2026-10-13",
+          "meal_type": "dinner",
+          "max_cooking_time": null
+        }
+      ],
+      "selected_meals": [],
+      "used_recipe_ids": [],
+      "budget": {
+        "initial": 100.0,
+        "estimated_spent": 39.6,
+        "remaining": 60.4
+      },
+      "inventory": {
+        "initial": {},
+        "current": {}
+      },
+      "nutrition": {},
+      "final_grocery_basket": {
+        "items": [],
+        "known_cost": 39.6,
+        "all_items_priced": false,
+        "unpriced_items": [],
+        "aggregated_requirements": [],
+        "status": "empty_plan"
+      },
+      "rejected_candidates": [],
+      "uncertain_candidates": [],
+      "skipped_slots": [
+        {
+          "slot_id": "2026-10-13_dinner",
+          "reason": "user_skipped"
+        }
+      ],
+      "execution_trace": [
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R08407",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "equal"
+            ],
+            "unpriced_items": [
+              "equal"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R00346",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "cinnamon"
+            ],
+            "unpriced_items": [
+              "cinnamon"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R34798",
+          "reason": "Incomplete grocery projection"
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R33328",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "nutmeg",
+              "pepper"
+            ],
+            "unpriced_items": [
+              "nutmeg",
+              "pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R16142",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "orange peel",
+              "nutmeg",
+              "worcestershire sauce",
+              "pepper",
+              "brown sugar",
+              "rice vinegar"
+            ],
+            "unpriced_items": [
+              "orange peel",
+              "nutmeg",
+              "worcestershire sauce",
+              "pepper",
+              "brown sugar",
+              "rice vinegar"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R26659",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "pepper",
+              "turmeric",
+              "coconut oil"
+            ],
+            "unpriced_items": [
+              "pepper",
+              "turmeric",
+              "coconut oil"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R35315",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "cumin",
+              "coriander",
+              "oregano"
+            ],
+            "unpriced_items": [
+              "cumin",
+              "coriander",
+              "oregano"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R26166",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "thyme",
+              "black pepper"
+            ],
+            "unpriced_items": [
+              "thyme",
+              "black pepper"
+            ]
+          }
+        },
+        {
+          "event": "candidate_uncertain",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R02993",
+          "reason": {
+            "type": "combined_basket_incomplete",
+            "projection_missing": [
+              "vegetable oil"
+            ],
+            "unpriced_items": [
+              "vegetable oil"
+            ]
+          }
+        },
+        {
+          "event": "meal_selected",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R28728"
+        },
+        {
+          "event": "nutrition_updated",
+          "slot_id": "2026-10-13_dinner",
+          "recipe_id": "R28728"
+        },
+        {
+          "event": "inventory_reconciliation_failed",
+          "reason": "One or more ingredient requirements could not be reconciled.",
+          "unresolved_count": 3,
+          "error_count": 3,
+          "details": [
+            {
+              "recipe_id": "R28728",
+              "ingredient_name": "lamb cutlet",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs count for ingredient 'lamb cutlet' (available=500.0, required=3.0)"
+            },
+            {
+              "recipe_id": "R28728",
+              "ingredient_name": "curry",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs tablespoon for ingredient 'curry' (available=100.0, required=0.5)"
+            },
+            {
+              "recipe_id": "R28728",
+              "ingredient_name": "butter",
+              "error_type": "unresolved_conversion",
+              "reason": "Incompatible inventory units: g vs tablespoon for ingredient 'butter' (available=250.0, required=1.0)"
+            }
+          ]
+        },
+        {
+          "event": "slot_skipped",
+          "slot_id": "2026-10-13_dinner",
+          "reason": "user_skipped"
+        },
+        {
+          "event": "inventory_reconciled",
+          "selected_meals": 0
+        },
+        {
+          "event": "plan_rebuilt_after_skip",
+          "skipped_slot_id": "2026-10-13_dinner",
+          "completed_slot_ids": []
+        }
+      ],
+      "cooking_schedule": {
+        "sessions": [],
+        "session_count": 0,
+        "weekly_session_counts": {},
+        "max_sessions_per_week": 2,
+        "valid": true,
+        "violations": {},
+        "storage_assumption_days": 1
+      }
+    },
+    "validation": {
+      "status": "infeasible",
+      "issues": []
+    },
+    "grocery_basket": {
+      "items": [],
+      "known_cost": 39.6,
+      "all_items_priced": false,
+      "unpriced_items": [],
+      "aggregated_requirements": [],
+      "status": "empty_plan"
+    },
+    "nutrition_summary": {},
+    "nutrition_deviation": null
+  },
+  "error": null
+}
