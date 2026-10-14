@@ -253,16 +253,6 @@ if parsed is not None:
                 key=f"diet_{revision}",
             )
 
-            other_diet = st.text_input(
-                "Other dietary restrictions",
-                value=", ".join(
-                    str(x) for x in parsed_diet
-                    if str(x).strip().lower()
-                    not in {d.lower() for d in diet_options}
-                ),
-                key=f"other_diet_{revision}",
-            )
-
         with right:
             allergy_text = st.text_input(
                 "Allergies (comma-separated)",
@@ -450,9 +440,7 @@ if parsed is not None:
                     if cook_minutes is not None else None
                 ),
                 "preferred_cuisines": cuisines,
-                "dietary_restrictions": unique_values(
-                    diet + csv_values(other_diet)
-                ),
+                "dietary_restrictions": list(diet),
                 "allergies": csv_values(allergy_text),
                 "preferred_meal_types": meals,
                 "preferred_ingredients": csv_values(likes),
@@ -707,40 +695,11 @@ if parsed is not None:
                     )
 
     # ========================================================
-    # DISPLAY CURRENT PLAN
+    # PLAN GENERATION RESULT (RECIPES SHOWN IN OVERVIEW ONLY)
     # ========================================================
 
-    result = st.session_state.get(
-        "planner_result"
-    )
-
+    result = st.session_state.get("planner_result")
     if result:
-
-        if (
-            st.session_state.get(
-                "pantry_changed_since_plan"
-            )
-            or st.session_state.get(
-                "preferences_changed_since_plan"
-            )
-        ):
-            st.info(
-                "Your preferences or pantry have changed "
-                "since this plan was created. "
-                "The existing plan remains available."
-            )
-
-        selected_meals = (
-            (result.get("plan") or {})
-            .get("selected_meals")
-            or []
-        )
-
-        if selected_meals:
-            st.markdown("#### Your planned meals")
-            show_meals(selected_meals)
-        else:
-            st.info(
-                "No meals could be planned with your "
-                "current preferences."
-            )
+        st.success("Your meal plan is ready. Open Overview to see your meals and recipe ingredients.")
+        if st.session_state.get("pantry_changed_since_plan") or st.session_state.get("preferences_changed_since_plan"):
+            st.info("This is your previous plan. Generate a new plan to include your latest changes.")

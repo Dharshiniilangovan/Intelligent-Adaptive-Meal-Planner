@@ -62,6 +62,7 @@ def _work(job, args):
     key = (job["workspace_id"], job["kind"])
     job = dict(job)
     try:
+        print(f"[BACKGROUND JOB RUNNING] kind={job['kind']} id={job['job_id']}", flush=True)
         job["status"] = "running"
         job["started_at"] = _time()
         _write(job)
@@ -73,6 +74,8 @@ def _work(job, args):
             planner = args["planner"]
             plan_state = deepcopy(args["plan_state"])
             user_state = deepcopy(args["user_state"])
+            user_state["approved_leftover_ids"] = list(args.get("approved_leftover_ids", []))
+            print(f"[REPLAN START] slot={args['slot_id']} completed={len(args['completed'])} approved_leftovers={len(user_state['approved_leftover_ids'])}", flush=True)
             result, updated_state = skip_meal(
                 planner, user_state, plan_state,
                 args["slot_id"], set(args["completed"]),
@@ -90,8 +93,10 @@ def _work(job, args):
         job["finished_at"] = _time()
         _write(job)
         LOG.info("Background job completed: %s", job["job_id"])
+        print(f"[BACKGROUND JOB COMPLETED] kind={job['kind']} id={job['job_id']}", flush=True)
     except Exception as exc:
         LOG.exception("Background job failed: %s", job["job_id"])
+        print(f"[BACKGROUND JOB FAILED] kind={job['kind']} id={job['job_id']} error={exc}", flush=True)
         job["status"] = "failed"
         job["error"] = str(exc)
         job["finished_at"] = _time()
@@ -122,6 +127,7 @@ def start_background_job(workspace_id, kind, **kwargs):
         }
         _write(job)
         _ACTIVE[key] = job_id
+        print(f"[BACKGROUND JOB QUEUED] kind={kind} id={job_id}", flush=True)
         try:
             _POOL.submit(_work, job, kwargs)
         except Exception:
