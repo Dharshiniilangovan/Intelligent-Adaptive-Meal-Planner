@@ -153,13 +153,16 @@ class PlanState:
     def mark_slot_infeasible(
         self,
         slot: MealSlot,
+        candidates: list[dict] | None = None,
     ) -> None:
-        self.execution_trace.append(
-            {
-                "event": "slot_infeasible",
-                "slot_id": slot.slot_id,
-            }
-        )
+        """Record an unfilled slot, with why each candidate failed."""
+        event = {
+            "event": "slot_infeasible",
+            "slot_id": slot.slot_id,
+        }
+        if candidates is not None:
+            event["candidates"] = candidates
+        self.execution_trace.append(event)
 
     # ============================================================
     # SKIPPED MEAL

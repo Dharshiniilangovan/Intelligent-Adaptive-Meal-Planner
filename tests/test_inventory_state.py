@@ -45,16 +45,23 @@ def test_consume_inventory_can_convert_kg_to_g():
     assert updated["rice"]["quantity"] == pytest.approx(0.7)
 
 
-def test_consume_inventory_rejects_insufficient_quantity():
+def test_consume_inventory_handles_insufficient_quantity():
     inventory = normalize_inventory({"Rice": "200 g"})
 
-    with pytest.raises(ValueError, match="Insufficient inventory"):
-        consume_inventory(
-            inventory,
-            [{"ingredient_name": "Rice", "quantity": 300, "unit": "g"}],
-        )
+    updated = consume_inventory(
+        inventory,
+        [
+            {
+                "ingredient_name": "Rice",
+                "quantity": 300,
+                "unit": "g",
+            }
+        ],
+    )
 
-
+    assert updated["rice"]["quantity"] == 0
+    assert inventory["rice"]["quantity"] == 200
+    
 def test_consume_inventory_rejects_incompatible_units():
     inventory = normalize_inventory({"Rice": "2 count"})
 
@@ -67,15 +74,23 @@ def test_consume_inventory_rejects_incompatible_units():
 
 def test_no_negative_inventory():
     inventory = normalize_inventory({"Rice": "200 g"})
-    original = {name: item.copy() for name, item in inventory.items()}
 
-    with pytest.raises(ValueError):
-        consume_inventory(
-            inventory,
-            [{"ingredient_name": "Rice", "quantity": 201, "unit": "g"}],
-        )
+    updated = consume_inventory(
+        inventory,
+        [
+            {
+                "ingredient_name": "Rice",
+                "quantity": 500,
+                "unit": "g",
+            }
+        ],
+    )
 
-    assert inventory == original
+    assert updated["rice"]["quantity"] == 0
+    assert updated["rice"]["quantity"] >= 0
+
+    # Original inventory remains unchanged.
+    assert inventory["rice"]["quantity"] == 200
 
 
 def test_add_purchase_package_to_existing_inventory():
@@ -211,6 +226,7 @@ def test_consume_inventory_supports_shared_unit_conversions(
         (1, "unknown_unit", 1, "g"),
     ],
 )
+
 def test_consume_inventory_rejects_unsupported_conversions(
     inventory_quantity,
     inventory_unit,
@@ -263,25 +279,27 @@ def test_consume_green_onion_bunch_using_estimated_mass():
     assert "conversion_status" not in inventory["green onion"]
 
 
-def test_failed_estimated_consumption_does_not_mutate_inventory():
-    inventory = normalize_inventory({"green onion": "0.1 bunch"})
-    original = {
-        name: item.copy()
-        for name, item in inventory.items()
-    }
+def test_insufficient_estimated_consumption_does_not_mutate_input():
+    inventory = normalize_inventory({
+        "green onion": "0.1 bunch"
+    })
 
-    with pytest.raises(ValueError, match="Insufficient inventory"):
-        consume_inventory(
-            inventory,
-            [{
+    updated = consume_inventory(
+        inventory,
+        [
+            {
                 "ingredient_name": "green onion",
-                "quantity": 2,
-                "unit": "tablespoon",
-            }],
-        )
+                "quantity": 20,
+                "unit": "g",
+            }
+        ],
+    )
 
-    assert inventory == original
+    assert updated["green onion"]["quantity"] == pytest.approx(0.0)
+    assert updated["green onion"]["conversion_status"] == "estimated"
 
+    # Original inventory must remain unchanged.
+    assert inventory["green onion"]["quantity"] == pytest.approx(0.1)
 
 @pytest.mark.parametrize("name,grams_per_cup", [
     ("masa harina", 120), ("black beans", 172), ("lettuce", 36),
@@ -294,3 +312,90 @@ def test_r32630_cup_requirements_from_gram_inventory(name, grams_per_cup):
     assert result[name]["quantity"] == pytest.approx(500 - grams_per_cup * 0.25)
     assert result[name]["conversion_status"] == "estimated"
     assert inventory[name]["quantity"] == 500
+
+
+# ---------------------------------------------------------------------------
+# Ingredient-specific unit reconciliation (shared KB lookup)
+# ---------------------------------------------------------------------------
+
+from src.agents.grocery_agent import subtract_inventory
+from src.state.inventory_state import _subtract
+
+
+def test_subtract_same_unit():
+    assert _subtract(500, "g", 200, "g", "rice") == (pytest.approx(300.0), "normalized")
+
+
+def test_subtract_kg_to_g_keeps_pantry_unit():
+    remaining, status = _subtract(1, "kg", 250, "g", "rice")
+    assert remaining == pytest.approx(0.75)
+    assert status == "normalized"
+
+
+def test_subtract_broccoli_grams_from_head():
+    remaining, status = _subtract(1, "head", 150, "g", "broccoli")
+    assert remaining == pytest.approx(0.5)
+    assert status == "estimated"
+
+
+def test_consume_broccoli_half_head_shortage_clamped():
+    inventory = {"broccoli": {"quantity": 0.5, "unit": "heads"}}
+    updated = consume_inventory(
+        inventory,
+        [{"ingredient_name": "Broccoli", "quantity": 300, "unit": "grams"}],
+    )
+    assert updated["broccoli"]["quantity"] == pytest.approx(0.0)
+    assert updated["broccoli"]["conversion_status"] == "estimated"
+
+
+def test_subtract_egg_grams_from_piece_clamped():
+    remaining, status = _subtract(1, "piece", 100, "g", "egg")
+    assert remaining == 0.0
+    assert status == "estimated"
+
+
+def test_subtract_insufficient_stock_clamps_to_zero():
+    remaining, _ = _subtract(100, "g", 400, "g", "rice")
+    assert remaining == 0.0
+
+
+def test_subtract_volume_to_mass_stays_unresolved():
+    with pytest.raises(ValueError, match="Incompatible inventory units"):
+        _subtract(100, "g", 125, "ml", "broccoli florets")
+
+
+def test_consume_kb_conversion_does_not_mutate_original():
+    inventory = {"broccoli": {"quantity": 1.0, "unit": "head"}}
+    updated = consume_inventory(
+        inventory,
+        [{"ingredient_name": "broccoli", "quantity": 150, "unit": "g"}],
+    )
+    assert inventory == {"broccoli": {"quantity": 1.0, "unit": "head"}}
+    assert updated["broccoli"]["quantity"] == pytest.approx(0.5)
+    assert updated["broccoli"]["unit"] == "head"
+
+
+@pytest.mark.parametrize(
+    "name, pantry_qty, pantry_unit, required_g",
+    [
+        ("broccoli", 0.5, "head", 300),
+        ("broccoli", 1, "head", 150),
+        ("egg", 1, "piece", 100),
+    ],
+)
+def test_grocery_and_inventory_consume_same_amount(
+    name, pantry_qty, pantry_unit, required_g
+):
+    grocery = subtract_inventory(
+        [{"ingredient_name": name, "quantity": required_g, "unit": "g"}],
+        [{"ingredient_name": name, "quantity": pantry_qty, "unit": pantry_unit}],
+    )[0]
+
+    remaining, _ = _subtract(pantry_qty, pantry_unit, required_g, "g", name)
+    grams_per_unit = {"broccoli": 300.0, "egg": 50.0}[name]
+    inventory_consumed_g = (pantry_qty - remaining) * grams_per_unit
+
+    assert grocery["inventory_used"] == pytest.approx(inventory_consumed_g)
+    assert grocery["purchase_required"] == pytest.approx(
+        required_g - inventory_consumed_g
+    )

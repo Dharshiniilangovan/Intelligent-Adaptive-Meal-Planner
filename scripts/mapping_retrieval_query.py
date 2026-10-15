@@ -14,7 +14,7 @@ MAPPING_FILE = (
     BASE_DIR
     / "data"
     / "processed"
-    / "recipe_ingredient_mapping.csv"
+    / "recipe_ingredient_mapping_normalized_with_original_fallback.csv"
 )
 
 RECIPE_ID_PATTERN = re.compile(r"^R\d{5}$")
@@ -78,59 +78,118 @@ def query_by_id(df, column_name, query_id):
 # GET RECIPE INGREDIENTS
 # ============================================================
 
+
 def get_recipe_ingredients(recipe_id):
     """
-    Retrieve all ingredients belonging to a recipe ID.
+    Retrieve recipe ingredients from the normalized Ingredient KB.
 
-    Parameters:
-        recipe_id (str):
-            Recipe ID in the format R followed by 5 digits.
+    Preserves:
+    - Original ingredient quantities and units
+    - Normalized quantities and units
+    - Conversion status
+    - Normalized weight
 
-    Returns:
-        pandas.DataFrame:
-            Rows belonging to the requested recipe.
-            Returns an empty DataFrame if the recipe does not exist.
-
-    Raises:
-        ValueError:
-            If the recipe ID format is invalid.
-
-        FileNotFoundError:
-            If the mapping file does not exist.
+    Does not perform additional normalization.
     """
 
-    # Normalize recipe ID
     recipe_id = str(recipe_id).strip().upper()
 
-    # Validate recipe ID
     if not validate_recipe_id(recipe_id):
         raise ValueError(
             f"Invalid Recipe ID: {recipe_id}. "
-            "Expected format: R followed by 5 digits "
-            "(example: R03943)."
+            "Expected format: R followed by 5 digits."
         )
 
-    # Check mapping file
     if not MAPPING_FILE.exists():
         raise FileNotFoundError(
             f"Mapping file not found: {MAPPING_FILE}"
         )
 
-    # Load mapping
     df = pd.read_csv(MAPPING_FILE)
 
-    # Clean column names
     df.columns = df.columns.str.strip()
 
-    # Check required column
-    if "recipe_id" not in df.columns:
+    required_columns = {
+        "recipe_id",
+        "ingredient_id",
+        "ingredient_name",
+        "quantity_per_serving",
+        "unit",
+        "normalized_quantity_per_serving",
+        "normalized_unit",
+        "normalized_weight",
+        "conversion_status",
+    }
+
+    missing_columns = required_columns - set(df.columns)
+
+    if missing_columns:
         raise ValueError(
-            "Mapping file must contain a 'recipe_id' column."
+            "Normalized Ingredient KB is missing columns: "
+            + ", ".join(sorted(missing_columns))
         )
 
-    # Query recipe
-    return query_by_id(
+    result = query_by_id(
         df=df,
         column_name="recipe_id",
-        query_id=recipe_id
+        query_id=recipe_id,
     )
+
+    return result
+
+# def get_recipe_ingredients(recipe_id):
+#     """
+#     Retrieve all ingredients belonging to a recipe ID.
+
+#     Parameters:
+#         recipe_id (str):
+#             Recipe ID in the format R followed by 5 digits.
+
+#     Returns:
+#         pandas.DataFrame:
+#             Rows belonging to the requested recipe.
+#             Returns an empty DataFrame if the recipe does not exist.
+
+#     Raises:
+#         ValueError:
+#             If the recipe ID format is invalid.
+
+#         FileNotFoundError:
+#             If the mapping file does not exist.
+#     """
+
+#     # Normalize recipe ID
+#     recipe_id = str(recipe_id).strip().upper()
+
+#     # Validate recipe ID
+#     if not validate_recipe_id(recipe_id):
+#         raise ValueError(
+#             f"Invalid Recipe ID: {recipe_id}. "
+#             "Expected format: R followed by 5 digits "
+#             "(example: R03943)."
+#         )
+
+#     # Check mapping file
+#     if not MAPPING_FILE.exists():
+#         raise FileNotFoundError(
+#             f"Mapping file not found: {MAPPING_FILE}"
+#         )
+
+#     # Load mapping
+#     df = pd.read_csv(MAPPING_FILE)
+
+#     # Clean column names
+#     df.columns = df.columns.str.strip()
+
+#     # Check required column
+#     if "recipe_id" not in df.columns:
+#         raise ValueError(
+#             "Mapping file must contain a 'recipe_id' column."
+#         )
+
+#     # Query recipe
+#     return query_by_id(
+#         df=df,
+#         column_name="recipe_id",
+#         query_id=recipe_id
+#     )

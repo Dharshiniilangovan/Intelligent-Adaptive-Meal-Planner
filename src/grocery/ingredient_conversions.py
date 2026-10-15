@@ -8,6 +8,7 @@ import csv
 from functools import lru_cache
 from pathlib import Path
 import math
+import re
 
 
 @dataclass(frozen=True)
@@ -145,7 +146,7 @@ def estimate_ingredient_mass(
     conversion = INGREDIENT_CONVERSIONS.get(name)
     if conversion is None:
         canonical = _mapping_aliases().get(name)
-        if canonical:
+        if canonical and _same_identity(name, canonical):
             conversion = INGREDIENT_CONVERSIONS.get(canonical)
     if conversion is None:
         return None
@@ -188,6 +189,31 @@ def estimate_ingredient_mass(
     if factor is None:
         return None
     return round(quantity * factor * multiplier, 4), "g"
+
+
+_RAW_SUFFIX = re.compile(r"[,)]\s*raw$")
+
+
+def _identity_tokens(text: str) -> list[str]:
+    # "carrots, raw" / "onion), raw" name the same fresh ingredient.
+    return re.findall(r"[a-z]+", _RAW_SUFFIX.sub("", text))
+
+
+def _same_identity(alias: str, canonical: str) -> bool:
+    """Accept only spelling/plural variants of the canonical name.
+
+    Aliases such as "baby carrots", "powdered sugar", "dried mint" or
+    "canned black beans" differ in size or preparation and must not
+    borrow the canonical ingredient's weight or density.
+    """
+    alias_tokens = _identity_tokens(alias)
+    canonical_tokens = _identity_tokens(canonical)
+    if len(alias_tokens) != len(canonical_tokens):
+        return False
+    return all(
+        a == c or a in (c + "s", c + "es")
+        for a, c in zip(alias_tokens, canonical_tokens)
+    )
 
 
 @lru_cache(maxsize=1)

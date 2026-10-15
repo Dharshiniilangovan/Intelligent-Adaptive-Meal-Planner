@@ -413,6 +413,96 @@ class MultiMealPlanner:
     # ADAPTIVE REPLANNING
 
     # ============================================================
+    
+    @staticmethod
+    def _allocate_prepared_leftovers(
+        plan_state,
+        remaining_slots,
+        approved_leftover_ids,
+    ):
+        """Allocate explicitly approved, unexpired cooked servings."""
+        from datetime import date
+        from copy import deepcopy
+
+        leftovers = deepcopy(plan_state.prepared_leftovers)
+        allocated_meals = []
+        unfilled_slots = []
+
+        approved = set(approved_leftover_ids or [])
+
+        for slot in remaining_slots:
+            allocated = False
+
+            for leftover in leftovers:
+                leftover_id = leftover.get("leftover_id")
+
+                if leftover_id not in approved:
+                    continue
+
+                if leftover.get("servings_remaining", 0) < 1:
+                    continue
+
+                # Require known storage and expiry.
+                if not leftover.get("storage"):
+                    continue
+
+                expires_on = leftover.get("expires_on")
+                if not expires_on:
+                    continue
+
+                try:
+                    expiry = date.fromisoformat(expires_on)
+                    prepared = date.fromisoformat(
+                        leftover["prepared_date"]
+                    )
+                except (ValueError, TypeError, KeyError):
+                    continue
+
+                if not (prepared <= slot.date <= expiry):
+                    continue
+
+                # Approval must only be given after dietary,
+                # allergy and food-safety suitability checks.
+                recipe_id = leftover["recipe_id"]
+
+                allocated_meals.append({
+                    "slot": slot.to_dict(),
+                    "recipe_id": recipe_id,
+                    "meal_source": "prepared_leftover",
+                    "leftover_id": leftover_id,
+                    "estimated_cost": 0.0,
+                    "decision": {
+                        "recipe_id": recipe_id,
+                        "recipe": deepcopy(
+                            leftover.get("nutrition") or {}
+                        ),
+                        "ingredient": {
+                            "required_ingredients": []
+                        },
+                        "grocery": {
+                            "items": []
+                        },
+                    },
+                })
+
+                leftover["servings_remaining"] -= 1
+
+                plan_state.execution_trace.append({
+                    "event": "prepared_leftover_allocated",
+                    "slot_id": slot.slot_id,
+                    "leftover_id": leftover_id,
+                    "recipe_id": recipe_id,
+                })
+
+                allocated = True
+                break
+
+            if not allocated:
+                unfilled_slots.append(slot)
+
+        plan_state.prepared_leftovers = leftovers
+
+        return allocated_meals, unfilled_slots
 
 
 
@@ -513,14 +603,27 @@ class MultiMealPlanner:
             and slot.slot_id not in skipped_ids
 
         ]
+        
+        # Allocate approved prepared leftovers first.
+        leftover_meals, remaining_slots = (
+            self._allocate_prepared_leftovers(
+                plan_state=rebuilt,
+                remaining_slots=remaining_slots,
+                approved_leftover_ids=user_state.get(
+                    "approved_leftover_ids", []
+                ),
+            )
+        )
 
-        rebuilt.selected_meals = completed_meals
+        rebuilt.selected_meals = (
+            completed_meals + leftover_meals
+        )
 
         rebuilt.used_recipe_ids = {
-
-            meal["recipe_id"] for meal in completed_meals
-
+            meal["recipe_id"]
+            for meal in rebuilt.selected_meals
         }
+
 
         rebuilt.rejected_candidates = []
 
@@ -1592,355 +1695,389 @@ class MultiMealPlanner:
 
 
 
-    def _reconcile_final_inventory(
+    
+def _reconcile_final_inventory(
+    self,
+    plan_state: PlanState,
+    final_grocery_basket: dict,
+) -> bool:
+    """
+    Reconcile inventory after final meal-plan optimization.
 
-        self,
-
-        plan_state: PlanState,
-
-        final_grocery_basket: dict,
-
-    ) -> bool:
-
-        """
-
-        Reconcile inventory once after plan optimization.
-
+    Flow:
         Initial pantry
-
         + consolidated grocery purchases
+        - selected recipe requirements
+        = final inventory
 
-        - all selected recipe requirements
+    Rules:
+    - Insufficient inventory is not a consumption error.
+    - Verify shortages before consuming ingredients.
+    - Never allow negative inventory.
+    - Do not consume raw ingredients for prepared leftovers.
+    - Preserve unresolved conversion information.
+    - Never commit partial inventory on failed reconciliation.
+    """
 
-        \= final inventory
+    from copy import deepcopy
 
-        Never commit partial inventory updates.
+    from src.agents.grocery_agent import (
+        aggregate_requirements,
+        subtract_inventory,
+    )
 
-        """
+    inventory = deepcopy(plan_state.initial_inventory)
 
-        from copy import deepcopy
+    # ========================================================
+    # 1. ADD CONSOLIDATED GROCERY PURCHASES
+    # ========================================================
 
-        inventory = deepcopy(plan_state.initial_inventory)
+    for item in final_grocery_basket.get("items", []):
 
-        # 1. Add purchases from the final basket only.
+        # Qualitative ingredients cannot be added numerically.
+        if item.get("purchase_basis") == "qualitative_requirement":
+            continue
 
-        for item in final_grocery_basket.get("items", []):
+        packages = item.get("packages")
 
-            packages = item.get("packages")
+        if packages is None:
+            plan_state.execution_trace.append({
+                "event": "inventory_reconciliation_failed",
+                "reason": (
+                    "Unknown package count for "
+                    f"{item.get('name')}"
+                ),
+            })
+            return False
 
-            if packages is None:
+        if packages == 0:
+            continue
 
-                plan_state.execution_trace.append(
+        if (
+            item.get("package_quantity") is None
+            or not item.get("package_unit")
+        ):
+            plan_state.execution_trace.append({
+                "event": "inventory_reconciliation_failed",
+                "reason": (
+                    "Missing package quantity or unit for "
+                    f"{item.get('name')}"
+                ),
+            })
+            return False
 
-                    {
+        purchase = {
+            "ingredient_name": item.get("name"),
+            "package_quantity": item["package_quantity"],
+            "package_unit": item["package_unit"],
+            "packages_needed": packages,
+        }
 
-                        "event": "inventory_reconciliation_failed",
+        try:
+            inventory = add_purchase(
+                inventory,
+                purchase,
+            )
 
-                        "reason": ("Unknown package count for " f"{item.get('name')}"),
+        except ValueError as exc:
+            plan_state.execution_trace.append({
+                "event": "inventory_reconciliation_failed",
+                "reason": str(exc),
+            })
+            return False
 
-                    }
+    # ========================================================
+    # 2. COLLECT RECIPE REQUIREMENTS
+    # ========================================================
 
-                )
+    recipe_requirements = []
 
-                return False
+    qualitative_requirements = []
 
-            if packages == 0:
+    qualitative_instructions = {
+        "to taste",
+        "as needed",
+        "as required",
+        "required",
+    }
 
+    for selected in plan_state.selected_meals:
+
+        # Prepared leftovers are already cooked.
+        # Do not consume raw ingredients again.
+        if selected.get("meal_source") == "prepared_leftover":
+            continue
+
+        decision = selected.get("decision") or {}
+        ingredient_data = decision.get("ingredient") or {}
+
+        required = ingredient_data.get(
+            "required_ingredients",
+            [],
+        )
+
+        measurable = []
+
+        for ingredient in required:
+
+            if not isinstance(ingredient, dict):
                 continue
 
-            if item.get("package_quantity") is None or not item.get("package_unit"):
+            quantity = ingredient.get(
+                "quantity",
+                ingredient.get("required_quantity"),
+            )
 
-                plan_state.execution_trace.append(
-
-                    {
-
-                        "event": "inventory_reconciliation_failed",
-
-                        "reason": (
-
-                            "Missing package quantity or unit for "
-
-                            f"{item.get('name')}"
-
-                        ),
-
-                    }
-
+            unit = str(
+                ingredient.get(
+                    "unit",
+                    ingredient.get("required_unit", ""),
                 )
+                or ""
+            ).strip().lower()
 
-                return False
+            qualitative_quantity = (
+                isinstance(quantity, str)
+                and quantity.strip().lower()
+                in qualitative_instructions
+            )
 
-            purchase = {
+            qualitative_unit = (
+                unit in qualitative_instructions
+            )
 
-                "ingredient_name": item.get("name"),
+            if qualitative_quantity or qualitative_unit:
 
-                "package_quantity": item["package_quantity"],
+                qualitative_requirements.append({
+                    "event": "qualitative_requirement_unresolved",
+                    "recipe_id": selected.get("recipe_id"),
+                    "ingredient_name": (
+                        ingredient.get("ingredient_name")
+                        or ingredient.get("name")
+                    ),
+                    "quantity": quantity,
+                    "unit": unit,
+                })
 
-                "package_unit": item["package_unit"],
+            else:
+                measurable.append(ingredient)
 
-                "packages_needed": packages,
+        recipe_requirements.append({
+            "recipe_id": selected.get("recipe_id"),
+            "ingredients": measurable,
+        })
 
-            }
+    # ========================================================
+    # 3. VERIFY INVENTORY QUANTITY COVERAGE
+    # ========================================================
+
+    aggregated = aggregate_requirements(
+        recipe_requirements
+    )
+
+    # Use inventory after adding grocery purchases,
+    # before consuming any recipe ingredients.
+    inventory_list = self._inventory_to_pantry(
+        inventory
+    )
+
+    coverage = subtract_inventory(
+        aggregated,
+        inventory_list,
+    )
+
+    shortages = []
+    unresolved_conversions = []
+
+    for requirement in coverage:
+
+        missing = requirement.get(
+            "purchase_required",
+            0,
+        )
+
+        ingredient_name = requirement.get(
+            "ingredient_name"
+        )
+
+        if requirement.get(
+            "inventory_conversion_unresolved",
+            False,
+        ):
+            unresolved_conversions.append({
+                "ingredient_name": ingredient_name,
+                "unit": requirement.get("unit"),
+                "reason": "Inventory unit conversion unresolved",
+            })
+
+        if (
+            requirement.get("conversion_status")
+            == "unresolved"
+            or requirement.get("normalization_status")
+            == "unresolved"
+        ):
+            unresolved_conversions.append({
+                "ingredient_name": ingredient_name,
+                "unit": requirement.get("unit"),
+                "reason": "Recipe quantity conversion unresolved",
+            })
+
+        if missing is None:
+            continue
+
+        try:
+            missing = float(missing)
+        except (TypeError, ValueError):
+            continue
+
+        if missing > 1e-6:
+            shortages.append({
+                "ingredient_name": ingredient_name,
+                "required_quantity": requirement.get(
+                    "required_quantity"
+                ),
+                "inventory_used": requirement.get(
+                    "inventory_used"
+                ),
+                "purchase_required": missing,
+                "unit": requirement.get("unit"),
+            })
+
+    # ========================================================
+    # 4. HANDLE UNMET REQUIREMENTS
+    # ========================================================
+
+    if shortages or unresolved_conversions:
+
+        plan_state.execution_trace.append({
+            "event": "inventory_reconciliation_incomplete",
+            "reason": (
+                "Some ingredient requirements remain "
+                "uncovered or have unresolved conversions."
+            ),
+            "shortage_count": len(shortages),
+            "shortages": shortages,
+            "unresolved_count": len(unresolved_conversions),
+            "unresolved_conversions": unresolved_conversions,
+        })
+
+        # Do not commit incomplete inventory.
+        return False
+
+    # ========================================================
+    # 5. CONSUME RECIPE INGREDIENTS
+    # ========================================================
+
+    reconciliation_errors = []
+
+    for recipe in recipe_requirements:
+
+        recipe_id = recipe.get("recipe_id")
+
+        for ingredient in recipe.get(
+            "ingredients",
+            [],
+        ):
 
             try:
-
-                inventory = add_purchase(
-
+                inventory = consume_inventory(
                     inventory,
-
-                    purchase,
-
+                    [ingredient],
                 )
 
             except ValueError as exc:
 
-                plan_state.execution_trace.append(
+                reason = str(exc)
 
-                    {
-
-                        "event": "inventory_reconciliation_failed",
-
-                        "reason": str(exc),
-
-                    }
-
+                ingredient_name = (
+                    ingredient.get("ingredient_name")
+                    or ingredient.get("name")
                 )
 
-                return False
+                if reason.startswith(
+                    "Package contents unknown"
+                ):
+                    error_type = "package_contents_unknown"
 
-        # 2. Consume measurable requirements and record qualitative ones.
-
-        qualitative_requirements = []
-
-        qualitative_instructions = {
-
-            "to taste",
-
-            "as needed",
-
-            "as required",
-
-            "required",
-
-        }
-
-
-
-        reconciliation_errors = []
-
-        for selected in plan_state.selected_meals:
-
-            decision = selected.get("decision") or {}
-
-            ingredient_data = decision.get("ingredient") or {}
-
-            required = ingredient_data.get("required_ingredients", [])
-
-            measurable = []
-
-
-
-            for ingredient in required:
-
-                if not isinstance(ingredient, dict):
-
-                    measurable.append(ingredient)
-
-                    continue
-
-
-
-                quantity = ingredient.get(
-
-                    "quantity",
-
-                    ingredient.get("required_quantity"),
-
-                )
-
-                unit = str(
-
-                    ingredient.get(
-
-                        "unit",
-
-                        ingredient.get("required_unit", ""),
-
-                    )
-
-                    or ""
-
-                ).strip().lower()
-
-                qualitative_quantity = (
-
-                    isinstance(quantity, str)
-
-                    and quantity.strip().lower() in qualitative_instructions
-
-                )
-
-                qualitative_unit = unit in qualitative_instructions
-
-
-
-                if qualitative_quantity or qualitative_unit:
-
-                    qualitative_requirements.append(
-
-                        {
-
-                            "event": "qualitative_requirement_unresolved",
-
-                            "recipe_id": selected.get("recipe_id"),
-
-                            "ingredient_name": (
-
-                                ingredient.get("ingredient_name")
-
-                                or ingredient.get("name")
-
-                            ),
-
-                            "quantity": quantity,
-
-                            "unit": unit,
-
-                        }
-
-                    )
+                elif reason.startswith(
+                    "Incompatible inventory units:"
+                ):
+                    error_type = "unresolved_conversion"
 
                 else:
+                    error_type = "inventory_error"
 
-                    measurable.append(ingredient)
+                reconciliation_errors.append({
+                    "recipe_id": recipe_id,
+                    "ingredient_name": ingredient_name,
+                    "error_type": error_type,
+                    "reason": reason,
+                })
 
+    # ========================================================
+    # 6. HANDLE RECONCILIATION ERRORS
+    # ========================================================
 
+    if reconciliation_errors:
 
-            # Check every measurable requirement instead of stopping at the
-
-            # first incompatible unit. Only the local inventory copy changes.
-
-            for ingredient in measurable:
-
-                try:
-
-                    inventory = consume_inventory(inventory, [ingredient])
-
-                except ValueError as exc:
-
-                    reason = str(exc)
-
-                    ingredient_name = (
-
-                        ingredient.get("ingredient_name") or ingredient.get("name")
-
-                        if isinstance(ingredient, dict) else None
-
-                    )
-
-                    if reason.startswith("Package contents unknown"):
-
-                        error_type = "package_contents_unknown"
-
-                    elif reason.startswith("Incompatible inventory units:"):
-
-                        error_type = "unresolved_conversion"
-
-                    elif reason.startswith("Insufficient inventory"):
-
-                        error_type = "insufficient_inventory"
-
-                    else:
-
-                        error_type = "inventory_error"
-
-                    reconciliation_errors.append({
-
-                        "recipe_id": selected.get("recipe_id"),
-
-                        "ingredient_name": ingredient_name,
-
-                        "error_type": error_type,
-
-                        "reason": reason,
-
-                    })
-
-
-
-        if reconciliation_errors:
-
-            # Preserve the original inventory and the failure semantics.
-
-            # Report all issues in a single event for easier diagnosis.
-
-            plan_state.execution_trace.append({
-
-                "event": "inventory_reconciliation_failed",
-
-                "reason": "One or more ingredient requirements could not be reconciled.",
-
-                "unresolved_count": sum(
-
-                    error["error_type"] in {"unresolved_conversion", "package_contents_unknown"}
-
-                    for error in reconciliation_errors
-
-                ),
-
-                "error_count": len(reconciliation_errors),
-
-                "details": reconciliation_errors,
-
-            })
-
-            return False
-
-
-
-        plan_state.execution_trace.extend(qualitative_requirements)
-
-        # Numeric requirements were reconciled, but qualitative quantities
-
-        # cannot be subtracted precisely from inventory.
-
-        plan_state.current_inventory = inventory
-
-        if qualitative_requirements:
-
-            plan_state.execution_trace.append(
-
-                {
-
-                    "event": "inventory_reconciliation_incomplete",
-
-                    "reason": "Qualitative ingredient quantities remain unresolved.",
-
-                    "unresolved_count": len(qualitative_requirements),
-
+        plan_state.execution_trace.append({
+            "event": "inventory_reconciliation_failed",
+            "reason": (
+                "One or more ingredient requirements "
+                "could not be reconciled."
+            ),
+            "unresolved_count": sum(
+                error["error_type"] in {
+                    "unresolved_conversion",
+                    "package_contents_unknown",
                 }
+                for error in reconciliation_errors
+            ),
+            "error_count": len(reconciliation_errors),
+            "details": reconciliation_errors,
+        })
 
-            )
+        # Preserve previous inventory state.
+        return False
 
-            return True
+    # ========================================================
+    # 7. COMMIT FINAL INVENTORY
+    # ========================================================
 
+    plan_state.current_inventory = inventory
 
+    plan_state.execution_trace.extend(
+        qualitative_requirements
+    )
 
-        # 3. Commit only when all requirements are measurable and succeed.
+    if qualitative_requirements:
 
-        plan_state.execution_trace.append(
-
-            {
-
-                "event": "inventory_reconciled",
-
-                "selected_meals": len(plan_state.selected_meals),
-
-            }
-
-        )
+        plan_state.execution_trace.append({
+            "event": "inventory_reconciliation_incomplete",
+            "reason": (
+                "Qualitative ingredient quantities "
+                "remain unresolved."
+            ),
+            "unresolved_count": len(
+                qualitative_requirements
+            ),
+        })
 
         return True
+
+    # ========================================================
+    # 8. SUCCESS
+    # ========================================================
+
+    plan_state.execution_trace.append({
+        "event": "inventory_reconciled",
+        "selected_meals": len(
+            plan_state.selected_meals
+        ),
+    })
+
+    return True
+
 
 
 

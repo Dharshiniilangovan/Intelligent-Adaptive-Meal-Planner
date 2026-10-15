@@ -3,6 +3,7 @@ import os
 import json
 import math
 from pathlib import Path
+import pandas as pd
 
 sys.path.append(
     os.path.abspath(
@@ -92,14 +93,13 @@ def examine_pantry(pantry_data):
     }
 
 
+
 def fetch_recipe_ingredients(recipe_id):
     """
-    Retrieve recipe ingredients from the mapping KB.
+    Retrieve recipe ingredients from the normalized KB.
 
-    Keeps ingredient ID and aliases so they can later
-    be used by the grocery/product search layer.
+    Preserve original and pre-normalized measurements.
     """
-
     df = scripts.mapping_retrieval_query.get_recipe_ingredients(
         recipe_id
     )
@@ -107,15 +107,45 @@ def fetch_recipe_ingredients(recipe_id):
     if df.empty:
         return {}
 
+    def clean_value(value):
+        if pd.isna(value):
+            return None
+        return value
+
     return {
         normalize_name(row["ingredient_name"]): {
-            "ingredient_id": row["ingredient_id"],
-            "alias_name": row["alias_name"],
-            "quantity": row["quantity_per_serving"],
-            "unit": normalize_unit(row["unit"])
+            "ingredient_id": clean_value(
+                row["ingredient_id"]
+            ),
+            "alias_name": clean_value(
+                row["alias_name"]
+            ),
+
+            # Original recipe measurement
+            "quantity": clean_value(
+                row["quantity_per_serving"]
+            ),
+            "unit": normalize_unit(
+                row["unit"]
+            ),
+
+            # Pre-normalized dataset measurement
+            "normalized_quantity_per_serving": clean_value(
+                row["normalized_quantity_per_serving"]
+            ),
+            "normalized_unit": clean_value(
+                row["normalized_unit"]
+            ),
+            "conversion_status": clean_value(
+                row["conversion_status"]
+            ),
+            "normalized_weight": clean_value(
+                row["normalized_weight"]
+            ),
         }
         for _, row in df.iterrows()
     }
+
 
 
 def filter_ingredient_list(pantry_data, ingredient_names):

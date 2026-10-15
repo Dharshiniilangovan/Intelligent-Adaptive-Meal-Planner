@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import math
 import re
 from typing import Any, Dict, List
+
+from scripts.mapping_retrieval_query import get_recipe_ingredients
 
 from src.pantry.pantry_service import (
     fetch_recipe_ingredients,
@@ -189,32 +192,89 @@ def pantry_to_dict(
 # REQUIRED INGREDIENTS
 # ============================================================
 
+
+def _missing(value: Any) -> bool:
+    if value is None:
+        return True
+    try:
+        return bool(math.isnan(value))
+    except TypeError:
+        return False
+
+
+def requirements_from_rows(
+    recipe_id: str,
+    rows: Any,
+) -> List[Dict[str, Any]]:
+    """
+    Convert one recipe's normalized-KB rows (a DataFrame) into
+    required-ingredient records, one per row, in KB order.
+
+    A recipe that lists the same ingredient twice (e.g. red and green
+    bell pepper -> "bell pepper") keeps both occurrences. Each gets a
+    stable occurrence_id "<recipe_id>#<row position in recipe>".
+    """
+
+    recipe_id = str(recipe_id).strip().upper()
+
+    def clean(value: Any) -> Any:
+        return None if _missing(value) else value
+
+    required: List[Dict[str, Any]] = []
+
+    for position, (_, row) in enumerate(rows.iterrows()):
+
+        unit = row["unit"]
+
+        required.append({
+            "occurrence_id": f"{recipe_id}#{position}",
+            "recipe_id": recipe_id,
+            "ingredient_id": clean(row["ingredient_id"]),
+            "ingredient_name": normalize_name(row["ingredient_name"]),
+            "alias_name": clean(row["alias_name"]),
+
+            # Original recipe values. A missing unit stays empty;
+            # it is never filled in.
+            "quantity": clean(row["quantity_per_serving"]),
+            "unit": "" if _missing(unit) else normalize_unit(unit),
+            # KB unit spelling exactly as stored (e.g. "gram"), used when
+            # a requirement is passed on in its original unit.
+            "kb_unit": "" if _missing(unit) else str(unit).strip().lower(),
+
+            # Pre-normalized dataset values
+            "normalized_quantity_per_serving": clean(
+                row["normalized_quantity_per_serving"]
+            ),
+            "normalized_unit": clean(
+                row["normalized_unit"]
+            ),
+            "conversion_status": clean(
+                row["conversion_status"]
+            ),
+            "normalized_weight": clean(
+                row["normalized_weight"]
+            ),
+        })
+
+    return required
+
+
 def get_required_ingredients(
     recipe_id: str,
 ) -> List[Dict[str, Any]]:
     """
-    Retrieve recipe ingredients using the existing
-    recipe-ingredient mapping service.
+    Retrieve recipe ingredients from the normalized KB.
+
+    Preserve original and normalized measurements
+    for Grocery Agent and Inventory State.
     """
 
-    ingredients = fetch_recipe_ingredients(recipe_id)
+    recipe_id = str(recipe_id).strip().upper()
 
-    required: List[Dict[str, Any]] = []
-
-    for ingredient_name, data in ingredients.items():
-
-        required.append(
-            {
-                "ingredient_id": data.get("ingredient_id"),
-                "ingredient_name": ingredient_name,
-                "alias_name": data.get("alias_name"),
-                "quantity": data.get("quantity"),
-                "unit": normalize_unit(data.get("unit")),
-            }
-        )
-
-    return required
-
+    return requirements_from_rows(
+        recipe_id,
+        get_recipe_ingredients(recipe_id),
+    )
 
 # ============================================================
 # PANTRY USED
@@ -282,6 +342,157 @@ def get_missing_ingredients(
         pantry,
         required_ingredients_dict,
     )
+
+
+def _as_float(value: Any) -> float | None:
+    try:
+        number = float(value)
+    except (TypeError, ValueError, OverflowError):
+        return None
+    return number if math.isfinite(number) else None
+
+
+def build_missing_ingredients(
+    recipe_id: str,
+    required_ingredients: List[Dict[str, Any]],
+    pantry: Dict[str, Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """
+    Candidate-level shopping needs, computed with the same aggregation
+    and pantry subtraction as the final Grocery Agent basket.
+
+    - Repeated occurrences of an ingredient are summed when their
+      normalized units are compatible and kept as separate entries
+      when they are not (they are never overwritten by name).
+    - Pantry stock is subtracted through the shared conversion rules.
+    - Qualitative and unresolved-quantity requirements stay visible
+      with quantity None; no amount is derived for them.
+
+    "quantity"/"unit" are what GroceryService searches with: the
+    original KB unit when the whole requirement is still needed and
+    all its occurrences share that unit, otherwise the normalized
+    unit. "normalized_quantity"/"normalized_unit" always hold the
+    authoritative shortage used by the final basket.
+    """
+    from src.agents.grocery_agent import (
+        _identity_keys,
+        aggregate_requirements,
+        collect_qualitative_requirements,
+        collect_unresolved_quantity_requirements,
+        subtract_inventory,
+    )
+
+    recipes = [{"recipe_id": recipe_id, "ingredients": required_ingredients}]
+    occurrences = {
+        ingredient.get("occurrence_id"): ingredient
+        for ingredient in required_ingredients
+    }
+    pantry_list = [
+        {"ingredient_name": name, "quantity": item.get("quantity"),
+         "unit": item.get("unit")}
+        for name, item in (pantry or {}).items()
+    ]
+    coverage = subtract_inventory(
+        aggregate_requirements(recipes), pantry_list
+    )
+
+    missing: List[Dict[str, Any]] = []
+
+    for record in coverage:
+        shortage = record["purchase_required"]
+        if shortage <= 1e-9:
+            continue
+
+        sources = record["source_requirements"]
+        originals = [occurrences.get(s["occurrence_id"]) or {} for s in sources]
+        kb_units = {o.get("kb_unit") for o in originals}
+        original_amounts = [_as_float(s["quantity"]) for s in sources]
+
+        quantity, unit = shortage, record["unit"]
+        if (
+            abs(shortage - record["required_quantity"]) <= 1e-9
+            and len(kb_units) == 1
+            and "" not in kb_units
+            and None not in kb_units
+            and None not in original_amounts
+        ):
+            quantity = sum(original_amounts)
+            unit = kb_units.pop()
+
+        name = record["ingredient_name"]
+        pantry_item = (pantry or {}).get(normalize_name(name))
+        if record.get("inventory_conversion_unresolved"):
+            status = "unit_mismatch"
+        elif pantry_item is not None and _as_float(pantry_item.get("quantity")) is None:
+            status = "quantity_unknown"
+        else:
+            status = "missing"
+
+        missing.append({
+            "ingredient_id": record["ingredient_id"],
+            "ingredient_name": name,
+            "quantity": quantity,
+            "unit": unit,
+            "normalized_quantity": shortage,
+            "normalized_unit": record["unit"],
+            "required_quantity": record["required_quantity"],
+            "pantry_used": record["inventory_used"],
+            "conversion_status": record["conversion_status"],
+            "normalization_status": record["normalization_status"],
+            "inventory_conversion_estimated": record.get(
+                "inventory_conversion_estimated", False
+            ),
+            "occurrence_ids": [s["occurrence_id"] for s in sources],
+            "status": status,
+        })
+
+    def existing_entry(record):
+        keys = _identity_keys(record)
+        return next(
+            (item for item in missing if _identity_keys(item) & keys),
+            None,
+        )
+
+    # Unquantifiable needs: one entry per ingredient, or noted on the
+    # measurable entry when one exists (as in the final basket).
+    for record in collect_unresolved_quantity_requirements(recipes):
+        existing = existing_entry(record)
+        if existing is not None:
+            existing["additional_unquantified_requirement"] = True
+            existing["occurrence_ids"] += record["occurrence_ids"]
+            continue
+        missing.append({
+            "ingredient_id": record["ingredient_id"],
+            "ingredient_name": record["ingredient_name"],
+            "quantity": None,
+            "unit": "",
+            "original_quantity": record["source_requirements"][0]["quantity"],
+            "unresolved_reasons": record["reasons"],
+            "occurrence_ids": record["occurrence_ids"],
+            "status": (
+                "unit_unknown"
+                if "missing_unit" in record["reasons"]
+                else "quantity_unknown"
+            ),
+        })
+
+    for record in collect_qualitative_requirements(recipes):
+        existing = existing_entry(record)
+        if existing is not None:
+            existing["additional_unquantified_requirement"] = True
+            existing["occurrence_ids"] += record["occurrence_ids"]
+            continue
+        missing.append({
+            "ingredient_id": record["ingredient_id"],
+            "ingredient_name": record["ingredient_name"],
+            "quantity": None,
+            "unit": record["unit"],
+            "instruction": record["instruction"],
+            "occurrence_ids": record["occurrence_ids"],
+            "status": "quantity_unknown",
+        })
+
+    return missing
 
 
 def format_missing_ingredients(
@@ -390,12 +601,12 @@ class IngredientAgent:
         )
 
         # ----------------------------------------------------
-        # Retrieve recipe ingredients
+        # Retrieve recipe ingredients (one record per KB row)
         # ----------------------------------------------------
 
         try:
 
-            recipe_ingredients = fetch_recipe_ingredients(
+            required_ingredients = get_required_ingredients(
                 recipe_id
             )
 
@@ -420,7 +631,7 @@ class IngredientAgent:
         # No recipe found
         # ----------------------------------------------------
 
-        if not recipe_ingredients:
+        if not required_ingredients:
 
             return {
                 "agent": self.name,
@@ -435,16 +646,6 @@ class IngredientAgent:
             }
 
         # ----------------------------------------------------
-        # Required ingredient list
-        # ----------------------------------------------------
-
-        required_ingredients = (
-            get_required_ingredients(
-                recipe_id
-            )
-        )
-
-        # ----------------------------------------------------
         # Pantry used
         # ----------------------------------------------------
 
@@ -454,18 +655,14 @@ class IngredientAgent:
         )
 
         # ----------------------------------------------------
-        # Missing ingredients
+        # Missing ingredients: same requirements and pantry
+        # subtraction as the final Grocery Agent basket.
         # ----------------------------------------------------
 
-        missing_raw = get_missing_ingredients(
-            recipe_ingredients,
+        missing_ingredients = build_missing_ingredients(
+            recipe_id,
+            required_ingredients,
             pantry_data,
-        )
-
-        missing_ingredients = (
-            format_missing_ingredients(
-                missing_raw
-            )
         )
 
         # ----------------------------------------------------
@@ -478,7 +675,7 @@ class IngredientAgent:
 
             status = item.get("status")
 
-            if status == "unit_mismatch":
+            if status in {"unit_mismatch", "unit_unknown"}:
                unsupported_items.append(item)
 
         # ----------------------------------------------------

@@ -24,6 +24,9 @@ from src.grocery.units import to_base
 from src.grocery.ingredient_conversions import (
     estimate_ingredient_mass,
 )
+from src.utils.ingredient_conversion_lookup import (
+    convert_using_ingredient_factor,
+)
 class GroceryAgent:
     """
     Agent responsible for grocery purchasing facts.
@@ -680,40 +683,200 @@ def normalize_requirement_quantity(name, quantity, unit):
 #         "original_quantity": original_quantity,
 #         "original_unit": original_unit,
 #     }
+
+# ============================================================
+# REQUIREMENT CLASSIFICATION
+#
+# Every recipe ingredient occurrence is exactly one of:
+#   measurable   numeric quantity with a unit (its conversion may
+#                still be exact, estimated or unresolved)
+#   qualitative  "to taste", "as needed", ...
+#   unresolved   quantity or unit cannot be determined, so no
+#                numeric requirement can be formed
+# Aggregation, the grocery basket and inventory reconciliation all
+# use this one classifier so no occurrence is dropped or counted twice.
+# ============================================================
+
+QUALITATIVE_INSTRUCTIONS = {
+    "to taste",
+    "as needed",
+    "as required",
+    "required",
+}
+
+_MISSING_TEXT = {"", "nan", "none", "null"}
+
+_STATUS_PRIORITY = {
+    "exact": 0,
+    "estimated": 1,
+    "volume_preserved_no_density": 2,
+    "unresolved": 3,
+}
+
+_DATASET_STATUS_MAP = {
+    "exact_mass": "exact",
+    "exact_volume": "exact",
+    "estimated_density": "estimated",
+    "estimated_piece_weight": "estimated",
+    "volume_retained": "volume_preserved_no_density",
+    "volume_preserved_no_density": "volume_preserved_no_density",
+    "unresolved": "unresolved",
+}
+
+
+def _clean_text(value):
+    """Lower-case text, with None/NaN/"nan" treated as missing."""
+    if value is None:
+        return ""
+    if isinstance(value, float) and not math.isfinite(value):
+        return ""
+    text = str(value).strip().lower()
+    return "" if text in _MISSING_TEXT else text
+
+
+def _positive_number(value):
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError, OverflowError):
+        return None
+    if not math.isfinite(number) or number <= 0:
+        return None
+    return number
+
+
+def _original_measurement(ingredient):
+    quantity = ingredient.get(
+        "quantity",
+        ingredient.get("quantity_per_serving"),
+    )
+    unit = ingredient.get("unit")
+    return quantity, unit
+
+
+def classify_requirement(ingredient):
+    """
+    Classify one recipe ingredient occurrence.
+
+    Returns one of:
+        ("measurable", normalized_measurement)
+        ("qualitative", instruction)
+        ("unresolved", reason)
+
+    Never invents a quantity, unit or density.
+    """
+    if not _ingredient_key(ingredient):
+        return "unresolved", "missing_ingredient_identity"
+
+    quantity, unit = _original_measurement(ingredient)
+    quantity_text = (
+        _clean_text(quantity) if isinstance(quantity, str) else ""
+    )
+    unit_text = _clean_text(unit)
+
+    if unit_text in QUALITATIVE_INSTRUCTIONS:
+        return "qualitative", unit_text
+    if quantity_text in QUALITATIVE_INSTRUCTIONS:
+        return "qualitative", quantity_text
+
+    # Prefer pre-normalized dataset measurements.
+    dataset_quantity = _positive_number(
+        ingredient.get("normalized_quantity_per_serving")
+    )
+    dataset_unit = _clean_text(ingredient.get("normalized_unit"))
+    dataset_status = _clean_text(ingredient.get("conversion_status"))
+
+    if (
+        dataset_quantity is not None
+        and dataset_unit
+        and dataset_status in _DATASET_STATUS_MAP
+    ):
+        return "measurable", {
+            "quantity": dataset_quantity,
+            "unit": dataset_unit,
+            "conversion_status": _DATASET_STATUS_MAP[dataset_status],
+            "original_quantity": quantity,
+            "original_unit": unit,
+        }
+
+    # Legacy (non-KB) input, or KB rows without usable values.
+    if _clean_text(quantity) == "":
+        return "unresolved", "missing_quantity"
+    if _positive_number(quantity) is None:
+        return "unresolved", "invalid_quantity"
+    if not unit_text:
+        return "unresolved", "missing_unit"
+
+    # Do not reinterpret explicitly unresolved dataset values
+    # as exact measurements.
+    if dataset_status == "unresolved":
+        return "unresolved", "unresolved_measurement"
+
+    normalized = normalize_requirement_quantity(
+        name=_ingredient_name(ingredient),
+        quantity=quantity,
+        unit=unit,
+    )
+    if normalized is None:
+        return "unresolved", "invalid_quantity"
+
+    return "measurable", normalized
+
+
+def _occurrence_id(ingredient):
+    return ingredient.get("occurrence_id")
+
+
+def _identity_keys(item):
+    """ID and normalized name, so records match on either."""
+    keys = set()
+    ingredient_id = str(item.get("ingredient_id") or "").strip()
+    if ingredient_id:
+        keys.add(("id", ingredient_id))
+    name = " ".join(_ingredient_name(item).lower().split())
+    if name:
+        keys.add(("name", name))
+    return keys
+
+
 def aggregate_requirements(recipe_requirements):
     """
-    Aggregate ingredient requirements across selected recipes.
-    - Uses existing unit normalization.
-    - Combines compatible normalized quantities.
-    - Preserves estimated conversion status.
-    - Keeps incompatible units separate.
-    - Never silently adds incompatible quantities.
+    Aggregate measurable ingredient requirements across recipes.
+
+    Priority:
+    1. Use pre-normalized dataset values when available.
+    2. Fall back to runtime normalization for legacy inputs.
+    3. Preserve original quantities and conversion uncertainty.
+    4. Never combine incompatible units.
+
+    Qualitative and unresolved occurrences are not aggregated here;
+    collect_qualitative_requirements() and
+    collect_unresolved_quantity_requirements() report them.
     """
     aggregated = {}
-    status_priority = {
-        "exact": 0,
-        "estimated": 1,
-        "unresolved": 2,
-    }
+
     for recipe in recipe_requirements or []:
         recipe_id = recipe.get("recipe_id")
+
         for ingredient in recipe.get("ingredients", []):
+            if not isinstance(ingredient, dict):
+                continue
+
+            kind, normalized = classify_requirement(ingredient)
+
+            if kind != "measurable":
+                continue
+
             key = _ingredient_key(ingredient)
-            if not key:
-                continue
             name = _ingredient_name(ingredient)
-            normalized = normalize_requirement_quantity(
-                name=name,
-                quantity=ingredient.get("quantity"),
-                unit=ingredient.get("unit"),
-            )
-            if normalized is None:
-                continue
+
             quantity = normalized["quantity"]
             unit = normalized["unit"]
             conversion_status = normalized["conversion_status"]
-            # Different incompatible units must remain separate.
+
             group_key = (key, unit)
+
             if group_key not in aggregated:
                 aggregated[group_key] = {
                     "ingredient_id": ingredient.get("ingredient_id"),
@@ -722,42 +885,124 @@ def aggregate_requirements(recipe_requirements):
                     "unit": unit,
                     "recipe_ids": [],
                     "conversion_status": conversion_status,
-                    "normalization_status": "resolved",
+                    "normalization_status": (
+                        "unresolved"
+                        if conversion_status == "unresolved"
+                        else "resolved"
+                    ),
                     "source_requirements": [],
                 }
+
             record = aggregated[group_key]
             record["quantity"] += quantity
-            # Preserve the least certain conversion status.
+
             current_status = record["conversion_status"]
+
             if (
-                status_priority[conversion_status]
-                > status_priority[current_status]
+                _STATUS_PRIORITY[conversion_status]
+                > _STATUS_PRIORITY[current_status]
             ):
                 record["conversion_status"] = conversion_status
+
+            if conversion_status == "unresolved":
+                record["normalization_status"] = "unresolved"
+
             record["source_requirements"].append({
                 "recipe_id": recipe_id,
+                "slot_id": recipe.get("slot_id"),
+                "occurrence_id": _occurrence_id(ingredient),
                 "quantity": normalized["original_quantity"],
                 "unit": normalized["original_unit"],
                 "conversion_status": conversion_status,
             })
+
             if (
                 recipe_id is not None
                 and recipe_id not in record["recipe_ids"]
             ):
                 record["recipe_ids"].append(recipe_id)
-    # Identify ingredients with incompatible unit groups.
+
+    # -----------------------------------------
+    # Identify incompatible unit groups
+    # -----------------------------------------
+
     ingredient_groups = {}
+
     for (ingredient_key, unit), record in aggregated.items():
         ingredient_groups.setdefault(
             ingredient_key, []
         ).append(record)
+
     for records in ingredient_groups.values():
         if len(records) > 1:
             units = [record["unit"] for record in records]
+
             for record in records:
                 record["normalization_status"] = "unresolved"
                 record["unresolved_units"] = units
+
     return list(aggregated.values())
+
+
+def collect_unresolved_quantity_requirements(recipe_requirements):
+    """
+    Report ingredient occurrences whose quantity or unit cannot be
+    determined (e.g. KB rows with no unit such as R30871 sesame seed).
+
+    One record per ingredient, merged across recipes, keeping every
+    source occurrence. No quantity, unit or package is invented.
+    """
+    records = {}
+
+    for recipe in recipe_requirements or []:
+        recipe_id = recipe.get("recipe_id")
+
+        for ingredient in recipe.get("ingredients", []):
+            if not isinstance(ingredient, dict):
+                continue
+
+            kind, reason = classify_requirement(ingredient)
+
+            if kind != "unresolved":
+                continue
+
+            key = _ingredient_key(ingredient) or (
+                f"unidentified:{_occurrence_id(ingredient) or id(ingredient)}"
+            )
+            quantity, unit = _original_measurement(ingredient)
+
+            record = records.setdefault(key, {
+                "ingredient_id": ingredient.get("ingredient_id"),
+                "ingredient_name": _ingredient_name(ingredient),
+                "requirement_type": "unresolved",
+                "recipe_ids": [],
+                "occurrence_ids": [],
+                "reasons": [],
+                "source_requirements": [],
+            })
+
+            record["source_requirements"].append({
+                "recipe_id": recipe_id,
+                "slot_id": recipe.get("slot_id"),
+                "occurrence_id": _occurrence_id(ingredient),
+                "quantity": quantity,
+                "unit": unit,
+                "conversion_status": ingredient.get("conversion_status"),
+                "reason": reason,
+            })
+            record["occurrence_ids"].append(_occurrence_id(ingredient))
+
+            if reason not in record["reasons"]:
+                record["reasons"].append(reason)
+
+            if (
+                recipe_id is not None
+                and recipe_id not in record["recipe_ids"]
+            ):
+                record["recipe_ids"].append(recipe_id)
+
+    return list(records.values())
+
 # def subtract_inventory(requirements, inventory):
 #     """
 #     Deduct pantry stock from aggregated requirements.
@@ -814,25 +1059,30 @@ def aggregate_requirements(recipe_requirements):
 #         })
 #         results.append(result)
 #     return results
+
 def subtract_inventory(requirements, inventory):
     """
     Deduct pantry stock from aggregated requirements.
-    Does not mutate the original inventory.
-    Does not consume the same pantry stock twice.
+
+    - Does not mutate the original inventory.
+    - Does not consume pantry stock twice.
+    - Uses existing normalized measurements.
+    - Uses dataset-derived conversions when units differ.
+    - Preserves estimated conversion uncertainty.
     """
 
-    # NEW: Match ingredients by normalized name.
-    # This handles recipe IDs such as ING2337 when
-    # pantry records contain only ingredient names.
     def pantry_match_key(item):
         name = _ingredient_name(item)
         return " ".join(name.lower().split())
 
     stock_map = {}
 
+    # ========================================================
+    # 1. NORMALIZE PANTRY STOCK
+    # ========================================================
+
     for item in inventory or []:
 
-        # CHANGED: Use normalized ingredient name.
         key = pantry_match_key(item)
 
         if not key:
@@ -857,37 +1107,117 @@ def subtract_inventory(requirements, inventory):
 
     results = []
 
+    # ========================================================
+    # 2. SUBTRACT PANTRY FROM REQUIREMENTS
+    # ========================================================
+
     for requirement in requirements or []:
 
-        # CHANGED: Use the same key as pantry inventory.
         key = pantry_match_key(requirement)
 
-        required = float(requirement.get("quantity", 0))
+        required = float(
+            requirement.get("quantity", 0)
+        )
+
         required_unit = requirement.get("unit")
 
         remaining = required
         inventory_used = 0.0
         inventory_unresolved = False
+        estimated_inventory_conversion = False
 
         for stock in stock_map.get(key, []):
 
-            if remaining <= 0:
+            if remaining <= 1e-9:
                 break
 
-            # Requirements and inventory must share
-            # a comparable normalized unit.
-            if stock["unit"] != required_unit:
+            available = max(
+                0.0,
+                stock["quantity"],
+            )
+
+            if available <= 0:
+                continue
+
+            # =================================================
+            # CASE 1: COMPATIBLE UNITS
+            # =================================================
+
+            if stock["unit"] == required_unit:
+
+                consumed = min(
+                    remaining,
+                    available,
+                )
+
+                remaining -= consumed
+                inventory_used += consumed
+
+                stock["quantity"] = max(
+                    0.0,
+                    available - consumed,
+                )
+
+                # Stock normalized via an estimate (e.g. 1 bunch -> g)
+                # keeps that uncertainty even when units now match.
+                if (
+                    consumed > 0
+                    and stock.get("conversion_status") == "estimated"
+                ):
+                    estimated_inventory_conversion = True
+
+                continue
+
+            # =================================================
+            # CASE 2: DATASET-DERIVED CONVERSION
+            # =================================================
+
+            conversion = convert_using_ingredient_factor(
+                ingredient_name=key,
+                quantity=available,
+                from_unit=stock["unit"],
+                to_unit=required_unit,
+            )
+
+            if conversion["quantity"] is None:
+
                 inventory_unresolved = True
                 continue
 
-            available = max(0.0, stock["quantity"])
-            consumed = min(remaining, available)
+            available_in_required_unit = max(
+                0.0,
+                conversion["quantity"],
+            )
+
+            if available_in_required_unit <= 0:
+                continue
+
+            consumed = min(
+                remaining,
+                available_in_required_unit,
+            )
 
             remaining -= consumed
             inventory_used += consumed
 
-            # Prevent the same pantry stock being used twice.
-            stock["quantity"] -= consumed
+            # Convert consumed quantity back into pantry units.
+            # This avoids consuming the same stock twice.
+            consumed_in_stock_unit = (
+                available
+                * consumed
+                / available_in_required_unit
+            )
+
+            stock["quantity"] = max(
+                0.0,
+                available - consumed_in_stock_unit,
+            )
+
+            estimated_inventory_conversion = True
+
+        # =====================================================
+        # 3. BUILD RESULT
+        # =====================================================
 
         result = dict(requirement)
 
@@ -895,13 +1225,22 @@ def subtract_inventory(requirements, inventory):
             "required_quantity": required,
             "inventory_available": inventory_used,
             "inventory_used": inventory_used,
-            "purchase_required": max(0.0, remaining),
-            "inventory_conversion_unresolved": inventory_unresolved,
+            "purchase_required": max(
+                0.0,
+                remaining,
+            ),
+            "inventory_conversion_unresolved": (
+                inventory_unresolved
+            ),
+            "inventory_conversion_estimated": (
+                estimated_inventory_conversion
+            ),
         })
 
         results.append(result)
 
     return results
+
 def calculate_packages(
     required_quantity,
     package_quantity,
@@ -991,46 +1330,93 @@ def find_plan_product(
 def collect_qualitative_requirements(recipe_requirements):
     """Preserve non-numeric ingredient instructions separately."""
     qualitative = []
-    seen = set()
-    qualitative_units = {
-        "to taste",
-        "as needed",
-        "as required",
-    }
+    by_key = {}
     for recipe in recipe_requirements or []:
         recipe_id = recipe.get("recipe_id")
         for ingredient in recipe.get("ingredients", []):
-            raw_quantity = ingredient.get("quantity")
-            raw_unit = str(ingredient.get("unit") or "").strip().lower()
-            instruction = None
-            if isinstance(raw_quantity, str):
-                candidate = raw_quantity.strip().lower()
-                if candidate in qualitative_units:
-                    instruction = candidate
-            if raw_unit in qualitative_units:
-                instruction = raw_unit
-            if instruction is None:
+            if not isinstance(ingredient, dict):
                 continue
+            kind, instruction = classify_requirement(ingredient)
+            if kind != "qualitative":
+                continue
+            raw_quantity = ingredient.get("quantity")
             name = _ingredient_name(ingredient)
             key = (
                 ingredient.get("ingredient_id"),
                 name.lower(),
                 instruction,
                 recipe_id,
+                recipe.get("slot_id"),
             )
-            if key in seen:
+            if key in by_key:
+                # Same instruction repeated within one recipe.
+                by_key[key]["occurrence_ids"].append(
+                    _occurrence_id(ingredient)
+                )
                 continue
-            seen.add(key)
-            qualitative.append({
+            entry = {
                 "ingredient_id": ingredient.get("ingredient_id"),
                 "ingredient_name": name,
+                "requirement_type": "qualitative",
                 "instruction": instruction,
                 "quantity": raw_quantity,
                 "unit": instruction,
                 "recipe_id": recipe_id,
+                "slot_id": recipe.get("slot_id"),
                 "recipe_ids": [recipe_id] if recipe_id is not None else [],
-            })
+                "occurrence_ids": [_occurrence_id(ingredient)],
+            }
+            by_key[key] = entry
+            qualitative.append(entry)
     return qualitative
+# Ingredient uncertainty policy for grocery projection.
+#
+#   exact / estimated measurable   priced normally; estimates never
+#                                  verify quantity coverage
+#   unresolved package conversion  one provisional package, priced,
+#                                  never verified (non-blocking)
+#   qualitative "to taste"         discretionary amount; recipe may be
+#                                  selected conditionally, cost left
+#                                  unpriced (non-blocking)
+#   other qualitative instruction  ("as needed", ...) blocking
+#   missing quantity or unit       essential amount unknown: blocking
+#   no product / price / package   no cost evidence: blocking
+DISCRETIONARY_INSTRUCTIONS = {"to taste"}
+
+
+def classify_projection_gaps(basket_items):
+    """Category and selection impact of every unpriced basket line."""
+    gaps = []
+    for item in basket_items:
+        if item.get("effective_purchase_cost") is not None:
+            continue
+        basis = item.get("purchase_basis")
+        if basis == "qualitative_requirement":
+            discretionary = item.get("instruction") in DISCRETIONARY_INSTRUCTIONS
+            category = (
+                "qualitative_discretionary" if discretionary
+                else "qualitative_unspecified"
+            )
+            blocks = not discretionary
+        elif basis == "unresolved_requirement":
+            category, blocks = "missing_quantity_or_unit", True
+        elif item.get("pricing_status") == "unresolved_conversion":
+            category = (
+                "incompatible_unit_groups"
+                if item.get("unresolved_units")
+                else "unconvertible_unit_without_product"
+            )
+            blocks = True
+        else:
+            category, blocks = "missing_product_or_price", True
+        gaps.append({
+            "name": item.get("name"),
+            "category": category,
+            "blocks_selection": blocks,
+        })
+    return gaps
+
+
 def build_plan_grocery_basket(
     recipe_requirements,
     inventory=None,
@@ -1051,6 +1437,17 @@ def build_plan_grocery_basket(
     qualitative_requirements = collect_qualitative_requirements(
         recipe_requirements
     )
+    unresolved_quantity_requirements = (
+        collect_unresolved_quantity_requirements(recipe_requirements)
+    )
+    # Ingredients that also need an amount nobody can quantify:
+    # no purchase of theirs can be verified as sufficient.
+    unquantified_keys = set().union(*(
+        _identity_keys(requirement)
+        for requirement in (
+            qualitative_requirements + unresolved_quantity_requirements
+        )
+    ))
     aggregated = aggregate_requirements(
         recipe_requirements
     )
@@ -1159,37 +1556,37 @@ def build_plan_grocery_basket(
         """Estimate package units through ingredient-specific mass data.
         This is a provisional fallback only. It must not be treated
         as exact retail quantity coverage.
+
+        Uses the shared Ingredient KB lookup, so package sizing,
+        pantry subtraction and Inventory State apply the same factors.
+        Returns (quantity in package units, factor provenance) or
+        (None, None) when no ingredient-specific evidence exists.
         """
         from_unit = normalize_unit(from_unit)
         to_unit = normalize_unit(to_unit)
-        # Convert an ingredient-specific recipe measure to mass.
-        required_mass = estimate_ingredient_mass(
-            ingredient_name,
-            quantity,
-            from_unit,
+        source_quantity, source_unit = (
+            (quantity * 1000.0, "g") if from_unit == "kg"
+            else (quantity, from_unit)
         )
-        if required_mass is not None:
-            grams, _ = required_mass
-            if to_unit == "g":
-                return grams
-            if to_unit == "kg":
-                return grams / 1000.0
-        # Convert mass requirements to an estimated count-like unit
-        # such as head, bunch, piece, clove, sprig, or wedge.
-        if from_unit in {"g", "kg"}:
-            required_grams = (
-                quantity * 1000.0 if from_unit == "kg" else quantity
+        target_scale, target_unit = (
+            (1000.0, "g") if to_unit == "kg"
+            else (1.0, to_unit)
+        )
+        conversion = convert_using_ingredient_factor(
+            ingredient_name=ingredient_name,
+            quantity=source_quantity,
+            from_unit=source_unit,
+            to_unit=target_unit,
+        )
+        if (
+            conversion["status"] == "estimated"
+            and conversion["quantity"] is not None
+        ):
+            return (
+                conversion["quantity"] / target_scale,
+                conversion.get("factors"),
             )
-            grams_per_package_unit = estimate_ingredient_mass(
-                ingredient_name,
-                1.0,
-                to_unit,
-            )
-            if grams_per_package_unit is not None:
-                grams, _ = grams_per_package_unit
-                if grams > 0:
-                    return required_grams / grams
-        return None
+        return None, None
     def implausible_package(quantity, unit, ingredient):
         """
         Conservative sanity checks for ordinary
@@ -1252,19 +1649,34 @@ def build_plan_grocery_basket(
             "conversion_status": requirement.get(
                 "conversion_status", "exact"
             ),
+            "volume_preserved_no_density": (requirement.get("conversion_status")== "volume_preserved_no_density"),
             "normalization_status": requirement.get(
                 "normalization_status", "resolved"
             ),
             "inventory_conversion_unresolved": requirement.get(
                 "inventory_conversion_unresolved", False
             ),
+            "inventory_conversion_estimated": requirement.get(
+                "inventory_conversion_estimated", False
+            ),
+            "additional_unquantified_requirement": bool(
+                _identity_keys(requirement) & unquantified_keys
+            ),
         }
-        if (
-            requirement.get("normalization_status")
-            == "unresolved"
-            or requirement.get("conversion_status")
-            == "unresolved"
-        ):
+        # Incompatible unit groups for one ingredient (e.g. thyme in
+        # sprigs and in pinches) cannot be sized or priced as one line.
+        # A single measurement in an unconvertible unit (pinch, count,
+        # packet) is matched like any other unresolved package
+        # conversion: one provisional package, never verified.
+        # aggregate_requirements() marks every unresolved conversion as
+        # normalization "unresolved"; only "unresolved_units" identifies
+        # several incompatible unit groups for one ingredient.
+        incompatible_groups = bool(requirement.get("unresolved_units"))
+        base_item["unresolved_units"] = requirement.get("unresolved_units")
+        unconvertible_unit = (
+            requirement.get("conversion_status") == "unresolved"
+        )
+        if incompatible_groups or (unconvertible_unit and product is None):
             base_item["pricing_status"] = "unresolved_conversion"
             base_item["price_source"] = "unknown"
             unpriced_items.append(ingredient_name)
@@ -1274,7 +1686,6 @@ def build_plan_grocery_basket(
                 "Purchase quantity cannot be verified."
             )
             basket_items.append(base_item)
-            
             continue
         if product is None:
             unpriced_items.append(ingredient_name)
@@ -1340,8 +1751,12 @@ def build_plan_grocery_basket(
             package_unit,
         )
         estimated_package_conversion = False
+        package_conversion_factors = None
         if converted_required is None:
-            converted_required = estimate_package_conversion(
+            (
+                converted_required,
+                package_conversion_factors,
+            ) = estimate_package_conversion(
                 required,
                 required_unit,
                 package_unit,
@@ -1372,11 +1787,18 @@ def build_plan_grocery_basket(
             inventory_resolved = not requirement.get(
                 "inventory_conversion_unresolved", False
             )
+            # Pantry stock subtracted through an estimated conversion
+            # makes the remaining purchase quantity an estimate too.
+            inventory_exact = not requirement.get(
+                "inventory_conversion_estimated", False
+            )
             quantity_supported = (
                 conversion_is_exact
                 and not estimated_package_conversion
                 and normalization_resolved
                 and inventory_resolved
+                and inventory_exact
+                and not base_item["additional_unquantified_requirement"]
             )
             if estimated_package_conversion:
                 warnings.append(
@@ -1470,12 +1892,17 @@ def build_plan_grocery_basket(
         inventory_resolved = not requirement.get(
             "inventory_conversion_unresolved", False
         )
+        inventory_exact = not requirement.get(
+            "inventory_conversion_estimated", False
+        )
         if (
             has_retail_evidence
             and quantity_supported
             and conversion_is_exact
             and normalization_resolved
             and inventory_resolved
+            and inventory_exact
+            and not base_item["additional_unquantified_requirement"]
         ):
             known_cost += estimated_purchase_cost
             base_item["purchase_cost"] = (
@@ -1521,6 +1948,8 @@ def build_plan_grocery_basket(
                     else "unresolved"
                 )
             ),
+            # Grams-per-unit and source of each estimated factor.
+            "package_conversion_factors": package_conversion_factors,
             "quantity_coverage_verified": (
                 quantity_supported
             ),
@@ -1552,7 +1981,6 @@ def build_plan_grocery_basket(
             base_item.get("pricing_status") != "priced"
         )
         basket_items.append(base_item)
-    # Add qualitative requirements as shopping-list entries without inventing quantities.
     existing_ids = {
         str(item["ingredient_id"]).strip()
         for item in basket_items if item.get("ingredient_id")
@@ -1561,6 +1989,89 @@ def build_plan_grocery_basket(
         str(item.get("name") or "").strip().lower()
         for item in basket_items
     }
+
+    # Unresolved-quantity requirements (e.g. no unit in the KB) stay
+    # visible: no package count, price or shortage is invented, and
+    # the missing cost keeps the projection incomplete.
+    for requirement in unresolved_quantity_requirements:
+        ingredient_id = requirement.get("ingredient_id")
+        ingredient_name = str(
+            requirement.get("ingredient_name") or ""
+        ).strip()
+        display_name = ingredient_name or "unidentified ingredient"
+        existing = next(
+            (
+                item for item in basket_items
+                if (
+                    ingredient_id
+                    and str(item.get("ingredient_id") or "").strip()
+                    == str(ingredient_id).strip()
+                )
+                or (
+                    ingredient_name
+                    and str(item.get("name") or "").strip().lower()
+                    == ingredient_name.lower()
+                )
+            ),
+            None,
+        )
+        if existing is not None:
+            # A measurable line already exists for this ingredient;
+            # keep one line and record the unquantified need on it.
+            existing["unresolved_quantity_sources"] = (
+                requirement["source_requirements"]
+            )
+            continue
+
+        basket_items.append({
+            "ingredient_id": ingredient_id,
+            "name": display_name,
+            "required_quantity": None,
+            "required_unit": None,
+            "original_measurements": [
+                {
+                    "recipe_id": source["recipe_id"],
+                    "occurrence_id": source["occurrence_id"],
+                    "quantity": source["quantity"],
+                    "unit": source["unit"],
+                }
+                for source in requirement["source_requirements"]
+            ],
+            "unresolved_reasons": requirement["reasons"],
+            "occurrence_ids": requirement["occurrence_ids"],
+            "package_quantity": None,
+            "package_unit": None,
+            "packages": None,
+            "purchased_quantity": None,
+            "price_per_package": None,
+            "purchase_cost": None,
+            "estimated_purchase_cost": None,
+            "effective_purchase_cost": None,
+            "display_cost": None,
+            "has_usable_price": False,
+            "cost_is_estimated": False,
+            "leftover_quantity": None,
+            "inventory_used": None,
+            "recipe_ids": requirement["recipe_ids"],
+            "pricing_status": "unresolved_quantity",
+            "price_source": "unknown",
+            "purchase_basis": "unresolved_requirement",
+            "conversion_status": "unresolved",
+            "package_conversion_status": None,
+            "quantity_coverage_verified": False,
+            "status": "quantity_unknown",
+        })
+        if ingredient_id:
+            existing_ids.add(str(ingredient_id).strip())
+        existing_names.add(display_name.lower())
+        projection_missing.append(display_name)
+        warnings.append(
+            f"{display_name}: recipe quantity or unit unresolved "
+            f"({', '.join(requirement['reasons'])}); included in the "
+            "shopping list without a package or cost estimate."
+        )
+
+    # Add qualitative requirements as shopping-list entries without inventing quantities.
 
     for requirement in qualitative_requirements:
         ingredient_id = requirement.get("ingredient_id")
@@ -1613,6 +2124,7 @@ def build_plan_grocery_basket(
             if item.get("effective_purchase_cost") is None
         )
     )
+    projection_gaps = classify_projection_gaps(basket_items)
     projection_missing = list(
         dict.fromkeys(projection_missing)
     )
@@ -1630,6 +2142,29 @@ def build_plan_grocery_basket(
         "items": basket_items,
         "known_cost": round(known_cost, 2),
         "unresolved_requirements": unresolved_requirements,
+        # Lines without a cost, each with its policy category and
+        # whether it blocks recipe selection (see
+        # classify_projection_gaps). projected_cost stays None while
+        # any gap exists; priced_subtotal is only a lower bound.
+        "projection_gaps": projection_gaps,
+        "selection_blocking_items": [
+            gap["name"] for gap in projection_gaps if gap["blocks_selection"]
+        ],
+        "discretionary_unpriced_items": [
+            gap["name"] for gap in projection_gaps if not gap["blocks_selection"]
+        ],
+        "selection_projection_complete": not any(
+            gap["blocks_selection"] for gap in projection_gaps
+        ),
+        "priced_subtotal": round(projected_cost, 2),
+        # Recipe requirements with no determinable quantity or unit.
+        # Reported separately from unresolved package conversions.
+        "unresolved_quantity_requirements": (
+            unresolved_quantity_requirements
+        ),
+        "unresolved_quantity_count": len(
+            unresolved_quantity_requirements
+        ),
         "all_items_priced": all(
             item.get("pricing_status") == "priced"
             for item in basket_items

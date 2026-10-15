@@ -1,0 +1,1625 @@
+
+
+======================================================================
+DAY 5 REAL END-TO-END RUN
+======================================================================
+
+[SETUP] Initializing real components...
+[SETUP] Components initialized.
+
+Planning: 1 days x 2 meals
+Expected slots: 2
+>>>>>>>>>Getting the meals now!! in plan meals<<<<<<<<<<<,
+Slots>>>>>>>>>>>>>>>[MealSlot(date=datetime.date(2026, 10, 7), meal_type='lunch', max_cooking_time=30), MealSlot(date=datetime.date(2026, 10, 7), meal_type='dinner', max_cooking_time=30)]<<<<<<<<<<<<
+Getting budget>>>>>>>>>>100.0<<<<<<<<<
+
+Getting initial inven: >>>>>>>>>>>{'rice': {'quantity': 500.0, 'unit': 'g'}, 'oil': {'quantity': 250.0, 'unit': 'ml'}}<<<<<<
+plan state: >>>>>>>>>>>PlanState(slots=[MealSlot(date=datetime.date(2026, 10, 7), meal_type='lunch', max_cooking_time=30), MealSlot(date=datetime.date(2026, 10, 7), meal_type='dinner', max_cooking_time=30)], initial_budget=100.0, cooking_schedule={}, selected_meals=[], used_recipe_ids=set(), rejected_candidates=[], uncertain_candidates=[], estimated_spent=0.0, initial_inventory={'rice': {'quantity': 500.0, 'unit': 'g'}, 'oil': {'quantity': 250.0, 'unit': 'ml'}}, current_inventory={'rice': {'quantity': 500.0, 'unit': 'g'}, 'oil': {'quantity': 250.0, 'unit': 'ml'}}, nutrition_state={}, prepared_leftovers=[], final_grocery_basket={}, status='building', execution_trace=[], skipped_slots=[])<<<<<<<<<<<
+
+[TIME] Candidates before filtering: 3460
+[TIME] Effective limit (minutes): 30
+[TIME] cooking_time_min column is missing
+[TIME] Cooking-time column missing from candidates. Loading from Recipe KB.
+
+========== COOKING TIME FILTER ==========
+Maximum cooking time: 30.0 minutes
+Candidates before: 3460
+Candidates with known times: 3446
+Candidates after: 1454
+[TIME] Candidates after filtering: 1454
+[LIVE TAVILY SEARCH] cauliflower
+[SQLITE OLLAMA CACHE HIT] cauliflower
+[LIVE TAVILY SEARCH] plain yogurt
+[SQLITE OLLAMA CACHE HIT] plain yogurt
+[LIVE TAVILY SEARCH] garbanzo
+[SQLITE OLLAMA CACHE HIT] garbanzo
+[LIVE TAVILY SEARCH] turmeric
+[SQLITE OLLAMA CACHE HIT] turmeric
+[LIVE TAVILY SEARCH] cumin
+[SQLITE OLLAMA CACHE HIT] cumin
+[LIVE TAVILY SEARCH] coriander
+[SQLITE OLLAMA CACHE HIT] coriander
+[LIVE TAVILY SEARCH] paprika
+[SQLITE OLLAMA CACHE HIT] paprika
+[LIVE TAVILY SEARCH] salt
+[SQLITE OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] water
+[SQLITE OLLAMA CACHE HIT] water
+[LIVE TAVILY SEARCH] beans
+[SQLITE OLLAMA CACHE HIT] beans
+[LIVE TAVILY SEARCH] cumin seed
+[SQLITE OLLAMA CACHE HIT] cumin seed
+[LIVE TAVILY SEARCH] coriander seed
+[SQLITE OLLAMA CACHE HIT] coriander seed
+[LIVE TAVILY SEARCH] fennel seed
+[SQLITE OLLAMA CACHE HIT] fennel seed
+[LIVE TAVILY SEARCH] fenugreek
+[SQLITE OLLAMA CACHE HIT] fenugreek
+[LIVE TAVILY SEARCH] cinnamon
+[SQLITE OLLAMA CACHE HIT] cinnamon
+[LIVE TAVILY SEARCH] chili flakes
+[SQLITE OLLAMA CACHE HIT] chili flakes
+[LIVE TAVILY SEARCH] mustard seed
+[SQLITE OLLAMA CACHE HIT] mustard seed
+[LIVE TAVILY SEARCH] curry leave
+[SQLITE OLLAMA CACHE HIT] curry leave
+[LIVE TAVILY SEARCH] onion
+[SQLITE OLLAMA CACHE HIT] onion
+[LIVE TAVILY SEARCH] garlic
+[SQLITE OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] ginger
+[SQLITE OLLAMA CACHE HIT] ginger
+[LIVE TAVILY SEARCH] water
+[SQLITE OLLAMA CACHE HIT] water
+[LIVE TAVILY SEARCH] coriander leave
+[SQLITE OLLAMA CACHE HIT] coriander leave
+[LIVE TAVILY SEARCH] coconut
+[SQLITE OLLAMA CACHE HIT] coconut
+[LIVE TAVILY SEARCH] salt
+[SQLITE OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] pumpkin
+[SQLITE OLLAMA CACHE HIT] pumpkin
+[LIVE TAVILY SEARCH] olive oil
+[SQLITE OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] red onion
+[SQLITE OLLAMA CACHE HIT] red onion
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] tomato paste
+[SQLITE OLLAMA CACHE HIT] tomato paste
+[LIVE TAVILY SEARCH] red wine vinegar
+[SQLITE OLLAMA CACHE HIT] red wine vinegar
+[LIVE TAVILY SEARCH] tomato
+[SQLITE OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] vegetable stock
+[SQLITE OLLAMA CACHE HIT] vegetable stock
+[LIVE TAVILY SEARCH] allspice
+[SQLITE OLLAMA CACHE HIT] allspice
+[LIVE TAVILY SEARCH] chickpea
+[SQLITE OLLAMA CACHE HIT] chickpea
+[LIVE TAVILY SEARCH] olive oil
+[SQLITE OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] mushroom
+[SQLITE OLLAMA CACHE HIT] mushroom
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] broccoli
+[SQLITE OLLAMA CACHE HIT] broccoli
+[LIVE TAVILY SEARCH] wheat
+[SQLITE OLLAMA CACHE HIT] wheat
+[LIVE TAVILY SEARCH] honey
+[SQLITE OLLAMA CACHE HIT] honey
+[LIVE TAVILY SEARCH] sesame oil
+[SQLITE OLLAMA CACHE HIT] sesame oil
+[LIVE TAVILY SEARCH] pasta
+[SQLITE OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] cashew nut
+[SQLITE OLLAMA CACHE HIT] cashew nut
+[LIVE TAVILY SEARCH] tofu
+[SQLITE OLLAMA CACHE HIT] tofu
+[LIVE TAVILY SEARCH] broccoli
+[MEMORY OLLAMA CACHE HIT] broccoli
+[LIVE TAVILY SEARCH] scallion
+[SQLITE OLLAMA CACHE HIT] scallion
+[LIVE TAVILY SEARCH] ginger
+[SQLITE OLLAMA CACHE HIT] piece ginger
+[LIVE TAVILY SEARCH] garlic
+[SQLITE OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] soy sauce
+[SQLITE OLLAMA CACHE HIT] soy sauce
+[LIVE TAVILY SEARCH] maple syrup
+[SQLITE OLLAMA CACHE HIT] maple syrup
+[LIVE TAVILY SEARCH] tahini
+[SQLITE OLLAMA CACHE HIT] tahini
+[LIVE TAVILY SEARCH] rice vinegar
+[SQLITE OLLAMA CACHE HIT] rice vinegar
+[LIVE TAVILY SEARCH] toasted sesame oil
+[SQLITE OLLAMA CACHE HIT] toasted sesame oil
+[LIVE TAVILY SEARCH] cornstarch
+[SQLITE OLLAMA CACHE HIT] cornstarch
+[LIVE TAVILY SEARCH] cornstarch
+[SQLITE OLLAMA CACHE HIT] cornstarch
+[LIVE TAVILY SEARCH] kosher salt
+[SQLITE OLLAMA CACHE HIT] kosher salt
+[LIVE TAVILY SEARCH] grapeseed oil
+[SQLITE OLLAMA CACHE HIT] grapeseed oil
+[LIVE TAVILY SEARCH] black pepper
+[SQLITE OLLAMA CACHE HIT] black pepper
+[LIVE TAVILY SEARCH] sesame seed
+[SQLITE OLLAMA CACHE HIT] sesame seed
+[LIVE TAVILY SEARCH] brown rice
+[SQLITE OLLAMA CACHE HIT] brown rice
+[LIVE TAVILY SEARCH] olive oil
+[SQLITE OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] rice vinegar
+[MEMORY OLLAMA CACHE HIT] rice vinegar
+[LIVE TAVILY SEARCH] low sodium soy sauce
+[SQLITE OLLAMA CACHE HIT] low sodium soy sauce
+[LIVE TAVILY SEARCH] ginger
+[SQLITE OLLAMA CACHE HIT] ginger
+[LIVE TAVILY SEARCH] brown rice
+[SQLITE OLLAMA CACHE HIT] brown rice
+[LIVE TAVILY SEARCH] broccoli floret
+[SQLITE OLLAMA CACHE HIT] broccoli floret
+[LIVE TAVILY SEARCH] napa cabbage
+[SQLITE OLLAMA CACHE HIT] napa cabbage
+[LIVE TAVILY SEARCH] carrot
+[SQLITE OLLAMA CACHE HIT] carrot
+[LIVE TAVILY SEARCH] bean sprout
+[SQLITE OLLAMA CACHE HIT] bean sprout
+[LIVE TAVILY SEARCH] fried egg
+[SQLITE OLLAMA CACHE HIT] fried egg
+[LIVE TAVILY SEARCH] spring onion
+[SQLITE OLLAMA CACHE HIT] green onion
+[LIVE TAVILY SEARCH] sesame seed
+[SQLITE OLLAMA CACHE HIT] sesame seed
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] peanut butter
+[SQLITE OLLAMA CACHE HIT] peanut butter
+[LIVE TAVILY SEARCH] seasoned rice vinegar
+[SQLITE OLLAMA CACHE HIT] seasoned rice vinegar
+[LIVE TAVILY SEARCH] soy sauce
+[SQLITE OLLAMA CACHE HIT] soy sauce
+[LIVE TAVILY SEARCH] sriracha sauce
+[SQLITE OLLAMA CACHE HIT] sriracha sauce
+[LIVE TAVILY SEARCH] vegan sausage
+[SQLITE OLLAMA CACHE HIT] vegan sausage
+[LIVE TAVILY SEARCH] onion
+[SQLITE OLLAMA CACHE HIT] onion
+[LIVE TAVILY SEARCH] tomato
+[SQLITE OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] noodles
+[SQLITE OLLAMA CACHE HIT] noodles
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] masa harina
+[SQLITE OLLAMA CACHE HIT] masa harina
+[LIVE TAVILY SEARCH] fresh limes
+[SQLITE OLLAMA CACHE HIT] lime
+[LIVE TAVILY SEARCH] black beans
+[SQLITE OLLAMA CACHE HIT] black beans
+[LIVE TAVILY SEARCH] lettuce
+[SQLITE OLLAMA CACHE HIT] lettuce
+[LIVE TAVILY SEARCH] plum tomato
+[SQLITE OLLAMA CACHE HIT] plum tomato
+[LIVE TAVILY SEARCH] jack cheese
+[SQLITE OLLAMA CACHE HIT] jack cheese
+[LIVE TAVILY SEARCH] avocado
+[SQLITE OLLAMA CACHE HIT] avocado
+[LIVE TAVILY SEARCH] sour cream
+[SQLITE OLLAMA CACHE HIT] sour cream
+[LIVE TAVILY SEARCH] cilantro
+[SQLITE OLLAMA CACHE HIT] cilantro
+[LIVE TAVILY SEARCH] tomatillo
+[SQLITE OLLAMA CACHE HIT] tomatillo
+[LIVE TAVILY SEARCH] jalapeno
+[SQLITE OLLAMA CACHE HIT] jalapeno
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] kosher salt
+[MEMORY OLLAMA CACHE HIT] kosher salt
+[LIVE TAVILY SEARCH] dandelion green
+[SQLITE OLLAMA CACHE HIT] dandelion green
+[LIVE TAVILY SEARCH] olive oil
+[SQLITE OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] red pepper flakes
+[SQLITE OLLAMA CACHE HIT] red pepper flakes
+[LIVE TAVILY SEARCH] pasta
+[SQLITE OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[TIME] Candidates before filtering: 3459
+[TIME] Effective limit (minutes): 30
+[TIME] cooking_time_min column is missing
+[TIME] Cooking-time column missing from candidates. Loading from Recipe KB.
+
+========== COOKING TIME FILTER ==========
+Maximum cooking time: 30.0 minutes
+Candidates before: 3459
+Candidates with known times: 3445
+Candidates after: 1453
+[TIME] Candidates after filtering: 1453
+[LIVE TAVILY SEARCH] cauliflower
+[MEMORY OLLAMA CACHE HIT] cauliflower
+[LIVE TAVILY SEARCH] plain yogurt
+[MEMORY OLLAMA CACHE HIT] plain yogurt
+[LIVE TAVILY SEARCH] garbanzo
+[MEMORY OLLAMA CACHE HIT] garbanzo
+[LIVE TAVILY SEARCH] turmeric
+[MEMORY OLLAMA CACHE HIT] turmeric
+[LIVE TAVILY SEARCH] cumin
+[MEMORY OLLAMA CACHE HIT] cumin
+[LIVE TAVILY SEARCH] coriander
+[MEMORY OLLAMA CACHE HIT] coriander
+[LIVE TAVILY SEARCH] paprika
+[MEMORY OLLAMA CACHE HIT] paprika
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] water
+[MEMORY OLLAMA CACHE HIT] water
+[LIVE TAVILY SEARCH] beans
+[MEMORY OLLAMA CACHE HIT] beans
+[LIVE TAVILY SEARCH] cumin seed
+[MEMORY OLLAMA CACHE HIT] cumin seed
+[LIVE TAVILY SEARCH] coriander seed
+[MEMORY OLLAMA CACHE HIT] coriander seed
+[LIVE TAVILY SEARCH] fennel seed
+[MEMORY OLLAMA CACHE HIT] fennel seed
+[LIVE TAVILY SEARCH] fenugreek
+[MEMORY OLLAMA CACHE HIT] fenugreek
+[LIVE TAVILY SEARCH] cinnamon
+[MEMORY OLLAMA CACHE HIT] cinnamon
+[LIVE TAVILY SEARCH] chili flakes
+[MEMORY OLLAMA CACHE HIT] chili flakes
+[LIVE TAVILY SEARCH] mustard seed
+[MEMORY OLLAMA CACHE HIT] mustard seed
+[LIVE TAVILY SEARCH] curry leave
+[MEMORY OLLAMA CACHE HIT] curry leave
+[LIVE TAVILY SEARCH] onion
+[MEMORY OLLAMA CACHE HIT] onion
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] ginger
+[LIVE TAVILY SEARCH] water
+[MEMORY OLLAMA CACHE HIT] water
+[LIVE TAVILY SEARCH] coriander leave
+[MEMORY OLLAMA CACHE HIT] coriander leave
+[LIVE TAVILY SEARCH] coconut
+[MEMORY OLLAMA CACHE HIT] coconut
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] pumpkin
+[MEMORY OLLAMA CACHE HIT] pumpkin
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] red onion
+[MEMORY OLLAMA CACHE HIT] red onion
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] tomato paste
+[MEMORY OLLAMA CACHE HIT] tomato paste
+[LIVE TAVILY SEARCH] red wine vinegar
+[MEMORY OLLAMA CACHE HIT] red wine vinegar
+[LIVE TAVILY SEARCH] tomato
+[MEMORY OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] vegetable stock
+[MEMORY OLLAMA CACHE HIT] vegetable stock
+[LIVE TAVILY SEARCH] allspice
+[MEMORY OLLAMA CACHE HIT] allspice
+[LIVE TAVILY SEARCH] chickpea
+[MEMORY OLLAMA CACHE HIT] chickpea
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] mushroom
+[MEMORY OLLAMA CACHE HIT] mushroom
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] broccoli
+[MEMORY OLLAMA CACHE HIT] broccoli
+[LIVE TAVILY SEARCH] wheat
+[MEMORY OLLAMA CACHE HIT] wheat
+[LIVE TAVILY SEARCH] honey
+[MEMORY OLLAMA CACHE HIT] honey
+[LIVE TAVILY SEARCH] sesame oil
+[MEMORY OLLAMA CACHE HIT] sesame oil
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] cashew nut
+[MEMORY OLLAMA CACHE HIT] cashew nut
+[LIVE TAVILY SEARCH] tofu
+[MEMORY OLLAMA CACHE HIT] tofu
+[LIVE TAVILY SEARCH] broccoli
+[MEMORY OLLAMA CACHE HIT] broccoli
+[LIVE TAVILY SEARCH] scallion
+[MEMORY OLLAMA CACHE HIT] scallion
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] piece ginger
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] soy sauce
+[MEMORY OLLAMA CACHE HIT] soy sauce
+[LIVE TAVILY SEARCH] maple syrup
+[MEMORY OLLAMA CACHE HIT] maple syrup
+[LIVE TAVILY SEARCH] tahini
+[MEMORY OLLAMA CACHE HIT] tahini
+[LIVE TAVILY SEARCH] rice vinegar
+[MEMORY OLLAMA CACHE HIT] rice vinegar
+[LIVE TAVILY SEARCH] toasted sesame oil
+[MEMORY OLLAMA CACHE HIT] toasted sesame oil
+[LIVE TAVILY SEARCH] cornstarch
+[MEMORY OLLAMA CACHE HIT] cornstarch
+[LIVE TAVILY SEARCH] cornstarch
+[MEMORY OLLAMA CACHE HIT] cornstarch
+[LIVE TAVILY SEARCH] kosher salt
+[MEMORY OLLAMA CACHE HIT] kosher salt
+[LIVE TAVILY SEARCH] grapeseed oil
+[MEMORY OLLAMA CACHE HIT] grapeseed oil
+[LIVE TAVILY SEARCH] black pepper
+[MEMORY OLLAMA CACHE HIT] black pepper
+[LIVE TAVILY SEARCH] sesame seed
+[MEMORY OLLAMA CACHE HIT] sesame seed
+[LIVE TAVILY SEARCH] brown rice
+[MEMORY OLLAMA CACHE HIT] brown rice
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] rice vinegar
+[MEMORY OLLAMA CACHE HIT] rice vinegar
+[LIVE TAVILY SEARCH] low sodium soy sauce
+[MEMORY OLLAMA CACHE HIT] low sodium soy sauce
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] ginger
+[LIVE TAVILY SEARCH] brown rice
+[MEMORY OLLAMA CACHE HIT] brown rice
+[LIVE TAVILY SEARCH] broccoli floret
+[MEMORY OLLAMA CACHE HIT] broccoli floret
+[LIVE TAVILY SEARCH] napa cabbage
+[MEMORY OLLAMA CACHE HIT] napa cabbage
+[LIVE TAVILY SEARCH] carrot
+[MEMORY OLLAMA CACHE HIT] carrot
+[LIVE TAVILY SEARCH] bean sprout
+[MEMORY OLLAMA CACHE HIT] bean sprout
+[LIVE TAVILY SEARCH] fried egg
+[MEMORY OLLAMA CACHE HIT] fried egg
+[LIVE TAVILY SEARCH] spring onion
+[MEMORY OLLAMA CACHE HIT] green onion
+[LIVE TAVILY SEARCH] sesame seed
+[MEMORY OLLAMA CACHE HIT] sesame seed
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] peanut butter
+[MEMORY OLLAMA CACHE HIT] peanut butter
+[LIVE TAVILY SEARCH] seasoned rice vinegar
+[MEMORY OLLAMA CACHE HIT] seasoned rice vinegar
+[LIVE TAVILY SEARCH] soy sauce
+[MEMORY OLLAMA CACHE HIT] soy sauce
+[LIVE TAVILY SEARCH] sriracha sauce
+[MEMORY OLLAMA CACHE HIT] sriracha sauce
+[LIVE TAVILY SEARCH] vegan sausage
+[MEMORY OLLAMA CACHE HIT] vegan sausage
+[LIVE TAVILY SEARCH] onion
+[MEMORY OLLAMA CACHE HIT] onion
+[LIVE TAVILY SEARCH] tomato
+[MEMORY OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] noodles
+[MEMORY OLLAMA CACHE HIT] noodles
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] masa harina
+[MEMORY OLLAMA CACHE HIT] masa harina
+[LIVE TAVILY SEARCH] fresh limes
+[MEMORY OLLAMA CACHE HIT] lime
+[LIVE TAVILY SEARCH] black beans
+[MEMORY OLLAMA CACHE HIT] black beans
+[LIVE TAVILY SEARCH] lettuce
+[MEMORY OLLAMA CACHE HIT] lettuce
+[LIVE TAVILY SEARCH] plum tomato
+[MEMORY OLLAMA CACHE HIT] plum tomato
+[LIVE TAVILY SEARCH] jack cheese
+[MEMORY OLLAMA CACHE HIT] jack cheese
+[LIVE TAVILY SEARCH] avocado
+[MEMORY OLLAMA CACHE HIT] avocado
+[LIVE TAVILY SEARCH] sour cream
+[MEMORY OLLAMA CACHE HIT] sour cream
+[LIVE TAVILY SEARCH] cilantro
+[MEMORY OLLAMA CACHE HIT] cilantro
+[LIVE TAVILY SEARCH] tomatillo
+[MEMORY OLLAMA CACHE HIT] tomatillo
+[LIVE TAVILY SEARCH] jalapeno
+[MEMORY OLLAMA CACHE HIT] jalapeno
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] kosher salt
+[MEMORY OLLAMA CACHE HIT] kosher salt
+[LIVE TAVILY SEARCH] dandelion green
+[MEMORY OLLAMA CACHE HIT] dandelion green
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] red pepper flakes
+[MEMORY OLLAMA CACHE HIT] red pepper flakes
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] cauliflower
+[SQLITE OLLAMA CACHE HIT] cauliflower
+[LIVE TAVILY SEARCH] black beans
+[MEMORY OLLAMA CACHE HIT] black beans
+[LIVE TAVILY SEARCH] corn
+[SQLITE OLLAMA CACHE HIT] corn
+[LIVE TAVILY SEARCH] tomato
+[SQLITE OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] seasoning
+[SQLITE OLLAMA CACHE HIT] seasoning
+[LIVE TAVILY SEARCH] sour cream
+[SQLITE OLLAMA CACHE HIT] sour cream
+[LIVE TAVILY SEARCH] avocado
+[MEMORY OLLAMA CACHE HIT] avocado
+[TIME] Candidates before filtering: 3459
+[TIME] Effective limit (minutes): 30
+[TIME] cooking_time_min column is missing
+[TIME] Cooking-time column missing from candidates. Loading from Recipe KB.
+
+========== COOKING TIME FILTER ==========
+Maximum cooking time: 30.0 minutes
+Candidates before: 3459
+Candidates with known times: 3445
+Candidates after: 1453
+[TIME] Candidates after filtering: 1453
+[LIVE TAVILY SEARCH] pumpkin
+[MEMORY OLLAMA CACHE HIT] pumpkin
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] red onion
+[MEMORY OLLAMA CACHE HIT] red onion
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] tomato paste
+[MEMORY OLLAMA CACHE HIT] tomato paste
+[LIVE TAVILY SEARCH] red wine vinegar
+[MEMORY OLLAMA CACHE HIT] red wine vinegar
+[LIVE TAVILY SEARCH] tomato
+[MEMORY OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] vegetable stock
+[MEMORY OLLAMA CACHE HIT] vegetable stock
+[LIVE TAVILY SEARCH] allspice
+[MEMORY OLLAMA CACHE HIT] allspice
+[LIVE TAVILY SEARCH] chickpea
+[MEMORY OLLAMA CACHE HIT] chickpea
+[LIVE TAVILY SEARCH] cauliflower
+[MEMORY OLLAMA CACHE HIT] cauliflower
+[LIVE TAVILY SEARCH] plain yogurt
+[MEMORY OLLAMA CACHE HIT] plain yogurt
+[LIVE TAVILY SEARCH] garbanzo
+[MEMORY OLLAMA CACHE HIT] garbanzo
+[LIVE TAVILY SEARCH] turmeric
+[MEMORY OLLAMA CACHE HIT] turmeric
+[LIVE TAVILY SEARCH] cumin
+[MEMORY OLLAMA CACHE HIT] cumin
+[LIVE TAVILY SEARCH] coriander
+[MEMORY OLLAMA CACHE HIT] coriander
+[LIVE TAVILY SEARCH] paprika
+[MEMORY OLLAMA CACHE HIT] paprika
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] water
+[MEMORY OLLAMA CACHE HIT] water
+[LIVE TAVILY SEARCH] beans
+[MEMORY OLLAMA CACHE HIT] beans
+[LIVE TAVILY SEARCH] cumin seed
+[MEMORY OLLAMA CACHE HIT] cumin seed
+[LIVE TAVILY SEARCH] coriander seed
+[MEMORY OLLAMA CACHE HIT] coriander seed
+[LIVE TAVILY SEARCH] fennel seed
+[MEMORY OLLAMA CACHE HIT] fennel seed
+[LIVE TAVILY SEARCH] fenugreek
+[MEMORY OLLAMA CACHE HIT] fenugreek
+[LIVE TAVILY SEARCH] cinnamon
+[MEMORY OLLAMA CACHE HIT] cinnamon
+[LIVE TAVILY SEARCH] chili flakes
+[MEMORY OLLAMA CACHE HIT] chili flakes
+[LIVE TAVILY SEARCH] mustard seed
+[MEMORY OLLAMA CACHE HIT] mustard seed
+[LIVE TAVILY SEARCH] curry leave
+[MEMORY OLLAMA CACHE HIT] curry leave
+[LIVE TAVILY SEARCH] onion
+[MEMORY OLLAMA CACHE HIT] onion
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] ginger
+[LIVE TAVILY SEARCH] water
+[MEMORY OLLAMA CACHE HIT] water
+[LIVE TAVILY SEARCH] coriander leave
+[MEMORY OLLAMA CACHE HIT] coriander leave
+[LIVE TAVILY SEARCH] coconut
+[MEMORY OLLAMA CACHE HIT] coconut
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] mushroom
+[MEMORY OLLAMA CACHE HIT] mushroom
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] broccoli
+[MEMORY OLLAMA CACHE HIT] broccoli
+[LIVE TAVILY SEARCH] wheat
+[MEMORY OLLAMA CACHE HIT] wheat
+[LIVE TAVILY SEARCH] honey
+[MEMORY OLLAMA CACHE HIT] honey
+[LIVE TAVILY SEARCH] sesame oil
+[MEMORY OLLAMA CACHE HIT] sesame oil
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] cashew nut
+[MEMORY OLLAMA CACHE HIT] cashew nut
+[LIVE TAVILY SEARCH] tofu
+[MEMORY OLLAMA CACHE HIT] tofu
+[LIVE TAVILY SEARCH] broccoli
+[MEMORY OLLAMA CACHE HIT] broccoli
+[LIVE TAVILY SEARCH] scallion
+[MEMORY OLLAMA CACHE HIT] scallion
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] piece ginger
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] soy sauce
+[MEMORY OLLAMA CACHE HIT] soy sauce
+[LIVE TAVILY SEARCH] maple syrup
+[MEMORY OLLAMA CACHE HIT] maple syrup
+[LIVE TAVILY SEARCH] tahini
+[MEMORY OLLAMA CACHE HIT] tahini
+[LIVE TAVILY SEARCH] rice vinegar
+[MEMORY OLLAMA CACHE HIT] rice vinegar
+[LIVE TAVILY SEARCH] toasted sesame oil
+[MEMORY OLLAMA CACHE HIT] toasted sesame oil
+[LIVE TAVILY SEARCH] cornstarch
+[MEMORY OLLAMA CACHE HIT] cornstarch
+[LIVE TAVILY SEARCH] cornstarch
+[MEMORY OLLAMA CACHE HIT] cornstarch
+[LIVE TAVILY SEARCH] kosher salt
+[MEMORY OLLAMA CACHE HIT] kosher salt
+[LIVE TAVILY SEARCH] grapeseed oil
+[MEMORY OLLAMA CACHE HIT] grapeseed oil
+[LIVE TAVILY SEARCH] black pepper
+[MEMORY OLLAMA CACHE HIT] black pepper
+[LIVE TAVILY SEARCH] sesame seed
+[MEMORY OLLAMA CACHE HIT] sesame seed
+[LIVE TAVILY SEARCH] brown rice
+[MEMORY OLLAMA CACHE HIT] brown rice
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] rice vinegar
+[MEMORY OLLAMA CACHE HIT] rice vinegar
+[LIVE TAVILY SEARCH] low sodium soy sauce
+[MEMORY OLLAMA CACHE HIT] low sodium soy sauce
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] ginger
+[LIVE TAVILY SEARCH] brown rice
+[MEMORY OLLAMA CACHE HIT] brown rice
+[LIVE TAVILY SEARCH] broccoli floret
+[MEMORY OLLAMA CACHE HIT] broccoli floret
+[LIVE TAVILY SEARCH] napa cabbage
+[MEMORY OLLAMA CACHE HIT] napa cabbage
+[LIVE TAVILY SEARCH] carrot
+[MEMORY OLLAMA CACHE HIT] carrot
+[LIVE TAVILY SEARCH] bean sprout
+[MEMORY OLLAMA CACHE HIT] bean sprout
+[LIVE TAVILY SEARCH] fried egg
+[MEMORY OLLAMA CACHE HIT] fried egg
+[LIVE TAVILY SEARCH] spring onion
+[MEMORY OLLAMA CACHE HIT] green onion
+[LIVE TAVILY SEARCH] sesame seed
+[MEMORY OLLAMA CACHE HIT] sesame seed
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] peanut butter
+[MEMORY OLLAMA CACHE HIT] peanut butter
+[LIVE TAVILY SEARCH] seasoned rice vinegar
+[MEMORY OLLAMA CACHE HIT] seasoned rice vinegar
+[LIVE TAVILY SEARCH] soy sauce
+[MEMORY OLLAMA CACHE HIT] soy sauce
+[LIVE TAVILY SEARCH] sriracha sauce
+[MEMORY OLLAMA CACHE HIT] sriracha sauce
+[LIVE TAVILY SEARCH] vegan sausage
+[MEMORY OLLAMA CACHE HIT] vegan sausage
+[LIVE TAVILY SEARCH] onion
+[MEMORY OLLAMA CACHE HIT] onion
+[LIVE TAVILY SEARCH] tomato
+[MEMORY OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] noodles
+[MEMORY OLLAMA CACHE HIT] noodles
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] masa harina
+[MEMORY OLLAMA CACHE HIT] masa harina
+[LIVE TAVILY SEARCH] fresh limes
+[MEMORY OLLAMA CACHE HIT] lime
+[LIVE TAVILY SEARCH] black beans
+[MEMORY OLLAMA CACHE HIT] black beans
+[LIVE TAVILY SEARCH] lettuce
+[MEMORY OLLAMA CACHE HIT] lettuce
+[LIVE TAVILY SEARCH] plum tomato
+[MEMORY OLLAMA CACHE HIT] plum tomato
+[LIVE TAVILY SEARCH] jack cheese
+[MEMORY OLLAMA CACHE HIT] jack cheese
+[LIVE TAVILY SEARCH] avocado
+[MEMORY OLLAMA CACHE HIT] avocado
+[LIVE TAVILY SEARCH] sour cream
+[MEMORY OLLAMA CACHE HIT] sour cream
+[LIVE TAVILY SEARCH] cilantro
+[MEMORY OLLAMA CACHE HIT] cilantro
+[LIVE TAVILY SEARCH] tomatillo
+[MEMORY OLLAMA CACHE HIT] tomatillo
+[LIVE TAVILY SEARCH] jalapeno
+[MEMORY OLLAMA CACHE HIT] jalapeno
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] kosher salt
+[MEMORY OLLAMA CACHE HIT] kosher salt
+[LIVE TAVILY SEARCH] dandelion green
+[MEMORY OLLAMA CACHE HIT] dandelion green
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] red pepper flakes
+[MEMORY OLLAMA CACHE HIT] red pepper flakes
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] cauliflower
+[MEMORY OLLAMA CACHE HIT] cauliflower
+[LIVE TAVILY SEARCH] black beans
+[MEMORY OLLAMA CACHE HIT] black beans
+[LIVE TAVILY SEARCH] corn
+[MEMORY OLLAMA CACHE HIT] corn
+[LIVE TAVILY SEARCH] tomato
+[MEMORY OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] seasoning
+[MEMORY OLLAMA CACHE HIT] seasoning
+[LIVE TAVILY SEARCH] sour cream
+[MEMORY OLLAMA CACHE HIT] sour cream
+[LIVE TAVILY SEARCH] avocado
+[MEMORY OLLAMA CACHE HIT] avocado
+[TIME] Candidates before filtering: 3459
+[TIME] Effective limit (minutes): 30
+[TIME] cooking_time_min column is missing
+[TIME] Cooking-time column missing from candidates. Loading from Recipe KB.
+
+========== COOKING TIME FILTER ==========
+Maximum cooking time: 30.0 minutes
+Candidates before: 3459
+Candidates with known times: 3445
+Candidates after: 1453
+[TIME] Candidates after filtering: 1453
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] mushroom
+[MEMORY OLLAMA CACHE HIT] mushroom
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] broccoli
+[MEMORY OLLAMA CACHE HIT] broccoli
+[LIVE TAVILY SEARCH] wheat
+[MEMORY OLLAMA CACHE HIT] wheat
+[LIVE TAVILY SEARCH] honey
+[MEMORY OLLAMA CACHE HIT] honey
+[LIVE TAVILY SEARCH] sesame oil
+[MEMORY OLLAMA CACHE HIT] sesame oil
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] cashew nut
+[MEMORY OLLAMA CACHE HIT] cashew nut
+[LIVE TAVILY SEARCH] cauliflower
+[MEMORY OLLAMA CACHE HIT] cauliflower
+[LIVE TAVILY SEARCH] plain yogurt
+[MEMORY OLLAMA CACHE HIT] plain yogurt
+[LIVE TAVILY SEARCH] garbanzo
+[MEMORY OLLAMA CACHE HIT] garbanzo
+[LIVE TAVILY SEARCH] turmeric
+[MEMORY OLLAMA CACHE HIT] turmeric
+[LIVE TAVILY SEARCH] cumin
+[MEMORY OLLAMA CACHE HIT] cumin
+[LIVE TAVILY SEARCH] coriander
+[MEMORY OLLAMA CACHE HIT] coriander
+[LIVE TAVILY SEARCH] paprika
+[MEMORY OLLAMA CACHE HIT] paprika
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] water
+[MEMORY OLLAMA CACHE HIT] water
+[LIVE TAVILY SEARCH] beans
+[MEMORY OLLAMA CACHE HIT] beans
+[LIVE TAVILY SEARCH] cumin seed
+[MEMORY OLLAMA CACHE HIT] cumin seed
+[LIVE TAVILY SEARCH] coriander seed
+[MEMORY OLLAMA CACHE HIT] coriander seed
+[LIVE TAVILY SEARCH] fennel seed
+[MEMORY OLLAMA CACHE HIT] fennel seed
+[LIVE TAVILY SEARCH] fenugreek
+[MEMORY OLLAMA CACHE HIT] fenugreek
+[LIVE TAVILY SEARCH] cinnamon
+[MEMORY OLLAMA CACHE HIT] cinnamon
+[LIVE TAVILY SEARCH] chili flakes
+[MEMORY OLLAMA CACHE HIT] chili flakes
+[LIVE TAVILY SEARCH] mustard seed
+[MEMORY OLLAMA CACHE HIT] mustard seed
+[LIVE TAVILY SEARCH] curry leave
+[MEMORY OLLAMA CACHE HIT] curry leave
+[LIVE TAVILY SEARCH] onion
+[MEMORY OLLAMA CACHE HIT] onion
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] ginger
+[LIVE TAVILY SEARCH] water
+[MEMORY OLLAMA CACHE HIT] water
+[LIVE TAVILY SEARCH] coriander leave
+[MEMORY OLLAMA CACHE HIT] coriander leave
+[LIVE TAVILY SEARCH] coconut
+[MEMORY OLLAMA CACHE HIT] coconut
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] pumpkin
+[MEMORY OLLAMA CACHE HIT] pumpkin
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] red onion
+[MEMORY OLLAMA CACHE HIT] red onion
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] tomato paste
+[MEMORY OLLAMA CACHE HIT] tomato paste
+[LIVE TAVILY SEARCH] red wine vinegar
+[MEMORY OLLAMA CACHE HIT] red wine vinegar
+[LIVE TAVILY SEARCH] tomato
+[MEMORY OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] vegetable stock
+[MEMORY OLLAMA CACHE HIT] vegetable stock
+[LIVE TAVILY SEARCH] allspice
+[MEMORY OLLAMA CACHE HIT] allspice
+[LIVE TAVILY SEARCH] chickpea
+[MEMORY OLLAMA CACHE HIT] chickpea
+[LIVE TAVILY SEARCH] tofu
+[MEMORY OLLAMA CACHE HIT] tofu
+[LIVE TAVILY SEARCH] broccoli
+[MEMORY OLLAMA CACHE HIT] broccoli
+[LIVE TAVILY SEARCH] scallion
+[MEMORY OLLAMA CACHE HIT] scallion
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] piece ginger
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] soy sauce
+[MEMORY OLLAMA CACHE HIT] soy sauce
+[LIVE TAVILY SEARCH] maple syrup
+[MEMORY OLLAMA CACHE HIT] maple syrup
+[LIVE TAVILY SEARCH] tahini
+[MEMORY OLLAMA CACHE HIT] tahini
+[LIVE TAVILY SEARCH] rice vinegar
+[MEMORY OLLAMA CACHE HIT] rice vinegar
+[LIVE TAVILY SEARCH] toasted sesame oil
+[MEMORY OLLAMA CACHE HIT] toasted sesame oil
+[LIVE TAVILY SEARCH] cornstarch
+[MEMORY OLLAMA CACHE HIT] cornstarch
+[LIVE TAVILY SEARCH] cornstarch
+[MEMORY OLLAMA CACHE HIT] cornstarch
+[LIVE TAVILY SEARCH] kosher salt
+[MEMORY OLLAMA CACHE HIT] kosher salt
+[LIVE TAVILY SEARCH] grapeseed oil
+[MEMORY OLLAMA CACHE HIT] grapeseed oil
+[LIVE TAVILY SEARCH] black pepper
+[MEMORY OLLAMA CACHE HIT] black pepper
+[LIVE TAVILY SEARCH] sesame seed
+[MEMORY OLLAMA CACHE HIT] sesame seed
+[LIVE TAVILY SEARCH] brown rice
+[MEMORY OLLAMA CACHE HIT] brown rice
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] rice vinegar
+[MEMORY OLLAMA CACHE HIT] rice vinegar
+[LIVE TAVILY SEARCH] low sodium soy sauce
+[MEMORY OLLAMA CACHE HIT] low sodium soy sauce
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] ginger
+[LIVE TAVILY SEARCH] brown rice
+[MEMORY OLLAMA CACHE HIT] brown rice
+[LIVE TAVILY SEARCH] broccoli floret
+[MEMORY OLLAMA CACHE HIT] broccoli floret
+[LIVE TAVILY SEARCH] napa cabbage
+[MEMORY OLLAMA CACHE HIT] napa cabbage
+[LIVE TAVILY SEARCH] carrot
+[MEMORY OLLAMA CACHE HIT] carrot
+[LIVE TAVILY SEARCH] bean sprout
+[MEMORY OLLAMA CACHE HIT] bean sprout
+[LIVE TAVILY SEARCH] fried egg
+[MEMORY OLLAMA CACHE HIT] fried egg
+[LIVE TAVILY SEARCH] spring onion
+[MEMORY OLLAMA CACHE HIT] green onion
+[LIVE TAVILY SEARCH] sesame seed
+[MEMORY OLLAMA CACHE HIT] sesame seed
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] peanut butter
+[MEMORY OLLAMA CACHE HIT] peanut butter
+[LIVE TAVILY SEARCH] seasoned rice vinegar
+[MEMORY OLLAMA CACHE HIT] seasoned rice vinegar
+[LIVE TAVILY SEARCH] soy sauce
+[MEMORY OLLAMA CACHE HIT] soy sauce
+[LIVE TAVILY SEARCH] sriracha sauce
+[MEMORY OLLAMA CACHE HIT] sriracha sauce
+[LIVE TAVILY SEARCH] vegan sausage
+[MEMORY OLLAMA CACHE HIT] vegan sausage
+[LIVE TAVILY SEARCH] onion
+[MEMORY OLLAMA CACHE HIT] onion
+[LIVE TAVILY SEARCH] tomato
+[MEMORY OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] noodles
+[MEMORY OLLAMA CACHE HIT] noodles
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] masa harina
+[MEMORY OLLAMA CACHE HIT] masa harina
+[LIVE TAVILY SEARCH] fresh limes
+[MEMORY OLLAMA CACHE HIT] lime
+[LIVE TAVILY SEARCH] black beans
+[MEMORY OLLAMA CACHE HIT] black beans
+[LIVE TAVILY SEARCH] lettuce
+[MEMORY OLLAMA CACHE HIT] lettuce
+[LIVE TAVILY SEARCH] plum tomato
+[MEMORY OLLAMA CACHE HIT] plum tomato
+[LIVE TAVILY SEARCH] jack cheese
+[MEMORY OLLAMA CACHE HIT] jack cheese
+[LIVE TAVILY SEARCH] avocado
+[MEMORY OLLAMA CACHE HIT] avocado
+[LIVE TAVILY SEARCH] sour cream
+[MEMORY OLLAMA CACHE HIT] sour cream
+[LIVE TAVILY SEARCH] cilantro
+[MEMORY OLLAMA CACHE HIT] cilantro
+[LIVE TAVILY SEARCH] tomatillo
+[MEMORY OLLAMA CACHE HIT] tomatillo
+[LIVE TAVILY SEARCH] jalapeno
+[MEMORY OLLAMA CACHE HIT] jalapeno
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] kosher salt
+[MEMORY OLLAMA CACHE HIT] kosher salt
+[LIVE TAVILY SEARCH] dandelion green
+[MEMORY OLLAMA CACHE HIT] dandelion green
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] red pepper flakes
+[MEMORY OLLAMA CACHE HIT] red pepper flakes
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] cauliflower
+[MEMORY OLLAMA CACHE HIT] cauliflower
+[LIVE TAVILY SEARCH] black beans
+[MEMORY OLLAMA CACHE HIT] black beans
+[LIVE TAVILY SEARCH] corn
+[MEMORY OLLAMA CACHE HIT] corn
+[LIVE TAVILY SEARCH] tomato
+[MEMORY OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] seasoning
+[MEMORY OLLAMA CACHE HIT] seasoning
+[LIVE TAVILY SEARCH] sour cream
+[MEMORY OLLAMA CACHE HIT] sour cream
+[LIVE TAVILY SEARCH] avocado
+[MEMORY OLLAMA CACHE HIT] avocado
+[TIME] Candidates before filtering: 3459
+[TIME] Effective limit (minutes): 30
+[TIME] cooking_time_min column is missing
+[TIME] Cooking-time column missing from candidates. Loading from Recipe KB.
+
+========== COOKING TIME FILTER ==========
+Maximum cooking time: 30.0 minutes
+Candidates before: 3459
+Candidates with known times: 3445
+Candidates after: 1453
+[TIME] Candidates after filtering: 1453
+[LIVE TAVILY SEARCH] masa harina
+[MEMORY OLLAMA CACHE HIT] masa harina
+[LIVE TAVILY SEARCH] fresh limes
+[MEMORY OLLAMA CACHE HIT] lime
+[LIVE TAVILY SEARCH] black beans
+[MEMORY OLLAMA CACHE HIT] black beans
+[LIVE TAVILY SEARCH] lettuce
+[MEMORY OLLAMA CACHE HIT] lettuce
+[LIVE TAVILY SEARCH] plum tomato
+[MEMORY OLLAMA CACHE HIT] plum tomato
+[LIVE TAVILY SEARCH] jack cheese
+[MEMORY OLLAMA CACHE HIT] jack cheese
+[LIVE TAVILY SEARCH] avocado
+[MEMORY OLLAMA CACHE HIT] avocado
+[LIVE TAVILY SEARCH] sour cream
+[MEMORY OLLAMA CACHE HIT] sour cream
+[LIVE TAVILY SEARCH] cilantro
+[MEMORY OLLAMA CACHE HIT] cilantro
+[LIVE TAVILY SEARCH] tomatillo
+[MEMORY OLLAMA CACHE HIT] tomatillo
+[LIVE TAVILY SEARCH] jalapeno
+[MEMORY OLLAMA CACHE HIT] jalapeno
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] kosher salt
+[MEMORY OLLAMA CACHE HIT] kosher salt
+[LIVE TAVILY SEARCH] cauliflower
+[MEMORY OLLAMA CACHE HIT] cauliflower
+[LIVE TAVILY SEARCH] plain yogurt
+[MEMORY OLLAMA CACHE HIT] plain yogurt
+[LIVE TAVILY SEARCH] garbanzo
+[MEMORY OLLAMA CACHE HIT] garbanzo
+[LIVE TAVILY SEARCH] turmeric
+[MEMORY OLLAMA CACHE HIT] turmeric
+[LIVE TAVILY SEARCH] cumin
+[MEMORY OLLAMA CACHE HIT] cumin
+[LIVE TAVILY SEARCH] coriander
+[MEMORY OLLAMA CACHE HIT] coriander
+[LIVE TAVILY SEARCH] paprika
+[MEMORY OLLAMA CACHE HIT] paprika
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] water
+[MEMORY OLLAMA CACHE HIT] water
+[LIVE TAVILY SEARCH] beans
+[MEMORY OLLAMA CACHE HIT] beans
+[LIVE TAVILY SEARCH] cumin seed
+[MEMORY OLLAMA CACHE HIT] cumin seed
+[LIVE TAVILY SEARCH] coriander seed
+[MEMORY OLLAMA CACHE HIT] coriander seed
+[LIVE TAVILY SEARCH] fennel seed
+[MEMORY OLLAMA CACHE HIT] fennel seed
+[LIVE TAVILY SEARCH] fenugreek
+[MEMORY OLLAMA CACHE HIT] fenugreek
+[LIVE TAVILY SEARCH] cinnamon
+[MEMORY OLLAMA CACHE HIT] cinnamon
+[LIVE TAVILY SEARCH] chili flakes
+[MEMORY OLLAMA CACHE HIT] chili flakes
+[LIVE TAVILY SEARCH] mustard seed
+[MEMORY OLLAMA CACHE HIT] mustard seed
+[LIVE TAVILY SEARCH] curry leave
+[MEMORY OLLAMA CACHE HIT] curry leave
+[LIVE TAVILY SEARCH] onion
+[MEMORY OLLAMA CACHE HIT] onion
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] ginger
+[LIVE TAVILY SEARCH] water
+[MEMORY OLLAMA CACHE HIT] water
+[LIVE TAVILY SEARCH] coriander leave
+[MEMORY OLLAMA CACHE HIT] coriander leave
+[LIVE TAVILY SEARCH] coconut
+[MEMORY OLLAMA CACHE HIT] coconut
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] pumpkin
+[MEMORY OLLAMA CACHE HIT] pumpkin
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] red onion
+[MEMORY OLLAMA CACHE HIT] red onion
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] tomato paste
+[MEMORY OLLAMA CACHE HIT] tomato paste
+[LIVE TAVILY SEARCH] red wine vinegar
+[MEMORY OLLAMA CACHE HIT] red wine vinegar
+[LIVE TAVILY SEARCH] tomato
+[MEMORY OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] vegetable stock
+[MEMORY OLLAMA CACHE HIT] vegetable stock
+[LIVE TAVILY SEARCH] allspice
+[MEMORY OLLAMA CACHE HIT] allspice
+[LIVE TAVILY SEARCH] chickpea
+[MEMORY OLLAMA CACHE HIT] chickpea
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] mushroom
+[MEMORY OLLAMA CACHE HIT] mushroom
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] broccoli
+[MEMORY OLLAMA CACHE HIT] broccoli
+[LIVE TAVILY SEARCH] wheat
+[MEMORY OLLAMA CACHE HIT] wheat
+[LIVE TAVILY SEARCH] honey
+[MEMORY OLLAMA CACHE HIT] honey
+[LIVE TAVILY SEARCH] sesame oil
+[MEMORY OLLAMA CACHE HIT] sesame oil
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] cashew nut
+[MEMORY OLLAMA CACHE HIT] cashew nut
+[LIVE TAVILY SEARCH] tofu
+[MEMORY OLLAMA CACHE HIT] tofu
+[LIVE TAVILY SEARCH] broccoli
+[MEMORY OLLAMA CACHE HIT] broccoli
+[LIVE TAVILY SEARCH] scallion
+[MEMORY OLLAMA CACHE HIT] scallion
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] piece ginger
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] soy sauce
+[MEMORY OLLAMA CACHE HIT] soy sauce
+[LIVE TAVILY SEARCH] maple syrup
+[MEMORY OLLAMA CACHE HIT] maple syrup
+[LIVE TAVILY SEARCH] tahini
+[MEMORY OLLAMA CACHE HIT] tahini
+[LIVE TAVILY SEARCH] rice vinegar
+[MEMORY OLLAMA CACHE HIT] rice vinegar
+[LIVE TAVILY SEARCH] toasted sesame oil
+[MEMORY OLLAMA CACHE HIT] toasted sesame oil
+[LIVE TAVILY SEARCH] cornstarch
+[MEMORY OLLAMA CACHE HIT] cornstarch
+[LIVE TAVILY SEARCH] cornstarch
+[MEMORY OLLAMA CACHE HIT] cornstarch
+[LIVE TAVILY SEARCH] kosher salt
+[MEMORY OLLAMA CACHE HIT] kosher salt
+[LIVE TAVILY SEARCH] grapeseed oil
+[MEMORY OLLAMA CACHE HIT] grapeseed oil
+[LIVE TAVILY SEARCH] black pepper
+[MEMORY OLLAMA CACHE HIT] black pepper
+[LIVE TAVILY SEARCH] sesame seed
+[MEMORY OLLAMA CACHE HIT] sesame seed
+[LIVE TAVILY SEARCH] brown rice
+[MEMORY OLLAMA CACHE HIT] brown rice
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] rice vinegar
+[MEMORY OLLAMA CACHE HIT] rice vinegar
+[LIVE TAVILY SEARCH] low sodium soy sauce
+[MEMORY OLLAMA CACHE HIT] low sodium soy sauce
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] ginger
+[LIVE TAVILY SEARCH] brown rice
+[MEMORY OLLAMA CACHE HIT] brown rice
+[LIVE TAVILY SEARCH] broccoli floret
+[MEMORY OLLAMA CACHE HIT] broccoli floret
+[LIVE TAVILY SEARCH] napa cabbage
+[MEMORY OLLAMA CACHE HIT] napa cabbage
+[LIVE TAVILY SEARCH] carrot
+[MEMORY OLLAMA CACHE HIT] carrot
+[LIVE TAVILY SEARCH] bean sprout
+[MEMORY OLLAMA CACHE HIT] bean sprout
+[LIVE TAVILY SEARCH] fried egg
+[MEMORY OLLAMA CACHE HIT] fried egg
+[LIVE TAVILY SEARCH] spring onion
+[MEMORY OLLAMA CACHE HIT] green onion
+[LIVE TAVILY SEARCH] sesame seed
+[MEMORY OLLAMA CACHE HIT] sesame seed
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] peanut butter
+[MEMORY OLLAMA CACHE HIT] peanut butter
+[LIVE TAVILY SEARCH] seasoned rice vinegar
+[MEMORY OLLAMA CACHE HIT] seasoned rice vinegar
+[LIVE TAVILY SEARCH] soy sauce
+[MEMORY OLLAMA CACHE HIT] soy sauce
+[LIVE TAVILY SEARCH] sriracha sauce
+[MEMORY OLLAMA CACHE HIT] sriracha sauce
+[LIVE TAVILY SEARCH] vegan sausage
+[MEMORY OLLAMA CACHE HIT] vegan sausage
+[LIVE TAVILY SEARCH] onion
+[MEMORY OLLAMA CACHE HIT] onion
+[LIVE TAVILY SEARCH] tomato
+[MEMORY OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] noodles
+[MEMORY OLLAMA CACHE HIT] noodles
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] dandelion green
+[MEMORY OLLAMA CACHE HIT] dandelion green
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] red pepper flakes
+[MEMORY OLLAMA CACHE HIT] red pepper flakes
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] cauliflower
+[MEMORY OLLAMA CACHE HIT] cauliflower
+[LIVE TAVILY SEARCH] black beans
+[MEMORY OLLAMA CACHE HIT] black beans
+[LIVE TAVILY SEARCH] corn
+[MEMORY OLLAMA CACHE HIT] corn
+[LIVE TAVILY SEARCH] tomato
+[MEMORY OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] seasoning
+[MEMORY OLLAMA CACHE HIT] seasoning
+[LIVE TAVILY SEARCH] sour cream
+[MEMORY OLLAMA CACHE HIT] sour cream
+[LIVE TAVILY SEARCH] avocado
+[MEMORY OLLAMA CACHE HIT] avocado
+[TIME] Candidates before filtering: 3459
+[TIME] Effective limit (minutes): 30
+[TIME] cooking_time_min column is missing
+[TIME] Cooking-time column missing from candidates. Loading from Recipe KB.
+
+========== COOKING TIME FILTER ==========
+Maximum cooking time: 30.0 minutes
+Candidates before: 3459
+Candidates with known times: 3445
+Candidates after: 1453
+[TIME] Candidates after filtering: 1453
+[LIVE TAVILY SEARCH] vegan sausage
+[MEMORY OLLAMA CACHE HIT] vegan sausage
+[LIVE TAVILY SEARCH] onion
+[MEMORY OLLAMA CACHE HIT] onion
+[LIVE TAVILY SEARCH] tomato
+[MEMORY OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] noodles
+[MEMORY OLLAMA CACHE HIT] noodles
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] cauliflower
+[MEMORY OLLAMA CACHE HIT] cauliflower
+[LIVE TAVILY SEARCH] plain yogurt
+[MEMORY OLLAMA CACHE HIT] plain yogurt
+[LIVE TAVILY SEARCH] garbanzo
+[MEMORY OLLAMA CACHE HIT] garbanzo
+[LIVE TAVILY SEARCH] turmeric
+[MEMORY OLLAMA CACHE HIT] turmeric
+[LIVE TAVILY SEARCH] cumin
+[MEMORY OLLAMA CACHE HIT] cumin
+[LIVE TAVILY SEARCH] coriander
+[MEMORY OLLAMA CACHE HIT] coriander
+[LIVE TAVILY SEARCH] paprika
+[MEMORY OLLAMA CACHE HIT] paprika
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] water
+[MEMORY OLLAMA CACHE HIT] water
+[LIVE TAVILY SEARCH] beans
+[MEMORY OLLAMA CACHE HIT] beans
+[LIVE TAVILY SEARCH] cumin seed
+[MEMORY OLLAMA CACHE HIT] cumin seed
+[LIVE TAVILY SEARCH] coriander seed
+[MEMORY OLLAMA CACHE HIT] coriander seed
+[LIVE TAVILY SEARCH] fennel seed
+[MEMORY OLLAMA CACHE HIT] fennel seed
+[LIVE TAVILY SEARCH] fenugreek
+[MEMORY OLLAMA CACHE HIT] fenugreek
+[LIVE TAVILY SEARCH] cinnamon
+[MEMORY OLLAMA CACHE HIT] cinnamon
+[LIVE TAVILY SEARCH] chili flakes
+[MEMORY OLLAMA CACHE HIT] chili flakes
+[LIVE TAVILY SEARCH] mustard seed
+[MEMORY OLLAMA CACHE HIT] mustard seed
+[LIVE TAVILY SEARCH] curry leave
+[MEMORY OLLAMA CACHE HIT] curry leave
+[LIVE TAVILY SEARCH] onion
+[MEMORY OLLAMA CACHE HIT] onion
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] ginger
+[LIVE TAVILY SEARCH] water
+[MEMORY OLLAMA CACHE HIT] water
+[LIVE TAVILY SEARCH] coriander leave
+[MEMORY OLLAMA CACHE HIT] coriander leave
+[LIVE TAVILY SEARCH] coconut
+[MEMORY OLLAMA CACHE HIT] coconut
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] pumpkin
+[MEMORY OLLAMA CACHE HIT] pumpkin
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] red onion
+[MEMORY OLLAMA CACHE HIT] red onion
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] tomato paste
+[MEMORY OLLAMA CACHE HIT] tomato paste
+[LIVE TAVILY SEARCH] red wine vinegar
+[MEMORY OLLAMA CACHE HIT] red wine vinegar
+[LIVE TAVILY SEARCH] tomato
+[MEMORY OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] vegetable stock
+[MEMORY OLLAMA CACHE HIT] vegetable stock
+[LIVE TAVILY SEARCH] allspice
+[MEMORY OLLAMA CACHE HIT] allspice
+[LIVE TAVILY SEARCH] chickpea
+[MEMORY OLLAMA CACHE HIT] chickpea
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] mushroom
+[MEMORY OLLAMA CACHE HIT] mushroom
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] broccoli
+[MEMORY OLLAMA CACHE HIT] broccoli
+[LIVE TAVILY SEARCH] wheat
+[MEMORY OLLAMA CACHE HIT] wheat
+[LIVE TAVILY SEARCH] honey
+[MEMORY OLLAMA CACHE HIT] honey
+[LIVE TAVILY SEARCH] sesame oil
+[MEMORY OLLAMA CACHE HIT] sesame oil
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] cashew nut
+[MEMORY OLLAMA CACHE HIT] cashew nut
+[LIVE TAVILY SEARCH] tofu
+[MEMORY OLLAMA CACHE HIT] tofu
+[LIVE TAVILY SEARCH] broccoli
+[MEMORY OLLAMA CACHE HIT] broccoli
+[LIVE TAVILY SEARCH] scallion
+[MEMORY OLLAMA CACHE HIT] scallion
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] piece ginger
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] soy sauce
+[MEMORY OLLAMA CACHE HIT] soy sauce
+[LIVE TAVILY SEARCH] maple syrup
+[MEMORY OLLAMA CACHE HIT] maple syrup
+[LIVE TAVILY SEARCH] tahini
+[MEMORY OLLAMA CACHE HIT] tahini
+[LIVE TAVILY SEARCH] rice vinegar
+[MEMORY OLLAMA CACHE HIT] rice vinegar
+[LIVE TAVILY SEARCH] toasted sesame oil
+[MEMORY OLLAMA CACHE HIT] toasted sesame oil
+[LIVE TAVILY SEARCH] cornstarch
+[MEMORY OLLAMA CACHE HIT] cornstarch
+[LIVE TAVILY SEARCH] cornstarch
+[MEMORY OLLAMA CACHE HIT] cornstarch
+[LIVE TAVILY SEARCH] kosher salt
+[MEMORY OLLAMA CACHE HIT] kosher salt
+[LIVE TAVILY SEARCH] grapeseed oil
+[MEMORY OLLAMA CACHE HIT] grapeseed oil
+[LIVE TAVILY SEARCH] black pepper
+[MEMORY OLLAMA CACHE HIT] black pepper
+[LIVE TAVILY SEARCH] sesame seed
+[MEMORY OLLAMA CACHE HIT] sesame seed
+[LIVE TAVILY SEARCH] brown rice
+[MEMORY OLLAMA CACHE HIT] brown rice
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] rice vinegar
+[MEMORY OLLAMA CACHE HIT] rice vinegar
+[LIVE TAVILY SEARCH] low sodium soy sauce
+[MEMORY OLLAMA CACHE HIT] low sodium soy sauce
+[LIVE TAVILY SEARCH] ginger
+[MEMORY OLLAMA CACHE HIT] ginger
+[LIVE TAVILY SEARCH] brown rice
+[MEMORY OLLAMA CACHE HIT] brown rice
+[LIVE TAVILY SEARCH] broccoli floret
+[MEMORY OLLAMA CACHE HIT] broccoli floret
+[LIVE TAVILY SEARCH] napa cabbage
+[MEMORY OLLAMA CACHE HIT] napa cabbage
+[LIVE TAVILY SEARCH] carrot
+[MEMORY OLLAMA CACHE HIT] carrot
+[LIVE TAVILY SEARCH] bean sprout
+[MEMORY OLLAMA CACHE HIT] bean sprout
+[LIVE TAVILY SEARCH] fried egg
+[MEMORY OLLAMA CACHE HIT] fried egg
+[LIVE TAVILY SEARCH] spring onion
+[MEMORY OLLAMA CACHE HIT] green onion
+[LIVE TAVILY SEARCH] sesame seed
+[MEMORY OLLAMA CACHE HIT] sesame seed
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] peanut butter
+[MEMORY OLLAMA CACHE HIT] peanut butter
+[LIVE TAVILY SEARCH] seasoned rice vinegar
+[MEMORY OLLAMA CACHE HIT] seasoned rice vinegar
+[LIVE TAVILY SEARCH] soy sauce
+[MEMORY OLLAMA CACHE HIT] soy sauce
+[LIVE TAVILY SEARCH] sriracha sauce
+[MEMORY OLLAMA CACHE HIT] sriracha sauce
+[LIVE TAVILY SEARCH] masa harina
+[MEMORY OLLAMA CACHE HIT] masa harina
+[LIVE TAVILY SEARCH] fresh limes
+[MEMORY OLLAMA CACHE HIT] lime
+[LIVE TAVILY SEARCH] black beans
+[MEMORY OLLAMA CACHE HIT] black beans
+[LIVE TAVILY SEARCH] lettuce
+[MEMORY OLLAMA CACHE HIT] lettuce
+[LIVE TAVILY SEARCH] plum tomato
+[MEMORY OLLAMA CACHE HIT] plum tomato
+[LIVE TAVILY SEARCH] jack cheese
+[MEMORY OLLAMA CACHE HIT] jack cheese
+[LIVE TAVILY SEARCH] avocado
+[MEMORY OLLAMA CACHE HIT] avocado
+[LIVE TAVILY SEARCH] sour cream
+[MEMORY OLLAMA CACHE HIT] sour cream
+[LIVE TAVILY SEARCH] cilantro
+[MEMORY OLLAMA CACHE HIT] cilantro
+[LIVE TAVILY SEARCH] tomatillo
+[MEMORY OLLAMA CACHE HIT] tomatillo
+[LIVE TAVILY SEARCH] jalapeno
+[MEMORY OLLAMA CACHE HIT] jalapeno
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] kosher salt
+[MEMORY OLLAMA CACHE HIT] kosher salt
+[LIVE TAVILY SEARCH] dandelion green
+[MEMORY OLLAMA CACHE HIT] dandelion green
+[LIVE TAVILY SEARCH] olive oil
+[MEMORY OLLAMA CACHE HIT] olive oil
+[LIVE TAVILY SEARCH] garlic
+[MEMORY OLLAMA CACHE HIT] garlic
+[LIVE TAVILY SEARCH] red pepper flakes
+[MEMORY OLLAMA CACHE HIT] red pepper flakes
+[LIVE TAVILY SEARCH] pasta
+[MEMORY OLLAMA CACHE HIT] pasta
+[LIVE TAVILY SEARCH] salt
+[MEMORY OLLAMA CACHE HIT] salt
+[LIVE TAVILY SEARCH] cauliflower
+[MEMORY OLLAMA CACHE HIT] cauliflower
+[LIVE TAVILY SEARCH] black beans
+[MEMORY OLLAMA CACHE HIT] black beans
+[LIVE TAVILY SEARCH] corn
+[MEMORY OLLAMA CACHE HIT] corn
+[LIVE TAVILY SEARCH] tomato
+[MEMORY OLLAMA CACHE HIT] tomato
+[LIVE TAVILY SEARCH] seasoning
+[MEMORY OLLAMA CACHE HIT] seasoning
+[LIVE TAVILY SEARCH] sour cream
+[MEMORY OLLAMA CACHE HIT] sour cream
+[LIVE TAVILY SEARCH] avocado
+[MEMORY OLLAMA CACHE HIT] avocado
+final grocery basket>>>>>{'items': [{'ingredient_id': 'ING0614', 'name': 'cauliflower', 'required_quantity': 125.0, 'required_unit': 'g', 'package_quantity': 1.0, 'package_unit': 'head', 'packages': 1, 'purchased_quantity': 1.0, 'price_per_package': 3.5, 'purchase_cost': None, 'estimated_purchase_cost': 3.5, 'leftover_quantity': 0.7916666666666666, 'inventory_used': 0.0, 'recipe_ids': ['R01296'], 'pricing_status': 'estimated', 'purchase_basis': 'minimum_retail_package', 'quantity_coverage_verified': False, 'price_source': 'ollama_estimate', 'conversion_status': 'exact', 'volume_preserved_no_density': False, 'normalization_status': 'resolved', 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False, 'additional_unquantified_requirement': False, 'unresolved_units': None, 'planning_purchase_cost': 3.5, 'package_conversion_status': 'estimated', 'package_conversion_factors': {'g': {'grams_per_unit': 1.0, 'source': 'exact'}, 'head': {'grams_per_unit': 600.0, 'source': 'recipe_ingredient_mapping_normalized_with_original_fallback.csv (estimated_piece_weight)'}}, 'effective_purchase_cost': 3.5, 'display_cost': 3.5, 'has_usable_price': True, 'cost_is_estimated': True}, {'ingredient_id': 'ING2630', 'name': 'plain yogurt', 'required_quantity': 1.0, 'required_unit': 'yogurt', 'package_quantity': 500.0, 'package_unit': 'g', 'packages': 1, 'purchased_quantity': 500.0, 'price_per_package': 2.5, 'purchase_cost': None, 'estimated_purchase_cost': 2.5, 'leftover_quantity': None, 'inventory_used': 0.0, 'recipe_ids': ['R01296'], 'pricing_status': 'estimated', 'purchase_basis': 'minimum_retail_package', 'quantity_coverage_verified': False, 'price_source': 'ollama_estimate', 'conversion_status': 'unresolved', 'volume_preserved_no_density': False, 'normalization_status': 'unresolved', 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False, 'additional_unquantified_requirement': False, 'unresolved_units': None, 'planning_purchase_cost': 2.5, 'package_conversion_status': 'unresolved', 'package_conversion_factors': None, 'effective_purchase_cost': 2.5, 'display_cost': 2.5, 'has_usable_price': True, 'cost_is_estimated': True}, {'ingredient_id': 'ING1457', 'name': 'garbanzo', 'required_quantity': 1.0, 'required_unit': 'pcs', 'package_quantity': 400.0, 'package_unit': 'g', 'packages': 1, 'purchased_quantity': 400.0, 'price_per_package': 1.6, 'purchase_cost': None, 'estimated_purchase_cost': 1.6, 'leftover_quantity': None, 'inventory_used': 0.0, 'recipe_ids': ['R01296'], 'pricing_status': 'estimated', 'purchase_basis': 'minimum_retail_package', 'quantity_coverage_verified': False, 'price_source': 'ollama_estimate', 'conversion_status': 'unresolved', 'volume_preserved_no_density': False, 'normalization_status': 'unresolved', 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False, 'additional_unquantified_requirement': False, 'unresolved_units': None, 'planning_purchase_cost': 1.6, 'package_conversion_status': 'unresolved', 'package_conversion_factors': None, 'effective_purchase_cost': 1.6, 'display_cost': 1.6, 'has_usable_price': True, 'cost_is_estimated': True}, {'ingredient_id': 'ING3656', 'name': 'turmeric', 'required_quantity': 1.0, 'required_unit': 'pcs', 'package_quantity': 100.0, 'package_unit': 'g', 'packages': 1, 'purchased_quantity': 100.0, 'price_per_package': 1.5, 'purchase_cost': None, 'estimated_purchase_cost': 1.5, 'leftover_quantity': None, 'inventory_used': 0.0, 'recipe_ids': ['R01296'], 'pricing_status': 'estimated', 'purchase_basis': 'minimum_retail_package', 'quantity_coverage_verified': False, 'price_source': 'ollama_estimate', 'conversion_status': 'unresolved', 'volume_preserved_no_density': False, 'normalization_status': 'unresolved', 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False, 'additional_unquantified_requirement': False, 'unresolved_units': None, 'planning_purchase_cost': 1.5, 'package_conversion_status': 'unresolved', 'package_conversion_factors': None, 'effective_purchase_cost': 1.5, 'display_cost': 1.5, 'has_usable_price': True, 'cost_is_estimated': True}, {'ingredient_id': 'ING1131', 'name': 'cumin', 'required_quantity': 1.0, 'required_unit': 'pcs', 'package_quantity': 50.0, 'package_unit': 'g', 'packages': 1, 'purchased_quantity': 50.0, 'price_per_package': 1.8, 'purchase_cost': None, 'estimated_purchase_cost': 1.8, 'leftover_quantity': None, 'inventory_used': 0.0, 'recipe_ids': ['R01296'], 'pricing_status': 'estimated', 'purchase_basis': 'minimum_retail_package', 'quantity_coverage_verified': False, 'price_source': 'ollama_estimate', 'conversion_status': 'unresolved', 'volume_preserved_no_density': False, 'normalization_status': 'unresolved', 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False, 'additional_unquantified_requirement': False, 'unresolved_units': None, 'planning_purchase_cost': 1.8, 'package_conversion_status': 'unresolved', 'package_conversion_factors': None, 'effective_purchase_cost': 1.8, 'display_cost': 1.8, 'has_usable_price': True, 'cost_is_estimated': True}, {'ingredient_id': 'ING0998', 'name': 'coriander', 'required_quantity': 2.0, 'required_unit': 'pcs', 'package_quantity': 1.0, 'package_unit': 'bunch', 'packages': 1, 'purchased_quantity': 1.0, 'price_per_package': 1.2, 'purchase_cost': None, 'estimated_purchase_cost': 1.2, 'leftover_quantity': None, 'inventory_used': 0.0, 'recipe_ids': ['R01296'], 'pricing_status': 'estimated', 'purchase_basis': 'minimum_retail_package', 'quantity_coverage_verified': False, 'price_source': 'ollama_estimate', 'conversion_status': 'unresolved', 'volume_preserved_no_density': False, 'normalization_status': 'unresolved', 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False, 'additional_unquantified_requirement': False, 'unresolved_units': None, 'planning_purchase_cost': 1.2, 'package_conversion_status': 'unresolved', 'package_conversion_factors': None, 'effective_purchase_cost': 1.2, 'display_cost': 1.2, 'has_usable_price': True, 'cost_is_estimated': True}, {'ingredient_id': 'ING2445', 'name': 'paprika', 'required_quantity': 1.0, 'required_unit': 'pinch', 'package_quantity': 50.0, 'package_unit': 'g', 'packages': 1, 'purchased_quantity': 50.0, 'price_per_package': 2.5, 'purchase_cost': None, 'estimated_purchase_cost': 2.5, 'leftover_quantity': None, 'inventory_used': 0.0, 'recipe_ids': ['R01296'], 'pricing_status': 'estimated', 'purchase_basis': 'minimum_retail_package', 'quantity_coverage_verified': False, 'price_source': 'ollama_estimate', 'conversion_status': 'unresolved', 'volume_preserved_no_density': False, 'normalization_status': 'unresolved', 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False, 'additional_unquantified_requirement': False, 'unresolved_units': None, 'planning_purchase_cost': 2.5, 'package_conversion_status': 'unresolved', 'package_conversion_factors': None, 'effective_purchase_cost': 2.5, 'display_cost': 2.5, 'has_usable_price': True, 'cost_is_estimated': True}, {'ingredient_id': 'ING3046', 'name': 'salt', 'required_quantity': 1.0, 'required_unit': 'pinch', 'package_quantity': 1.0, 'package_unit': 'kg', 'packages': 1, 'purchased_quantity': 1.0, 'price_per_package': 1.5, 'purchase_cost': None, 'estimated_purchase_cost': 1.5, 'leftover_quantity': 0.99965, 'inventory_used': 0.0, 'recipe_ids': ['R01296'], 'pricing_status': 'estimated', 'purchase_basis': 'minimum_retail_package', 'quantity_coverage_verified': False, 'price_source': 'ollama_estimate', 'conversion_status': 'unresolved', 'volume_preserved_no_density': False, 'normalization_status': 'unresolved', 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False, 'additional_unquantified_requirement': True, 'unresolved_units': None, 'planning_purchase_cost': 1.5, 'package_conversion_status': 'estimated', 'package_conversion_factors': {'pinch': {'grams_per_unit': 0.35, 'source': 'src/grocery/ingredient_conversions.py grams_per_pinch'}, 'g': {'grams_per_unit': 1.0, 'source': 'exact'}}, 'effective_purchase_cost': 1.5, 'display_cost': 1.5, 'has_usable_price': True, 'cost_is_estimated': True}, {'ingredient_id': 'ING3816', 'name': 'water', 'required_quantity': 7.5, 'required_unit': 'ml', 'package_quantity': 1.5, 'package_unit': 'l', 'packages': 1, 'purchased_quantity': 1.5, 'price_per_package': 0.9, 'purchase_cost': None, 'estimated_purchase_cost': 0.9, 'leftover_quantity': 1.4925, 'inventory_used': 0.0, 'recipe_ids': ['R01296'], 'pricing_status': 'estimated', 'purchase_basis': 'calculated_quantity', 'quantity_coverage_verified': True, 'price_source': 'ollama_estimate', 'conversion_status': 'exact', 'volume_preserved_no_density': False, 'normalization_status': 'resolved', 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False, 'additional_unquantified_requirement': False, 'unresolved_units': None, 'planning_purchase_cost': 0.9, 'package_conversion_status': 'exact', 'package_conversion_factors': None, 'effective_purchase_cost': 0.9, 'display_cost': 0.9, 'has_usable_price': True, 'cost_is_estimated': True}, {'ingredient_id': 'ING3756', 'name': 'vegan sausage', 'required_quantity': 83.5, 'required_unit': 'g', 'package_quantity': 250.0, 'package_unit': 'g', 'packages': 1, 'purchased_quantity': 250.0, 'price_per_package': 6.5, 'purchase_cost': None, 'estimated_purchase_cost': 6.5, 'leftover_quantity': 166.5, 'inventory_used': 0.0, 'recipe_ids': ['R15279'], 'pricing_status': 'estimated', 'purchase_basis': 'calculated_quantity', 'quantity_coverage_verified': True, 'price_source': 'ollama_estimate', 'conversion_status': 'exact', 'volume_preserved_no_density': False, 'normalization_status': 'resolved', 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False, 'additional_unquantified_requirement': False, 'unresolved_units': None, 'planning_purchase_cost': 6.5, 'package_conversion_status': 'exact', 'package_conversion_factors': None, 'effective_purchase_cost': 6.5, 'display_cost': 6.5, 'has_usable_price': True, 'cost_is_estimated': True}, {'ingredient_id': 'ING2367', 'name': 'onion', 'required_quantity': 150.0, 'required_unit': 'g', 'package_quantity': 1.0, 'package_unit': 'kg', 'packages': 1, 'purchased_quantity': 1.0, 'price_per_package': 3.2, 'purchase_cost': None, 'estimated_purchase_cost': 3.2, 'leftover_quantity': 0.85, 'inventory_used': 0.0, 'recipe_ids': ['R15279'], 'pricing_status': 'estimated', 'purchase_basis': 'minimum_retail_package', 'quantity_coverage_verified': False, 'price_source': 'ollama_estimate', 'conversion_status': 'estimated', 'volume_preserved_no_density': False, 'normalization_status': 'resolved', 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False, 'additional_unquantified_requirement': False, 'unresolved_units': None, 'planning_purchase_cost': 3.2, 'package_conversion_status': 'exact', 'package_conversion_factors': None, 'effective_purchase_cost': 3.2, 'display_cost': 3.2, 'has_usable_price': True, 'cost_is_estimated': True}, {'ingredient_id': 'ING3565', 'name': 'tomato', 'required_quantity': 60.0, 'required_unit': 'g', 'package_quantity': 3.0, 'package_unit': 'pcs', 'packages': 1, 'purchased_quantity': 3.0, 'price_per_package': 2.5, 'purchase_cost': None, 'estimated_purchase_cost': 2.5, 'leftover_quantity': 2.5, 'inventory_used': 0.0, 'recipe_ids': ['R15279'], 'pricing_status': 'estimated', 'purchase_basis': 'minimum_retail_package', 'quantity_coverage_verified': False, 'price_source': 'ollama_estimate', 'conversion_status': 'estimated', 'volume_preserved_no_density': False, 'normalization_status': 'resolved', 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False, 'additional_unquantified_requirement': False, 'unresolved_units': None, 'planning_purchase_cost': 2.5, 'package_conversion_status': 'estimated', 'package_conversion_factors': {'g': {'grams_per_unit': 1.0, 'source': 'exact'}, 'piece': {'grams_per_unit': 120.0, 'source': 'recipe_ingredient_mapping_normalized_with_original_fallback.csv (estimated_piece_weight)'}}, 'effective_purchase_cost': 2.5, 'display_cost': 2.5, 'has_usable_price': True, 'cost_is_estimated': True}, {'ingredient_id': 'ING2307', 'name': 'noodles', 'required_quantity': 90.0, 'required_unit': 'g', 'package_quantity': 400.0, 'package_unit': 'g', 'packages': 1, 'purchased_quantity': 400.0, 'price_per_package': 1.8, 'purchase_cost': None, 'estimated_purchase_cost': 1.8, 'leftover_quantity': 310.0, 'inventory_used': 0.0, 'recipe_ids': ['R15279'], 'pricing_status': 'estimated', 'purchase_basis': 'calculated_quantity', 'quantity_coverage_verified': True, 'price_source': 'ollama_estimate', 'conversion_status': 'exact', 'volume_preserved_no_density': False, 'normalization_status': 'resolved', 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False, 'additional_unquantified_requirement': False, 'unresolved_units': None, 'planning_purchase_cost': 1.8, 'package_conversion_status': 'exact', 'package_conversion_factors': None, 'effective_purchase_cost': 1.8, 'display_cost': 1.8, 'has_usable_price': True, 'cost_is_estimated': True}], 'known_cost': 0.0, 'unresolved_requirements': [{'ingredient_id': 'ING2630', 'ingredient_name': 'plain yogurt', 'quantity': 1.0, 'unit': 'yogurt', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#1', 'quantity': '1.0', 'unit': 'yogurt', 'conversion_status': 'unresolved'}], 'required_quantity': 1.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 1.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING1457', 'ingredient_name': 'garbanzo', 'quantity': 1.0, 'unit': 'count', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#2', 'quantity': '1.0', 'unit': 'count', 'conversion_status': 'unresolved'}], 'required_quantity': 1.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 1.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING3656', 'ingredient_name': 'turmeric', 'quantity': 1.0, 'unit': 'count', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#3', 'quantity': '1.0', 'unit': 'count', 'conversion_status': 'unresolved'}], 'required_quantity': 1.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 1.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING1131', 'ingredient_name': 'cumin', 'quantity': 1.0, 'unit': 'count', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#4', 'quantity': '1.0', 'unit': 'count', 'conversion_status': 'unresolved'}], 'required_quantity': 1.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 1.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING0998', 'ingredient_name': 'coriander', 'quantity': 2.0, 'unit': 'count', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#5', 'quantity': '2.0', 'unit': 'count', 'conversion_status': 'unresolved'}], 'required_quantity': 2.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 2.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING2445', 'ingredient_name': 'paprika', 'quantity': 1.0, 'unit': 'pinch', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#6', 'quantity': '1.0', 'unit': 'pinch', 'conversion_status': 'unresolved'}], 'required_quantity': 1.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 1.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING3046', 'ingredient_name': 'salt', 'quantity': 1.0, 'unit': 'pinch', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#7', 'quantity': '1.0', 'unit': 'pinch', 'conversion_status': 'unresolved'}], 'required_quantity': 1.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 1.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}], 'projection_gaps': [], 'selection_blocking_items': [], 'discretionary_unpriced_items': [], 'selection_projection_complete': True, 'priced_subtotal': 31.0, 'unresolved_quantity_requirements': [], 'unresolved_quantity_count': 0, 'all_items_priced': False, 'all_items_have_usable_cost': True, 'qualitative_requirements': [{'ingredient_id': 'ING3046', 'ingredient_name': 'salt', 'requirement_type': 'qualitative', 'instruction': 'to taste', 'quantity': 'required', 'unit': 'to taste', 'recipe_id': 'R15279', 'slot_id': '2026-10-07_dinner', 'recipe_ids': ['R15279'], 'occurrence_ids': ['R15279#5']}], 'unpriced_items': [], 'aggregated_requirements': [{'ingredient_id': 'ING0614', 'ingredient_name': 'cauliflower', 'quantity': 125.0, 'unit': 'g', 'recipe_ids': ['R01296'], 'conversion_status': 'exact', 'normalization_status': 'resolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#0', 'quantity': '125.0', 'unit': 'g', 'conversion_status': 'exact'}]}, {'ingredient_id': 'ING2630', 'ingredient_name': 'plain yogurt', 'quantity': 1.0, 'unit': 'yogurt', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#1', 'quantity': '1.0', 'unit': 'yogurt', 'conversion_status': 'unresolved'}]}, {'ingredient_id': 'ING1457', 'ingredient_name': 'garbanzo', 'quantity': 1.0, 'unit': 'count', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#2', 'quantity': '1.0', 'unit': 'count', 'conversion_status': 'unresolved'}]}, {'ingredient_id': 'ING3656', 'ingredient_name': 'turmeric', 'quantity': 1.0, 'unit': 'count', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#3', 'quantity': '1.0', 'unit': 'count', 'conversion_status': 'unresolved'}]}, {'ingredient_id': 'ING1131', 'ingredient_name': 'cumin', 'quantity': 1.0, 'unit': 'count', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#4', 'quantity': '1.0', 'unit': 'count', 'conversion_status': 'unresolved'}]}, {'ingredient_id': 'ING0998', 'ingredient_name': 'coriander', 'quantity': 2.0, 'unit': 'count', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#5', 'quantity': '2.0', 'unit': 'count', 'conversion_status': 'unresolved'}]}, {'ingredient_id': 'ING2445', 'ingredient_name': 'paprika', 'quantity': 1.0, 'unit': 'pinch', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#6', 'quantity': '1.0', 'unit': 'pinch', 'conversion_status': 'unresolved'}]}, {'ingredient_id': 'ING3046', 'ingredient_name': 'salt', 'quantity': 1.0, 'unit': 'pinch', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#7', 'quantity': '1.0', 'unit': 'pinch', 'conversion_status': 'unresolved'}]}, {'ingredient_id': 'ING3816', 'ingredient_name': 'water', 'quantity': 7.5, 'unit': 'ml', 'recipe_ids': ['R01296'], 'conversion_status': 'exact', 'normalization_status': 'resolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#8', 'quantity': '0.5', 'unit': 'tablespoon', 'conversion_status': 'exact'}]}, {'ingredient_id': 'ING3756', 'ingredient_name': 'vegan sausage', 'quantity': 83.5, 'unit': 'g', 'recipe_ids': ['R15279'], 'conversion_status': 'exact', 'normalization_status': 'resolved', 'source_requirements': [{'recipe_id': 'R15279', 'slot_id': '2026-10-07_dinner', 'occurrence_id': 'R15279#0', 'quantity': '83.5', 'unit': 'g', 'conversion_status': 'exact'}]}, {'ingredient_id': 'ING2367', 'ingredient_name': 'onion', 'quantity': 150.0, 'unit': 'g', 'recipe_ids': ['R15279'], 'conversion_status': 'estimated', 'normalization_status': 'resolved', 'source_requirements': [{'recipe_id': 'R15279', 'slot_id': '2026-10-07_dinner', 'occurrence_id': 'R15279#1', 'quantity': '1.0', 'unit': 'count', 'conversion_status': 'estimated'}]}, {'ingredient_id': 'ING2337', 'ingredient_name': 'oil', 'quantity': 7.5, 'unit': 'ml', 'recipe_ids': ['R15279'], 'conversion_status': 'exact', 'normalization_status': 'resolved', 'source_requirements': [{'recipe_id': 'R15279', 'slot_id': '2026-10-07_dinner', 'occurrence_id': 'R15279#2', 'quantity': '0.5', 'unit': 'tablespoon', 'conversion_status': 'exact'}]}, {'ingredient_id': 'ING3565', 'ingredient_name': 'tomato', 'quantity': 60.0, 'unit': 'g', 'recipe_ids': ['R15279'], 'conversion_status': 'estimated', 'normalization_status': 'resolved', 'source_requirements': [{'recipe_id': 'R15279', 'slot_id': '2026-10-07_dinner', 'occurrence_id': 'R15279#3', 'quantity': '0.5', 'unit': 'count', 'conversion_status': 'estimated'}]}, {'ingredient_id': 'ING2307', 'ingredient_name': 'noodles', 'quantity': 90.0, 'unit': 'g', 'recipe_ids': ['R15279'], 'conversion_status': 'exact', 'normalization_status': 'resolved', 'source_requirements': [{'recipe_id': 'R15279', 'slot_id': '2026-10-07_dinner', 'occurrence_id': 'R15279#4', 'quantity': '90.0', 'unit': 'g', 'conversion_status': 'exact'}]}], 'purchase_requirements': [{'ingredient_id': 'ING0614', 'ingredient_name': 'cauliflower', 'quantity': 125.0, 'unit': 'g', 'recipe_ids': ['R01296'], 'conversion_status': 'exact', 'normalization_status': 'resolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#0', 'quantity': '125.0', 'unit': 'g', 'conversion_status': 'exact'}], 'required_quantity': 125.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 125.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING2630', 'ingredient_name': 'plain yogurt', 'quantity': 1.0, 'unit': 'yogurt', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#1', 'quantity': '1.0', 'unit': 'yogurt', 'conversion_status': 'unresolved'}], 'required_quantity': 1.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 1.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING1457', 'ingredient_name': 'garbanzo', 'quantity': 1.0, 'unit': 'count', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#2', 'quantity': '1.0', 'unit': 'count', 'conversion_status': 'unresolved'}], 'required_quantity': 1.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 1.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING3656', 'ingredient_name': 'turmeric', 'quantity': 1.0, 'unit': 'count', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#3', 'quantity': '1.0', 'unit': 'count', 'conversion_status': 'unresolved'}], 'required_quantity': 1.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 1.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING1131', 'ingredient_name': 'cumin', 'quantity': 1.0, 'unit': 'count', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#4', 'quantity': '1.0', 'unit': 'count', 'conversion_status': 'unresolved'}], 'required_quantity': 1.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 1.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING0998', 'ingredient_name': 'coriander', 'quantity': 2.0, 'unit': 'count', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#5', 'quantity': '2.0', 'unit': 'count', 'conversion_status': 'unresolved'}], 'required_quantity': 2.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 2.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING2445', 'ingredient_name': 'paprika', 'quantity': 1.0, 'unit': 'pinch', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#6', 'quantity': '1.0', 'unit': 'pinch', 'conversion_status': 'unresolved'}], 'required_quantity': 1.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 1.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING3046', 'ingredient_name': 'salt', 'quantity': 1.0, 'unit': 'pinch', 'recipe_ids': ['R01296'], 'conversion_status': 'unresolved', 'normalization_status': 'unresolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#7', 'quantity': '1.0', 'unit': 'pinch', 'conversion_status': 'unresolved'}], 'required_quantity': 1.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 1.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING3816', 'ingredient_name': 'water', 'quantity': 7.5, 'unit': 'ml', 'recipe_ids': ['R01296'], 'conversion_status': 'exact', 'normalization_status': 'resolved', 'source_requirements': [{'recipe_id': 'R01296', 'slot_id': '2026-10-07_lunch', 'occurrence_id': 'R01296#8', 'quantity': '0.5', 'unit': 'tablespoon', 'conversion_status': 'exact'}], 'required_quantity': 7.5, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 7.5, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING3756', 'ingredient_name': 'vegan sausage', 'quantity': 83.5, 'unit': 'g', 'recipe_ids': ['R15279'], 'conversion_status': 'exact', 'normalization_status': 'resolved', 'source_requirements': [{'recipe_id': 'R15279', 'slot_id': '2026-10-07_dinner', 'occurrence_id': 'R15279#0', 'quantity': '83.5', 'unit': 'g', 'conversion_status': 'exact'}], 'required_quantity': 83.5, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 83.5, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING2367', 'ingredient_name': 'onion', 'quantity': 150.0, 'unit': 'g', 'recipe_ids': ['R15279'], 'conversion_status': 'estimated', 'normalization_status': 'resolved', 'source_requirements': [{'recipe_id': 'R15279', 'slot_id': '2026-10-07_dinner', 'occurrence_id': 'R15279#1', 'quantity': '1.0', 'unit': 'count', 'conversion_status': 'estimated'}], 'required_quantity': 150.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 150.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING2337', 'ingredient_name': 'oil', 'quantity': 7.5, 'unit': 'ml', 'recipe_ids': ['R15279'], 'conversion_status': 'exact', 'normalization_status': 'resolved', 'source_requirements': [{'recipe_id': 'R15279', 'slot_id': '2026-10-07_dinner', 'occurrence_id': 'R15279#2', 'quantity': '0.5', 'unit': 'tablespoon', 'conversion_status': 'exact'}], 'required_quantity': 7.5, 'inventory_available': 7.5, 'inventory_used': 7.5, 'purchase_required': 0.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING3565', 'ingredient_name': 'tomato', 'quantity': 60.0, 'unit': 'g', 'recipe_ids': ['R15279'], 'conversion_status': 'estimated', 'normalization_status': 'resolved', 'source_requirements': [{'recipe_id': 'R15279', 'slot_id': '2026-10-07_dinner', 'occurrence_id': 'R15279#3', 'quantity': '0.5', 'unit': 'count', 'conversion_status': 'estimated'}], 'required_quantity': 60.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 60.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}, {'ingredient_id': 'ING2307', 'ingredient_name': 'noodles', 'quantity': 90.0, 'unit': 'g', 'recipe_ids': ['R15279'], 'conversion_status': 'exact', 'normalization_status': 'resolved', 'source_requirements': [{'recipe_id': 'R15279', 'slot_id': '2026-10-07_dinner', 'occurrence_id': 'R15279#4', 'quantity': '90.0', 'unit': 'g', 'conversion_status': 'exact'}], 'required_quantity': 90.0, 'inventory_available': 0.0, 'inventory_used': 0.0, 'purchase_required': 90.0, 'inventory_conversion_unresolved': False, 'inventory_conversion_estimated': False}], 'projected_cost': 31.0, 'projected_cost_complete': True, 'projection_missing': [], 'warnings': ['cauliflower: estimated ingredient-specific conversion used for package sizing; quantity coverage is provisional.', 'plain yogurt: package coverage unresolved (required 1.0 yogurt, package 500.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.', 'garbanzo: package coverage unresolved (required 1.0 pcs, package 400.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.', 'turmeric: package coverage unresolved (required 1.0 pcs, package 100.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.', 'cumin: package coverage unresolved (required 1.0 pcs, package 50.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.', 'coriander: package coverage unresolved (required 2.0 pcs, package 1.0 bunch). One package is a provisional minimum purchase; inventory sufficiency is not verified.', 'paprika: package coverage unresolved (required 1.0 pinch, package 50.0 g). One package is a provisional minimum purchase; inventory sufficiency is not verified.', 'salt: estimated ingredient-specific conversion used for package sizing; quantity coverage is provisional.', 'tomato: estimated ingredient-specific conversion used for package sizing; quantity coverage is provisional.'], 'planning_cost': 31.0, 'planning_cost_complete': True}<<<<<<<
+
+nutrition summ. >>>>>{'2026-10-07': {'calories': 1228.6129, 'protein_g': 59.2037, 'carbs_g': 163.5627, 'fat_g': 42.3451, 'fiber_g': 31.1228, 'sugar_g': 3.9978, 'sodium_mg': 1910.0693, 'calcium_mg': 435.2097, 'iron_mg': 17.0556}}<<<<<<<
+
+nutritional devi.>>>>>{'daily': {'2026-10-07': {'calories': 571.3871, 'protein_g': 10.7963}}, 'mean_absolute_deviation': {'calories': 571.3871, 'protein_g': 10.7963}, 'targets': {'calories': 1800.0, 'protein_g': 70.0}} and targets : {'calories': 1800, 'protein_g': 70}<<<<<<<
+
+validation of plan >>>>>{'status': 'uncertain', 'issues': ['Some ingredient quantities or retail package coverage could not be verified.']}<<<<<<<
+
+
+
+======================================================================
+FINAL PLAN STATUS
+======================================================================
+{
+  "status": "uncertain",
+  "issues": [
+    "Some ingredient quantities or retail package coverage could not be verified."
+  ]
+}
+
+
+======================================================================
+SELECTED MEALS
+======================================================================
+Meals selected: 2
+
+1. 2026-10-07 lunch
+   Recipe: R01296
+   Estimated cost: 17.0
+
+2. 2026-10-07 dinner
+   Recipe: R15279
+   Estimated cost: 14.0
+
+
+======================================================================
+REJECTIONS / RETRIES
+======================================================================
+Rejected candidates: 4
+- R20037 | slot: 2026-10-07_lunch | reason: [{'constraint': 'diet', 'source': 'dietary_requirements', 'status': 'pass', 'reason': 'Recipe satisfies dietary requirement(s): vegetarian'}, {'constraint': 'allergy', 'source': 'dietary_requirements', 'status': 'unknown', 'reason': 'Allergy safety could not be verified for: peanut'}, {'constraint': 'cooking_time', 'source': 'feasibility', 'status': 'pass', 'reason': "Recipe time 30 min is within user's 30 min limit"}, {'constraint': 'ingredient_feasibility', 'source': 'feasibility', 'status': 'pass', 'reason': 'All ingredients have valid ingredient IDs and names'}]
+- R37500 | slot: 2026-10-07_lunch | reason: [{'constraint': 'diet', 'source': 'dietary_requirements', 'status': 'pass', 'reason': 'Recipe satisfies dietary requirement(s): vegetarian'}, {'constraint': 'allergy', 'source': 'dietary_requirements', 'status': 'fail', 'reason': 'Recipe conflicts with allergy requirement(s): peanut: ingredient: peanut butter'}, {'constraint': 'cooking_time', 'source': 'feasibility', 'status': 'pass', 'reason': "Recipe time 15 min is within user's 30 min limit"}, {'constraint': 'ingredient_feasibility', 'source': 'feasibility', 'status': 'pass', 'reason': 'All ingredients have valid ingredient IDs and names'}]
+- R20037 | slot: 2026-10-07_dinner | reason: [{'constraint': 'diet', 'source': 'dietary_requirements', 'status': 'pass', 'reason': 'Recipe satisfies dietary requirement(s): vegetarian'}, {'constraint': 'allergy', 'source': 'dietary_requirements', 'status': 'unknown', 'reason': 'Allergy safety could not be verified for: peanut'}, {'constraint': 'cooking_time', 'source': 'feasibility', 'status': 'pass', 'reason': "Recipe time 30 min is within user's 30 min limit"}, {'constraint': 'ingredient_feasibility', 'source': 'feasibility', 'status': 'pass', 'reason': 'All ingredients have valid ingredient IDs and names'}]
+- R37500 | slot: 2026-10-07_dinner | reason: [{'constraint': 'diet', 'source': 'dietary_requirements', 'status': 'pass', 'reason': 'Recipe satisfies dietary requirement(s): vegetarian'}, {'constraint': 'allergy', 'source': 'dietary_requirements', 'status': 'fail', 'reason': 'Recipe conflicts with allergy requirement(s): peanut: ingredient: peanut butter'}, {'constraint': 'cooking_time', 'source': 'feasibility', 'status': 'pass', 'reason': "Recipe time 15 min is within user's 30 min limit"}, {'constraint': 'ingredient_feasibility', 'source': 'feasibility', 'status': 'pass', 'reason': 'All ingredients have valid ingredient IDs and names'}]
+
+Uncertain candidates: 4
+- R37824 | slot: 2026-10-07_lunch | reason: {'type': 'combined_basket_incomplete', 'projection_missing': ['cornstarch', 'cornstarch'], 'unpriced_items': ['cornstarch']}
+- R30871 | slot: 2026-10-07_lunch | reason: {'type': 'combined_basket_incomplete', 'projection_missing': ['sesame seed'], 'unpriced_items': ['sesame seed']}
+- R37824 | slot: 2026-10-07_dinner | reason: {'type': 'combined_basket_incomplete', 'projection_missing': ['cornstarch', 'cornstarch'], 'unpriced_items': ['cornstarch']}
+- R30871 | slot: 2026-10-07_dinner | reason: {'type': 'combined_basket_incomplete', 'projection_missing': ['sesame seed'], 'unpriced_items': ['sesame seed']}
+
+
+======================================================================
+BUDGET
+======================================================================
+Initial budget: S$100.00
+Total Grocery Cost: S$31.00
+Remaining Budget: S$69.00
+All Ingredients Have Prices: Yes
+Grocery Pricing: Complete
+Unpriced Items: []
+
+
+======================================================================
+INVENTORY
+======================================================================
+
+Initial inventory:
+{
+  "rice": {
+    "quantity": 500.0,
+    "unit": "g"
+  },
+  "oil": {
+    "quantity": 250.0,
+    "unit": "ml"
+  }
+}
+
+Final inventory:
+{
+  "rice": {
+    "quantity": 500.0,
+    "unit": "g"
+  },
+  "oil": {
+    "quantity": 250.0,
+    "unit": "ml"
+  }
+}
+
+
+======================================================================
+NUTRITION
+======================================================================
+Summary:
+{
+  "2026-10-07": {
+    "calories": 1228.6129,
+    "protein_g": 59.2037,
+    "carbs_g": 163.5627,
+    "fat_g": 42.3451,
+    "fiber_g": 31.1228,
+    "sugar_g": 3.9978,
+    "sodium_mg": 1910.0693,
+    "calcium_mg": 435.2097,
+    "iron_mg": 17.0556
+  }
+}
+
+Deviation:
+{
+  "daily": {
+    "2026-10-07": {
+      "calories": 571.3871,
+      "protein_g": 10.7963
+    }
+  },
+  "mean_absolute_deviation": {
+    "calories": 571.3871,
+    "protein_g": 10.7963
+  },
+  "targets": {
+    "calories": 1800.0,
+    "protein_g": 70.0
+  }
+}
+
+
+======================================================================
+FINAL GROCERY BASKET
+======================================================================
+Number of grocery items: 13
+
+- cauliflower
+  Required: 125.0 g
+  Package: 1.0 head
+  Packages: 1
+  Cost: S$3.50
+
+- plain yogurt
+  Required: 1.0 yogurt
+  Package: 500.0 g
+  Packages: 1
+  Cost: S$2.50
+
+- garbanzo
+  Required: 1.0 pcs
+  Package: 400.0 g
+  Packages: 1
+  Cost: S$1.60
+
+- turmeric
+  Required: 1.0 pcs
+  Package: 100.0 g
+  Packages: 1
+  Cost: S$1.50
+
+- cumin
+  Required: 1.0 pcs
+  Package: 50.0 g
+  Packages: 1
+  Cost: S$1.80
+
+- coriander
+  Required: 2.0 pcs
+  Package: 1.0 bunch
+  Packages: 1
+  Cost: S$1.20
+
+- paprika
+  Required: 1.0 pinch
+  Package: 50.0 g
+  Packages: 1
+  Cost: S$2.50
+
+- salt
+  Required: 1.0 pinch
+  Package: 1.0 kg
+  Packages: 1
+  Cost: S$1.50
+
+- water
+  Required: 7.5 ml
+  Package: 1.5 l
+  Packages: 1
+  Cost: S$0.90
+
+- vegan sausage
+  Required: 83.5 g
+  Package: 250.0 g
+  Packages: 1
+  Cost: S$6.50
+
+- onion
+  Required: 150.0 g
+  Package: 1.0 kg
+  Packages: 1
+  Cost: S$3.20
+
+- tomato
+  Required: 60.0 g
+  Package: 3.0 pcs
+  Packages: 1
+  Cost: S$2.50
+
+- noodles
+  Required: 90.0 g
+  Package: 400.0 g
+  Packages: 1
+  Cost: S$1.80
+
+
+======================================================================
+EXECUTION TRACE
+======================================================================
+1. {"event": "candidate_rejected", "slot_id": "2026-10-07_lunch", "recipe_id": "R20037", "reason": [{"constraint": "diet", "source": "dietary_requirements", "status": "pass", "reason": "Recipe satisfies dietary requirement(s): vegetarian"}, {"constraint": "allergy", "source": "dietary_requirements", "status": "unknown", "reason": "Allergy safety could not be verified for: peanut"}, {"constraint": "cooking_time", "source": "feasibility", "status": "pass", "reason": "Recipe time 30 min is within user's 30 min limit"}, {"constraint": "ingredient_feasibility", "source": "feasibility", "status": "pass", "reason": "All ingredients have valid ingredient IDs and names"}]}
+2. {"event": "candidate_uncertain", "slot_id": "2026-10-07_lunch", "recipe_id": "R37824", "reason": {"type": "combined_basket_incomplete", "projection_missing": ["cornstarch", "cornstarch"], "unpriced_items": ["cornstarch"]}}
+3. {"event": "candidate_uncertain", "slot_id": "2026-10-07_lunch", "recipe_id": "R30871", "reason": {"type": "combined_basket_incomplete", "projection_missing": ["sesame seed"], "unpriced_items": ["sesame seed"]}}
+4. {"event": "candidate_rejected", "slot_id": "2026-10-07_lunch", "recipe_id": "R37500", "reason": [{"constraint": "diet", "source": "dietary_requirements", "status": "pass", "reason": "Recipe satisfies dietary requirement(s): vegetarian"}, {"constraint": "allergy", "source": "dietary_requirements", "status": "fail", "reason": "Recipe conflicts with allergy requirement(s): peanut: ingredient: peanut butter"}, {"constraint": "cooking_time", "source": "feasibility", "status": "pass", "reason": "Recipe time 15 min is within user's 30 min limit"}, {"constraint": "ingredient_feasibility", "source": "feasibility", "status": "pass", "reason": "All ingredients have valid ingredient IDs and names"}]}
+5. {"event": "meal_selected", "slot_id": "2026-10-07_lunch", "recipe_id": "R01296"}
+6. {"event": "candidate_rejected", "slot_id": "2026-10-07_dinner", "recipe_id": "R20037", "reason": [{"constraint": "diet", "source": "dietary_requirements", "status": "pass", "reason": "Recipe satisfies dietary requirement(s): vegetarian"}, {"constraint": "allergy", "source": "dietary_requirements", "status": "unknown", "reason": "Allergy safety could not be verified for: peanut"}, {"constraint": "cooking_time", "source": "feasibility", "status": "pass", "reason": "Recipe time 30 min is within user's 30 min limit"}, {"constraint": "ingredient_feasibility", "source": "feasibility", "status": "pass", "reason": "All ingredients have valid ingredient IDs and names"}]}
+7. {"event": "candidate_uncertain", "slot_id": "2026-10-07_dinner", "recipe_id": "R37824", "reason": {"type": "combined_basket_incomplete", "projection_missing": ["cornstarch", "cornstarch"], "unpriced_items": ["cornstarch"]}}
+8. {"event": "candidate_uncertain", "slot_id": "2026-10-07_dinner", "recipe_id": "R30871", "reason": {"type": "combined_basket_incomplete", "projection_missing": ["sesame seed"], "unpriced_items": ["sesame seed"]}}
+9. {"event": "candidate_rejected", "slot_id": "2026-10-07_dinner", "recipe_id": "R37500", "reason": [{"constraint": "diet", "source": "dietary_requirements", "status": "pass", "reason": "Recipe satisfies dietary requirement(s): vegetarian"}, {"constraint": "allergy", "source": "dietary_requirements", "status": "fail", "reason": "Recipe conflicts with allergy requirement(s): peanut: ingredient: peanut butter"}, {"constraint": "cooking_time", "source": "feasibility", "status": "pass", "reason": "Recipe time 15 min is within user's 30 min limit"}, {"constraint": "ingredient_feasibility", "source": "feasibility", "status": "pass", "reason": "All ingredients have valid ingredient IDs and names"}]}
+10. {"event": "meal_selected", "slot_id": "2026-10-07_dinner", "recipe_id": "R15279"}
+11. {"event": "nutrition_updated", "slot_id": "2026-10-07_lunch", "recipe_id": "R01296"}
+12. {"event": "nutrition_updated", "slot_id": "2026-10-07_dinner", "recipe_id": "R15279"}
+13. {"event": "qualitative_requirement_unresolved", "recipe_id": "R15279", "ingredient_name": "salt", "occurrence_id": "R15279#5", "quantity": "required", "unit": "to taste"}
+14. {"event": "inventory_reconciliation_incomplete", "reason": "Some ingredient requirements remain uncovered or cannot be verified.", "confirmed_shortage_count": 0, "confirmed_shortages": [], "unverified_package_count": 6, "unverified_package_coverage": [{"ingredient_name": "plain yogurt", "required_unit": "yogurt", "purchase_required": 1.0, "package_quantity": 500.0, "package_unit": "g", "package_conversion_status": "unresolved"}, {"ingredient_name": "garbanzo", "required_unit": "count", "purchase_required": 1.0, "package_quantity": 400.0, "package_unit": "g", "package_conversion_status": "unresolved"}, {"ingredient_name": "turmeric", "required_unit": "count", "purchase_required": 1.0, "package_quantity": 100.0, "package_unit": "g", "package_conversion_status": "unresolved"}, {"ingredient_name": "cumin", "required_unit": "count", "purchase_required": 1.0, "package_quantity": 50.0, "package_unit": "g", "package_conversion_status": "unresolved"}, {"ingredient_name": "coriander", "required_unit": "count", "purchase_required": 2.0, "package_quantity": 1.0, "package_unit": "bunch", "package_conversion_status": "unresolved"}, {"ingredient_name": "paprika", "required_unit": "pinch", "purchase_required": 1.0, "package_quantity": 50.0, "package_unit": "g", "package_conversion_status": "unresolved"}], "unresolved_count": 8, "unresolved_conversions": [{"ingredient_name": "plain yogurt", "unit": "yogurt"}, {"ingredient_name": "garbanzo", "unit": "count"}, {"ingredient_name": "turmeric", "unit": "count"}, {"ingredient_name": "cumin", "unit": "count"}, {"ingredient_name": "coriander", "unit": "count"}, {"ingredient_name": "paprika", "unit": "pinch"}, {"ingredient_name": "salt", "unit": "pinch"}], "unresolved_quantity_count": 0, "unresolved_quantity_requirements": [], "estimated_conversion_count": 3, "estimated_conversions": [{"ingredient_name": "cauliflower", "unit": "g"}, {"ingredient_name": "onion", "unit": "g"}, {"ingredient_name": "tomato", "unit": "g"}]}
+
+
+======================================================================
+DAY 5 ACCEPTANCE CHECKS
+======================================================================
+[PASS] All requested meal slots generated
+[PASS] No duplicate meal-slot assignments
+[PASS] Inventory state available
+[PASS] Nutrition summary available
+[PASS] Final grocery basket available
+[PASS] Pricing completeness available
+[PASS] At least one meal selected
+[PASS] All requested meal slots filled
+[PASS] Valid final plan status
+
+DAY 5 STRUCTURAL E2E CHECKS PASSED.
+
+Full output saved to: reports/day5_e2e_output.json

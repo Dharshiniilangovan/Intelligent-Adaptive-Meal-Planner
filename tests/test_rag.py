@@ -129,7 +129,13 @@ def test_04_no_duplicates(result):
 
 def test_05_cooking_time(agent, result, user_state):
     kb = agent.repository.to_frame()
-    limit = float(user_state["cook_time_preference_hrs"]) * 60
+    cook_time_hrs = user_state.get("cook_time_preference_hrs")
+
+    if cook_time_hrs is None:
+        pytest.skip("No cooking-time preference specified")
+
+    limit = float(cook_time_hrs) * 60
+    # limit = float(user_state["cook_time_preference_hrs"]) * 60
 
     for recipe_id in result["candidate_recipe_ids"]:
         row = kb[kb["recipe_id"] == recipe_id]
@@ -429,10 +435,15 @@ def test_04_real_rag_one_meal_slot(real_agent, user_state, kb):
     kb_ids = set(kb["recipe_id"])
     assert all(recipe_id in kb_ids for recipe_id in ids)
 
-    limit = float(
-        user_state["cook_time_preference_hrs"]
-    ) * 60
+    # limit = float(
+    #     user_state["cook_time_preference_hrs"]
+    # ) * 60
+    cook_time_hrs = user_state.get("cook_time_preference_hrs")
 
+    if cook_time_hrs is None:
+         pytest.skip("No cooking-time preference specified")
+
+    limit = float(cook_time_hrs) * 60
     selected = kb[kb["recipe_id"].isin(ids)].copy()
 
     selected_times = pd.to_numeric(

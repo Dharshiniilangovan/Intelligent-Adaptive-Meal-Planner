@@ -4,6 +4,7 @@ import pytest
 from src.agents.grocery_agent import (
     aggregate_requirements,
     build_plan_grocery_basket,
+    subtract_inventory,
 )
 
 
@@ -210,3 +211,107 @@ def test_to_taste_requirement_is_preserved_separately():
     # Grocery cost remains incomplete.
     assert basket["projected_cost_complete"] is False
     assert "table salt" in basket["unpriced_items"]
+
+def test_insufficient_inventory_creates_grocery_shortage():
+    recipes = [{
+        "recipe_id": "R1",
+        "ingredients": [{
+            "ingredient_name": "rice",
+            "quantity": 300,
+            "unit": "g",
+        }],
+    }]
+
+    inventory = [{
+        "ingredient_name": "rice",
+        "quantity": 200,
+        "unit": "g",
+    }]
+
+    requirements = aggregate_requirements(recipes)
+
+    result = subtract_inventory(
+        requirements,
+        inventory,
+    )
+
+    assert result[0]["required_quantity"] == 300
+    assert result[0]["inventory_used"] == 200
+    assert result[0]["purchase_required"] == 100
+
+def test_preserved_volume_does_not_verify_mass_package():
+    recipes = [{
+        "recipe_id": "R30871",
+        "ingredients": [{
+            "ingredient_id": "ING0452",
+            "ingredient_name": "broccoli floret",
+            "quantity": 0.5,
+            "unit": "cup",
+            "normalized_quantity_per_serving": 125.0,
+            "normalized_unit": "ml",
+            "conversion_status": "volume_preserved_no_density",
+        }],
+    }]
+
+    products = [{
+        "ingredient_name": "broccoli floret",
+        "package_quantity": 250,
+        "package_unit": "g",
+        "price": 2.50,
+    }]
+
+    basket = build_plan_grocery_basket(
+        recipe_requirements=recipes,
+        inventory=[],
+        product_catalog=products,
+    )
+
+    item = next(
+        item for item in basket["items"]
+        if item["name"] == "broccoli floret"
+    )
+
+    assert item["required_quantity"] == 125.0
+    assert item["required_unit"] == "ml"
+    assert item["conversion_status"] == "volume_preserved_no_density"
+    assert item["quantity_coverage_verified"] is False
+
+    # Package is provisional, not verified.
+    assert item["package_conversion_status"] != "exact"
+
+    print("Preserved-volume package coverage PASSED")
+def test_dataset_factor_broccoli_pantry_subtraction():
+    from src.agents.grocery_agent import (
+        aggregate_requirements,
+        subtract_inventory,
+    )
+
+    recipes = [{
+        "recipe_id": "R12345",
+        "ingredients": [{
+            "ingredient_name": "broccoli",
+            "quantity": 300,
+            "unit": "g",
+        }],
+    }]
+
+    pantry = [{
+        "ingredient_name": "broccoli",
+        "quantity": 0.5,
+        "unit": "head",
+    }]
+
+    requirements = aggregate_requirements(recipes)
+
+    result = subtract_inventory(
+        requirements,
+        pantry,
+    )
+
+    item = result[0]
+
+    assert item["required_quantity"] == 300
+    assert item["inventory_used"] == 150
+    assert item["purchase_required"] == 150
+    assert item["inventory_conversion_estimated"] is True
+    assert item["inventory_conversion_unresolved"] is False
