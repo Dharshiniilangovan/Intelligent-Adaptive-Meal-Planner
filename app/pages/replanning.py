@@ -205,7 +205,16 @@ else:
         except (ValueError, TypeError):
             valid = False
         if valid and leftover.get("leftover_id"):
-            key = f"{leftover['leftover_id']} · {leftover.get('recipe_id')} · {leftover.get('servings_remaining')} serving(s) · use by {leftover.get('expires_on')}"
+            recipe_name = get_recipe_name(
+                            leftover.get("recipe_id")
+                        )
+            key = (
+                f"{recipe_name}"
+                f" · {leftover.get('servings_remaining', 0)} serving(s)"
+                f" · Use by {friendly_date(leftover.get('expires_on'))}"
+                f" · {leftover['leftover_id']}"
+            )
+            
             approved_options[key] = leftover["leftover_id"]
 
     if choices:

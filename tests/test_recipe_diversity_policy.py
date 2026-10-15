@@ -132,29 +132,63 @@ def test_required_repeat_is_not_placed_in_adjacent_slots():
 
 
 def test_default_limit_is_not_relaxed_without_consent():
-    result, _ = plan({"RA": spec(1.0)}, days=1, meal_types=("breakfast", "lunch", "dinner"))
+    result, _ = plan(
+        {"RA": spec(1.0)},
+        days=1,
+        meal_types=("breakfast", "lunch", "dinner"),
+    )
 
-    assert recipes(result) == ["RA", "RA"]
-    [request] = events(result, "repetition_relaxation_requires_confirmation")
-    assert (request["limit"], request["filled_with_limit"], request["filled_if_relaxed"]) == (2, 2, 3)
-    assert not events(result, "repetition_limit_relaxed")
-    [conflict] = result["validation"]["constraint_conflicts"]
-    assert conflict["limit"] == 2
-    assert result["validation"]["status"] == "partial"
-    [unfilled] = events(result, "slot_infeasible")
-    assert unfilled["candidates"] == [{
-        "recipe_id": "RA", "status": "rejected",
-        "reason": {"constraint": "max_recipe_repetitions", "status": "fail",
-                   "limit": 2, "times_selected": 2}}]
+    # No explicit repetition limit:
+    # all three meal slots should be filled.
+    assert recipes(result) == ["RA", "RA", "RA"]
+
+    # No repetition relaxation or confirmation is needed.
+    assert not events(
+        result,
+        "repetition_relaxation_requires_confirmation",
+    )
+
+    assert not events(
+        result,
+        "repetition_limit_relaxed",
+    )
+
+    # No repetition-limit conflict should exist.
+    assert not result["validation"].get(
+        "constraint_conflicts"
+    )
+
+    # All requested slots are filled.
+    assert not events(result, "slot_infeasible")
+
+    # The plan should be feasible.
+    assert result["validation"]["status"] == "feasible"
 
 
 def test_default_limit_relaxed_only_with_consent():
-    result, _ = plan({"RA": spec(1.0)}, days=1, meal_types=("breakfast", "lunch", "dinner"),
-                     allow_repetition_relaxation=True)
+    result, _ = plan(
+        {"RA": spec(1.0)},
+        days=1,
+        meal_types=("breakfast", "lunch", "dinner"),
+        allow_repetition_relaxation=True,
+    )
 
+    # No explicit repetition limit is configured.
+    # All three meal slots should be filled.
     assert recipes(result) == ["RA", "RA", "RA"]
-    [relaxed] = events(result, "repetition_limit_relaxed")
-    assert relaxed["filled_with_limit"] == 2 and relaxed["filled_if_relaxed"] == 3
+
+    # No relaxation is necessary under the new default policy.
+    assert not events(result, "repetition_limit_relaxed")
+
+    # No user confirmation should be required.
+    assert not events(
+        result,
+        "repetition_relaxation_requires_confirmation",
+    )
+
+    # The plan should be complete.
+    assert result["validation"]["status"] == "feasible"
+    assert not events(result, "slot_infeasible")
 
 
 def test_explicit_limit_is_never_relaxed():
